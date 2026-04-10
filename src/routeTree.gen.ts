@@ -15,6 +15,9 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProtectedDashboardRouteImport } from './routes/_protected/dashboard'
+import { Route as ProtectedKomersialEmailRouteImport } from './routes/_protected/komersial/email'
+import { Route as ProtectedKomersialPenawaranIndexRouteImport } from './routes/_protected/komersial/penawaran/index'
+import { Route as ProtectedKomersialPenawaranIdRouteImport } from './routes/_protected/komersial/penawaran/$id'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -45,6 +48,23 @@ const ProtectedDashboardRoute = ProtectedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
+const ProtectedKomersialEmailRoute = ProtectedKomersialEmailRouteImport.update({
+  id: '/komersial/email',
+  path: '/komersial/email',
+  getParentRoute: () => ProtectedRouteRoute,
+} as any)
+const ProtectedKomersialPenawaranIndexRoute =
+  ProtectedKomersialPenawaranIndexRouteImport.update({
+    id: '/komersial/penawaran/',
+    path: '/komersial/penawaran/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
+const ProtectedKomersialPenawaranIdRoute =
+  ProtectedKomersialPenawaranIdRouteImport.update({
+    id: '/komersial/penawaran/$id',
+    path: '/komersial/penawaran/$id',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -52,6 +72,9 @@ export interface FileRoutesByFullPath {
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/dashboard': typeof ProtectedDashboardRoute
+  '/komersial/email': typeof ProtectedKomersialEmailRoute
+  '/komersial/penawaran/$id': typeof ProtectedKomersialPenawaranIdRoute
+  '/komersial/penawaran/': typeof ProtectedKomersialPenawaranIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -59,6 +82,9 @@ export interface FileRoutesByTo {
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/dashboard': typeof ProtectedDashboardRoute
+  '/komersial/email': typeof ProtectedKomersialEmailRoute
+  '/komersial/penawaran/$id': typeof ProtectedKomersialPenawaranIdRoute
+  '/komersial/penawaran': typeof ProtectedKomersialPenawaranIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -68,12 +94,31 @@ export interface FileRoutesById {
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/_protected/dashboard': typeof ProtectedDashboardRoute
+  '/_protected/komersial/email': typeof ProtectedKomersialEmailRoute
+  '/_protected/komersial/penawaran/$id': typeof ProtectedKomersialPenawaranIdRoute
+  '/_protected/komersial/penawaran/': typeof ProtectedKomersialPenawaranIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/home' | '/login' | '/dashboard'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/home'
+    | '/login'
+    | '/dashboard'
+    | '/komersial/email'
+    | '/komersial/penawaran/$id'
+    | '/komersial/penawaran/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/home' | '/login' | '/dashboard'
+  to:
+    | '/'
+    | '/about'
+    | '/home'
+    | '/login'
+    | '/dashboard'
+    | '/komersial/email'
+    | '/komersial/penawaran/$id'
+    | '/komersial/penawaran'
   id:
     | '__root__'
     | '/'
@@ -82,6 +127,9 @@ export interface FileRouteTypes {
     | '/home'
     | '/login'
     | '/_protected/dashboard'
+    | '/_protected/komersial/email'
+    | '/_protected/komersial/penawaran/$id'
+    | '/_protected/komersial/penawaran/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -136,15 +184,42 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedDashboardRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
+    '/_protected/komersial/email': {
+      id: '/_protected/komersial/email'
+      path: '/komersial/email'
+      fullPath: '/komersial/email'
+      preLoaderRoute: typeof ProtectedKomersialEmailRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/komersial/penawaran/': {
+      id: '/_protected/komersial/penawaran/'
+      path: '/komersial/penawaran'
+      fullPath: '/komersial/penawaran/'
+      preLoaderRoute: typeof ProtectedKomersialPenawaranIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/komersial/penawaran/$id': {
+      id: '/_protected/komersial/penawaran/$id'
+      path: '/komersial/penawaran/$id'
+      fullPath: '/komersial/penawaran/$id'
+      preLoaderRoute: typeof ProtectedKomersialPenawaranIdRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
   }
 }
 
 interface ProtectedRouteRouteChildren {
   ProtectedDashboardRoute: typeof ProtectedDashboardRoute
+  ProtectedKomersialEmailRoute: typeof ProtectedKomersialEmailRoute
+  ProtectedKomersialPenawaranIdRoute: typeof ProtectedKomersialPenawaranIdRoute
+  ProtectedKomersialPenawaranIndexRoute: typeof ProtectedKomersialPenawaranIndexRoute
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedDashboardRoute: ProtectedDashboardRoute,
+  ProtectedKomersialEmailRoute: ProtectedKomersialEmailRoute,
+  ProtectedKomersialPenawaranIdRoute: ProtectedKomersialPenawaranIdRoute,
+  ProtectedKomersialPenawaranIndexRoute: ProtectedKomersialPenawaranIndexRoute,
 }
 
 const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(

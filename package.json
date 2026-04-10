@@ -17,13 +17,17 @@
     "@tanstack/react-router": "^1.168.10",
     "@tanstack/react-router-devtools": "^1.166.11",
     "axios": "^1.14.0",
+    "currency.js": "^2.0.4",
+    "date-fns": "^4.1.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "tailwindcss": "^4.2.2",
+    "use-debounce": "^10.1.1",
     "zod": "^4.3.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
+    "@gravity-ui/icons": "^2.18.0",
     "@tanstack/eslint-plugin-query": "^5.96.2",
     "@tanstack/router-plugin": "^1.167.12",
     "@types/node": "^24.12.0",

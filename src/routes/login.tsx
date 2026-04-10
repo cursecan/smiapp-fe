@@ -9,7 +9,7 @@ export const Route = createFileRoute('/login')({
   beforeLoad: ({ context }) => {
       if (context.auth.isAuthenticated) {
           throw redirect({
-            to: "/home",
+            to: "/dashboard",
           });
         }
       },

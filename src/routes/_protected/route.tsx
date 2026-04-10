@@ -1,4 +1,8 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
+import AssideBar from '../../components/AssideBar';
+import { Avatar, Button } from '@heroui/react';
+import { Bell } from '@gravity-ui/icons';
+import TopNavbar from '../../components/TopNavbar';
 
 export const Route = createFileRoute('/_protected')({
   component: RouteComponent,
@@ -15,8 +19,11 @@ export const Route = createFileRoute('/_protected')({
 function RouteComponent() {
   return (
     <div className="">
-        <div className="">Dashboard navbar</div>
-        <Outlet />
+        <TopNavbar />
+        <AssideBar />
+        <div className="ml-72 mt-24">
+            <Outlet />
+        </div>
     </div>
   )
 }

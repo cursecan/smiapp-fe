@@ -1,2 +1,7 @@
 @import "tailwindcss";
 @import "@heroui/styles"; 
+
+
+body {
+    @apply bg-stone-100 text-gray-900
+}
