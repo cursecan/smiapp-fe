@@ -20,8 +20,6 @@ function RouteComponent() {
     queryFn: async({queryKey}) => usePenawaranService.getList({limit, page: queryKey[1] , q: queryKey[2]}),
     select: (data) => data.data
   })
-
-  console.log(penawaran);
   
 
   return (
@@ -91,7 +89,11 @@ function RouteComponent() {
                           </div>
                         </Table.Cell>
                         <Table.Cell>
-                          <Chip variant='soft' color='accent'>Inisiasi</Chip>
+                          <Chip variant='soft' color='accent'>
+                            {
+                              i.status[0].name 
+                            }
+                          </Chip>
                         </Table.Cell>
                         <Table.Cell>
                           {useFormatDate(i.create_at)}

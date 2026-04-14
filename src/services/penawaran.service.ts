@@ -14,9 +14,17 @@ export const usePenawaranService = {
     edit: (id, payload) => {
         return api.put(`/komersial/penawaran/${id}/`, payload)
     },
-
+    submit: (id) => {
+        return api.post(`/komersial/penawaran/${id}/submit/`)
+    },
     items: (id) => {
         return api.get(`/komersial/penawaran/${id}/items/`)
+    },
+    append_kapal: (id, payload) => {
+        return api.post(`/komersial/penawaran/${id}/append-kapal/`, payload)
+    },
+    remove_kapal: (id, payload) => {
+        return api.post(`/komersial/penawaran/${id}/remove-kapal/`, payload)
     }
 }
 

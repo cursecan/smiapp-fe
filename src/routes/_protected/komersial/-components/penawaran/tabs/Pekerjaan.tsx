@@ -6,7 +6,7 @@ import { useItemPenawaranService, usePenawaranService } from '../../../../../../
 import ItemPenawaranModal from '../../itemPenawaran/ItemPenawaranModal'
 import ItemPenawaranPekerjaan from '../../itemPenawaran/ItemPenawaranPekerjaan'
 
-const Pekerjaan = ({id}) => {
+const Pekerjaan = ({id, canEdit}) => {
     const {data: items, isLoading} = useQuery({
         queryKey: ['item-penawaran'],
         queryFn: async () => await usePenawaranService.items(id),
@@ -16,13 +16,12 @@ const Pekerjaan = ({id}) => {
     if (isLoading) {
         return null
     }
-    console.log(items);
     
     
 
   return (
     <div className="space-y-3">
-        <ItemPenawaranModal id={id} />
+        <ItemPenawaranModal disable={!canEdit} id={id} />
 
         <Table>
             <Table.ScrollContainer>
@@ -43,7 +42,7 @@ const Pekerjaan = ({id}) => {
                         {
                             items?.map((i, index) => {
                                 return (
-                                    <ItemPenawaranPekerjaan id={id} item={i} key={index} />
+                                    <ItemPenawaranPekerjaan  canEdit={canEdit} id={id} item={i} key={index} />
                                 )
                             })
                         }

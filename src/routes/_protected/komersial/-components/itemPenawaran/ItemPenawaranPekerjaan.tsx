@@ -5,7 +5,9 @@ import UpdateItemModal from './UpdateItemModal'
 import DeleteItemModal from './DeleteItemModal'
 import CurrencyInput from '../../../../../components/input/CurrencyInput'
 
-const ItemPenawaranPekerjaan = ({id, item}) => {
+const ItemPenawaranPekerjaan = ({id, item, canEdit}) => {
+    console.log(canEdit, 'canedit');
+    
   return (
     <Table.Row>
         <Table.Cell>
@@ -15,14 +17,18 @@ const ItemPenawaranPekerjaan = ({id, item}) => {
                         <div className="flex-1">
                             <Label>{item.barang_jasa}</Label>
                         </div>
-                        <div className="flex gap-2 w-32 justify-end">
-                            <ItemPenawaranModal simple id={id} parent={item.id} />
-                            {/* Update */}
-                            <UpdateItemModal item={item} />
-                            
-                            {/* Delete */}
-                            <DeleteItemModal item={item} />
-                        </div>
+                        {
+                            canEdit && (
+                                <div className="flex gap-2 w-32 justify-end">
+                                    <ItemPenawaranModal simple id={id} parent={item.id} />
+                                    {/* Update */}
+                                    <UpdateItemModal item={item} />
+                                    
+                                    {/* Delete */}
+                                    <DeleteItemModal item={item} />
+                                </div>
+                            )
+                        }
                     </div>
                 ) : (
                     <div className="flex gap-3">
@@ -46,18 +52,22 @@ const ItemPenawaranPekerjaan = ({id, item}) => {
                             {/* <Input readOnly type='number' className={'w-40'} value={item.harga_satuan} /> */}
                             <CurrencyInput readOnly value={item.harga_satuan} className="w-32 text-right" />
                         </div>
-                        <div className="flex gap-2 w-32 justify-end">
-                            {
-                                !item.parent && (
-                                    <ItemPenawaranModal simple id={id} parent={item.id} />
-                                )
-                            }
-                            {/* Update */}
-                            <UpdateItemModal item={item} />
-                            
-                            {/* Delete */}
-                            <DeleteItemModal item={item} />
-                        </div>
+                        {
+                            canEdit &&(
+                                    <div className="flex gap-2 w-32 justify-end">
+                                {
+                                    !item.parent && (
+                                        <ItemPenawaranModal simple id={id} parent={item.id} />
+                                    )
+                                }
+                                {/* Update */}
+                                <UpdateItemModal item={item} />
+                                
+                                {/* Delete */}
+                                <DeleteItemModal item={item} />
+                            </div>
+                            )
+                        }
                     </div>
                 )
             }

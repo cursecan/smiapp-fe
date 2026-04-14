@@ -1,18 +1,17 @@
 import { Label, ComboBox, Input, ListBox, EmptyState, Collection, ListBoxLoadMoreItem, Spinner } from '@heroui/react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useState } from 'react'
-import { useWilayahService } from '../../services/masterdata/wilayahService'
 import { useDebounce } from 'use-debounce'
+import { useKapalService } from '../../services/masterdata/kapalService'
 
-const WilayahComboBox = ({readOnly=false, onChange=()=>{}, ...props}) => {
-    const [search, setSearch] = useState(props.value?.lokasi)
+const KapalComboBox = ({onSelectionChange, readOnly=false}) => {
+    const [search, setSearch] = useState('')
     const [debouncedFilter] = useDebounce(search, 600)
-    
     
 
     const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfiniteQuery({
-        queryKey: ['wilayah-list-combox', debouncedFilter],
-        queryFn: async ({pageParam, queryKey}) => useWilayahService.list({pageParam, queryKey}),
+        queryKey: ['kapal-list-combox', debouncedFilter],
+        queryFn: async ({pageParam, queryKey}) => useKapalService.list({pageParam, queryKey}),
         initialPageParam: 1,
         getNextPageParam: (lastPage) => {
             if (!lastPage.data.next) return undefined
@@ -22,7 +21,7 @@ const WilayahComboBox = ({readOnly=false, onChange=()=>{}, ...props}) => {
         }
     })
     
-    const items = (data?.pages.flatMap(page => page.data.results) || []).map(i => ({...i, name: i.lokasi}))
+    const items = (data?.pages.flatMap(page => page.data.results) || []).map(i => ({...i, name: i.nama_kapal}))
     const list = {
         items,
         loadingState: isFetchingNextPage ? 'loadingMore' : 'idle',
@@ -32,17 +31,17 @@ const WilayahComboBox = ({readOnly=false, onChange=()=>{}, ...props}) => {
     }
     
     
+    
   return (
+    
     <ComboBox
         isReadOnly={readOnly}
+        onSelectionChange={onSelectionChange}
         allowsEmptyCollection
         inputValue={search}
         onInputChange={setSearch}
-        onSelectionChange={onChange}
-        selectedKey={props.value?.id}
-        selectionMode='multiple'
     >
-        <Label>Wilayah</Label>
+        <Label>Cari Kapal</Label>
         <ComboBox.InputGroup>
             <Input placeholder='Search...' />
             <ComboBox.Trigger />
@@ -76,4 +75,4 @@ const WilayahComboBox = ({readOnly=false, onChange=()=>{}, ...props}) => {
   )
 }
 
-export default WilayahComboBox
+export default KapalComboBox

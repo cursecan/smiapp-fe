@@ -19,7 +19,7 @@ export const Route = createFileRoute('/_protected')({
 function RouteComponent() {
   return (
     <div className="">
-        <TopNavbar />
+        {/* <TopNavbar /> */}
         <AssideBar />
         <div className="ml-72 mt-24">
             <Outlet />

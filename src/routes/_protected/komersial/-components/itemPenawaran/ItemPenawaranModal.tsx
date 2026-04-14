@@ -8,7 +8,7 @@ import { usePekerjaanService } from '../../../../../services/masterdata/pekerjaa
 import { useItemPenawaranService } from '../../../../../services/penawaran.service'
 import { formatRupiah } from '../../../../../utils/formatCurrency'
 
-const ItemPenawaranModal = ({id, parent, simple=false}) => {
+const ItemPenawaranModal = ({id, parent, simple=false, disable=false}) => {
     const state = useOverlayState()
     const form = {
         penawaran: '',
@@ -47,7 +47,7 @@ const ItemPenawaranModal = ({id, parent, simple=false}) => {
         heading={'Data Sheet Pekerjaan'}
         size={'lg'}
         iconComponent={<Rocket className='size-6' />}
-        buttonTrigger={<Button onPress={state.setOpen} isIconOnly={simple} size='sm'><Plus />{ !simple && <span>Tambah Item Penawaran</span> }</Button>}
+        buttonTrigger={<Button isDisabled={disable} onPress={state.setOpen} isIconOnly={simple} size='sm'><Plus />{ !simple && <span>Tambah Item Penawaran</span> }</Button>}
         hideFooter
 
     >
