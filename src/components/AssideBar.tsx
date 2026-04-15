@@ -1,11 +1,13 @@
 import { LogoPython, HouseFill, Envelope, HandPointRight, Persons, Timestamps, House, ChevronDown, MapPin, LogoYandexCloud, LogoUbuntu } from "@gravity-ui/icons"
 import NavButton from "./buttons/NavButton"
 import { useLocation } from "@tanstack/react-router"
+import { useAuth } from "../auth/AuthProvider"
 
 
 
 const AssideBar = () => {
     const location = useLocation()
+    const { logout } = useAuth()
     return (
         <div className="fixed top-0 left-0 w-72 h-screen flex flex-col">
             <div className="h-24"></div>
@@ -49,7 +51,7 @@ const AssideBar = () => {
                         </div>
                     </div>
                     <div className="">
-                        <NavButton icon={<LogoUbuntu />} label={'Logout'} />
+                        <NavButton onPress={logout} icon={<LogoUbuntu />} label={'Logout'} />
                     </div>
                     
                 </div>

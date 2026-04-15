@@ -39,7 +39,7 @@ function RouteComponent() {
       const { user, access } = res.data
       await login(user, access)
 
-      navigate({to: '/home', replace: true})
+      navigate({to: '/dashboard', replace: true})
 
     } catch (error) {
       console.log(error);

@@ -13,6 +13,7 @@ import { useSchema } from '../../../../components/useSchema'
 import SubmitButton from '../../../../components/buttons/SubmitButton'
 import { useEffect, useState } from 'react'
 import { useForm, Controller } from "react-hook-form"
+import ApprovalButton from '../../../../components/buttons/ApprovalButton'
 
 export const Route = createFileRoute('/_protected/komersial/penawaran/$id')({
   component: RouteComponent,
@@ -80,7 +81,7 @@ function RouteComponent() {
     remove_mutation.mutate({id, payload: {kapal_id: e}})
   }
 
-  const handleSubmitAjukan = () => {
+  const handleSubmitApproval = () => {
     submit_mutation.mutate(id)
   }
 
@@ -288,17 +289,27 @@ function RouteComponent() {
         {/* Submit & Approval */}
         <div className="actions">
           <div className="flex justify-end gap-3">
-            <Button onPress={handleSubmit(handleSaveForm)} isDisabled={!canEdit}><FloppyDisk /> Simpan</Button>
+            {
+              canEdit && <Button onPress={handleSubmit(handleSaveForm)}><FloppyDisk /> Simpan</Button>
+            }
             {
               canEdit && (
-                <SubmitButton handleSubmit={handleSubmitAjukan} label={'Ajukan'} heading={'Ajukan Penawaran'} icon={<LocationArrow />}>
+                <SubmitButton handleSubmit={handleSubmitApproval} label={'Ajukan'} heading={'Ajukan Penawaran'} icon={<LocationArrow />}>
                   <div className="">Ajukan penawaran untuk pekerjaan ini?</div>
                 </SubmitButton>
               )
             }
+
+            {
+              canApprove && (
+                <ApprovalButton onApprove={handleSubmitApproval}>
+                  <div className="">Silahkan melakukan approval untuk penawaran ini.</div>
+                </ApprovalButton>
+              )
+            }
             
             {/* <Button isDisabled={!canEdit}>Simpan</Button>
-            <Button isDisabled={!canEdit} className={'bg-purple-500'} onPress={handleSubmitAjukan}>Ajukan Approval</Button>
+            <Button isDisabled={!canEdit} className={'bg-purple-500'} onPress={handleSubmitApproval}>Ajukan Approval</Button>
             <Button className={'bg-green-600'}>Approval</Button> */}
           </div>
         </div>

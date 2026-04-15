@@ -7,8 +7,8 @@ export const useSchema = (schema) => {
 
     const { user } = useAuth()
     
-    const canEdit = user?.id.includes(userApprovals) && status?.can_edit
-    const canApprove = user?.id.includes(userApprovals) && status?.can_approve
+    const canEdit = user?.id.includes(userApprovals) && status?.can_edit && !status?.completed
+    const canApprove = user?.id.includes(userApprovals) && status?.can_approve && !status?.completed
 
   return {
     canEdit, canApprove

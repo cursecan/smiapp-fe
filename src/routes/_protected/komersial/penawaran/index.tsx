@@ -15,11 +15,16 @@ function RouteComponent() {
   const limit = 10
   const [page, setPage] = useState(0)
   const [search, setSearch] = useState()
-  const {data: penawaran} = useQuery({
+  const {data: penawaran, isLoading} = useQuery({
     queryKey: ['penawaran-list', page, search],
     queryFn: async({queryKey}) => usePenawaranService.getList({limit, page: queryKey[1] , q: queryKey[2]}),
     select: (data) => data.data
   })
+
+
+  if (isLoading) {
+    return <div className="">Loading</div>
+  }
   
 
   return (
@@ -72,16 +77,16 @@ function RouteComponent() {
                         <Table.Cell>
                           <Link to={`${i.id}`}>{i.nama_project}</Link>
                         </Table.Cell>
-                        <Table.Cell>{i.nomor_penugasan}</Table.Cell>
+                        <Table.Cell className={'truncate'}>{i.nomor_penugasan}</Table.Cell>
                         {/* <Table.Cell>{i.judul_penugasan}</Table.Cell> */}
-                        <Table.Cell>
+                        <Table.Cell className={'truncate'}>
                           <div className="flex flex-col gap-1">
                             { i.kapal.length > 0 && i.kapal.map(p => {
                               return <Chip key={p.id}>{p.nama_kapal}</Chip>
                             })}
                           </div>
                         </Table.Cell>
-                        <Table.Cell>{i.lokasi}</Table.Cell>
+                        <Table.Cell>{i.lokasi?.lokasi || '-'}</Table.Cell>
                         <Table.Cell className={'truncate'}>
                           <div className="flex flex-col">
                             <div className="">{i.customer?.full_name}</div>
@@ -91,7 +96,7 @@ function RouteComponent() {
                         <Table.Cell>
                           <Chip variant='soft' color='accent'>
                             {
-                              i.status[0].name 
+                              i.status[0].completed ? 'Selesai' : i.status[0].name 
                             }
                           </Chip>
                         </Table.Cell>

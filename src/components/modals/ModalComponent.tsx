@@ -10,6 +10,7 @@ const ModalComponent = ({
     state,
     size,
     hideFooter=false,
+    hideHeader=false,
     disable=false
 }) => {
   return (
@@ -27,7 +28,9 @@ const ModalComponent = ({
                                 </Modal.Icon>
                             )
                         }
-                        <Modal.Heading>{heading||'Modal Header'}</Modal.Heading>
+                        {
+                            !hideHeader && <Modal.Heading>{heading||'Modal Header'}</Modal.Heading>
+                        }
                     </Modal.Header>
                     <Modal.Body>
                         { children }
