@@ -41,7 +41,7 @@ const KapalComboBox = ({onSelectionChange, readOnly=false}) => {
         inputValue={search}
         onInputChange={setSearch}
     >
-        <Label>Cari Kapal</Label>
+        <Label>Kapal</Label>
         <ComboBox.InputGroup>
             <Input placeholder='Search...' />
             <ComboBox.Trigger />

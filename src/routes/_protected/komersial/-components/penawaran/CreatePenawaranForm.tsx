@@ -42,7 +42,7 @@ const CreatePenawaranForm = ({pesanan, state}) => {
     <div className="">
 
         <Surface className="p-4">
-            <form action="" className="space-y-3">
+            <form action="" className="space-y-6">
                 <TextField isRequired>
                     <Label>Nama Project</Label>
                     <Input value={form.nama_project} onChange={e=>setForm({...form, nama_project: e.target.value})} />
@@ -55,18 +55,18 @@ const CreatePenawaranForm = ({pesanan, state}) => {
                     <Label>Surat Pesanan</Label>
                     <Input value={form.judul_penugasan} onChange={e=>setForm({...form, judul_penugasan: e.target.value})} />
                 </TextField>
-                <TextField isRequired>
+                {/* <TextField isRequired>
                     <Label>Wilayah</Label>
                     <Input />
                 </TextField>
-                <KapalSelect onChange={(e) => setForm({...form, kapal:e})} />
+                <KapalSelect onChange={(e) => setForm({...form, kapal:e})} /> */}
                 {
                     !pesanan && <CustomerSelect onChange={(e) => setForm({...form, customer:e})} />
                 }
             </form>
         </Surface>
         <div className="flex justify-end items-center gap-2">
-            <Button variant="tertiary">Close</Button>
+            <Button variant="tertiary" onPress={state.close}>Close</Button>
             <Button onPress={() => mutation.mutate(form)}>Submit</Button>
         </div>
     </div>

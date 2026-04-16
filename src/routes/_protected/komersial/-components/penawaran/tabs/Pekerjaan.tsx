@@ -1,10 +1,11 @@
 import { Plus, Tray } from '@gravity-ui/icons'
-import { Button, EmptyState, Table } from '@heroui/react'
+import { Button, Description, EmptyState, Input, Label, Table, TextField } from '@heroui/react'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useItemPenawaranService, usePenawaranService } from '../../../../../../services/penawaran.service'
 import ItemPenawaranModal from '../../itemPenawaran/ItemPenawaranModal'
 import ItemPenawaranPekerjaan from '../../itemPenawaran/ItemPenawaranPekerjaan'
+import { formatRupiah } from '../../../../../../utils/formatCurrency'
 
 const Pekerjaan = ({id, canEdit}) => {
     const {data: items, isLoading} = useQuery({
@@ -14,9 +15,13 @@ const Pekerjaan = ({id, canEdit}) => {
     })
 
     if (isLoading) {
-        return null
+        return <div className="">Loading...</div>
     }
+    console.log(items);
     
+
+    const total_hpp = items.reduce((a,b) => (!b.is_header ? a + Number(b.harga_hpp * b.qty) : 0), 0)
+    const total_satuan = items.reduce((a,b) => (!b.is_header ? a + Number(b.harga_satuan * b.qty) : 0), 0)
     
 
   return (
@@ -47,9 +52,22 @@ const Pekerjaan = ({id, canEdit}) => {
                             })
                         }
                     </Table.Body>
-
                 </Table.Content>
             </Table.ScrollContainer>
+            {
+                items?.length > 0 && (
+                    <Table.Footer className='justify-end gap-6'>
+                        <div className="flex flex-col">
+                            <Description>Total HPP</Description>
+                            <Label>{formatRupiah(total_hpp)}</Label>
+                        </div>
+                        <div className="flex flex-col">
+                            <Description>Total RAB</Description>
+                            <Label>{formatRupiah(total_satuan)}</Label>
+                        </div>
+                    </Table.Footer>
+                )
+            }
         </Table>
     </div>
   )

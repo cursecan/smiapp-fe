@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, functionalUpdate, Link, useParams } from '@tanstack/react-router'
 import { usePenawaranService } from '../../../../services/penawaran.service'
-import { Accordion, AutocompletePopover, Breadcrumbs, Button, Card, CloseIcon, Description, EmptyState, Input, Label, ListBox, Surface, Tab, Table, Tabs, TextField } from '@heroui/react'
-import { CheckDouble, Clock, Dots9, FloppyDisk, House, LocationArrow, LogoDocker, Paperclip } from '@gravity-ui/icons'
+import { Accordion, AutocompletePopover, Avatar, Breadcrumbs, Button, Card, CloseIcon, Description, Disclosure, EmptyState, Input, Label, ListBox, Radio, RadioGroup, Surface, Tab, Table, Tabs, TextField } from '@heroui/react'
+import { CheckDouble, Clock, Dots9, FloppyDisk, FolderMagnifier, House, ListCheck, LocationArrow, LogoDocker, Paperclip } from '@gravity-ui/icons'
 import KapalSelect from '../../../../components/input/KapalSelect'
 import CustomerSelect from '../../../../components/input/CustomerSelect'
 import { useFormatDate } from '../../../../utils/dateFormat'
@@ -14,6 +14,7 @@ import SubmitButton from '../../../../components/buttons/SubmitButton'
 import { useEffect, useState } from 'react'
 import { useForm, Controller } from "react-hook-form"
 import ApprovalButton from '../../../../components/buttons/ApprovalButton'
+import PengadaanBarangRadio from '../../../../components/input/PengadaanBarangRadio'
 
 export const Route = createFileRoute('/_protected/komersial/penawaran/$id')({
   component: RouteComponent,
@@ -88,7 +89,7 @@ function RouteComponent() {
 
   useEffect(() => {
     if (data) {
-      // console.log(data);
+      console.log(data);
       reset({...data, customer: data?.customer?.id || '', sumber_penugasan: data?.sumber_penugasan?.id || ''})
     }
   }, [data, reset])
@@ -104,187 +105,101 @@ function RouteComponent() {
   
 
 
-  return <div className="p-4">
-    <div className="mb-6">
-      <Breadcrumbs>
-        <Breadcrumbs.Item href='#'>
-          <House />
-        </Breadcrumbs.Item>
-        <Breadcrumbs.Item href='#'>
-          Penawaran
-          {/* <Link to={'/komersial/penawaran'}>Penawaran</Link> */}
-        </Breadcrumbs.Item>
-        <Breadcrumbs.Item>{data?.nama_project.length>50 ? `${data?.nama_project.slice(0,50)}...`: data?.nama_project}</Breadcrumbs.Item>
-      </Breadcrumbs>
-    </div>
-    <div className="">
-      <div className="text-xl text-black max-w-4xl w-full font-medium">{data?.nama_project}</div>
-    </div>
+  return <div className="">
+    <Card variant='secondary'>
+      <LogoDocker className='size-8' />
+      <Card.Footer>
+        <Breadcrumbs>
+          <Breadcrumbs.Item><House /></Breadcrumbs.Item>
+          <Breadcrumbs.Item>Penawaran</Breadcrumbs.Item>
+          <Breadcrumbs.Item>{data.nama_project.length > 40 ? data.nama_project.slice(0,40) +'...'  : data.nama_project}</Breadcrumbs.Item>
+        </Breadcrumbs>
+      </Card.Footer>
+    </Card>
 
-
-    {/* Cotnent */}
-    <div className="mt-10 flex gap-6">
-      <div className="flex-1 space-y-6">
-        <div className="space-y-6">
-          <TextField>
-            <Label>Nama Project</Label>
-            <Controller
-              name='nama_project'
-              control={control}
-              render={({field}) => (
-                <Input readOnly={!canEdit} {...field} value={field.value || ''} onChange={(e) => field.onChange(e.target.value)} />
-              )}
-            />
-          </TextField>
-          <TextField className={'w-72'}>
-            <Label>No. Pesanan / Penugasan</Label>
-            <Controller
-              name='nomor_penugasan'
-              control={control}
-              render={({field}) => (
-                <Input readOnly={!canEdit} {...field} value={field.value || ''} onChange={(e) => field.onChange(e.target.value)} />
-              )}
-            />
-          </TextField>
-          <div className="flex gap-3 items-center">
-            <Controller
-              name='lokasi'
-              control={control}
-              render={({field}) => (
-                <WilayahComboBox readOnly={!canEdit} {...field} value={field.value} onChange={(e) => field.onChange(e)} />
-                // <Input readOnly={!canEdit} {...field} value={field.value || ''} onChange={(e) => field.onChange(e.target.value)} />
-              )}
-            />
-            {/* <WilayahComboBox readOnly={!canEdit} /> */}
-          </div>
-          
-          <div className="space-y-3">
-            <KapalComboBox readOnly={!canEdit} onSelectionChange={handleAppendKapal} />
-            {
-              data?.kapal.length > 0 && (
-              <Surface>
-                <ListBox>
-                  {
-                    data?.kapal.map(k => {
-                      return (
-                        <ListBox.Item key={k.id}>
-                          <LogoDocker />
-                          <div className="flex flex-1 items-center justify-between">
-                            <Label>{k.nama_kapal}</Label>
-                            {
-                              canEdit && (
-                                <div className="">
-                                  <Button onPress={() => handleRemoveKapal(k.id)} isIconOnly size='sm' variant='danger-soft'>
-                                    <CloseIcon />
-                                  </Button>
-                                </div>
-                              )
-                            }
-                          </div>
-                          
-                        </ListBox.Item>
-                      )
-                    })
-                  }
-                </ListBox>
-              </Surface>
-              )
-            }
-            
-          </div>
-
-            {/* <Controller
-              name='customer'
-              control={control}
-              render={({field}) => (
-                <CustomerSelect disable={!!data?.sumber_penugasan} {...field} value={field.value} onChange={(e) => field.onChange(e)}  />
-              )}
-
-            /> */}
-        </div>
-
-        {/* Tabs */}
-        <Tabs>
-          <Tabs.ListContainer>
-            <Tabs.List>
-              <Tabs.Tab id={'pekerjaan'}>
-                Item Pekerjaan
-                <Tabs.Indicator />
-              </Tabs.Tab>
-              <Tabs.Tab id={'dokumen'}>
-                Kelengkapan Dokumen
-                <Tabs.Indicator />
-              </Tabs.Tab>
-            </Tabs.List>
-          </Tabs.ListContainer>
-
-          <Tabs.Panel id={'pekerjaan'}>
-            <Pekerjaan id={id} canEdit={canEdit} />
-          </Tabs.Panel>
-          <Tabs.Panel id={'dokumen'}>
+    <div className="mt-6 flex gap-10">
+      <div className="max-w-3xl w-full space-y-6">
+        <Card variant='secondary'>
+          <Card.Header>
+            <Card.Title title={data?.nama_project} className='text-sky-600 font-semibold text-xl'>{data?.nama_project.length > 100 ? data?.nama_project.slice(0,100) + '...' : data?.nama_project}</Card.Title>
+          </Card.Header>
+          <Card.Content>
             <div className="">
-              daddddd {JSON.stringify(canEdit)}
+              <div className="space-y-6">
+                <TextField>
+                  <Label>Nama Pekerjaan</Label>
+                  <Controller
+                    name='nama_project'
+                    control={control}
+                    render={({field}) => (
+                      <Input readOnly={!canEdit} {...field} value={field.value || ''} onChange={(e) => field.onChange(e.target.value)} />
+                    )}
+                  />
+                </TextField>
+                <TextField className={'w-72'}>
+                  <Label>No. Pesanan</Label>
+                  <Controller
+                    name='nomor_penugasan'
+                    control={control}
+                    render={({field}) => (
+                      <Input readOnly={!canEdit} {...field} value={field.value || ''} onChange={(e) => field.onChange(e.target.value)} />
+                    )}
+                  />
+                </TextField>
+
+                <div className="flex gap-6">
+                  <div className="flex-1 space-y-2">
+                    <KapalComboBox readOnly={!canEdit} onSelectionChange={handleAppendKapal} />
+                    {
+                      data?.kapal.length > 0 && (
+                      <Surface>
+                        <ListBox>
+                          {
+                            data?.kapal.map(k => {
+                              return (
+                                <ListBox.Item key={k.id}>
+                                  <LogoDocker className='text-sky-600' />
+                                  <div className="flex flex-1 items-center justify-between">
+                                    <Label>{k.nama_kapal}</Label>
+                                    {
+                                      canEdit && (
+                                        <div className="">
+                                          <Button onPress={() => handleRemoveKapal(k.id)} isIconOnly size='sm' variant='danger-soft'>
+                                            <CloseIcon />
+                                          </Button>
+                                        </div>
+                                      )
+                                    }
+                                  </div>
+                                  
+                                </ListBox.Item>
+                              )
+                            })
+                          }
+                        </ListBox>
+                      </Surface>
+                      )
+                    }
+                  </div>
+                  <div className="flex-1">
+                    <PengadaanBarangRadio />
+                  </div>
+                </div>
+
+                <Controller
+                  name='lokasi'
+                  control={control}
+                  render={({field}) => (
+                    <WilayahComboBox readOnly={!canEdit} {...field} value={field.value} onChange={(e) => field.onChange(e)} />
+                    // <Input readOnly={!canEdit} {...field} value={field.value || ''} onChange={(e) => field.onChange(e.target.value)} />
+                  )}
+                />
+              </div>
             </div>
-          </Tabs.Panel>
-        </Tabs>
+          </Card.Content>
+        </Card>
 
-
-        {
-          !!data?.sumber_penugasan && (
-            <Accordion variant='surface'>
-              <Accordion.Item>
-                <Accordion.Heading>
-                  <Accordion.Trigger>
-                    <Label>Email Penugasan</Label>
-                    <Accordion.Indicator />
-                  </Accordion.Trigger>
-                </Accordion.Heading>
-                <Accordion.Panel>
-                  <Accordion.Body>
-                    <div className="space-y-4">
-                      <div className="flex justify-between">
-                        <div className="">
-                          <Label>Pengirim</Label>
-                          <div className="">{data?.sumber_penugasan.email_from}</div>
-                        </div>
-                        <div>
-                          { data?.sumber_penugasan?.receive_date && useFormatDate(data?.sumber_penugasan?.receive_date) }
-                        </div>
-                      </div>
-                      <div className='flex flex-col'>
-                        <Label>Subject Surat</Label>
-                        <span>{data?.sumber_penugasan.subject}</span>
-                      </div>
-                      <p>
-                        {data?.sumber_penugasan.body}
-                      </p>
-                      {
-                        data?.sumber_penugasan.attachments.length > 0 && (
-
-                          <div className="">
-                            <Label className='flex gap-2'><Paperclip /> Attachments</Label>
-                            <div className="flex flex-col">
-                              {
-                                data?.sumber_penugasan.attachments.map(t => {
-                                  return (
-                                    <a href={t.filepath} className=' underline' target='_blank' key={t.id}>
-                                      <div className="">{t.filename}</div>
-                                    </a>
-                                  )
-                                })
-                              }
-                            </div>
-                          </div>
-                        )
-                      }
-                    </div>
-                  </Accordion.Body>
-                </Accordion.Panel>
-              </Accordion.Item>
-            </Accordion>
-          )
-        }
-        
+        <Pekerjaan id={id} canEdit={canEdit} />
 
         {/* Submit & Approval */}
         <div className="actions">
@@ -307,50 +222,52 @@ function RouteComponent() {
                 </ApprovalButton>
               )
             }
-            
-            {/* <Button isDisabled={!canEdit}>Simpan</Button>
-            <Button isDisabled={!canEdit} className={'bg-purple-500'} onPress={handleSubmitApproval}>Ajukan Approval</Button>
-            <Button className={'bg-green-600'}>Approval</Button> */}
           </div>
         </div>
-        
+
       </div>
-      <div className="flex max-w-xs w-full">
-        <div className="">
-          <Card>
-            <Card.Content>
-              <div className="flex flex-col gap-4 divide-y">
-                {
-                  data?.stepper.map((t, index) => {
-                    return (
-                      <div className="flex gap-4 pb-4" key={index}>
-                        <Button isIconOnly variant="secondary">
-                          {
-                            t.approved_at && t.is_approve ?
-                            <CheckDouble className='size-5' /> :
-                            <Clock className='size-5' />
-                          }
-                        </Button>
-                          <div className={`flex-1 ${t.approved_at && t.is_approve && 'text-accent'}`}>
-                            <div className="">
-                              { t.name }
-                            </div>
-                            {
-                              t.approved_at && <div className="text-sm italic">12 April 2026 12:10 Wib</div>
-                            }
-                          </div>
+      
+      <div className="flex-1">
+        <div className="bg-white/0 backdrop-blur-sm rounded-2xl">
+            <div className="p-0 space-y-5">
+              {
+                data?.stepper.map((s, index) => {
+                  return (
+                    <Card key={s.id} className='flex-row'>
+                      <div className="">
+                        {
+                          !!s.approved_at ? (
+                            <Button isIconOnly className={'bg-success'}>
+                              <CheckDouble /> 
+                            </Button>
+                          ) : (
+                            <Avatar>
+                              <Avatar.Fallback>{s.step}</Avatar.Fallback>
+                            </Avatar>
+                          )
+                        }
                       </div>
-                    )
-                  })
-                }
+                      <div className="flex-1">
+                        <Card.Header className=''>
+                          <Card.Title className=''>{s.name}</Card.Title>
+                          {
+                            s.approved_at &&  (
+                              <Card.Description>
+                                { index === 0 ? 'Create' : 'Approve'} by {s.approval_by.full_name}
+                              </Card.Description>
+                            )
+                          }
+                        </Card.Header>
 
-              </div>
-
-            </Card.Content>
-          </Card>
-          
+                      </div>
+                    </Card>
+                  )
+                })
+              }
+            </div>
         </div>
       </div>
+
     </div>
   </div>
 }

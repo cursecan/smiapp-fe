@@ -7,7 +7,7 @@ const TopNavbar = () => {
 
   return (
     <div className='fixed z-10 top-0 inset-x-0 h-24 p-4 backdrop-blur-sm'>
-        <div className="bg-white rounded-2xl p-4 flex items-center gap-4">
+        <div className="bg-white/5 rounded-2xl p-4 flex items-center gap-4">
             <div className="flex-1"></div>
             <div className="flex items-center p-1 bg-neutral-100 rounded-full overflow-hidden">
                 <Button isIconOnly variant='ghost'>
