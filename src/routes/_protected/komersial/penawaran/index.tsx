@@ -13,12 +13,11 @@ export const Route = createFileRoute('/_protected/komersial/penawaran/')({
 })
 
 function RouteComponent() {
-  const limit = 10
-  const [page, setPage] = useState(0)
+  const [pageParam, setPageParam] = useState(1)
   const [search, setSearch] = useState()
   const {data: penawaran, isLoading} = useQuery({
-    queryKey: ['penawaran-list', page, search],
-    queryFn: async({queryKey}) => usePenawaranService.getList({limit, page: queryKey[1] , q: queryKey[2]}),
+    queryKey: ['penawaran-list', search],
+    queryFn: async({queryKey}) => usePenawaranService.getList({pageParam, queryKey}),
     select: (data) => data.data
   })
 

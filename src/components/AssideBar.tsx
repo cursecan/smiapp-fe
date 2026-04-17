@@ -1,4 +1,4 @@
-import { LogoPython, HouseFill, Envelope, HandPointRight, Persons, Timestamps, House, ChevronDown, MapPin, LogoYandexCloud, LogoUbuntu, FaceRobotSmile } from "@gravity-ui/icons"
+import { LogoPython, HouseFill, Envelope, HandPointRight, Persons, Timestamps, House, ChevronDown, MapPin, LogoYandexCloud, LogoUbuntu, FaceRobotSmile, TagDollar } from "@gravity-ui/icons"
 import NavButton from "./buttons/NavButton"
 import { useLocation } from "@tanstack/react-router"
 import { useAuth } from "../auth/AuthProvider"
@@ -25,6 +25,7 @@ const AssideBar = () => {
                                 </li>
                             </ul>
                         </div>
+                        {/* Komersial */}
                         <div className="">
                             <div className="text-xs uppercase mb-3">Komersial</div>
                             <ul className="">
@@ -34,6 +35,18 @@ const AssideBar = () => {
                                 <li>
                                     <NavButton active icon={<HandPointRight />} label={'Penawaran'} href={'/komersial/penawaran'}/>
                                 </li>
+                            </ul>
+                        </div>
+                        {/* Oprasinal */}
+                        <div className="">
+                            <div className="text-xs uppercase mb-3">Oprasional</div>
+                            <ul className="">
+                                <li>
+                                    <NavButton active icon={<TagDollar />} label={'Pembayaran'} href={'/oprasional/pembayaran'} />
+                                </li>
+                                {/* <li>
+                                    <NavButton active icon={<HandPointRight />} label={'Penawaran'} href={'/komersial/penawaran'}/>
+                                </li> */}
                             </ul>
                         </div>
                         <div className="">

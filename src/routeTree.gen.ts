@@ -16,6 +16,7 @@ import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProtectedDashboardRouteImport } from './routes/_protected/dashboard'
 import { Route as ProtectedKomersialEmailRouteImport } from './routes/_protected/komersial/email'
+import { Route as ProtectedOprasionalPembayaranIndexRouteImport } from './routes/_protected/oprasional/pembayaran/index'
 import { Route as ProtectedKomersialPenawaranIndexRouteImport } from './routes/_protected/komersial/penawaran/index'
 import { Route as ProtectedKomersialPenawaranIdRouteImport } from './routes/_protected/komersial/penawaran/$id'
 
@@ -53,6 +54,12 @@ const ProtectedKomersialEmailRoute = ProtectedKomersialEmailRouteImport.update({
   path: '/komersial/email',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
+const ProtectedOprasionalPembayaranIndexRoute =
+  ProtectedOprasionalPembayaranIndexRouteImport.update({
+    id: '/oprasional/pembayaran/',
+    path: '/oprasional/pembayaran/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 const ProtectedKomersialPenawaranIndexRoute =
   ProtectedKomersialPenawaranIndexRouteImport.update({
     id: '/komersial/penawaran/',
@@ -75,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/komersial/email': typeof ProtectedKomersialEmailRoute
   '/komersial/penawaran/$id': typeof ProtectedKomersialPenawaranIdRoute
   '/komersial/penawaran/': typeof ProtectedKomersialPenawaranIndexRoute
+  '/oprasional/pembayaran/': typeof ProtectedOprasionalPembayaranIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -85,6 +93,7 @@ export interface FileRoutesByTo {
   '/komersial/email': typeof ProtectedKomersialEmailRoute
   '/komersial/penawaran/$id': typeof ProtectedKomersialPenawaranIdRoute
   '/komersial/penawaran': typeof ProtectedKomersialPenawaranIndexRoute
+  '/oprasional/pembayaran': typeof ProtectedOprasionalPembayaranIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -97,6 +106,7 @@ export interface FileRoutesById {
   '/_protected/komersial/email': typeof ProtectedKomersialEmailRoute
   '/_protected/komersial/penawaran/$id': typeof ProtectedKomersialPenawaranIdRoute
   '/_protected/komersial/penawaran/': typeof ProtectedKomersialPenawaranIndexRoute
+  '/_protected/oprasional/pembayaran/': typeof ProtectedOprasionalPembayaranIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -109,6 +119,7 @@ export interface FileRouteTypes {
     | '/komersial/email'
     | '/komersial/penawaran/$id'
     | '/komersial/penawaran/'
+    | '/oprasional/pembayaran/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -119,6 +130,7 @@ export interface FileRouteTypes {
     | '/komersial/email'
     | '/komersial/penawaran/$id'
     | '/komersial/penawaran'
+    | '/oprasional/pembayaran'
   id:
     | '__root__'
     | '/'
@@ -130,6 +142,7 @@ export interface FileRouteTypes {
     | '/_protected/komersial/email'
     | '/_protected/komersial/penawaran/$id'
     | '/_protected/komersial/penawaran/'
+    | '/_protected/oprasional/pembayaran/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -191,6 +204,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedKomersialEmailRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
+    '/_protected/oprasional/pembayaran/': {
+      id: '/_protected/oprasional/pembayaran/'
+      path: '/oprasional/pembayaran'
+      fullPath: '/oprasional/pembayaran/'
+      preLoaderRoute: typeof ProtectedOprasionalPembayaranIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
     '/_protected/komersial/penawaran/': {
       id: '/_protected/komersial/penawaran/'
       path: '/komersial/penawaran'
@@ -213,6 +233,7 @@ interface ProtectedRouteRouteChildren {
   ProtectedKomersialEmailRoute: typeof ProtectedKomersialEmailRoute
   ProtectedKomersialPenawaranIdRoute: typeof ProtectedKomersialPenawaranIdRoute
   ProtectedKomersialPenawaranIndexRoute: typeof ProtectedKomersialPenawaranIndexRoute
+  ProtectedOprasionalPembayaranIndexRoute: typeof ProtectedOprasionalPembayaranIndexRoute
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
@@ -220,6 +241,8 @@ const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedKomersialEmailRoute: ProtectedKomersialEmailRoute,
   ProtectedKomersialPenawaranIdRoute: ProtectedKomersialPenawaranIdRoute,
   ProtectedKomersialPenawaranIndexRoute: ProtectedKomersialPenawaranIndexRoute,
+  ProtectedOprasionalPembayaranIndexRoute:
+    ProtectedOprasionalPembayaranIndexRoute,
 }
 
 const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(

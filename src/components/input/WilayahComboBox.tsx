@@ -40,7 +40,6 @@ const WilayahComboBox = ({readOnly=false, onChange=()=>{}, ...props}) => {
         onInputChange={setSearch}
         onSelectionChange={onChange}
         selectedKey={props.value?.id}
-        selectionMode='multiple'
     >
         <Label>Wilayah</Label>
         <ComboBox.InputGroup>

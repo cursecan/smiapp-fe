@@ -1,9 +1,9 @@
 import { api } from "../lib/api"
 
 export const usePenawaranService = {
-    getList: ({page=0, limit=10, q=''}) => {
-        const offset = page * limit
-        return api.get('/komersial/penawaran/', {params: {offset, limit, q}})
+    getList: ({pageParam, queryKey}) => {
+        const [_, q] = queryKey
+        return api.get('/komersial/penawaran/', {params: {page: pageParam, q}})
     },
     detail: (id) => {
         return api.get(`/komersial/penawaran/${id}/`)
