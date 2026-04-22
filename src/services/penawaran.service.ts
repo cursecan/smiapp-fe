@@ -43,4 +43,7 @@ export const useItemPenawaranService = {
     delete: (id) => {
         return api.post(`/komersial/item/${id}/delete/`)
     },
+    progress: (id, payload) => {
+        return api.post(`/komersial/item/${id}/progress/`, payload)
+    },
 }

@@ -47,14 +47,14 @@ const CreatePenawaranForm = ({pesanan, state}) => {
                     <Label>Nama Project</Label>
                     <Input value={form.nama_project} onChange={e=>setForm({...form, nama_project: e.target.value})} />
                 </TextField>
-                <TextField isRequired>
-                    <Label>No. Surat Pesanan</Label>
+                <TextField>
+                    <Label>Nomor PO/SPK</Label>
                     <Input value={form.nomor_penugasan} onChange={e=>setForm({...form, nomor_penugasan: e.target.value})} />
                 </TextField>
-                <TextField isRequired>
+                {/* <TextField isRequired>
                     <Label>Surat Pesanan</Label>
                     <Input value={form.judul_penugasan} onChange={e=>setForm({...form, judul_penugasan: e.target.value})} />
-                </TextField>
+                </TextField> */}
                 {/* <TextField isRequired>
                     <Label>Wilayah</Label>
                     <Input />

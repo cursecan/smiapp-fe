@@ -7,6 +7,7 @@ import InputText from '../../../../../components/input/InputText'
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useCashService } from '../../../../../services/oprasional/cashService'
+import { useNavigate } from '@tanstack/react-router'
 
 const CreateModal = () => {
     const state = useOverlayState()
@@ -24,21 +25,23 @@ const CreateModal = () => {
         catatan: ''
     })
 
+    const navigate = useNavigate()
+
     const qc = useQueryClient()
     const mutation_create = useMutation({
         mutationFn: async (payload) => {
-            return useCashService.create(payload)
+            return await useCashService.create(payload)
         },
         onSuccess: (res) => {
             qc.invalidateQueries({queryKey: ['cashbon-list']})
             state.close
+            navigate({to: `/oprasional/pembayaran/${res.data.id}`})
         }
     })
 
     const handleSave = () => {
         mutation_create.mutate(form)
         // console.log(form);
-        
     }
 
 

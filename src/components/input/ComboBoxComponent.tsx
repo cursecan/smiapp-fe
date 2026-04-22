@@ -1,15 +1,28 @@
 import { Label, ComboBox, Input, ListBox, EmptyState, Collection, ListBoxLoadMoreItem, Spinner, Avatar, Description } from '@heroui/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDebounce } from 'use-debounce'
+import { useInfiniteQuery } from '@tanstack/react-query'
 
-const ComboBoxComponent = ({label, onChangeTextValue=()=>{}, items=[], fetchNextPage=()=>{}, onChange=()=>{}, hasNextPage, isFetchingNextPage, isLoading, ...props}) => {
-    const [search, setSearch] = useState('')
+const ComboBoxComponent = ({label, onChange=()=>{}, fnQuery, keyName, filter, value, ...props}) => {
+    const [search, setSearch] = useState()
     const [debouncedFilter] = useDebounce(search, 600)
+    const [selectedKey, setSelectedKey] = useState(value || '')
+    
+    
+    const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfiniteQuery({
+        queryKey: [keyName, debouncedFilter],
+        queryFn: ({pageParam, queryKey}) => fnQuery(pageParam, queryKey),
+        initialPageParam: 1,
+        getNextPageParam: (lastPage) => {
+            
+            if (!lastPage.data.next) return undefined
 
-    const changeSearcInput = (e) => {
-        setSearch(e)
-        onChangeTextValue(debouncedFilter)
-    }
+            const url = new URL(lastPage.data.next)
+            return Number(url.searchParams.get('page'))
+        }
+    })
+    
+    const items = (data?.pages.flatMap(page => page.data.results) || []).map(filter)
 
     const list = {
         items,
@@ -19,33 +32,53 @@ const ComboBoxComponent = ({label, onChangeTextValue=()=>{}, items=[], fetchNext
         },
     }
 
+    const selectedItem = items?.find(i=>i.id===selectedKey)
+
+    const onChangeValue = (e) => {
+        // console.log(e);
+        // setSearch(selectedItem?.name)
+        setSelectedKey(e)
+        onChange(e)
+    }
+
+    useEffect(() => {
+        if (value) {
+            setSelectedKey(value)
+        }
+
+    }, [value])
+
   return (
+    <>
     <ComboBox
-        // isReadOnly={readOnly}
         allowsEmptyCollection
         inputValue={search}
-        onInputChange={changeSearcInput}
+        // onInputChange={setSearch}
         fullWidth
-        onSelectionChange={onChange}
-        selectedKey={props.value?.id}
+        onSelectionChange={(key) => onChangeValue(key)}
+        selectedKey={selectedKey}
     >
-        <Label>{label}</Label>
+        {
+            label && <Label>{label}</Label>
+        }
         <ComboBox.InputGroup>
             <Input placeholder='Search...' />
             <ComboBox.Trigger />
         </ComboBox.InputGroup>
         <ComboBox.Popover className={'w-100'}>
             <ListBox
-                className=''
                 renderEmptyState={() => {<EmptyState />}}
             >
                 <Collection items={items}>
                     {(item) => {
                         return (
-                            <ListBox.Item id={item.id} textValue={item.name}>
+                            <ListBox.Item key={item.id} id={item.id} textValue={item.name}>
                                 <div className="flex flex-col flex-1">
                                     <Label>{item.name}</Label>
-                                    <Description>Lorem, ipsum dolor.</Description>
+                                    {
+                                        !!item.description && <Description>{item.description}</Description>
+                                    }
+                                    
                                 </div>
                                 <ListBox.ItemIndicator />
                             </ListBox.Item>
@@ -64,6 +97,8 @@ const ComboBoxComponent = ({label, onChangeTextValue=()=>{}, items=[], fetchNext
             </ListBox>
         </ComboBox.Popover>
     </ComboBox>
+    {/* <p className="text-sm text-black">Selected: {selectedItem?.name || "None"}</p> */}
+    </>
   )
 }
 

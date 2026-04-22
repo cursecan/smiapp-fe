@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { useCashService } from '../../../../services/oprasional/cashService'
-import { Breadcrumbs, Button, Card, Table } from '@heroui/react'
-import { FileDollar, House, Plus } from '@gravity-ui/icons'
+import { Breadcrumbs, Button, Card, Chip, Description, Tab, Table } from '@heroui/react'
+import { FileDollar, House, Plus, TagDollar } from '@gravity-ui/icons'
 import CreateModal from '../-components/pembayaran/CreateModal'
+import { useFormatDate } from '../../../../utils/dateFormat'
 
 export const Route = createFileRoute('/_protected/oprasional/pembayaran/')({
   component: RouteComponent,
@@ -64,13 +65,64 @@ function RouteComponent() {
                                 <Table.Column isRowHeader>
                                     Pengajuan
                                 </Table.Column>
+                                <Table.Column>
+                                    Penerima
+                                </Table.Column>
+                                {/* <Table.Column>
+                                    Pemohon
+                                </Table.Column> */}
+                                <Table.Column>
+                                    Nilai
+                                </Table.Column>
+                                <Table.Column>
+                                    Status
+                                </Table.Column>
                             </Table.Header>
                             <Table.Body>
-                                <Table.Row>
-                                    <Table.Cell>
-                                        dada
-                                    </Table.Cell>
-                                </Table.Row>
+                                {
+                                    data?.results.map(i => {
+                                        return (
+                                            <Table.Row key={i.id}>
+                                                <Table.Cell>
+                                                    <div className="">
+                                                        <div className="flex gap-3">
+                                                            <Button isIconOnly size='sm' variant='primary' className={'bg-orange-400'}>
+                                                                <TagDollar />
+                                                            </Button>
+                                                            <div className="">
+                                                                <div className="text-xs mb-2 underline text-gray-500">{useFormatDate(i.create_at)}</div>
+                                                                <div className="">
+                                                                    <Link to={`/oprasional/pembayaran/${i.id}`}>{i.keterangan}</Link>
+                                                                </div>
+                                                                <Description>N.SPK 12/PMS/UU/2006</Description>
+                                                            </div> 
+                                                        </div>
+                                                    </div>
+                                                </Table.Cell>
+                                                <Table.Cell>
+                                                    <div className="">
+                                                        PT. Surya Abadi
+                                                        <div className="mb-2">
+                                                            <Description>
+                                                                Rek. 1982838 (BNI)
+                                                                A.n Anderi Setiawan
+                                                            </Description>
+                                                        </div>
+                                                        <Chip color='accent' variant='primary'>Pembayaran</Chip>
+                                                    </div>
+                                                </Table.Cell>
+                                                <Table.Cell>
+                                                    10.000
+                                                </Table.Cell>
+                                                <Table.Cell>
+                                                    <Chip color='accent' variant='soft'>
+                                                        Inisiasi
+                                                    </Chip>
+                                                </Table.Cell>
+                                            </Table.Row>
+                                        )
+                                    })
+                                }
                             </Table.Body>
                         </Table.Content>
                     </Table.ScrollContainer>

@@ -17,7 +17,10 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProtectedDashboardRouteImport } from './routes/_protected/dashboard'
 import { Route as ProtectedKomersialEmailRouteImport } from './routes/_protected/komersial/email'
 import { Route as ProtectedOprasionalPembayaranIndexRouteImport } from './routes/_protected/oprasional/pembayaran/index'
+import { Route as ProtectedOprasionalOprasionalIndexRouteImport } from './routes/_protected/oprasional/oprasional/index'
 import { Route as ProtectedKomersialPenawaranIndexRouteImport } from './routes/_protected/komersial/penawaran/index'
+import { Route as ProtectedOprasionalPembayaranIdRouteImport } from './routes/_protected/oprasional/pembayaran/$id'
+import { Route as ProtectedOprasionalOprasionalIdRouteImport } from './routes/_protected/oprasional/oprasional/$id'
 import { Route as ProtectedKomersialPenawaranIdRouteImport } from './routes/_protected/komersial/penawaran/$id'
 
 const LoginRoute = LoginRouteImport.update({
@@ -60,10 +63,28 @@ const ProtectedOprasionalPembayaranIndexRoute =
     path: '/oprasional/pembayaran/',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
+const ProtectedOprasionalOprasionalIndexRoute =
+  ProtectedOprasionalOprasionalIndexRouteImport.update({
+    id: '/oprasional/oprasional/',
+    path: '/oprasional/oprasional/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 const ProtectedKomersialPenawaranIndexRoute =
   ProtectedKomersialPenawaranIndexRouteImport.update({
     id: '/komersial/penawaran/',
     path: '/komersial/penawaran/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
+const ProtectedOprasionalPembayaranIdRoute =
+  ProtectedOprasionalPembayaranIdRouteImport.update({
+    id: '/oprasional/pembayaran/$id',
+    path: '/oprasional/pembayaran/$id',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
+const ProtectedOprasionalOprasionalIdRoute =
+  ProtectedOprasionalOprasionalIdRouteImport.update({
+    id: '/oprasional/oprasional/$id',
+    path: '/oprasional/oprasional/$id',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
 const ProtectedKomersialPenawaranIdRoute =
@@ -81,7 +102,10 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof ProtectedDashboardRoute
   '/komersial/email': typeof ProtectedKomersialEmailRoute
   '/komersial/penawaran/$id': typeof ProtectedKomersialPenawaranIdRoute
+  '/oprasional/oprasional/$id': typeof ProtectedOprasionalOprasionalIdRoute
+  '/oprasional/pembayaran/$id': typeof ProtectedOprasionalPembayaranIdRoute
   '/komersial/penawaran/': typeof ProtectedKomersialPenawaranIndexRoute
+  '/oprasional/oprasional/': typeof ProtectedOprasionalOprasionalIndexRoute
   '/oprasional/pembayaran/': typeof ProtectedOprasionalPembayaranIndexRoute
 }
 export interface FileRoutesByTo {
@@ -92,7 +116,10 @@ export interface FileRoutesByTo {
   '/dashboard': typeof ProtectedDashboardRoute
   '/komersial/email': typeof ProtectedKomersialEmailRoute
   '/komersial/penawaran/$id': typeof ProtectedKomersialPenawaranIdRoute
+  '/oprasional/oprasional/$id': typeof ProtectedOprasionalOprasionalIdRoute
+  '/oprasional/pembayaran/$id': typeof ProtectedOprasionalPembayaranIdRoute
   '/komersial/penawaran': typeof ProtectedKomersialPenawaranIndexRoute
+  '/oprasional/oprasional': typeof ProtectedOprasionalOprasionalIndexRoute
   '/oprasional/pembayaran': typeof ProtectedOprasionalPembayaranIndexRoute
 }
 export interface FileRoutesById {
@@ -105,7 +132,10 @@ export interface FileRoutesById {
   '/_protected/dashboard': typeof ProtectedDashboardRoute
   '/_protected/komersial/email': typeof ProtectedKomersialEmailRoute
   '/_protected/komersial/penawaran/$id': typeof ProtectedKomersialPenawaranIdRoute
+  '/_protected/oprasional/oprasional/$id': typeof ProtectedOprasionalOprasionalIdRoute
+  '/_protected/oprasional/pembayaran/$id': typeof ProtectedOprasionalPembayaranIdRoute
   '/_protected/komersial/penawaran/': typeof ProtectedKomersialPenawaranIndexRoute
+  '/_protected/oprasional/oprasional/': typeof ProtectedOprasionalOprasionalIndexRoute
   '/_protected/oprasional/pembayaran/': typeof ProtectedOprasionalPembayaranIndexRoute
 }
 export interface FileRouteTypes {
@@ -118,7 +148,10 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/komersial/email'
     | '/komersial/penawaran/$id'
+    | '/oprasional/oprasional/$id'
+    | '/oprasional/pembayaran/$id'
     | '/komersial/penawaran/'
+    | '/oprasional/oprasional/'
     | '/oprasional/pembayaran/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -129,7 +162,10 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/komersial/email'
     | '/komersial/penawaran/$id'
+    | '/oprasional/oprasional/$id'
+    | '/oprasional/pembayaran/$id'
     | '/komersial/penawaran'
+    | '/oprasional/oprasional'
     | '/oprasional/pembayaran'
   id:
     | '__root__'
@@ -141,7 +177,10 @@ export interface FileRouteTypes {
     | '/_protected/dashboard'
     | '/_protected/komersial/email'
     | '/_protected/komersial/penawaran/$id'
+    | '/_protected/oprasional/oprasional/$id'
+    | '/_protected/oprasional/pembayaran/$id'
     | '/_protected/komersial/penawaran/'
+    | '/_protected/oprasional/oprasional/'
     | '/_protected/oprasional/pembayaran/'
   fileRoutesById: FileRoutesById
 }
@@ -211,11 +250,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedOprasionalPembayaranIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
+    '/_protected/oprasional/oprasional/': {
+      id: '/_protected/oprasional/oprasional/'
+      path: '/oprasional/oprasional'
+      fullPath: '/oprasional/oprasional/'
+      preLoaderRoute: typeof ProtectedOprasionalOprasionalIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
     '/_protected/komersial/penawaran/': {
       id: '/_protected/komersial/penawaran/'
       path: '/komersial/penawaran'
       fullPath: '/komersial/penawaran/'
       preLoaderRoute: typeof ProtectedKomersialPenawaranIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/oprasional/pembayaran/$id': {
+      id: '/_protected/oprasional/pembayaran/$id'
+      path: '/oprasional/pembayaran/$id'
+      fullPath: '/oprasional/pembayaran/$id'
+      preLoaderRoute: typeof ProtectedOprasionalPembayaranIdRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/oprasional/oprasional/$id': {
+      id: '/_protected/oprasional/oprasional/$id'
+      path: '/oprasional/oprasional/$id'
+      fullPath: '/oprasional/oprasional/$id'
+      preLoaderRoute: typeof ProtectedOprasionalOprasionalIdRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
     '/_protected/komersial/penawaran/$id': {
@@ -232,7 +292,10 @@ interface ProtectedRouteRouteChildren {
   ProtectedDashboardRoute: typeof ProtectedDashboardRoute
   ProtectedKomersialEmailRoute: typeof ProtectedKomersialEmailRoute
   ProtectedKomersialPenawaranIdRoute: typeof ProtectedKomersialPenawaranIdRoute
+  ProtectedOprasionalOprasionalIdRoute: typeof ProtectedOprasionalOprasionalIdRoute
+  ProtectedOprasionalPembayaranIdRoute: typeof ProtectedOprasionalPembayaranIdRoute
   ProtectedKomersialPenawaranIndexRoute: typeof ProtectedKomersialPenawaranIndexRoute
+  ProtectedOprasionalOprasionalIndexRoute: typeof ProtectedOprasionalOprasionalIndexRoute
   ProtectedOprasionalPembayaranIndexRoute: typeof ProtectedOprasionalPembayaranIndexRoute
 }
 
@@ -240,7 +303,11 @@ const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedDashboardRoute: ProtectedDashboardRoute,
   ProtectedKomersialEmailRoute: ProtectedKomersialEmailRoute,
   ProtectedKomersialPenawaranIdRoute: ProtectedKomersialPenawaranIdRoute,
+  ProtectedOprasionalOprasionalIdRoute: ProtectedOprasionalOprasionalIdRoute,
+  ProtectedOprasionalPembayaranIdRoute: ProtectedOprasionalPembayaranIdRoute,
   ProtectedKomersialPenawaranIndexRoute: ProtectedKomersialPenawaranIndexRoute,
+  ProtectedOprasionalOprasionalIndexRoute:
+    ProtectedOprasionalOprasionalIndexRoute,
   ProtectedOprasionalPembayaranIndexRoute:
     ProtectedOprasionalPembayaranIndexRoute,
 }

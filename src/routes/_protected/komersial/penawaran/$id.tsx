@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react'
 import { useForm, Controller } from "react-hook-form"
 import ApprovalButton from '../../../../components/buttons/ApprovalButton'
 import PengadaanBarangRadio from '../../../../components/input/PengadaanBarangRadio'
+import InputText from '../../../../components/input/InputText'
 
 export const Route = createFileRoute('/_protected/komersial/penawaran/$id')({
   component: RouteComponent,
@@ -89,8 +90,8 @@ function RouteComponent() {
 
   useEffect(() => {
     if (data) {
-      console.log(data);
-      reset({...data, customer: data?.customer?.id || '', sumber_penugasan: data?.sumber_penugasan?.id || ''})
+      // console.log(data);
+      reset({...data, customer: data?.customer?.id || '', sumber_penugasan: data?.sumber_penugasan?.id || '', lokasi: data?.lokasi?.id})
     }
   }, [data, reset])
 
@@ -119,25 +120,22 @@ function RouteComponent() {
 
     <div className="mt-6 flex gap-10">
       <div className="max-w-3xl w-full space-y-6">
-        <Card variant='secondary'>
+        <Card variant='transparent' className='bg-white/80 backdrop-blur-sm'>
           <Card.Header>
             <Card.Title title={data?.nama_project} className='text-sky-600 font-semibold text-xl'>{data?.nama_project.length > 100 ? data?.nama_project.slice(0,100) + '...' : data?.nama_project}</Card.Title>
           </Card.Header>
           <Card.Content>
             <div className="">
               <div className="space-y-6">
-                <TextField>
-                  <Label>Nama Pekerjaan</Label>
                   <Controller
                     name='nama_project'
                     control={control}
                     render={({field}) => (
-                      <Input readOnly={!canEdit} {...field} value={field.value || ''} onChange={(e) => field.onChange(e.target.value)} />
+                      <InputText label={"Nama Pekerjaan ku"} readOnly={!canEdit} {...field} value={field.value || ''} onChange={(e) => field.onChange(e.target.value)} />
                     )}
                   />
-                </TextField>
                 <TextField className={'w-72'}>
-                  <Label>No. Pesanan</Label>
+                  <Label>No. SPK / No.PO</Label>
                   <Controller
                     name='nomor_penugasan'
                     control={control}
@@ -149,10 +147,10 @@ function RouteComponent() {
 
                 <div className="flex gap-6">
                   <div className="flex-1 space-y-2">
-                    <KapalComboBox readOnly={!canEdit} onSelectionChange={handleAppendKapal} />
+                    <KapalComboBox readOnly={!canEdit} value={''} onChange={handleAppendKapal} />
                     {
                       data?.kapal.length > 0 && (
-                      <Surface>
+                      <div className='bg-white/40 rounded-2xl'>
                         <ListBox>
                           {
                             data?.kapal.map(k => {
@@ -177,7 +175,7 @@ function RouteComponent() {
                             })
                           }
                         </ListBox>
-                      </Surface>
+                      </div>
                       )
                     }
                   </div>
