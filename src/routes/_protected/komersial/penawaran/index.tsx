@@ -1,11 +1,13 @@
-import { Breadcrumbs, Button, Card, Chip, Table } from '@heroui/react'
+import { Breadcrumbs, Button, Card, Chip, Description, Label, Surface, Table, Tag, TagGroup } from '@heroui/react'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { usePenawaranService } from '../../../../services/penawaran.service'
 import { useState } from 'react'
 import ModalPenawaran from '../-components/penawaran/ModalPenawaran'
 import { useFormatDate } from "../../../../utils/dateFormat"
-import { Clock, House, LogoDocker, LogoMicrosoftOffice, OfficeBadge, Pulse } from '@gravity-ui/icons'
+import { Clock, House, Route as RouteIcon, LogoDocker, LogoMicrosoftOffice, OfficeBadge, Pulse, TagDollar, CloudNutHex, MapPin } from '@gravity-ui/icons'
+import HeaderPage from '../../../../components/HeaderPage'
+import { formatRupiah } from '../../../../utils/formatCurrency'
 
 
 export const Route = createFileRoute('/_protected/komersial/penawaran/')({
@@ -28,27 +30,10 @@ function RouteComponent() {
   
 
   return (
-    <div className="">
-      <Card>
-        <Pulse className='size-8' />
-        <Card.Header>
-          <Card.Title>Penawaran</Card.Title>
-          <Card.Description>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius, consequuntur!
-          </Card.Description>
-        </Card.Header>
-        <Card.Footer>
-          <Breadcrumbs>
-            <Breadcrumbs.Item>
-              <House />
-            </Breadcrumbs.Item>
-            <Breadcrumbs.Item>
-              Penawaran Harga
-            </Breadcrumbs.Item>
-          </Breadcrumbs>
-        </Card.Footer>
-      </Card>
-
+    <div className="mt-10">
+      <HeaderPage
+        title={'Penawaran Harga'}
+      />
       <Card className='mt-6'>
         <Card.Header>
           <div className="flex items-center">
@@ -67,23 +52,12 @@ function RouteComponent() {
                     Penawaran
                   </Table.Column>
                   {/* <Table.Column>
-                    No. Surat Pesanan
-                  </Table.Column> */}
-                  <Table.Column>
                     Kapal
                   </Table.Column>
-                  {/* <Table.Column>
-                    Wilayah
-                  </Table.Column>
-                  <Table.Column>
-                    Customer
-                  </Table.Column> */}
                   <Table.Column>
                     Status
-                  </Table.Column>
-                  {/* <Table.Column>
-                    Create At
                   </Table.Column> */}
+                  
                 </Table.Header>
                 <Table.Body>
                   {
@@ -91,7 +65,7 @@ function RouteComponent() {
                       return (
                         <Table.Row key={i.id}>
                           <Table.Cell>
-                            <div className="flex gap-2">
+                            {/* <div className="flex gap-2">
                               <div className="">
                                 <Button isIconOnly>
                                   <LogoDocker />
@@ -106,40 +80,58 @@ function RouteComponent() {
                                     <div className="">{i.customer?.full_name}</div>
                                     <div className="">({i.customer?.company?.company_name || "-"})</div>
                                   </div>
-                                  
-                                  {/* <div className="flex flex-col">
-                                    <div className="">{i.customer?.full_name}</div>
-                                    <div className="">{i.customer?.company?.company_name || "-"}</div>
-                                  </div> */}
                                 </div>
                               </div>
 
+                            </div> */}
+
+                            <div className="flex gap-2 items-center">
+                              <Surface className='p-2 rounded-xl bg-amber-500'>
+                                <RouteIcon />
+                              </Surface>
+                              <div className="flex flex-col gap-2 flex-1">
+                                <Label>
+                                  <Link to={`${i.id}`}>{i.nama_project}</Link>
+                                </Label>
+                               <div className="flex items-center justify-between">
+                                <TagGroup variant='surface'>
+                                  <TagGroup.List>
+                                    <Tag>
+                                      <TagDollar /> { formatRupiah(i.progress.budget || '0')}
+                                    </Tag>
+                                    <Tag>
+                                      <LogoDocker /> { i.kapal ? i.kapal.length : '0' }
+                                    </Tag>
+                                     <Tag>
+                                      <MapPin /> { i.lokasi?.lokasi || '-' }
+                                    </Tag>
+                                  </TagGroup.List>
+                                </TagGroup>
+                                <TagGroup>
+                                  <TagGroup.List>
+                                    <Tag>
+                                      {i.status[0].completed ? 'Selesai' : i.status[0].name }
+                                    </Tag>
+                                  </TagGroup.List>
+                                </TagGroup>
+                               </div>
+                              </div>
                             </div>
                           </Table.Cell>
-                          {/* <Table.Cell className={'truncate'}>{i.nomor_penugasan}</Table.Cell> */}
-                          <Table.Cell className={'truncate'}>
+                          {/* <Table.Cell className={'truncate'}>
                             <div className="flex flex-col gap-1">
                               { i.kapal.length > 0 && i.kapal.map(p => {
                                 return <Chip key={p.id} color='danger' className='bg-orange-100'>{p.nama_kapal}</Chip>
                               })}
                             </div>
                           </Table.Cell>
-                          {/* <Table.Cell>{i.lokasi?.lokasi || '-'}</Table.Cell>
-                          <Table.Cell className={'truncate'}>
-                            <div className="flex flex-col">
-                              <div className="">{i.customer?.full_name}</div>
-                              <div className="">{i.customer?.company?.company_name || "-"}</div>
-                            </div>
-                          </Table.Cell> */}
+                          
                           <Table.Cell>
                             <Chip variant='soft' color='accent'>
                               {
                                 i.status[0].completed ? 'Selesai' : i.status[0].name 
                               }
                             </Chip>
-                          </Table.Cell>
-                          {/* <Table.Cell>
-                            {useFormatDate(i.create_at)}
                           </Table.Cell> */}
                         </Table.Row>
                       )

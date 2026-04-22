@@ -54,9 +54,9 @@ const ComboBoxComponent = ({label, onChange=()=>{}, fnQuery, keyName, filter, va
         allowsEmptyCollection
         inputValue={search}
         // onInputChange={setSearch}
-        fullWidth
         onSelectionChange={(key) => onChangeValue(key)}
         selectedKey={selectedKey}
+        className={props.className || ''}
     >
         {
             label && <Label>{label}</Label>
@@ -65,7 +65,7 @@ const ComboBoxComponent = ({label, onChange=()=>{}, fnQuery, keyName, filter, va
             <Input placeholder='Search...' />
             <ComboBox.Trigger />
         </ComboBox.InputGroup>
-        <ComboBox.Popover className={'w-100'}>
+        <ComboBox.Popover className={props.className || ''}>
             <ListBox
                 renderEmptyState={() => {<EmptyState />}}
             >

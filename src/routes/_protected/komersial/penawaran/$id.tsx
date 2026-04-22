@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, functionalUpdate, Link, useParams } from '@tanstack/react-router'
 import { usePenawaranService } from '../../../../services/penawaran.service'
 import { Accordion, AutocompletePopover, Avatar, Breadcrumbs, Button, Card, CloseIcon, Description, Disclosure, EmptyState, Input, Label, ListBox, Radio, RadioGroup, Surface, Tab, Table, Tabs, TextField } from '@heroui/react'
-import { CheckDouble, Clock, Dots9, FloppyDisk, FolderMagnifier, House, ListCheck, LocationArrow, LogoDocker, Paperclip } from '@gravity-ui/icons'
+import { CheckDouble, Clock, Dots9, FloppyDisk, FolderMagnifier, House, ListCheck, LocationArrow, LogoDocker, Paperclip, Timestamps } from '@gravity-ui/icons'
 import KapalSelect from '../../../../components/input/KapalSelect'
 import CustomerSelect from '../../../../components/input/CustomerSelect'
 import { useFormatDate } from '../../../../utils/dateFormat'
@@ -16,6 +16,8 @@ import { useForm, Controller } from "react-hook-form"
 import ApprovalButton from '../../../../components/buttons/ApprovalButton'
 import PengadaanBarangRadio from '../../../../components/input/PengadaanBarangRadio'
 import InputText from '../../../../components/input/InputText'
+import HeaderPage from '../../../../components/HeaderPage'
+import PengadaanBarangComboBox from '../../../../components/input/PengadaanBarangComboBox'
 
 export const Route = createFileRoute('/_protected/komersial/penawaran/$id')({
   component: RouteComponent,
@@ -106,47 +108,73 @@ function RouteComponent() {
   
 
 
-  return <div className="">
-    <Card variant='secondary'>
-      <LogoDocker className='size-8' />
-      <Card.Footer>
-        <Breadcrumbs>
-          <Breadcrumbs.Item><House /></Breadcrumbs.Item>
-          <Breadcrumbs.Item>Penawaran</Breadcrumbs.Item>
-          <Breadcrumbs.Item>{data.nama_project.length > 40 ? data.nama_project.slice(0,40) +'...'  : data.nama_project}</Breadcrumbs.Item>
-        </Breadcrumbs>
-      </Card.Footer>
-    </Card>
+  return <div className="mt-10">
+    <HeaderPage
+      title={`Detail Penawaran / ${data?.nama_project}`}
+    >
+       <div className="actions mt-6">
+          <div className="flex gap-3">
+            {
+              canEdit && <Button onPress={handleSubmit(handleSaveForm)}><FloppyDisk /> Simpan</Button>
+            }
+            {
+              canEdit && (
+                <SubmitButton handleSubmit={handleSubmitApproval} label={'Ajukan'} heading={'Ajukan Penawaran'} icon={<LocationArrow />}>
+                  <div className="">Ajukan penawaran untuk pekerjaan ini?</div>
+                </SubmitButton>
+              )
+            }
 
-    <div className="mt-6 flex gap-10">
-      <div className="max-w-3xl w-full space-y-6">
-        <Card variant='transparent' className='bg-white/80 backdrop-blur-sm'>
+            {
+              canApprove && (
+                <ApprovalButton onApprove={handleSubmitApproval}>
+                  <div className="">Silahkan melakukan approval untuk penawaran ini.</div>
+                </ApprovalButton>
+              )
+            }
+          </div>
+        </div>
+
+    </HeaderPage>
+
+    
+
+    <div className="flex mt-6 gap-10">
+      <div className="w-100">
+        <Card>
           <Card.Header>
-            <Card.Title title={data?.nama_project} className='text-sky-600 font-semibold text-xl'>{data?.nama_project.length > 100 ? data?.nama_project.slice(0,100) + '...' : data?.nama_project}</Card.Title>
+            <Card.Title>Detail Informasi</Card.Title>
           </Card.Header>
           <Card.Content>
-            <div className="">
-              <div className="space-y-6">
+            <Card variant='secondary'>
+              <Card.Content>
+                <div className="space-y-6">
                   <Controller
                     name='nama_project'
                     control={control}
                     render={({field}) => (
-                      <InputText label={"Nama Pekerjaan ku"} readOnly={!canEdit} {...field} value={field.value || ''} onChange={(e) => field.onChange(e.target.value)} />
+                      <InputText label={"Pekerjaan"} readOnly={!canEdit} {...field} value={field.value || ''} onChange={(e) => field.onChange(e.target.value)} />
                     )}
                   />
-                <TextField className={'w-72'}>
-                  <Label>No. SPK / No.PO</Label>
                   <Controller
                     name='nomor_penugasan'
                     control={control}
                     render={({field}) => (
-                      <Input readOnly={!canEdit} {...field} value={field.value || ''} onChange={(e) => field.onChange(e.target.value)} />
+                      <InputText label={'No. SPK/PO'} {...field} value={field.value} onChange={(e) => field.onChange(e.target.value)} />
                     )}
                   />
-                </TextField>
+                  
+                  <Controller
+                    name='lokasi'
+                    control={control}
+                    render={({field}) => (
+                      <WilayahComboBox readOnly={!canEdit} {...field} value={field.value} onChange={(e) => field.onChange(e)} />
+                      
+                    )}
+                  />
+                  <PengadaanBarangComboBox value={''} onChange={() => {}} />
 
-                <div className="flex gap-6">
-                  <div className="flex-1 space-y-2">
+                  <div className="space-y-2">
                     <KapalComboBox readOnly={!canEdit} value={''} onChange={handleAppendKapal} />
                     {
                       data?.kapal.length > 0 && (
@@ -179,54 +207,58 @@ function RouteComponent() {
                       )
                     }
                   </div>
-                  <div className="flex-1">
-                    <PengadaanBarangRadio />
-                  </div>
+                  
                 </div>
+              </Card.Content>
+            </Card>
+          </Card.Content>
+        </Card>
+      </div>
 
-                <Controller
-                  name='lokasi'
-                  control={control}
-                  render={({field}) => (
-                    <WilayahComboBox readOnly={!canEdit} {...field} value={field.value} onChange={(e) => field.onChange(e)} />
-                    // <Input readOnly={!canEdit} {...field} value={field.value || ''} onChange={(e) => field.onChange(e.target.value)} />
-                  )}
-                />
-              </div>
+      <div className="flex-1">
+        <Pekerjaan id={id} canEdit={canEdit} />
+      </div>
+      
+      <div className="w-72">
+        <Card>
+          <Card.Header>
+            <Card.Title>Progress Status</Card.Title>
+            <Card.Description>
+              Lorem ipsum dolor sit amet.
+            </Card.Description>
+          </Card.Header>
+          <Card.Content>
+            <div className="flex flex-col gap-4">
+              {
+                data?.stepper.map((s, index) => {
+                  return (
+                    <Surface key={index} className='flex items-center gap-6'>
+                      <Surface className={`p-2 rounded-xl ${!!s.approved_at ? 'bg-success' : 'bg-amber-100'}`}>
+                        {
+                          !!s.approved_at ? <CheckDouble /> : <Clock />
+                        }
+                      </Surface>
+                      <Surface className='flex flex-col flex-1'>
+                        <Label>{s.name}</Label>
+                        {
+                          s.approved_at && (
+                            <>
+                              <Description>{s.step > 1 ? 'Approved' : 'Created'} by {s.approval_by?.full_name}</Description>
+                              <Description>{useFormatDate(s.approved_at)}</Description>
+                            </>
+                          )
+                        }
+                      </Surface>
+                    </Surface>
+
+                  )
+                })
+              }
+
             </div>
           </Card.Content>
         </Card>
-
-        <Pekerjaan id={id} canEdit={canEdit} />
-
-        {/* Submit & Approval */}
-        <div className="actions">
-          <div className="flex justify-end gap-3">
-            {
-              canEdit && <Button onPress={handleSubmit(handleSaveForm)}><FloppyDisk /> Simpan</Button>
-            }
-            {
-              canEdit && (
-                <SubmitButton handleSubmit={handleSubmitApproval} label={'Ajukan'} heading={'Ajukan Penawaran'} icon={<LocationArrow />}>
-                  <div className="">Ajukan penawaran untuk pekerjaan ini?</div>
-                </SubmitButton>
-              )
-            }
-
-            {
-              canApprove && (
-                <ApprovalButton onApprove={handleSubmitApproval}>
-                  <div className="">Silahkan melakukan approval untuk penawaran ini.</div>
-                </ApprovalButton>
-              )
-            }
-          </div>
-        </div>
-
-      </div>
-      
-      <div className="flex-1">
-        <div className="bg-white/0 backdrop-blur-sm rounded-2xl">
+        {/* <div className="bg-white/0 backdrop-blur-sm rounded-2xl">
             <div className="p-0 space-y-5">
               {
                 data?.stepper.map((s, index) => {
@@ -263,9 +295,8 @@ function RouteComponent() {
                 })
               }
             </div>
-        </div>
+        </div> */}
       </div>
-
     </div>
   </div>
 }

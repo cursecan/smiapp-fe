@@ -2,7 +2,7 @@
 import { useWilayahService } from '../../services/masterdata/wilayahService'
 import ComboBoxComponent from './ComboBoxComponent'
 
-const WilayahComboBox = ({value, onChange=()=>{}}) => {
+const WilayahComboBox = ({value, onChange=()=>{}, ...props}) => {
     const fnQuery = async (pageParam, queryKey) => useWilayahService.list({pageParam, queryKey})
     
   return (
@@ -14,6 +14,7 @@ const WilayahComboBox = ({value, onChange=()=>{}}) => {
         filter={(i) => ({...i, name: i.lokasi})}
         onChange={onChange}
         value={value}
+        {...props}
     />
   )
 }

@@ -2,7 +2,8 @@ import { api } from "../../lib/api"
 
 
 export const useJenisPekerjaanService = {
-    list: () => {
-        return api.get('/master/jenis-pekerjaan', {params: {limit: 20}})
+    list: ({pageParam, queryKey}) => {
+        const [_, q] = queryKey
+        return api.get('/master/jenis-pekerjaan', {params: {page: pageParam, q}})
     }
 }

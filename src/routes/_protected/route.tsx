@@ -1,7 +1,7 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 import AssideBar from '../../components/AssideBar';
-import { Avatar, Button } from '@heroui/react';
-import { Bell } from '@gravity-ui/icons';
+import { Avatar, Button, ButtonGroup, Description, Dropdown, Label, Surface } from '@heroui/react';
+import { Bell, BellDot, ChevronLeft, ChevronRight, Headphones, House, MapPinPlus,  Route as IconRoute, Envelope, Cup } from '@gravity-ui/icons';
 import TopNavbar from '../../components/TopNavbar';
 
 export const Route = createFileRoute('/_protected')({
@@ -24,8 +24,8 @@ function RouteComponent() {
         </div> */}
         {/* <TopNavbar /> */}
         
-        <AssideBar />
-        <div className="ml-72 min-h-screen flex flex-col">
+        {/* <AssideBar /> */}
+        {/* <div className="min-h-screen flex flex-col">
             <div className="flex-1 flex flex-col pr-3 pb-3">
               <div className="p-3 pt-0 pl-0">
                 <div className="pt-3">
@@ -49,6 +49,16 @@ function RouteComponent() {
               </div>
 
             </div>
+        </div> */}
+
+        <div className="min-h-screen flex flex-col">
+          <div>
+            <TopNavbar />
+          </div>
+          <div className="flex-1 px-10">
+            <Outlet />
+          </div>
+
         </div>
     </div>
   )
