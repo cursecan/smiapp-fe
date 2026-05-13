@@ -1,23 +1,31 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { createFileRoute, functionalUpdate, Link, useParams } from '@tanstack/react-router'
+import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
 import { usePenawaranService } from '../../../../services/penawaran.service'
-import { Accordion, AutocompletePopover, Avatar, Breadcrumbs, Button, Card, CloseIcon, Description, Disclosure, EmptyState, Input, Label, ListBox, Radio, RadioGroup, Surface, Tab, Table, Tabs, TextField } from '@heroui/react'
-import { CheckDouble, Clock, Dots9, FloppyDisk, FolderMagnifier, House, ListCheck, LocationArrow, LogoDocker, Paperclip, Timestamps } from '@gravity-ui/icons'
-import KapalSelect from '../../../../components/input/KapalSelect'
-import CustomerSelect from '../../../../components/input/CustomerSelect'
+import {  Breadcrumbs, Button, Card, CloseButton, Description,  Disclosure,  Label,  Surface, Table  } from '@heroui/react'
+import { CheckDouble, Clock,  Cloud,  Eye,  House, LogoDocker } from '@gravity-ui/icons'
+
 import { useFormatDate } from '../../../../utils/dateFormat'
-import Pekerjaan from '../-components/penawaran/tabs/Pekerjaan'
-import WilayahComboBox from '../../../../components/input/WilayahComboBox'
 import KapalComboBox from '../../../../components/input/KapalComboBox'
 import { useSchema } from '../../../../components/useSchema'
-import SubmitButton from '../../../../components/buttons/SubmitButton'
 import { useEffect, useState } from 'react'
 import { useForm, Controller } from "react-hook-form"
-import ApprovalButton from '../../../../components/buttons/ApprovalButton'
-import PengadaanBarangRadio from '../../../../components/input/PengadaanBarangRadio'
 import InputText from '../../../../components/input/InputText'
 import HeaderPage from '../../../../components/HeaderPage'
 import PengadaanBarangComboBox from '../../../../components/input/PengadaanBarangComboBox'
+import DokumenFileItem from '../-components/penawaran/DokumenFileItem'
+import PelabuhanComboBox from '../../../../components/input/PelabuhanComboBox'
+import ApprovalButtons from '../../../../components/buttons/ApprovalButtons'
+import Pekerjaan from '../-components/penawaran/tabs/Pekerjaan'
+
+
+import { zodResolver } from "@hookform/resolvers/zod"
+import { usePenawaranSchema } from '../../../../schemas/penawaranSchema'
+import CustomerComboBox from '../../../../components/input/CustomerComboBox'
+import DokumenPenawaran from '../-components/penawaran/DokumenPenawaran'
+import ReplyEmailModal from '../-components/penawaran/ReplyEmailModal'
+import DisposisiOperasionalModal from '../-components/penawaran/DisposisiOperasionalModal'
+import { useOprasionalService } from '../../../../services/oprasional/oprasionalService'
+import DownloadPenawaran from '../-components/penawaran/DownloadPenawaran'
 
 export const Route = createFileRoute('/_protected/komersial/penawaran/$id')({
   component: RouteComponent,
@@ -32,10 +40,13 @@ function RouteComponent() {
     select: (data) => data.data
   })
 
+  const navigate = useNavigate()
+  const [kapal, setkapal] = useState('')
+  const [errors, setErrors] = useState(null)
+
   const {canEdit, canApprove} = useSchema(data)
-
-  const {control, handleSubmit, reset} = useForm({defaultValues: data || {}})
-
+  const {control, handleSubmit, reset, getValues, formState: {isValid}} = useForm({resolver: zodResolver(usePenawaranSchema), mode: "onChange", defaultValues: data || {}})
+  
   const qc  = useQueryClient()
   const mutation = useMutation({
     mutationFn: async ({id, payload}) => {
@@ -43,6 +54,7 @@ function RouteComponent() {
     },
     onSuccess: (res) => {
       qc.invalidateQueries({queryKey: ['detail-penawaran', id]})
+      setkapal('')
     }
   })
 
@@ -55,45 +67,25 @@ function RouteComponent() {
     }
   })
 
-  const submit_mutation = useMutation({
-    mutationFn: async (id) => {
-      return await usePenawaranService.submit(id)
-    },
-    onSuccess: () => {
-      qc.invalidateQueries({queryKey: ['detail-penawaran', id]})
-    }
-  })
 
-  const save_mutation = useMutation({
-    mutationFn: async (payload) => {
-      return await usePenawaranService.edit(id, payload)
-    },
-    onSuccess: () => {
-      qc.invalidateQueries({queryKey: ['detail-penawaran', id]})
-    }
-  })
-
-  const handleSaveForm = (dataForm) => {
-    save_mutation.mutate(dataForm)
-  }
-
-  const handleAppendKapal = (e) => {
-    mutation.mutate({id, payload: {kapal_id: e}})
+  const handleAppendKapal = () => {
+    mutation.mutate({id, payload: {kapal_id: kapal}})
   }
 
   const handleRemoveKapal = (e) => {
     remove_mutation.mutate({id, payload: {kapal_id: e}})
   }
 
-  const handleSubmitApproval = () => {
-    submit_mutation.mutate(id)
-  }
-
 
   useEffect(() => {
     if (data) {
       // console.log(data);
-      reset({...data, customer: data?.customer?.id || '', sumber_penugasan: data?.sumber_penugasan?.id || '', lokasi: data?.lokasi?.id})
+      reset({...data, 
+        jenis_pekerjaan: data?.jenis_pekerjaan?.id ||'', 
+        customer: data?.customer?.id || '', 
+        sumber_penugasan: data?.sumber_penugasan?.id || '', 
+        pelabuhan: data?.pelabuhan?.id || ''}
+      )
     }
   }, [data, reset])
 
@@ -101,122 +93,189 @@ function RouteComponent() {
   if (isLoading) {
     return (<>Loading....</>)
   }
-
-
-
   
-  
-
 
   return <div className="mt-10">
     <HeaderPage
-      title={`Detail Penawaran / ${data?.nama_project}`}
+      title={`Detail Penawaran`}
     >
-       <div className="actions mt-6">
-          <div className="flex gap-3">
-            {
-              canEdit && <Button onPress={handleSubmit(handleSaveForm)}><FloppyDisk /> Simpan</Button>
-            }
-            {
-              canEdit && (
-                <SubmitButton handleSubmit={handleSubmitApproval} label={'Ajukan'} heading={'Ajukan Penawaran'} icon={<LocationArrow />}>
-                  <div className="">Ajukan penawaran untuk pekerjaan ini?</div>
-                </SubmitButton>
-              )
-            }
-
-            {
-              canApprove && (
-                <ApprovalButton onApprove={handleSubmitApproval}>
-                  <div className="">Silahkan melakukan approval untuk penawaran ini.</div>
-                </ApprovalButton>
-              )
-            }
-          </div>
-        </div>
+      <div className="mt-6">
+        <Breadcrumbs>
+          <Breadcrumbs.Item>
+            <House />
+          </Breadcrumbs.Item>
+          <Breadcrumbs.Item onPress={() => navigate({to: '/komersial/penawaran'})}>
+            Penawaran
+          </Breadcrumbs.Item>
+          <Breadcrumbs.Item>
+            Detail
+          </Breadcrumbs.Item>
+        </Breadcrumbs>
+      </div>
 
     </HeaderPage>
 
     
 
-    <div className="flex mt-6 gap-10">
-      <div className="w-100">
+    <div className="flex mt-6 gap-10 mb-10">
+      <div className="flex-1">
         <Card>
           <Card.Header>
-            <Card.Title>Detail Informasi</Card.Title>
+            <Card.Title className={'font-bold'}>NO. {data?.nomor}</Card.Title>
           </Card.Header>
           <Card.Content>
-            <Card variant='secondary'>
-              <Card.Content>
-                <div className="space-y-6">
-                  <Controller
-                    name='nama_project'
-                    control={control}
-                    render={({field}) => (
-                      <InputText label={"Pekerjaan"} readOnly={!canEdit} {...field} value={field.value || ''} onChange={(e) => field.onChange(e.target.value)} />
-                    )}
-                  />
-                  <Controller
-                    name='nomor_penugasan'
-                    control={control}
-                    render={({field}) => (
-                      <InputText label={'No. SPK/PO'} {...field} value={field.value} onChange={(e) => field.onChange(e.target.value)} />
-                    )}
-                  />
-                  
-                  <Controller
-                    name='lokasi'
-                    control={control}
-                    render={({field}) => (
-                      <WilayahComboBox readOnly={!canEdit} {...field} value={field.value} onChange={(e) => field.onChange(e)} />
-                      
-                    )}
-                  />
-                  <PengadaanBarangComboBox value={''} onChange={() => {}} />
+            <Surface className="space-y-6 p-4 rounded-2xl" variant='secondary'>
+              <Controller
+                name='nama_project'
+                control={control}
+                render={({field}) => (
+                  <InputText isDisabled={!canEdit} error={errors?.nama_project} label={"Pekerjaan"} {...field} value={field.value || ''} onChange={(e) => field.onChange(e.target.value)} />
+                )}
+              />
+              <div className="flex gap-6">
+                <Controller
+                  name='nomor_penugasan'
+                  control={control}
+                  render={({field}) => (
+                    <InputText isDisabled={!canEdit} error={errors?.nomor_penugasan} label={'No. SPK/PO'} {...field} value={field.value} onChange={(e) => field.onChange(e.target.value)} />
+                  )}
+                />
 
-                  <div className="space-y-2">
-                    <KapalComboBox readOnly={!canEdit} value={''} onChange={handleAppendKapal} />
-                    {
-                      data?.kapal.length > 0 && (
-                      <div className='bg-white/40 rounded-2xl'>
-                        <ListBox>
+                <Controller
+                  name="jenis_pekerjaan"
+                  control={control}
+                  render={({field}) => (
+                    <PengadaanBarangComboBox isDisabled={!canEdit} isInvalid={!field.value} {...field} value={field.value || ''} onChange={(e) => field.onChange(e)} />
+                  )}
+                />
+
+                <Controller
+                  name='pelabuhan'
+                  control={control}
+                  render={({field}) => (
+                    // <WilayahComboBox readOnly={!canEdit} {...field} value={field.value} onChange={(e) => field.onChange(e)} />
+                    <PelabuhanComboBox isDisabled={!canEdit} isInvalid={!field.value} label={'Palabuhan / Wilayah'} {...field} value={field.value || ''} onChange={(e) => field.onChange(e)} />
+                  )}
+                />
+              </div>
+              
+              <Surface className='rounded-xl p-3'>
+                  { canEdit && (
+                    <div className="flex items-center gap-3 mb-3">
+                      <Label> Pilih Kapal : </Label>
+                      <KapalComboBox readOnly={!canEdit} value={kapal} onChange={setkapal} />
+                      <Button onPress={handleAppendKapal} variant='secondary'>Add Kapal</Button>
+                    </div>
+                  )}
+                  <Table>
+                    <Table.ScrollContainer>
+                      <Table.Content>
+                        <Table.Header>
+                          <Table.Column isRowHeader></Table.Column>
+                          <Table.Column>Nama Kapal</Table.Column>
+                          <Table.Column></Table.Column>
+                        </Table.Header>
+                        <Table.Body >
                           {
                             data?.kapal.map(k => {
                               return (
-                                <ListBox.Item key={k.id}>
-                                  <LogoDocker className='text-sky-600' />
-                                  <div className="flex flex-1 items-center justify-between">
-                                    <Label>{k.nama_kapal}</Label>
-                                    {
-                                      canEdit && (
-                                        <div className="">
-                                          <Button onPress={() => handleRemoveKapal(k.id)} isIconOnly size='sm' variant='danger-soft'>
-                                            <CloseIcon />
-                                          </Button>
-                                        </div>
-                                      )
-                                    }
-                                  </div>
-                                  
-                                </ListBox.Item>
+                                <Table.Row>
+                                  <Table.Cell className={'truncate w-0'}>
+                                    <LogoDocker />
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                    {k.nama_kapal}
+                                  </Table.Cell>
+                                  <Table.Cell className={'w-0 truncate'}>
+                                    <CloseButton isDisabled={!canEdit} onPress={() => handleRemoveKapal(k.id)} />
+                                  </Table.Cell>
+                                </Table.Row>
                               )
                             })
                           }
-                        </ListBox>
-                      </div>
-                      )
-                    }
-                  </div>
-                  
-                </div>
-              </Card.Content>
-            </Card>
+                        </Table.Body>
+                      </Table.Content>
+                    </Table.ScrollContainer>
+                  </Table>
+                  {
+                    !!errors?.kapal && (
+                      <div className="text-sm text-red-500 mt-2">* {errors.kapal.message}</div>
+                    )
+                  }
+              </Surface>
+              
+              <DokumenPenawaran canEdit={canEdit} data={data} />
+              
+              <Pekerjaan id={id} canEdit={canEdit} />
+              
+              {
+                data?.sumber_penugasan && (
+                  <Surface className='p-3 rounded-2xl text-center'>
+                    <Disclosure>
+                      <Disclosure.Heading>
+                        <Button variant='tertiary' slot={'trigger'}>
+                          <Eye />
+                          Lihat Email Penugasan
+                          <Disclosure.Indicator />
+                        </Button>
+                      </Disclosure.Heading>
+                      <Disclosure.Content>
+                        <Disclosure.Body>
+                          <div className="text-left space-y-4">
+                            <div className="flex flex-col">
+                              <Description>Subject</Description>
+                              <Label>{data?.sumber_penugasan?.subject}</Label>
+                            </div>
+                            <div className="flex flex-col">
+                              <Description>Receive Date</Description>
+                              <Label>{useFormatDate(data?.sumber_penugasan?.receive_date)}</Label>
+                            </div>
+                            <div className="flex flex-col">
+                              <Description>Body</Description>
+                              <Label>{data?.sumber_penugasan?.body}</Label>
+                            </div>
+                          </div>
+                        </Disclosure.Body>
+                      </Disclosure.Content>
+                    </Disclosure>
+                  </Surface>
+                )
+              }
+
+              <Controller
+                name='customer'
+                control={control}
+                render={({field}) => (
+                  <CustomerComboBox isDisabled={!!data?.sumber_penugasan} label={'Pemberi Kerja'} {...field} value={field.value || ''} onChange={(e) => field.onChange(e)} />
+                )}
+              />
+
+              <div className="flex items-center gap-3">
+                <ApprovalButtons
+                  noValidationSave
+                  isCanApprove={canApprove}
+                  isCanEdit={canEdit}
+                  form={{handleSubmit, getValues, isValid}}
+                  saveFn={(payload) => usePenawaranService.edit(data.id, payload)}
+                  submitFn={() => usePenawaranService.submit(data.id)}
+                  queryKey={['detail-penawaran', id]}
+                  onError={setErrors}
+                />
+                {
+                  data?.status[0]?.completed && (
+                    <>
+                      <ReplyEmailModal payload={data} isDisabled={data?.has_email_reply} fnQuery={(payload) => usePenawaranService.reply_email(data?.id, payload)} queryKey={['detail-penawaran', id]} />
+                      <DownloadPenawaran data={data} />
+                      <DisposisiOperasionalModal isDisabled={data?.has_ops} fnQuery={() => useOprasionalService.create({penawaran: data.id})} queryKey={['detail-penawaran', id]}  />
+                    </>
+                  )
+                }
+              </div>
+
+            </Surface>
           </Card.Content>
         </Card>
-      </div>
 
-      <div className="flex-1">
-        <Pekerjaan id={id} canEdit={canEdit} />
       </div>
       
       <div className="w-72">
@@ -228,7 +287,7 @@ function RouteComponent() {
             </Card.Description>
           </Card.Header>
           <Card.Content>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-6">
               {
                 data?.stepper.map((s, index) => {
                   return (
@@ -254,48 +313,9 @@ function RouteComponent() {
                   )
                 })
               }
-
             </div>
           </Card.Content>
         </Card>
-        {/* <div className="bg-white/0 backdrop-blur-sm rounded-2xl">
-            <div className="p-0 space-y-5">
-              {
-                data?.stepper.map((s, index) => {
-                  return (
-                    <Card key={s.id} className='flex-row'>
-                      <div className="">
-                        {
-                          !!s.approved_at ? (
-                            <Button isIconOnly className={'bg-success'}>
-                              <CheckDouble /> 
-                            </Button>
-                          ) : (
-                            <Avatar>
-                              <Avatar.Fallback>{s.step}</Avatar.Fallback>
-                            </Avatar>
-                          )
-                        }
-                      </div>
-                      <div className="flex-1">
-                        <Card.Header className=''>
-                          <Card.Title className=''>{s.name}</Card.Title>
-                          {
-                            s.approved_at &&  (
-                              <Card.Description>
-                                { index === 0 ? 'Create' : 'Approve'} by {s.approval_by.full_name}
-                              </Card.Description>
-                            )
-                          }
-                        </Card.Header>
-
-                      </div>
-                    </Card>
-                  )
-                })
-              }
-            </div>
-        </div> */}
       </div>
     </div>
   </div>

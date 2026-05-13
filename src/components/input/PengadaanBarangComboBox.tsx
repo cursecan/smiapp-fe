@@ -1,8 +1,21 @@
+import { useQuery } from "@tanstack/react-query"
 import { useJenisPekerjaanService } from "../../services/masterdata/jenisPekerjaanService"
 import ComboBoxComponent from "./ComboBoxComponent"
 
 const PengadaanBarangComboBox = ({value, onChange=()=>{}, ...props}) => {
     const fnQuery = async (pageParam, queryKey) => useJenisPekerjaanService.list({pageParam, queryKey})
+
+    const {data:selectedData} = useQuery({
+        queryKey: ['jenispekerjaan-detail-combox', value],
+        queryFn: async () => {
+            return await useJenisPekerjaanService.detail(value)
+        },
+        select: (res) => {
+            const data=res.data
+            return {...data, name: data.jenis_pekerjaan}
+        },
+        enabled: !!value
+    })
   return (
     <ComboBoxComponent
         label={'Jenis Pekerjaan'}
@@ -10,7 +23,7 @@ const PengadaanBarangComboBox = ({value, onChange=()=>{}, ...props}) => {
         keyName={'pekerjaan-jenis-list-combox'}
         filter={(i) => ({...i, name: i.jenis_pekerjaan})}
         onChange={onChange}
-        value={value}
+        value={selectedData}
         {...props}
     />
   )

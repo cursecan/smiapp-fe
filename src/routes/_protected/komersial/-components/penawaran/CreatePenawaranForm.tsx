@@ -60,9 +60,6 @@ const CreatePenawaranForm = ({pesanan, state}) => {
                     <Input />
                 </TextField>
                 <KapalSelect onChange={(e) => setForm({...form, kapal:e})} /> */}
-                {
-                    !pesanan && <CustomerSelect onChange={(e) => setForm({...form, customer:e})} />
-                }
             </form>
         </Surface>
         <div className="flex justify-end items-center gap-2">

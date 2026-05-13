@@ -7,5 +7,8 @@ export const useCustomerService = {
     },
     create: (payload) => {
         return api.post('/customer/customer/', payload)
+    },
+    detail: (id) => {
+        return api.get(`/customer/customer/${id}/`)
     }
 }

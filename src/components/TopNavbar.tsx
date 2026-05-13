@@ -1,20 +1,22 @@
-import { BellDot, ChevronRight, Cup, Envelope, FaceRobot, Gear, Headphones, House, Route, Shapes4, SquareDashed } from '@gravity-ui/icons'
+import { ArrowRightFromSquare, BellDot, ChevronRight, Cup, Envelope, FaceRobot, Gear, Headphones, House, LogoUbuntu, Person, Route, Shapes4, SquareDashed } from '@gravity-ui/icons'
 import { Avatar, Button, ButtonGroup, Dropdown, Label, Surface } from '@heroui/react'
 import { useAuth } from '../auth/AuthProvider'
 import { useLocation, useNavigate } from '@tanstack/react-router'
+import { useFallbackName } from '../utils/useFallbackName'
 
 const TopNavbar = () => {
-    const {user} = useAuth()
+    const {user, logout} = useAuth()
     const location = useLocation()
     const navigate = useNavigate()
 
   return (
     <div className="bg-white flex items-center justify-end gap-6 h-16 px-10">
         <div className="flex flex-1 gap-2 items-center">
-            <Surface className='bg-amber-400 text-black p-1 rounded-full'>
+            {/* <Surface className='bg-amber-400 text-black p-1 rounded-full'>
                 <FaceRobot className='size-8' />
-            </Surface>
-            <div className="text-2xl font-black">Smile:</div>
+            </Surface> */}
+            <img src="/logo3.png" alt="logo" className='h-10' />
+            <div className="text-2xl font-black">NaviAgent</div>
         </div>
         <Surface variant='secondary' className="flex items-center rounded-full">
             <Button variant='ghost'>
@@ -43,7 +45,7 @@ const TopNavbar = () => {
                 </Dropdown.Popover>
             </Dropdown>
             {/* Operasioanl */}
-            <Button variant='ghost'>
+            <Button onPress={() => navigate({to: '/oprasional/oprasional'})} variant='ghost' className={location.pathname.includes('/oprasional') && 'bg-black text-white'}>
                 <Route />
                 Operasional
             </Button>
@@ -92,17 +94,30 @@ const TopNavbar = () => {
         <Button isIconOnly variant='tertiary'>
             <BellDot />
         </Button>
-        <ButtonGroup variant='tertiary'>
-            <Button variant='tertiary' isIconOnly>
-                <Avatar size='sm'>
-                <Avatar.Image src='https://img.heroui.chat/image/avatar?w=400&h=400&u=4' />
-                </Avatar>
-            </Button>
-            <Button variant='tertiary'>
-                <Label>{user.full_name}</Label>
-                <ChevronRight />
-            </Button>
-        </ButtonGroup>
+        <Dropdown>
+            <Dropdown.Trigger>
+                <Button variant='tertiary'>
+                    <Person /> {useFallbackName(user.full_name)}
+                </Button>
+            </Dropdown.Trigger>
+            <Dropdown.Popover>
+                <div className="flex items-center gap-2 p-3">
+                    <Avatar size='sm'>
+                        <Avatar.Image src='https://img.heroui.chat/image/avatar?w=400&h=400&u=4' />
+                    </Avatar>
+                    <Label>{user.full_name}</Label>
+                </div>
+
+                <Dropdown.Menu>
+                    <Dropdown.Item variant='danger' onPress={logout}>
+                        <div className="flex w-full items-center justify-between gap-2">
+                            <Label>Log Out</Label>
+                            <ArrowRightFromSquare className="size-3.5 text-danger" />
+                        </div>
+                    </Dropdown.Item>
+                </Dropdown.Menu>
+            </Dropdown.Popover>
+        </Dropdown>
         
     </div>
   )

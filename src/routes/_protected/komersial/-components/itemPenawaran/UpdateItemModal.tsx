@@ -55,13 +55,13 @@ const UpdateItemModal = ({item}) => {
                         </div>
                         <TextField>
                             <Label>Biaya HPP</Label>
-                            <CurrencyInput value={dataForm.harga_hpp} />
+                            <CurrencyInput value={dataForm.harga_hpp} onChange={(e) => setDataForm({...dataForm, harga_hpp: e})}  />
                             {/* <Input type='number' value={dataForm.harga_hpp} onChange={(e) => setDataForm({...dataForm, harga_hpp:e.target.value})} /> */}
                             <Description>Biaya dapat disesuaikan dengan harga vendor.</Description>
                         </TextField>
                         <TextField>
                             <Label>Biaya Satuan</Label>
-                            <CurrencyInput value={dataForm.harga_satuan} />
+                            <CurrencyInput value={dataForm.harga_satuan} onChange={(e) => setDataForm({...dataForm, harga_satuan: e})} />
                             {/* <Input type='number' value={dataForm.harga_satuan} onChange={(e) => setDataForm({...dataForm, harga_satuan:e.target.value})} /> */}
                             <Description>Estimasi biaya sesuai invoice.</Description>
                         </TextField>

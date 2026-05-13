@@ -2,13 +2,13 @@
 import { useKapalService } from '../../services/masterdata/kapalService'
 import ComboBoxComponent from './ComboBoxComponent'
 
-const KapalComboBox = ({value, onChange=()=>{}}) => {
+const KapalComboBox = ({label, value, onChange=()=>{}}) => {
     const fnQuery = async (pageParam, queryKey) => useKapalService.list({pageParam, queryKey})
     
   return (
 
     <ComboBoxComponent
-        label={'Kapal'}
+        label={label}
         fnQuery={fnQuery}
         keyName={'kapal-list-combox'}
         filter={(i) => ({...i, name: i.nama_kapal})}

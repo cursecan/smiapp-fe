@@ -6,8 +6,8 @@ const SelectComponent = ({
     value,
     data=[],
     multiple=false,
-    disable=false,
     onChange=()=>{},
+    ...props
 }) => {
     const a = () => {
         if (multiple) {
@@ -24,7 +24,7 @@ const SelectComponent = ({
 
 
   return (
-    <Select isDisabled={disable} value={selectedValue} onChange={changeValue} selectionMode={!multiple ? 'single' : 'multiple'}>
+    <Select value={selectedValue} onChange={changeValue} selectionMode={!multiple ? 'single' : 'multiple'} {...props}>
         {
             label && (
                 <Label>{label}</Label>

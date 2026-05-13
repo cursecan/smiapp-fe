@@ -1,11 +1,12 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import HeaderPage from '../../../../components/HeaderPage'
-import { House, Rocket, RoundBrackets } from '@gravity-ui/icons'
-import { Avatar, Breadcrumbs, Card, Chip, Description, Label, ProgressBar, Table } from '@heroui/react'
+import { Car, House, Rocket, RoundBrackets } from '@gravity-ui/icons'
+import { Avatar, Breadcrumbs, Card, Chip, Description, Label, ProgressBar, SearchField, Table } from '@heroui/react'
 import { useQuery } from '@tanstack/react-query'
 import { useOprasionalService } from '../../../../services/oprasional/oprasionalService'
 import { useState } from 'react'
 import { formatRupiah } from '../../../../utils/formatCurrency'
+import { useFallbackName } from '../../../../utils/useFallbackName'
 
 export const Route = createFileRoute('/_protected/oprasional/oprasional/')({
   component: RouteComponent,
@@ -30,21 +31,29 @@ function RouteComponent() {
     }
 
   return (
-    <div className="">
+    <div className="mt-10">
         <HeaderPage
-            // title={'Oprasional'}
-            icon={<Rocket className='size-8' />}
-        >
-            <Breadcrumbs>
-                <Breadcrumbs.Item>
-                    <House />
-                </Breadcrumbs.Item>
-                <Breadcrumbs.Item>Oprasional</Breadcrumbs.Item>
-            </Breadcrumbs>
-        </HeaderPage>
+            title={'Operasional'}
+        />
 
 
         <Card className='mt-6'>
+            <Card.Header>
+                <div className="flex items-center">
+            <div className="flex-1">
+              <SearchField className={'w-100'}>
+                  <SearchField.Group>
+                      <SearchField.SearchIcon />
+                      <SearchField.Input onChange={() => {}} placeholder='Search...' className={'w-90'} />
+                      <SearchField.ClearButton onPress={() => setSearch('')} />
+                  </SearchField.Group>
+              </SearchField>
+            </div>
+            {/* <div className="">
+              <ModalPenawaran />
+            </div> */}
+          </div>
+            </Card.Header>
             <Card.Content>
                 <Table>
                     <Table.ScrollContainer>
@@ -64,16 +73,16 @@ function RouteComponent() {
                                                 <Table.Cell className={'truncate'}>
                                                     <div className="flex gap-2 items-center">
                                                         <Avatar>
-                                                            <Avatar.Fallback>AS</Avatar.Fallback>
+                                                            <Avatar.Fallback className='bg-black text-white'>{useFallbackName(i.assign_to?.full_name || 'NA')}</Avatar.Fallback>
                                                         </Avatar>
                                                         <div className="flex-1">
-                                                            <div className="">Anderi Setiawan</div>
-                                                            <Description>Cilacap Agen</Description>
+                                                            <div className="">{i.assign_to?.full_name || 'Unmaped'}</div>
+                                                            <Description>{i.assign_to?.pegawai?.cabang || '-'}</Description>
                                                         </div>
                                                     </div>
                                                 </Table.Cell>
                                                 <Table.Cell>
-                                                    <Description>SPK. 123123123</Description>
+                                                    <Description>{i.penawaran.nomor} / <span className=''>{i.penawaran.nomor_penugasan}</span></Description>
                                                     <div className="">
                                                         <Link to={`${i.id}`}>{i.penawaran.nama_project}</Link>
                                                     </div>

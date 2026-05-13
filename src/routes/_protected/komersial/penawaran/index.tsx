@@ -1,4 +1,4 @@
-import { Breadcrumbs, Button, Card, Chip, Description, Label, Surface, Table, Tag, TagGroup } from '@heroui/react'
+import { Breadcrumbs, Button, Card, Chip, Description, Label, SearchField, Surface, Table, Tag, TagGroup } from '@heroui/react'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { usePenawaranService } from '../../../../services/penawaran.service'
@@ -23,10 +23,16 @@ function RouteComponent() {
     select: (data) => data.data
   })
 
-
-  if (isLoading) {
-    return <div className="">Loading</div>
+  const changeSearch =(e) => {
+    setTimeout(() => {
+      setSearch(e.target.value)
+    }, 800);
   }
+
+
+  // if (isLoading) {
+  //   return <div className="">Loading</div>
+  // }
   
 
   return (
@@ -37,7 +43,15 @@ function RouteComponent() {
       <Card className='mt-6'>
         <Card.Header>
           <div className="flex items-center">
-            <div className="flex-1"></div>
+            <div className="flex-1">
+              <SearchField className={'w-100'}>
+                  <SearchField.Group>
+                      <SearchField.SearchIcon />
+                      <SearchField.Input onChange={changeSearch} placeholder='Search...' className={'w-90'} />
+                      <SearchField.ClearButton onPress={() => setSearch('')} />
+                  </SearchField.Group>
+              </SearchField>
+            </div>
             <div className="">
               <ModalPenawaran />
             </div>
@@ -65,31 +79,12 @@ function RouteComponent() {
                       return (
                         <Table.Row key={i.id}>
                           <Table.Cell>
-                            {/* <div className="flex gap-2">
-                              <div className="">
-                                <Button isIconOnly>
-                                  <LogoDocker />
-                                </Button>
-                              </div>
-                              <div className="">
-                                <div className="text-xs mb-3 underline">{useFormatDate(i.create_at)}</div>
-                                <Link to={`${i.id}`}>{i.nama_project}</Link>
-                                <div className="">
-                                  <div className="flex items-center gap-2 text-gray-400 text-sm">
-                                    <LogoMicrosoftOffice />
-                                    <div className="">{i.customer?.full_name}</div>
-                                    <div className="">({i.customer?.company?.company_name || "-"})</div>
-                                  </div>
-                                </div>
-                              </div>
-
-                            </div> */}
-
                             <div className="flex gap-2 items-center">
                               <Surface className='p-2 rounded-xl bg-amber-500'>
                                 <RouteIcon />
                               </Surface>
                               <div className="flex flex-col gap-2 flex-1">
+                                <Description>{i.nomor}</Description>
                                 <Label>
                                   <Link to={`${i.id}`}>{i.nama_project}</Link>
                                 </Label>
@@ -103,7 +98,7 @@ function RouteComponent() {
                                       <LogoDocker /> { i.kapal ? i.kapal.length : '0' }
                                     </Tag>
                                      <Tag>
-                                      <MapPin /> { i.lokasi?.lokasi || '-' }
+                                      <MapPin /> { i.pelabuhan?.nama_pelabuhan || '-' }
                                     </Tag>
                                   </TagGroup.List>
                                 </TagGroup>

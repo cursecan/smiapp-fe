@@ -5,6 +5,7 @@ import { routeTree } from './routeTree.gen'
 
 import { AuthProvider, useAuth } from './auth/AuthProvider'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { Toast } from '@heroui/react'
 
 
 const queryClient = new QueryClient()
@@ -32,10 +33,10 @@ function App() {
   return (
     <>
       <QueryClientProvider client={queryClient}>
+        <Toast.Provider placement='bottom end' />
         <AuthProvider>
           <InnerApp />
         </AuthProvider>
-
       </QueryClientProvider>
     </>
   )

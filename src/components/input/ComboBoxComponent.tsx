@@ -1,4 +1,4 @@
-import { Label, ComboBox, Input, ListBox, EmptyState, Collection, ListBoxLoadMoreItem, Spinner, Avatar, Description } from '@heroui/react'
+import { Label, ComboBox, Input, ListBox, EmptyState, Collection, ListBoxLoadMoreItem, Spinner, Avatar, Description, FieldError } from '@heroui/react'
 import { useEffect, useState } from 'react'
 import { useDebounce } from 'use-debounce'
 import { useInfiniteQuery } from '@tanstack/react-query'
@@ -6,16 +6,17 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 const ComboBoxComponent = ({label, onChange=()=>{}, fnQuery, keyName, filter, value, ...props}) => {
     const [search, setSearch] = useState()
     const [debouncedFilter] = useDebounce(search, 600)
-    const [selectedKey, setSelectedKey] = useState(value || '')
+    const [selectedKey, setSelectedKey] = useState('')
     
     
     const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfiniteQuery({
-        queryKey: [keyName, debouncedFilter],
+        queryKey: [keyName, debouncedFilter, selectedKey],
         queryFn: ({pageParam, queryKey}) => fnQuery(pageParam, queryKey),
         initialPageParam: 1,
         getNextPageParam: (lastPage) => {
+            // console.log(lastPage, 'lastpage');
             
-            if (!lastPage.data.next) return undefined
+            if (!lastPage.data.nexts) return undefined
 
             const url = new URL(lastPage.data.next)
             return Number(url.searchParams.get('page'))
@@ -23,6 +24,7 @@ const ComboBoxComponent = ({label, onChange=()=>{}, fnQuery, keyName, filter, va
     })
     
     const items = (data?.pages.flatMap(page => page.data.results) || []).map(filter)
+    
 
     const list = {
         items,
@@ -32,31 +34,32 @@ const ComboBoxComponent = ({label, onChange=()=>{}, fnQuery, keyName, filter, va
         },
     }
 
-    const selectedItem = items?.find(i=>i.id===selectedKey)
-
     const onChangeValue = (e) => {
         // console.log(e);
-        // setSearch(selectedItem?.name)
+        // setSearch(e)
         setSelectedKey(e)
         onChange(e)
     }
 
     useEffect(() => {
         if (value) {
-            setSelectedKey(value)
+            setSelectedKey(value.id)
+            setSearch(value.name)
         }
 
     }, [value])
+
 
   return (
     <>
     <ComboBox
         allowsEmptyCollection
         inputValue={search}
-        // onInputChange={setSearch}
+        onInputChange={setSearch}
         onSelectionChange={(key) => onChangeValue(key)}
         selectedKey={selectedKey}
         className={props.className || ''}
+        {...props}
     >
         {
             label && <Label>{label}</Label>

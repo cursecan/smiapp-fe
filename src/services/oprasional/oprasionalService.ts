@@ -2,6 +2,9 @@ import { api } from '../../lib/api'
 
 
 export const useOprasionalService = {
+    create: (payload) => {
+        return api.post('/oprasional/opr/', payload)
+    },
     list: ({pageParam, queryKkey}) => {
         return api.get('/oprasional/opr/')
     },

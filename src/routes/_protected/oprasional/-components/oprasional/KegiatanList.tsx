@@ -10,7 +10,8 @@ const KegiatanList = ({data}) => {
         queryFn: async () => {
             return await usePenawaranService.items(data?.penawaran.id)
         },
-        select: (data) => data.data.filter(i => !i.is_header)
+        select: (data) => data.data.filter(i => !i.is_header),
+        enabled: !!data?.penawaran.id
     }) 
 
     const { data:catatan, isLoading:loadingCatatan} = useQuery({
@@ -18,7 +19,8 @@ const KegiatanList = ({data}) => {
         queryFn: async () => {
             return await useOprasionalService.catatan(data?.id)
         },
-        select: (data) => data.data
+        select: (data) => data.data,
+        enabled: !!data?.id
     }) 
 
     if (loadingKegiatan || loadingCatatan) {
@@ -34,17 +36,17 @@ const KegiatanList = ({data}) => {
   return (
     <Card>
         <Card.Header>
-            <Card.Title>Check List Pekerjaan</Card.Title>
+            <Card.Title>Progress Pekerjaan</Card.Title>
         </Card.Header>
         <Card.Content>
             <Table>
                 <Table.ScrollContainer>
                     <Table.Content>
                         <Table.Header>
-                            <Table.Column isRowHeader className={'w-0 truncate'}>No</Table.Column>
-                            <Table.Column>Pekerjaan</Table.Column>
-                            <Table.Column className={'w-50 truncate'}>Progress (%)</Table.Column>
-                            <Table.Column className={'truncate w-0'}>Selesai?</Table.Column>
+                            {/* <Table.Column isRowHeader className={'w-0 truncate'}>No</Table.Column> */}
+                            <Table.Column isRowHeader className={'truncate'}>Progress</Table.Column>
+                            <Table.Column>Barang / Jasa</Table.Column>
+                            <Table.Column className={'truncate w-0'}></Table.Column>
                         </Table.Header>
                         <Table.Body>
                             {

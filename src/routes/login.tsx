@@ -1,8 +1,9 @@
-import { Button, Input, Label, TextField } from '@heroui/react'
+import { Button, Input, Label, Surface, TextField } from '@heroui/react'
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
 import axios from 'axios'
 import { use, useState } from 'react'
 import { useAuth } from '../auth/AuthProvider'
+import { FaceRobotSmile } from '@gravity-ui/icons'
 
 export const Route = createFileRoute('/login')({
   component: RouteComponent,
@@ -35,11 +36,11 @@ function RouteComponent() {
         },
         withCredentials: true
       })
-      // console.log(res.data);
       const { user, access } = res.data
       await login(user, access)
-
-      navigate({to: '/dashboard', replace: true})
+      
+      console.log(res.data);
+      navigate({to: '/komersial/penawaran', replace: true})
 
     } catch (error) {
       console.log(error);
@@ -51,8 +52,14 @@ function RouteComponent() {
 
 
   return (
-    <div className=" h-screen bg-white flex justify-center items-center">
+    <div className=" h-screen bg-linear-150 from-neutral-100 to-sky-500  flex justify-center items-center">
       <div className="max-w-xs w-full">
+          <div className="flex items-center justify-center">
+            <Surface className='p-2 rounded-full bg-amber-400'>
+              <FaceRobotSmile className='size-10' />
+            </Surface>
+          </div>
+          <div className="text-2xl text-center mb-10">Login Smile</div>
           <div className="space-y-6">
             <TextField>
               {/* <Label>Username</Label> */}

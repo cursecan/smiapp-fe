@@ -47,7 +47,7 @@ const ItemPenawaranModal = ({id, parent, simple=false, disable=false}) => {
         heading={'Data Sheet Pekerjaan'}
         size={'lg'}
         iconComponent={<Rocket className='size-6' />}
-        buttonTrigger={<Button isDisabled={disable} onPress={state.setOpen} isIconOnly={simple} size='sm'><Plus />{ !simple && <span>Tambah Item Penawaran</span> }</Button>}
+        buttonTrigger={<Button isDisabled={disable} onPress={state.setOpen} size='sm' isIconOnly={simple}><Plus />{ !simple && <span>Tambah Item Penawaran</span> }</Button>}
         hideFooter
 
     >

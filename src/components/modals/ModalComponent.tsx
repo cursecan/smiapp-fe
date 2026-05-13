@@ -1,4 +1,3 @@
-import { Rocket } from '@gravity-ui/icons'
 import { Button, Modal } from '@heroui/react'
 
 const ModalComponent = ({

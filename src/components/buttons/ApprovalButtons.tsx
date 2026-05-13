@@ -1,20 +1,26 @@
 import { AlertDialog, Button, useOverlayState } from "@heroui/react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useToast } from "../../lib/useToast"
 
 
 const ApprovalButtons = ({
     submitFn,
     saveFn,
     form,
-    handleSubmit,
     queryKey,
     isCanEdit=false,
     isCanApprove=false,
-    beforeSubmit=()=>{}
+    noValidationSave=false,
+    onError=()=>{}
 }) => {
+
+    console.log(isCanApprove, 'pppppppppppppppppppppp');
+    
     const save_state = useOverlayState()
     const req_state = useOverlayState()
     const app_state = useOverlayState()
+
+    const toast = useToast()
 
     const closeState = () => {
         save_state.close()
@@ -27,6 +33,7 @@ const ApprovalButtons = ({
     const save_mutation = useMutation({
         mutationFn: saveFn,
         onSuccess: (res) => {
+            toast.success({message: 'Success.', description:'Data telah bershasil disimpan.'})
             if (queryKey) {
                 qc.invalidateQueries({
                     queryKey: [...queryKey]
@@ -34,12 +41,17 @@ const ApprovalButtons = ({
 
             }
             closeState()
+        },
+        onError: (er) => {
+            toast.danger({message: 'Gagal', description: er.message})
         }
+
     })
 
     const submit_mutation = useMutation({
         mutationFn: submitFn,
         onSuccess: (res) => {
+            // toast.success()
             if (queryKey) {
                 qc.invalidateQueries({
                     queryKey: [...queryKey]
@@ -47,24 +59,40 @@ const ApprovalButtons = ({
 
             }
             closeState()
+        },
+        onError: (er) => {
+            toast.danger({message: 'Gagal', description: er.message})
         }
     })
 
     const handleSaveForm = (dataForm) => {
-        if (beforeSubmit) {
-            beforeSubmit()
-        }
         save_mutation.mutate(dataForm)
     }
 
-    const handleSubmitForm = (dataForm) => {
-        if (beforeSubmit) {
-            beforeSubmit()
+
+    const errorSave = (errors) => {
+        if (noValidationSave) {
+            const data = form.getValues()
+            save_mutation.mutate(data)
+            return
         }
-        submit_mutation.mutate(dataForm)
+
+        onError(errors)
     }
 
-    
+    const errorSubmit = (errors) => {
+        console.log(errors, 'errors');
+        
+        alert('Harap lengkapi data dengan benar.')
+        onError(errors)
+        
+    }
+
+    const handleSubmitForm = (dataForm) => {
+        console.log(dataForm, 'dataformss');
+        
+        submit_mutation.mutate(dataForm)
+    }
 
 
   return (
@@ -73,7 +101,7 @@ const ApprovalButtons = ({
             isCanEdit && (
                 <>
                     <AlertDialog>
-                        <Button onPress={save_state.setOpen}>Simpan</Button>
+                        <Button isDisabled={false} onPress={save_state.setOpen}>Simpan</Button>
                         <AlertDialog.Backdrop isOpen={save_state.isOpen} onOpenChange={save_state.setOpen}>
                             <AlertDialog.Container>
                                 <AlertDialog.Dialog>
@@ -89,36 +117,68 @@ const ApprovalButtons = ({
                                     </AlertDialog.Body>
                                     <AlertDialog.Footer>
                                         <Button slot={'close'} variant="tertiary">Close</Button>
-                                        <Button onPress={handleSubmit(handleSaveForm)}>Ya, Simpan</Button>
+                                        <Button onPress={form.handleSubmit(handleSaveForm, errorSave)}>Ya, Simpan</Button>
                                     </AlertDialog.Footer>
                                 </AlertDialog.Dialog>
                             </AlertDialog.Container>
                         </AlertDialog.Backdrop>
                     </AlertDialog>
-                    <AlertDialog>
-                        <Button className={'bg-orange-500'} onPress={req_state.setOpen}>Ajukan</Button>
-                        <AlertDialog.Backdrop isOpen={req_state.isOpen} onOpenChange={req_state.setOpen}>
-                            <AlertDialog.Container>
-                                <AlertDialog.Dialog>
-                                    <AlertDialog.CloseTrigger />
-                                    <AlertDialog.Header>
-                                        <AlertDialog.Icon status="success" />
-                                        <AlertDialog.Heading>Pengajuan Approval</AlertDialog.Heading>
-                                    </AlertDialog.Header>
-                                    <AlertDialog.Body>
-                                        <div className="">
-                                            Apakah kamu yakin mau mangajukan proses aprroval ke tahap selanjutnya?
-                                        </div>
-                                    </AlertDialog.Body>
-                                    <AlertDialog.Footer>
-                                        <Button slot={'close'} variant="tertiary">Close</Button>
-                                        <Button onPress={handleSubmit(handleSubmitForm)}>Ya, Lanjutkan</Button>
-                                    </AlertDialog.Footer>
-                                </AlertDialog.Dialog>
-                            </AlertDialog.Container>
-                        </AlertDialog.Backdrop>
-                    </AlertDialog>
+                    {
+                        !isCanApprove && (
+                            <AlertDialog>
+                                <Button isDisabled={false} className={'bg-orange-500'} onPress={req_state.setOpen}>Ajukan</Button>
+                                <AlertDialog.Backdrop isOpen={req_state.isOpen} onOpenChange={req_state.setOpen}>
+                                    <AlertDialog.Container>
+                                        <AlertDialog.Dialog>
+                                            <AlertDialog.CloseTrigger />
+                                            <AlertDialog.Header>
+                                                <AlertDialog.Icon status="success" />
+                                                <AlertDialog.Heading>Pengajuan Approval</AlertDialog.Heading>
+                                            </AlertDialog.Header>
+                                            <AlertDialog.Body>
+                                                <div className="">
+                                                    Apakah kamu yakin mau mangajukan proses aprroval ke tahap selanjutnya?
+                                                </div>
+                                            </AlertDialog.Body>
+                                            <AlertDialog.Footer>
+                                                <Button slot={'close'} variant="tertiary">Close</Button>
+                                                <Button onPress={form.handleSubmit(handleSubmitForm, errorSubmit)}>Ya, Lanjutkan</Button>
+                                            </AlertDialog.Footer>
+                                        </AlertDialog.Dialog>
+                                    </AlertDialog.Container>
+                                </AlertDialog.Backdrop>
+                            </AlertDialog>
+                        )
+                    }
                 </>
+            )
+        }
+        {
+            isCanApprove && (
+                <AlertDialog>
+                    <Button isDisabled={false} className={'bg-orange-500'} onPress={req_state.setOpen}>Approval</Button>
+                    <AlertDialog.Backdrop isOpen={req_state.isOpen} onOpenChange={req_state.setOpen}>
+                        <AlertDialog.Container>
+                            <AlertDialog.Dialog>
+                                <AlertDialog.CloseTrigger />
+                                <AlertDialog.Header>
+                                    <AlertDialog.Icon status="success" />
+                                    <AlertDialog.Heading>Approval</AlertDialog.Heading>
+                                </AlertDialog.Header>
+                                <AlertDialog.Body>
+                                    <div className="">
+                                        Apakah kamu yakin menyetujui permintaan aproval data tersebut?
+                                    </div>
+                                </AlertDialog.Body>
+                                <AlertDialog.Footer>
+                                    {/* <Button slot={'close'} variant="tertiary">Close</Button> */}
+                                    <Button variant="danger" slot={'close'}>Tolak</Button>
+                                    <Button onPress={form.handleSubmit(handleSubmitForm, errorSubmit)}>Setujui</Button>
+                                </AlertDialog.Footer>
+                            </AlertDialog.Dialog>
+                        </AlertDialog.Container>
+                    </AlertDialog.Backdrop>
+                </AlertDialog>
             )
         }
     </div>

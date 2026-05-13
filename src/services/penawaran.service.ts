@@ -25,6 +25,12 @@ export const usePenawaranService = {
     },
     remove_kapal: (id, payload) => {
         return api.post(`/komersial/penawaran/${id}/remove-kapal/`, payload)
+    },
+    documents: (id) => {
+        return api.get(`/komersial/penawaran/${id}/documents/`)
+    },
+    reply_email: (id, payload) => {
+        return api.post(`/komersial/penawaran/${id}/reply-email/`, payload)
     }
 }
 
