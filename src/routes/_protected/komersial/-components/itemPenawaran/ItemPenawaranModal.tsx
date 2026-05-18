@@ -1,8 +1,8 @@
 
-import { FontCursor, HandPointUp, Plus, Rocket } from '@gravity-ui/icons'
+import { HandPointUp, Plus, Rocket } from '@gravity-ui/icons'
 import ModalComponent from '../../../../../components/modals/ModalComponent'
-import { Button, Description, SearchField, Surface, Tab, Table, useOverlayState } from '@heroui/react'
-import { useState } from 'react'
+import { Button, SearchField, Surface, Table, useOverlayState } from '@heroui/react'
+
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { usePekerjaanService } from '../../../../../services/masterdata/pekerjaanService'
 import { useItemPenawaranService } from '../../../../../services/penawaran.service'
@@ -12,6 +12,7 @@ const ItemPenawaranModal = ({id, parent, simple=false, disable=false}) => {
     const state = useOverlayState()
     const form = {
         penawaran: '',
+        reference_item: '',
         parent: '',
         code: '',
         barang_jasa: '',
@@ -37,7 +38,7 @@ const ItemPenawaranModal = ({id, parent, simple=false, disable=false}) => {
     })
 
     const handleCreateItem = (p) => {
-        mutation.mutate({...form, penawaran: id, barang_jasa: p.nama_pekerjaan, harga_satuan: p.hpp, harga_hpp: p.hpp, parent: parent ? parent : ''})
+        mutation.mutate({...form, penawaran: id, reference_item: p.id, barang_jasa: p.nama_pekerjaan, harga_satuan: p.hpp, harga_hpp: p.hpp, parent: parent ? parent : ''})
     }
 
 
