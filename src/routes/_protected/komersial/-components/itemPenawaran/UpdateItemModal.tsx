@@ -15,8 +15,8 @@ const UpdateItemModal = ({item}) => {
         mutationFn: async ({id, payload}) => {
             return await useItemPenawaranService.edit(id, payload)
         },
-        onSuccess: (res) => {
-            qc.invalidateQueries({queryKey: ['item-penawaran']}),
+        onSuccess: () => {
+            qc.invalidateQueries({queryKey: ['item-penawaran']})
             state.close()
         }
     })

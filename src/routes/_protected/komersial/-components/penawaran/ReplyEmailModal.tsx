@@ -3,22 +3,27 @@ import ModalComponent from "../../../../../components/modals/ModalComponent"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useToast } from "../../../../../lib/useToast"
 import InputText from "../../../../../components/input/InputText"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 const ReplyEmailModal = ({payload, fnQuery, queryKey, isDisabled=false}) => {
     const state = useOverlayState()
     const toast = useToast()
+    const re_subject = `Re: ${payload.sumber_penugasan.subject}`
+    const email_to = payload.sumber_penugasan.customer?.email || ''
+    const company = payload.sumber_penugasan?.customer?.company?.company_name || ''
+    const full_name = payload.sumber_penugasan?.customer?.full_name
+    const body = `Kepada Yth.\n${company}\n${full_name}\n\nBerikut kami kirimkan Penawaran Harga ${payload.nama_project}`
 
     const [data, setData] = useState({
-        subject: '',
-        body: '',
-        email_to: ''
+        subject: re_subject,
+        email_to: email_to, 
+        body: body
     })
 
     const qc  = useQueryClient()
     const mutation = useMutation({
         mutationFn: fnQuery,
-        onSuccess: (res) => {
+        onSuccess: () => {
             qc.invalidateQueries([...queryKey])
             state.close()
             toast.success({message: 'Berhasil.', description: "Penawaran berhasil dikirimkan."})
@@ -32,18 +37,6 @@ const ReplyEmailModal = ({payload, fnQuery, queryKey, isDisabled=false}) => {
     const handleSubmit = () => {
         mutation.mutate(data)
     }
-
-    useEffect(() => {
-        if (payload && payload.sumber_penugasan) {
-            const re_subject = `Re: ${payload.sumber_penugasan.subject}`
-            const email_to = payload.sumber_penugasan.customer?.email || ''
-            const company = payload.sumber_penugasan?.customer?.company?.company_name || ''
-            const full_name = payload.sumber_penugasan?.customer?.full_name
-            const body = `Kepada Yth.\n${company}\n${full_name}\n\nBerikut kami kirimkan Penawaran Harga ${payload.nama_project}`
-
-            setData({...data, subject: re_subject, email_to: email_to, body: body})
-        }   
-    }, [payload])
 
   return (
     <ModalComponent

@@ -2,7 +2,7 @@ import { ArrowRightFromSquare, BellDot, Cup, Envelope, Gear, Headphones, House, 
 import { Avatar, Button, Dropdown, Label, Surface } from '@heroui/react'
 import { useAuth } from '../auth/AuthProvider'
 import { useLocation, useNavigate } from '@tanstack/react-router'
-import { useFallbackName } from '../utils/useFallbackName'
+import { fallbackName } from '../utils/useFallbackName'
 
 const TopNavbar = () => {
     const {user, logout} = useAuth()
@@ -97,7 +97,7 @@ const TopNavbar = () => {
         <Dropdown>
             <Dropdown.Trigger>
                 <Button variant='tertiary'>
-                    <Person /> {useFallbackName(user.full_name)}
+                    <Person /> {fallbackName(user.full_name)}
                 </Button>
             </Dropdown.Trigger>
             <Dropdown.Popover>

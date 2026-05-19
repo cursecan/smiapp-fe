@@ -1,32 +1,38 @@
 import { Card, Description, Label, SearchField, Surface, Table, Tag, TagGroup } from '@heroui/react'
 import { useQuery } from '@tanstack/react-query'
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { usePenawaranService } from '../../../../services/penawaran.service'
-import { useState } from 'react'
 import ModalPenawaran from '../-components/penawaran/ModalPenawaran'
 import { Route as RouteIcon, LogoDocker, TagDollar, MapPin } from '@gravity-ui/icons'
 import HeaderPage from '../../../../components/HeaderPage'
 import { formatRupiah } from '../../../../utils/formatCurrency'
+import PaginationTable from '../../../../components/PaginationTable'
 
 
 export const Route = createFileRoute('/_protected/komersial/penawaran/')({
   component: RouteComponent,
+  validateSearch: (search) => ({
+    page: Number(search.page ?? 1),
+    q: String(search.q ?? '')
+  })
 })
 
 function RouteComponent() {
-  const [pageParam, setPageParam] = useState(1)
-  const [search, setSearch] = useState()
-  const {data: penawaran, isLoading} = useQuery({
-    queryKey: ['penawaran-list', search],
-    queryFn: async({queryKey}) => usePenawaranService.getList({pageParam, queryKey}),
+  const navigate = useNavigate()
+  const {page, q} = Route.useSearch()
+  const {data: penawaran} = useQuery({
+    queryKey: ['penawaran-list', page, q],
+    queryFn: async ({queryKey}) => usePenawaranService.getList({queryKey}),
     select: (data) => data.data
   })
 
   const changeSearch =(e) => {
     setTimeout(() => {
-      setSearch(e.target.value)
+      navigate({search: (prev) => ({...prev, q: e.target.value})})
     }, 800);
   }
+
+  const totalPages = Math.ceil(penawaran?.count/10)
 
 
   // if (isLoading) {
@@ -47,7 +53,7 @@ function RouteComponent() {
                   <SearchField.Group>
                       <SearchField.SearchIcon />
                       <SearchField.Input onChange={changeSearch} placeholder='Search...' className={'w-90'} />
-                      <SearchField.ClearButton onPress={() => setSearch('')} />
+                      <SearchField.ClearButton onPress={() => navigate({search: (prev) => ({...prev, q: undefined})})} />
                   </SearchField.Group>
               </SearchField>
             </div>
@@ -64,13 +70,6 @@ function RouteComponent() {
                   <Table.Column isRowHeader>
                     Penawaran
                   </Table.Column>
-                  {/* <Table.Column>
-                    Kapal
-                  </Table.Column>
-                  <Table.Column>
-                    Status
-                  </Table.Column> */}
-                  
                 </Table.Header>
                 <Table.Body>
                   {
@@ -112,21 +111,6 @@ function RouteComponent() {
                               </div>
                             </div>
                           </Table.Cell>
-                          {/* <Table.Cell className={'truncate'}>
-                            <div className="flex flex-col gap-1">
-                              { i.kapal.length > 0 && i.kapal.map(p => {
-                                return <Chip key={p.id} color='danger' className='bg-orange-100'>{p.nama_kapal}</Chip>
-                              })}
-                            </div>
-                          </Table.Cell>
-                          
-                          <Table.Cell>
-                            <Chip variant='soft' color='accent'>
-                              {
-                                i.status[0].completed ? 'Selesai' : i.status[0].name 
-                              }
-                            </Chip>
-                          </Table.Cell> */}
                         </Table.Row>
                       )
                     })
@@ -134,6 +118,14 @@ function RouteComponent() {
                 </Table.Body>
               </Table.Content>
             </Table.ScrollContainer>
+            {
+              penawaran?.count > 0 && (
+                <Table.Footer>
+                  <PaginationTable totalPage={totalPages} page={page}  />
+                </Table.Footer>
+
+              )
+            }
           </Table>
         </Card.Content>
       </Card>

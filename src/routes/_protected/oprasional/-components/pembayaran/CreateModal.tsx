@@ -34,7 +34,7 @@ const CreateModal = () => {
         },
         onSuccess: (res) => {
             qc.invalidateQueries({queryKey: ['cashbon-list']})
-            state.close
+            state.close()
             navigate({to: `/oprasional/pembayaran/${res.data.id}`})
         }
     })

@@ -1,9 +1,9 @@
 import { api } from "../lib/api"
 
 export const usePenawaranService = {
-    getList: ({pageParam, queryKey}) => {
-        const [, q] = queryKey
-        return api.get('/komersial/penawaran/', {params: {page: pageParam, q}})
+    getList: ({queryKey}) => {
+        const [, page, q] = queryKey
+        return api.get('/komersial/penawaran/', {params: {page, q}})
     },
     detail: (id) => {
         return api.get(`/komersial/penawaran/${id}/`)

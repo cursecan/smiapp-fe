@@ -4,7 +4,7 @@ import { useCashService } from '../../../../services/oprasional/cashService'
 import { Breadcrumbs, Button, Card, Chip, Description, Table } from '@heroui/react'
 import { FileDollar, House, TagDollar } from '@gravity-ui/icons'
 import CreateModal from '../-components/pembayaran/CreateModal'
-import { useFormatDate } from '../../../../utils/dateFormat'
+import { formatDate } from '../../../../utils/dateFormat'
 
 export const Route = createFileRoute('/_protected/oprasional/pembayaran/')({
   component: RouteComponent,
@@ -90,7 +90,7 @@ function RouteComponent() {
                                                                 <TagDollar />
                                                             </Button>
                                                             <div className="">
-                                                                <div className="text-xs mb-2 underline text-gray-500">{useFormatDate(i.create_at)}</div>
+                                                                <div className="text-xs mb-2 underline text-gray-500">{formatDate(i.create_at)}</div>
                                                                 <div className="">
                                                                     <Link to={`/oprasional/pembayaran/${i.id}`}>{i.keterangan}</Link>
                                                                 </div>

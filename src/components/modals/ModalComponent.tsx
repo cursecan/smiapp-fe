@@ -10,7 +10,6 @@ const ModalComponent = ({
     size,
     hideFooter=false,
     hideHeader=false,
-    disable=false
 }) => {
   return (
     <Modal>

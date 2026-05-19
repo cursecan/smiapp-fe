@@ -31,7 +31,7 @@ const ApprovalButtons = ({
     
     const save_mutation = useMutation({
         mutationFn: saveFn,
-        onSuccess: (res) => {
+        onSuccess: () => {
             toast.success({message: 'Success.', description:'Data telah bershasil disimpan.'})
             if (queryKey) {
                 qc.invalidateQueries({
@@ -49,7 +49,7 @@ const ApprovalButtons = ({
 
     const submit_mutation = useMutation({
         mutationFn: submitFn,
-        onSuccess: (res) => {
+        onSuccess: () => {
             // toast.success()
             if (queryKey) {
                 qc.invalidateQueries({

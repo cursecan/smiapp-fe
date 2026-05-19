@@ -4,9 +4,7 @@ import { Cloud } from "@gravity-ui/icons"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 import { api } from "../../../../../lib/api"
-import { useEffect, useState } from "react"
-
-import { useDropzone } from 'react-dropzone'
+import {useState } from "react"
 
 const UploadDokumenModal = ({data, canEdit=false}) => {
     const state = useOverlayState()
@@ -36,24 +34,12 @@ const UploadDokumenModal = ({data, canEdit=false}) => {
         mutationFn: async ({file, onProgress}) => {
             return await uploadFile(file, onProgress)
         },
-        onSuccess: (res) => {
+        onSuccess: () => {
             state.close()
             setProgress(0)
             qc.invalidateQueries({queryKey: ['doks-list-penawaran', data.id]})
         }
     })
-
-    const { getRootProps, getInputProps } = useDropzone({
-        onDrop: (acceptedFiles) => {
-            // handleUpload(acceptedFiles[0])
-            console.log(acceptedFiles);
-            
-        }
-    })
-
-    useEffect(() => {
-        setProgress(0)
-    }, [])
 
     
 

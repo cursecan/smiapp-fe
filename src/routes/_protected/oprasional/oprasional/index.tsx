@@ -3,30 +3,34 @@ import HeaderPage from '../../../../components/HeaderPage'
 import { Avatar, Card, Chip, Description, ProgressBar, SearchField, Table } from '@heroui/react'
 import { useQuery } from '@tanstack/react-query'
 import { useOprasionalService } from '../../../../services/oprasional/oprasionalService'
-import { useState } from 'react'
+
 import { formatRupiah } from '../../../../utils/formatCurrency'
-import { useFallbackName } from '../../../../utils/useFallbackName'
+import { fallbackName } from '../../../../utils/useFallbackName'
+import PaginationTable from '../../../../components/PaginationTable'
 
 export const Route = createFileRoute('/_protected/oprasional/oprasional/')({
   component: RouteComponent,
+  validateSearch: (search) => ({
+    page: Number(search.page ?? 1),
+    q: String(search.q ?? '')
+  })
 })
 
 function RouteComponent() {
-    const [page, setPage] = useState(1)
-    const [search, setSearch] = useState('')\
+    // const navigate = useNavigate()
+    const {page, q} = Route.useSearch()
 
     const {data, isLoading}= useQuery({
-        queryKey: ['oprasional_list', search],
-        queryFn: async ({queryKey}) => {
-            return await useOprasionalService.list({pageParam: page, queryKey})
-        },
+        queryKey: ['oprasional_list', page, q],
+        queryFn: async ({queryKey}) => useOprasionalService.list({queryKey}),
         select: (data) => data.data
     })
-
 
     if (isLoading) {
         return <div className="">Loading...</div>
     }
+
+    const totalPage = Math.ceil(data?.count / 10)
 
   return (
     <div className="mt-10">
@@ -47,9 +51,6 @@ function RouteComponent() {
                   </SearchField.Group>
               </SearchField>
             </div>
-            {/* <div className="">
-              <ModalPenawaran />
-            </div> */}
           </div>
             </Card.Header>
             <Card.Content>
@@ -71,7 +72,7 @@ function RouteComponent() {
                                                 <Table.Cell className={'truncate'}>
                                                     <div className="flex gap-2 items-center">
                                                         <Avatar>
-                                                            <Avatar.Fallback className='bg-black text-white'>{useFallbackName(i.assign_to?.full_name || 'NA')}</Avatar.Fallback>
+                                                            <Avatar.Fallback className='bg-black text-white'>{fallbackName(i.assign_to?.full_name || 'NA')}</Avatar.Fallback>
                                                         </Avatar>
                                                         <div className="flex-1">
                                                             <div className="">{i.assign_to?.full_name || 'Unmaped'}</div>
@@ -108,6 +109,14 @@ function RouteComponent() {
                             </Table.Body>
                         </Table.Content>
                     </Table.ScrollContainer>
+                    {
+                        data?.count > 0 && (
+                            <Table.Footer>
+                                <PaginationTable totalPage={totalPage} page={page} />
+                            </Table.Footer>
+
+                        )
+                    }
                 </Table>
             </Card.Content>
         </Card>

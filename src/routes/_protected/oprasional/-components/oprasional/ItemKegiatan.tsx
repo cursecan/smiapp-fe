@@ -1,69 +1,14 @@
 
 import { Label, ProgressCircle, Table } from "@heroui/react"
-import { useEffect, useRef, useState } from "react"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useCatatanOpsService } from "../../../../../services/oprasional/catatanService"
-import { useParams } from "@tanstack/react-router"
-import { useForm, useWatch } from "react-hook-form"
-import { useItemPenawaranService } from "../../../../../services/penawaran.service"
+import { useEffect } from "react"
+import { useForm } from "react-hook-form"
 import CreateCatatanModal from "./progressCatatan/CreateCatatanModal"
 import CatatanModal from "./progressCatatan/CatatanModal"
 
 const ItemKegiatan = ({item}) => {
-    const { id } = useParams({from: '/_protected/oprasional/oprasional/$id'})
-    const [expand, setExpand] = useState(false)
-    const [form, setForm] = useState({
-        oprasional: id,
-        item_penawaran: item.id,
-        keterangan: ''
-    })
-    const {control, reset, handleSubmit} = useForm({defaultValues: item || {}})
+    const {reset} = useForm({defaultValues: item || {}})
 
-    const qc = useQueryClient()
-    const save_mutation = useMutation({
-        mutationFn: async (payload) => {
-            return await useCatatanOpsService.create(payload)
-        },
-        onSuccess: (res) => {
-            qc.invalidateQueries({queryKey: ['catatan-list']})
-            setExpand(false)
-        }
-    })
-
-    const handleSubmitSimpan = () => {
-        save_mutation.mutate(form)
-    }
-
-    const progress_save_mt = useMutation({
-        mutationFn: async (payload) => {
-            return await useItemPenawaranService.progress(item.id, payload)
-        },
-        onSuccess: (res) => {
-            qc.invalidateQueries({queryKey: ['catatan-list']})
-        }
-    })
     
-    const handleUpdateProgressSubmit = (formData) => {
-        progress_save_mt.mutate(formData)
-    }
-    
-    const timeout = useRef(0)
-    const handleUpdateProgress = (field, e) => {
-        field.onChange(e)
-        if (timeout.current) {
-            clearTimeout(timeout.current)
-        }
-        
-        timeout.current = setTimeout(() => {
-            // console.log(e);
-            handleSubmit(handleUpdateProgressSubmit)()
-        }, 600);
-    }
-
-    const progress = useWatch({
-        name: 'progress',
-        control: control
-    })
     useEffect(() => {
         if (item) {
             reset({...item})

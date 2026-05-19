@@ -5,10 +5,9 @@ export const useOprasionalService = {
     create: (payload) => {
         return api.post('/oprasional/opr/', payload)
     },
-    list: ({pageParam, queryKkey}) => {
-        console.log(pageParam, queryKkey);
-        
-        return api.get('/oprasional/opr/')
+    list: ({queryKey}) => {
+        const [, page, q] = queryKey
+        return api.get('/oprasional/opr/', {params: {page, q}})
     },
     detail: (id) => {
         return api.get(`/oprasional/opr/${id}/`)

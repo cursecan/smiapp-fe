@@ -41,7 +41,7 @@ const SelectComponent = ({
                         return (
                             <ListBox.Item key={i.id} id={i.id} textValue={i.label}>
                                 {
-                                    !!i.title ? (
+                                    i?.title ? (
                                         <div className="flex flex-col">
                                             <Label>{i.title}</Label>
                                             <Description>{i.description}</Description>

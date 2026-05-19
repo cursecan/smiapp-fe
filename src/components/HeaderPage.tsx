@@ -1,6 +1,14 @@
-import { Card, Description, Label, Surface } from '@heroui/react'
+import { Description, Label, Surface } from '@heroui/react'
+import type { PropsWithChildren, ReactNode } from 'react'
 
-const HeaderPage = ({title, description, children, rightAction}) => {
+type Props = {
+  children?: ReactNode | null,
+  title: string,
+  description?: string | null,
+  rightAction?: ReactNode | null
+}
+
+const HeaderPage = ({children, title, description='', rightAction=null}: PropsWithChildren<Props>) => {
   return (
     <Surface variant='transparent'>
       <div className="flex items-center">

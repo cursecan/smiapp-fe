@@ -1,7 +1,7 @@
 import { Button, Description, Label, Slider, Surface, useOverlayState } from "@heroui/react"
 import ModalComponent from "../../../../../../components/modals/ModalComponent"
 import { PencilToSquare } from "@gravity-ui/icons"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useParams } from "@tanstack/react-router"
 import InputText from "../../../../../../components/input/InputText"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
@@ -13,9 +13,9 @@ const CreateCatatanModal = ({item}) => {
     const { id } = useParams({from: '/_protected/oprasional/oprasional/$id'})
     const [form, setForm] = useState({
         oprasional: id,
-        item_penawaran: item.id,
         keterangan: '',
-        progress: 0
+        progress: item.progress || 0, 
+        item_penawaran: item.id
     })
 
     const toast = useToast()
@@ -36,13 +36,6 @@ const CreateCatatanModal = ({item}) => {
     const handleSubmit = () => {
         save_mutation.mutate(form)
     }
-
-
-    useEffect(() => {
-        if (item) {
-            setForm({...form, progress: item.progress, item_penawaran: item.id})
-        }
-    }, [item])
 
   return (
     <ModalComponent

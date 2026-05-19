@@ -10,7 +10,7 @@ const DisposisiOperasionalModal = ({fnQuery, queryKey, isDisabled}) => {
     const qc = useQueryClient()
     const mutation = useMutation({
         mutationFn: fnQuery,
-        onSuccess: (res) => {
+        onSuccess: () => {
             toast.success({message: 'Berhasil', description: 'Penawaran berhasil disposisi ke bidang operasional.'})        
             state.close()
             qc.invalidateQueries([...queryKey])

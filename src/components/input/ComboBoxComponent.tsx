@@ -1,15 +1,15 @@
 import { Label, ComboBox, Input, ListBox, EmptyState, Collection, ListBoxLoadMoreItem, Spinner, Description } from '@heroui/react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useDebounce } from 'use-debounce'
 import { useInfiniteQuery } from '@tanstack/react-query'
 
 const ComboBoxComponent = ({label, onChange=()=>{}, fnQuery, keyName, filter, value, ...props}) => {
-    const [search, setSearch] = useState()
+    const [search, setSearch] = useState(value?.name)
     const [debouncedFilter] = useDebounce(search, 600)
-    const [selectedKey, setSelectedKey] = useState('')
+    const [selectedKey, setSelectedKey] = useState(value?.id)
     
     
-    const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfiniteQuery({
+    const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
         queryKey: [keyName, debouncedFilter, selectedKey],
         queryFn: ({pageParam, queryKey}) => fnQuery(pageParam, queryKey),
         initialPageParam: 1,
@@ -41,13 +41,13 @@ const ComboBoxComponent = ({label, onChange=()=>{}, fnQuery, keyName, filter, va
         onChange(e)
     }
 
-    useEffect(() => {
-        if (value) {
-            setSelectedKey(value.id)
-            setSearch(value.name)
-        }
+    // useEffect(() => {
+    //     if (value) {
+    //         setSelectedKey(value.id)
+    //         setSearch(value.name)
+    //     }
 
-    }, [value])
+    // }, [value])
 
 
   return (

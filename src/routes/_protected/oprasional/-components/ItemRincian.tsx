@@ -12,7 +12,7 @@ const ItemRincian = ({item}) => {
         mutationFn: async (id) => {
             return await useRincianCashService.delete(id)
         },
-        onSuccess: (res) => {
+        onSuccess: () => {
             qc.invalidateQueries({queryKey: ['chashbon_item_list']})
         }
     })

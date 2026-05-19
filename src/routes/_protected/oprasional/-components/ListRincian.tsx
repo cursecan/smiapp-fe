@@ -2,7 +2,6 @@ import { Table } from '@heroui/react'
 import CreateModalRincian from './pembayaran/CreateModalRincian'
 import { useQuery } from '@tanstack/react-query'
 import { useCashService } from '../../../../services/oprasional/cashService'
-import InputText from '../../../../components/input/InputText'
 import ItemRincian from './ItemRincian'
 
 const ListRincian = ({pembayaran}) => {

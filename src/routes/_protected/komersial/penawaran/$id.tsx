@@ -4,7 +4,7 @@ import { usePenawaranService } from '../../../../services/penawaran.service'
 import {  Breadcrumbs, Button, Card, CloseButton, Description,  Disclosure,  Label,  Surface, Table  } from '@heroui/react'
 import { CheckDouble, Clock,  Eye,  House, LogoDocker } from '@gravity-ui/icons'
 
-import { useFormatDate } from '../../../../utils/dateFormat'
+import { formatDate } from '../../../../utils/dateFormat'
 import KapalComboBox from '../../../../components/input/KapalComboBox'
 import { useSchema } from '../../../../components/useSchema'
 import { useEffect, useState } from 'react'
@@ -51,7 +51,7 @@ function RouteComponent() {
     mutationFn: async ({id, payload}) => {
       return await usePenawaranService.append_kapal(id, payload)
     },
-    onSuccess: (res) => {
+    onSuccess: () => {
       qc.invalidateQueries({queryKey: ['detail-penawaran', id]})
       setkapal('')
     }
@@ -61,7 +61,7 @@ function RouteComponent() {
     mutationFn: async ({id, payload}) => {
       return await usePenawaranService.remove_kapal(id, payload)
     },
-    onSuccess: (res) => {
+    onSuccess: () => {
       qc.invalidateQueries({queryKey: ['detail-penawaran', id]})
     }
   })
@@ -227,7 +227,7 @@ function RouteComponent() {
                             </div>
                             <div className="flex flex-col">
                               <Description>Receive Date</Description>
-                              <Label>{useFormatDate(data?.sumber_penugasan?.receive_date)}</Label>
+                              <Label>{formatDate(data?.sumber_penugasan?.receive_date)}</Label>
                             </div>
                             <div className="flex flex-col">
                               <Description>Body</Description>
@@ -291,9 +291,9 @@ function RouteComponent() {
                 data?.stepper.map((s, index) => {
                   return (
                     <Surface key={index} className='flex items-center gap-6'>
-                      <Surface className={`p-2 rounded-xl ${!!s.approved_at ? 'bg-success' : 'bg-amber-100'}`}>
+                      <Surface className={`p-2 rounded-xl ${s.approved_at ? 'bg-success' : 'bg-amber-100'}`}>
                         {
-                          !!s.approved_at ? <CheckDouble /> : <Clock />
+                          s.approved_at ? <CheckDouble /> : <Clock />
                         }
                       </Surface>
                       <Surface className='flex flex-col flex-1'>
@@ -302,7 +302,7 @@ function RouteComponent() {
                           s.approved_at && (
                             <>
                               <Description>{s.step > 1 ? 'Approved' : 'Created'} by {s.approval_by?.full_name}</Description>
-                              <Description>{useFormatDate(s.approved_at)}</Description>
+                              <Description>{formatDate(s.approved_at)}</Description>
                             </>
                           )
                         }

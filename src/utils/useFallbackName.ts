@@ -1,4 +1,4 @@
-export const useFallbackName = (t:string) => {
+export const fallbackName = (t:string) => {
     const l_name = t.toUpperCase().split(' ', 2)
 
     if (l_name.length === 2) {

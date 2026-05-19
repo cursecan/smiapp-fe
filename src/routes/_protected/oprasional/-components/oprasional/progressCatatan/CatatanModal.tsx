@@ -1,7 +1,7 @@
 import { Button, Description, Label, Surface, Table, useOverlayState } from "@heroui/react"
 import ModalComponent from "../../../../../../components/modals/ModalComponent"
 import { CodePullRequestCheck } from "@gravity-ui/icons"
-import { useFormatDate } from "../../../../../../utils/dateFormat"
+import { formatDate } from "../../../../../../utils/dateFormat"
 
 const CatatanModal = ({catatan=[]}) => {
     const state = useOverlayState()
@@ -38,7 +38,7 @@ const CatatanModal = ({catatan=[]}) => {
                                     return (
                                         <Table.Row key={i.id}>
                                             <Table.Cell className={'flex flex-col'}>
-                                                <Description>{ useFormatDate(i.create_at)}</Description>
+                                                <Description>{ formatDate(i.create_at)}</Description>
                                                 <Label>{i.keterangan}</Label>
                                             </Table.Cell>
                                             <Table.Cell>{i.progress}%</Table.Cell>

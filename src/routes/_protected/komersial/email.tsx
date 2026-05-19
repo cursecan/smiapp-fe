@@ -1,32 +1,37 @@
-import { Card, Pagination, SearchField, Table } from '@heroui/react'
+import { Card, SearchField, Table } from '@heroui/react'
 import { useQuery } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
-import { useEmailService } from "../../../services/email.service"
-import { useState } from 'react'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { useEmailService } from '../../../services/email.service'
 import ItemEmailList from './-components/ItemEmailList'
 import HeaderPage from '../../../components/HeaderPage'
+import PaginationTable from '../../../components/PaginationTable'
 
 export const Route = createFileRoute('/_protected/komersial/email')({
   component: RouteComponent,
+  validateSearch: (search) => ({
+    page: Number(search.page ?? 1),
+    q: String(search.q ?? '')
+  })
 })
 
 function RouteComponent() {
-    const [page, setPage] = useState(1)
-    const [search, setSearch] = useState()
+    const navigate = useNavigate()
+    const {page, q} = Route.useSearch()
     
     const changeSearch = (e) => {
         setTimeout(() => {
-            setPage(1)
-            setSearch(e.target.value)
+            navigate({
+                search: (prev) => ({...prev, q: e.target.value, page: 1})
+            })
         }, 800);
     }
 
     const { data } = useQuery({
-        queryKey: ['email-list', page, search],
+        queryKey: ['email-list', page, q],
         queryFn: async ({queryKey}) => {
             return await useEmailService.getList({queryKey})
         },
-        select: (data: any) => data.data
+        select: (data) => data.data
     })
     
 
@@ -43,7 +48,7 @@ function RouteComponent() {
                             <SearchField.Group>
                                 <SearchField.SearchIcon />
                                 <SearchField.Input onChange={changeSearch} placeholder='Search...' className={'w-90'} />
-                                <SearchField.ClearButton onPress={() => setSearch('')} />
+                                <SearchField.ClearButton onPress={() => navigate({search: (prev) => ({...prev, q: undefined})})} />
                             </SearchField.Group>
                         </SearchField>
                     </div>
@@ -72,27 +77,14 @@ function RouteComponent() {
                                     </Table.Body>
                                 </Table.Content>
                             </Table.ScrollContainer>
-                            <Table.Footer>
-                                <Pagination>
-                                    <Pagination.Summary>
-                                        Page {page} of {totalPage}
-                                    </Pagination.Summary>
-                                    <Pagination.Content>
-                                        <Pagination.Item>
-                                            <Pagination.Previous isDisabled={page <= 1} onPress={() => setPage(state => state-1)}>
-                                                <Pagination.PreviousIcon />
-                                                Prev
-                                            </Pagination.Previous>
-                                        </Pagination.Item>
-                                        <Pagination.Item>
-                                            <Pagination.Next isDisabled={page >= totalPage} onPress={() => {setPage(state => state+1)}}>
-                                                Next
-                                                <Pagination.NextIcon />
-                                            </Pagination.Next>
-                                        </Pagination.Item>
-                                    </Pagination.Content>
-                                </Pagination>
-                            </Table.Footer>
+                            {
+                                data?.count > 0 && (
+                                    <Table.Footer>
+                                        <PaginationTable page={page} totalPage={totalPage} />
+                                    </Table.Footer>
+
+                                )
+                            }
                         </Table>
                     </div>
                 </Card.Content>

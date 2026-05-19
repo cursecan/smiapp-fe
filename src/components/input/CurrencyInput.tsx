@@ -1,5 +1,5 @@
 import { Input, Label, TextField } from "@heroui/react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 
 const CurrencyInput = ({
@@ -9,12 +9,11 @@ const CurrencyInput = ({
     ...props
 }) => {
 
-    const [numValue, setNumValue] = useState('')
     const formatRupiah = (val) => {
         const number = String(val||0).replace(/[^\d.]/g, '')
         return new Intl.NumberFormat('en-EN').format(number)
     }
-
+    
     const handleChange = (e) => {
         const raw = e.target.value
         // console.log(raw);
@@ -24,10 +23,8 @@ const CurrencyInput = ({
         
         setNumValue(formatRupiah(raw))
     }
-
-    useEffect(() => {
-        setNumValue(formatRupiah(value))
-    }, [])
+    
+    const [numValue, setNumValue] = useState(formatRupiah(value))
 
 
   return (

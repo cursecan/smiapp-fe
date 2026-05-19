@@ -12,7 +12,7 @@ const DeleteItemModal = ({item}) => {
         mutationFn: async (id) => {
             return await useItemPenawaranService.delete(id)
         },
-        onSuccess: (res) => {
+        onSuccess: () => {
             qc.invalidateQueries({queryKey:['item-penawaran']})
             state.close()
         }

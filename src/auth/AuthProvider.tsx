@@ -11,7 +11,7 @@ export function AuthProvider({children}) {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
 
-    const login = async (user:any, access:string) => {
+    const login = async (user, access:string) => {
         useUserToken.setAccessToken(access)
         setUser(user)
 

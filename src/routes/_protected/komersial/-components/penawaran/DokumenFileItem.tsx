@@ -1,15 +1,12 @@
 import {Link, Table } from "@heroui/react"
 import SelectComponent from "../../../../../components/input/SelectComponent"
 import { useTypeFilePenawaran } from "../../../../../constans"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 import { useDokumenPenawaranService } from "../../../../../services/komersial/dokumenPenawaranService"
 import { ArrowUpRightFromSquare } from "@gravity-ui/icons"
 
 
 const DokumenFileItem = ({item, canEdit}) => {
-    const qc = useQueryClient()
-
-
     const update_mutate = useMutation({
         mutationFn: async (payload) => {
             return await useDokumenPenawaranService.update(item.id, payload)
