@@ -1,6 +1,6 @@
 import ModalComponent from '../../../../../components/modals/ModalComponent'
 import { Button, Description, Input, Label, TextField, useOverlayState } from '@heroui/react'
-import { Pencil, PencilToSquare } from '@gravity-ui/icons'
+import { Pencil } from '@gravity-ui/icons'
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useItemPenawaranService } from '../../../../../services/penawaran.service'

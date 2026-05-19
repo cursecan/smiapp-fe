@@ -1,7 +1,6 @@
 import { Button, Label, Surface, useOverlayState } from "@heroui/react"
 import ModalComponent from "../../../../../components/modals/ModalComponent"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useOprasionalService } from "../../../../../services/oprasional/oprasionalService"
 import { useToast } from "../../../../../lib/useToast"
 
 const DisposisiOperasionalModal = ({fnQuery, queryKey, isDisabled}) => {

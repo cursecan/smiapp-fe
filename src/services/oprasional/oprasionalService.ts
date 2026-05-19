@@ -6,6 +6,8 @@ export const useOprasionalService = {
         return api.post('/oprasional/opr/', payload)
     },
     list: ({pageParam, queryKkey}) => {
+        console.log(pageParam, queryKkey);
+        
         return api.get('/oprasional/opr/')
     },
     detail: (id) => {

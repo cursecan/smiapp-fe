@@ -1,5 +1,5 @@
-import { ArrowRightFromSquare, BellDot, ChevronRight, Cup, Envelope, FaceRobot, Gear, Headphones, House, LogoUbuntu, Person, Route, Shapes4, SquareDashed } from '@gravity-ui/icons'
-import { Avatar, Button, ButtonGroup, Dropdown, Label, Surface } from '@heroui/react'
+import { ArrowRightFromSquare, BellDot, Cup, Envelope, Gear, Headphones, House, Person, Route, Shapes4 } from '@gravity-ui/icons'
+import { Avatar, Button, Dropdown, Label, Surface } from '@heroui/react'
 import { useAuth } from '../auth/AuthProvider'
 import { useLocation, useNavigate } from '@tanstack/react-router'
 import { useFallbackName } from '../utils/useFallbackName'

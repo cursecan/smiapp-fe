@@ -1,7 +1,4 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
-import AssideBar from '../../components/AssideBar';
-import { Avatar, Button, ButtonGroup, Description, Dropdown, Label, Surface } from '@heroui/react';
-import { Bell, BellDot, ChevronLeft, ChevronRight, Headphones, House, MapPinPlus,  Route as IconRoute, Envelope, Cup } from '@gravity-ui/icons';
 import TopNavbar from '../../components/TopNavbar';
 
 export const Route = createFileRoute('/_protected')({

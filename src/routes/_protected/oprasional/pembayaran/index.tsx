@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useCashService } from '../../../../services/oprasional/cashService'
-import { Breadcrumbs, Button, Card, Chip, Description, Tab, Table } from '@heroui/react'
-import { FileDollar, House, Plus, TagDollar } from '@gravity-ui/icons'
+import { Breadcrumbs, Button, Card, Chip, Description, Table } from '@heroui/react'
+import { FileDollar, House, TagDollar } from '@gravity-ui/icons'
 import CreateModal from '../-components/pembayaran/CreateModal'
 import { useFormatDate } from '../../../../utils/dateFormat'
 

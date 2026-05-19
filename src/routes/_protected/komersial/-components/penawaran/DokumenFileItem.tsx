@@ -4,7 +4,6 @@ import { useTypeFilePenawaran } from "../../../../../constans"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useDokumenPenawaranService } from "../../../../../services/komersial/dokumenPenawaranService"
 import { ArrowUpRightFromSquare } from "@gravity-ui/icons"
-import { useSchema } from "../../../../../components/useSchema"
 
 
 const DokumenFileItem = ({item, canEdit}) => {

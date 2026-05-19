@@ -2,7 +2,7 @@ import { api } from "../../lib/api"
 
 export const useCustomerService = {
     list: ({pageParam, queryKey}) => {
-        const {_, q} = queryKey
+        const [, q] = queryKey
         return api.get('/customer/customer/', {params: {page: pageParam, q}})
     },
     create: (payload) => {

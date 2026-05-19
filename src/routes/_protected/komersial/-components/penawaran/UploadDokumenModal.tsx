@@ -2,7 +2,6 @@ import { Button, Label, ProgressBar, useOverlayState } from "@heroui/react"
 import ModalComponent from "../../../../../components/modals/ModalComponent"
 import { Cloud } from "@gravity-ui/icons"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useUploadDokumenService } from "../../../../../services/komersial/uploadDokumenService"
 
 import { api } from "../../../../../lib/api"
 import { useEffect, useState } from "react"

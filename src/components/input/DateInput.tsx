@@ -1,8 +1,8 @@
 import { Button, Calendar, DateField, DatePicker, Label } from '@heroui/react'
-import { getLocalTimeZone, parseDate, today } from '@internationalized/date'
+import { parseDate } from '@internationalized/date'
 import { useEffect, useState } from 'react'
 
-const DateInput = ({label, value, onChange=()=>{}, ...props}) => {
+const DateInput = ({label, value, onChange=()=>{}}) => {
     const [dateValue, setDateValue] = useState()
 
     const changeDateVal = (e) => {

@@ -32,7 +32,7 @@ const ItemPenawaranModal = ({id, parent, simple=false, disable=false}) => {
     const qc = useQueryClient()
     const mutation = useMutation({
         mutationFn: async (payload) => useItemPenawaranService.create(payload),
-        onSuccess: (res) => {
+        onSuccess: () => {
             qc.invalidateQueries({queryKey:['item-penawaran']})
         }
     })

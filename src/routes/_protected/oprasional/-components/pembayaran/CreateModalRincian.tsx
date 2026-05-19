@@ -1,8 +1,8 @@
-import { Button, Checkbox, Label, Radio, RadioGroup, useOverlayState } from "@heroui/react"
+import { Button, Checkbox, Label, useOverlayState } from "@heroui/react"
 import ModalComponent from "../../../../../components/modals/ModalComponent"
 import { Plus } from "@gravity-ui/icons"
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { useCashService, useRincianCashService } from "../../../../../services/oprasional/cashService"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useRincianCashService } from "../../../../../services/oprasional/cashService"
 import { useState } from "react"
 import InputText from "../../../../../components/input/InputText"
 import CurrencyInput from "../../../../../components/input/CurrencyInput"
@@ -24,7 +24,7 @@ const CreateModalRincian = ({pembayaran}) => {
         mutationFn: async (payload) => {
             return await useRincianCashService.create(payload)
         },
-        onSuccess: (res) => {
+        onSuccess: () => {
             qc.invalidateQueries({
                 queryKey: ['chashbon_item_list']
             })

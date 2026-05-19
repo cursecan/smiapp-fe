@@ -1,9 +1,7 @@
-import { Pencil, TrashBin } from '@gravity-ui/icons'
-import { Button, Description, Input, Label, Table } from '@heroui/react'
+import { Description, Label, Table } from '@heroui/react'
 import ItemPenawaranModal from './ItemPenawaranModal'
 import UpdateItemModal from './UpdateItemModal'
 import DeleteItemModal from './DeleteItemModal'
-import CurrencyInput from '../../../../../components/input/CurrencyInput'
 import { formatRupiah } from '../../../../../utils/formatCurrency'
 
 const ItemPenawaranPekerjaan = ({id, item, canEdit}) => {

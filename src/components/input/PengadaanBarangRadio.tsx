@@ -1,4 +1,4 @@
-import { Card, Description, Label, Radio, RadioGroup } from '@heroui/react'
+import { Description, Label, Radio, RadioGroup } from '@heroui/react'
 import { useQuery } from '@tanstack/react-query'
 import { useJenisPekerjaanService } from '../../services/masterdata/jenisPekerjaanService'
 

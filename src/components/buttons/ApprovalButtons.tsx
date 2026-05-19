@@ -14,7 +14,6 @@ const ApprovalButtons = ({
     onError=()=>{}
 }) => {
 
-    console.log(isCanApprove, 'pppppppppppppppppppppp');
     
     const save_state = useOverlayState()
     const req_state = useOverlayState()

@@ -1,7 +1,6 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import HeaderPage from '../../../../components/HeaderPage'
-import { Car, House, Rocket, RoundBrackets } from '@gravity-ui/icons'
-import { Avatar, Breadcrumbs, Card, Chip, Description, Label, ProgressBar, SearchField, Table } from '@heroui/react'
+import { Avatar, Card, Chip, Description, ProgressBar, SearchField, Table } from '@heroui/react'
 import { useQuery } from '@tanstack/react-query'
 import { useOprasionalService } from '../../../../services/oprasional/oprasionalService'
 import { useState } from 'react'
@@ -14,8 +13,7 @@ export const Route = createFileRoute('/_protected/oprasional/oprasional/')({
 
 function RouteComponent() {
     const [page, setPage] = useState(1)
-    const [search, setSearch] = useState('')
-    const navigate = useNavigate()
+    const [search, setSearch] = useState('')\
 
     const {data, isLoading}= useQuery({
         queryKey: ['oprasional_list', search],

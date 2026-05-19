@@ -25,7 +25,7 @@ const CreateCatatanModal = ({item}) => {
         mutationFn: async (payload) => {
             return await useCatatanOpsService.create(payload)
         },
-        onSuccess: (res) => {
+        onSuccess: () => {
             qc.invalidateQueries({queryKey: ['catatan-list']})
             toast.success({message: 'Berhasil', description: 'Catatan berhasil disimpan.'})
             state.close()

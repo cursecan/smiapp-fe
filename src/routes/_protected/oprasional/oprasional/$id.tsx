@@ -2,10 +2,9 @@ import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
 import { useOprasionalService } from '../../../../services/oprasional/oprasionalService'
 import HeaderPage from '../../../../components/HeaderPage'
-import { Breadcrumbs, Card, Description, Label, Separator, Surface, Table } from '@heroui/react'
-import { House, Rocket } from '@gravity-ui/icons'
+import { Breadcrumbs, Card, Description, Label, Surface, Table } from '@heroui/react'
+import { House } from '@gravity-ui/icons'
 import KegiatanList from '../-components/oprasional/KegiatanList'
-import { formatRupiah } from '../../../../utils/formatCurrency'
 
 export const Route = createFileRoute('/_protected/oprasional/oprasional/$id')({
   component: RouteComponent,

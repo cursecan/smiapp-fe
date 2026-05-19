@@ -3,7 +3,7 @@ let accessToken = ''
 
 export const useUserToken = {
     getAccessToken: () => accessToken,
-    setAccessToken: (token: any) => {
+    setAccessToken: (token: string) => {
         accessToken = token;
     },
     clearAccessToken: () => {
