@@ -1,7 +1,7 @@
 
 import { HandPointUp, Plus, Rocket } from '@gravity-ui/icons'
 import ModalComponent from '../../../../../components/modals/ModalComponent'
-import { Button, SearchField, Surface, Table, useOverlayState } from '@heroui/react'
+import { Button, CloseButton, SearchField, Surface, Table, useOverlayState } from '@heroui/react'
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { usePekerjaanService } from '../../../../../services/masterdata/pekerjaanService'
@@ -48,7 +48,7 @@ const ItemPenawaranModal = ({id, parent, simple=false, disable=false}) => {
         heading={'Data Sheet Pekerjaan'}
         size={'lg'}
         iconComponent={<Rocket className='size-6' />}
-        buttonTrigger={<Button isDisabled={disable} onPress={state.setOpen} size='sm' isIconOnly={simple}><Plus />{ !simple && <span>Tambah Item Penawaran</span> }</Button>}
+        buttonTrigger={ simple ? <CloseButton isDisabled={disable} onPress={state.setOpen}><Plus /></CloseButton> : <Button> <Plus /> Tambah Pekerjaan</Button>}
         hideFooter
 
     >

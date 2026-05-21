@@ -1,5 +1,5 @@
 import ModalComponent from '../../../../../components/modals/ModalComponent'
-import { Button, Description, Input, Label, TextField, useOverlayState } from '@heroui/react'
+import { Button, CloseButton, Description, Input, Label, TextField, useOverlayState } from '@heroui/react'
 import { Pencil } from '@gravity-ui/icons'
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -25,6 +25,8 @@ const UpdateItemModal = ({item}) => {
         mutation.mutate({id: item.id, payload: dataForm})
     }
 
+    console.log(dataForm);
+    
 
   return (
     <ModalComponent
@@ -33,7 +35,7 @@ const UpdateItemModal = ({item}) => {
         hideFooter
         iconComponent={<Pencil className='size-5' />}
         heading={'Update Item'}
-        buttonTrigger={<Button onPress={state.setOpen} variant='secondary' isIconOnly size='sm'><Pencil /></Button>}
+        buttonTrigger={<CloseButton className={'bg-accent text-accent-foreground'} onPress={state.setOpen} isIconOnly size='sm'><Pencil /></CloseButton>}
     >
         <div className="p-1 mt-6 space-y-6">
             <TextField>

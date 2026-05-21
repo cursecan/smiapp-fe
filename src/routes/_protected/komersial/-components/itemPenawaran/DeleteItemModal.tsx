@@ -1,4 +1,4 @@
-import { Button, useOverlayState } from '@heroui/react'
+import { Button, CloseButton, useOverlayState } from '@heroui/react'
 import ModalComponent from '../../../../../components/modals/ModalComponent'
 import { TrashBin } from '@gravity-ui/icons'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -25,7 +25,7 @@ const DeleteItemModal = ({item}) => {
   return (
     <ModalComponent
         state={state}
-        buttonTrigger={<Button onPress={state.setOpen} variant='danger-soft' isIconOnly size='sm'><TrashBin /></Button>}
+        buttonTrigger={<CloseButton className={'bg-danger-soft text-danger'} onPress={state.setOpen} isIconOnly size='sm'><TrashBin /></CloseButton>}
         hideFooter
         heading={'Delete Item'}
         iconComponent={<TrashBin className='size-6 text-red-500' />}

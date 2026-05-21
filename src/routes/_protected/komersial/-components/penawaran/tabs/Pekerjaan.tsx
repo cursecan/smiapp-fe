@@ -36,6 +36,15 @@ const Pekerjaan = ({id, canEdit}) => {
                         <Table.Column isRowHeader>
                             Barang / Jasa
                         </Table.Column>
+                        <Table.Column>
+                            Harga Satuan
+                        </Table.Column>
+                        <Table.Column>
+                            Total
+                        </Table.Column>
+                        <Table.Column>
+                            Aksi
+                        </Table.Column>
                     </Table.Header>
                     <Table.Body
                         renderEmptyState={() => (
