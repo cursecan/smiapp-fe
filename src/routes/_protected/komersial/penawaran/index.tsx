@@ -1,9 +1,9 @@
-import { Card, Description, Label, SearchField, Surface, Table, Tag, TagGroup } from '@heroui/react'
+import { Button, Card, Description, Label, SearchField, Table } from '@heroui/react'
 import { useQuery } from '@tanstack/react-query'
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { usePenawaranService } from '../../../../services/penawaran.service'
 import ModalPenawaran from '../-components/penawaran/ModalPenawaran'
-import { Route as RouteIcon, LogoDocker, TagDollar, MapPin } from '@gravity-ui/icons'
+import { Route as RouteIcon, ArrowShapeTurnUpRight } from '@gravity-ui/icons'
 import HeaderPage from '../../../../components/HeaderPage'
 import { formatRupiah } from '../../../../utils/formatCurrency'
 import PaginationTable from '../../../../components/PaginationTable'
@@ -41,11 +41,11 @@ function RouteComponent() {
   
 
   return (
-    <div className="mt-10">
+    <div className="">
       <HeaderPage
         title={'Penawaran Harga'}
       />
-      <Card className='mt-6'>
+      <Card className=''>
         <Card.Header>
           <div className="flex items-center">
             <div className="flex-1">
@@ -70,6 +70,13 @@ function RouteComponent() {
                   <Table.Column isRowHeader>
                     Penawaran
                   </Table.Column>
+                  <Table.Column>
+                    Lokasi
+                  </Table.Column>
+                  <Table.Column>
+                    Nilai
+                  </Table.Column>
+                  <Table.Column></Table.Column>
                 </Table.Header>
                 <Table.Body>
                   {
@@ -77,39 +84,28 @@ function RouteComponent() {
                       return (
                         <Table.Row key={i.id}>
                           <Table.Cell>
-                            <div className="flex gap-2 items-center">
-                              <Surface className='p-2 rounded-xl bg-amber-500'>
-                                <RouteIcon />
-                              </Surface>
+                            <div className="flex gap-2">
+                              {/* <Surface className='p-2 rounded-xl bg-amber-500'> */}
+                                <RouteIcon className='text-orange-500 size-4' />
+                              {/* </Surface> */}
                               <div className="flex flex-col gap-2 flex-1">
                                 <Description>{i.nomor}</Description>
                                 <Label>
-                                  <Link to={`${i.id}`}>{i.nama_project}</Link>
+                                  {i.nama_project}
                                 </Label>
-                               <div className="flex items-center justify-between">
-                                <TagGroup variant='surface'>
-                                  <TagGroup.List>
-                                    <Tag>
-                                      <TagDollar /> { formatRupiah(i.progress.budget || '0')}
-                                    </Tag>
-                                    <Tag>
-                                      <LogoDocker /> { i.kapal ? i.kapal.length : '0' }
-                                    </Tag>
-                                     <Tag>
-                                      <MapPin /> { i.pelabuhan?.nama_pelabuhan || '-' }
-                                    </Tag>
-                                  </TagGroup.List>
-                                </TagGroup>
-                                <TagGroup>
-                                  <TagGroup.List>
-                                    <Tag>
-                                      {i.status[0].completed ? 'Selesai' : i.status[0].name }
-                                    </Tag>
-                                  </TagGroup.List>
-                                </TagGroup>
-                               </div>
                               </div>
                             </div>
+                          </Table.Cell>
+                          <Table.Cell>
+                            { i.pelabuhan?.nama_pelabuhan || '-'}
+                          </Table.Cell>
+                          <Table.Cell>
+                            { formatRupiah(i.progress.budget || '0') }
+                          </Table.Cell>
+                          <Table.Cell>
+                            <Button onPress={() => navigate({to: `/komersial/penawaran/${i.id}`})} isIconOnly size='sm'>
+                              <ArrowShapeTurnUpRight />
+                            </Button>
                           </Table.Cell>
                         </Table.Row>
                       )

@@ -1,24 +1,25 @@
-import { Description, Label, Surface } from '@heroui/react'
+import { LayoutSideContent } from '@gravity-ui/icons'
+import { Label, Surface } from '@heroui/react'
 import type { PropsWithChildren, ReactNode } from 'react'
 
 type Props = {
-  children?: ReactNode | null,
   title: string,
-  description?: string | null,
-  rightAction?: ReactNode | null
+  breadchrumb?: ReactNode | null
 }
 
-const HeaderPage = ({children, title, description='', rightAction=null}: PropsWithChildren<Props>) => {
+const HeaderPage = ({title, breadchrumb}: PropsWithChildren<Props>) => {
   return (
     <Surface variant='transparent'>
-      <div className="flex items-center">
+      <div className="flex items-center gap-2 h-16">
+        <LayoutSideContent className='size-6 ml-5' />
         <div className="flex flex-col flex-1">
-            <Label className='text-2xl font-bold'>{title||'Title Header'}</Label>
-            <Description>{description||'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde, quam.'}</Description>
+            {
+              breadchrumb ? breadchrumb : (
+                <Label className='text-lg text-gray-500'>{title||'Title Header'}</Label>
+              )
+            }
         </div>
-        { rightAction && rightAction}
       </div>
-        { children }
     </Surface>
   )
 }

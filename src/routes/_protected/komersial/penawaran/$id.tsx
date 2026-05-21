@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
+import { createFileRoute, useParams } from '@tanstack/react-router'
 import { usePenawaranService } from '../../../../services/penawaran.service'
 import {  Breadcrumbs, Button, Card, CloseButton, Description,  Disclosure,  Label,  Surface, Table  } from '@heroui/react'
-import { CheckDouble, Clock,  Eye,  House, LogoDocker } from '@gravity-ui/icons'
+import { CheckDouble, Clock,  Eye, LogoDocker } from '@gravity-ui/icons'
 
 import { formatDate } from '../../../../utils/dateFormat'
 import KapalComboBox from '../../../../components/input/KapalComboBox'
@@ -39,7 +39,7 @@ function RouteComponent() {
     select: (data) => data.data
   })
 
-  const navigate = useNavigate()
+
   const [kapal, setkapal] = useState('')
   const [errors, setErrors] = useState(null)
 
@@ -94,29 +94,18 @@ function RouteComponent() {
   }
   
 
-  return <div className="mt-10">
+  return <div className="">
     <HeaderPage
       title={`Detail Penawaran`}
+      breadchrumb={<Breadcrumbs>
+        <Breadcrumbs.Item>Penawaran</Breadcrumbs.Item>
+        <Breadcrumbs.Item isDisabled>Detail</Breadcrumbs.Item>
+        <Breadcrumbs.Item>{data?.nomor}</Breadcrumbs.Item>
+      </Breadcrumbs>}
     >
-      <div className="mt-6">
-        <Breadcrumbs>
-          <Breadcrumbs.Item>
-            <House />
-          </Breadcrumbs.Item>
-          <Breadcrumbs.Item onPress={() => navigate({to: '/komersial/penawaran'})}>
-            Penawaran
-          </Breadcrumbs.Item>
-          <Breadcrumbs.Item>
-            Detail
-          </Breadcrumbs.Item>
-        </Breadcrumbs>
-      </div>
-
     </HeaderPage>
 
-    
-
-    <div className="flex mt-6 gap-10 mb-10">
+    <div className="flex gap-2">
       <div className="flex-1">
         <Card>
           <Card.Header>

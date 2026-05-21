@@ -1,4 +1,4 @@
-import { Button, Modal } from '@heroui/react'
+import { Button, Description, Modal } from '@heroui/react'
 
 const ModalComponent = ({
     buttonTrigger,
@@ -8,6 +8,7 @@ const ModalComponent = ({
     footerComponent,
     state,
     size,
+    description = 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quia, repudiandae?',
     hideFooter=false,
     hideHeader=false,
 }) => {
@@ -27,7 +28,12 @@ const ModalComponent = ({
                             )
                         }
                         {
-                            !hideHeader && <Modal.Heading>{heading||'Modal Header'}</Modal.Heading>
+                            !hideHeader && (
+                                <>
+                                    <Modal.Heading>{heading||'Modal Header'}</Modal.Heading>
+                                    <Description>{description } </Description>
+                                </>
+                            )
                         }
                     </Modal.Header>
                     <Modal.Body>

@@ -1,76 +1,80 @@
-import {  Envelope, HandPointRight, Persons, Timestamps, House, MapPin, LogoYandexCloud, LogoUbuntu, FaceRobotSmile, TagDollar, RoundBrackets } from "@gravity-ui/icons"
-import NavButton from "./buttons/NavButton"
+import {  Envelope, Persons, House, MapPin, Bell, Circles5Random, Rocket, Flask, LogoDocker, Megaphone, Mug, ArrowRightFromSquare } from "@gravity-ui/icons"
 import { useAuth } from "../auth/AuthProvider"
+import { Avatar, Button, Label, Surface } from "@heroui/react"
+import { useNavigate } from "@tanstack/react-router"
 
+
+const NavButton = ({icon, name, onPress=()=>{}}) => {
+    return (
+        <Button onPress={onPress} fullWidth className={'rounded-lg flex justify-start'} variant="ghost">
+            {
+                icon && icon
+            }
+            <div className="">{name}</div>
+        </Button>
+    )
+}
 
 
 const AssideBar = () => {
-    const { logout } = useAuth()
+    const navigate = useNavigate()
+    const { logout, user } = useAuth()
     return (
-        <div className="fixed top-0 left-0 w-72 h-screen flex flex-col">
-            {/* <div className="h-24"></div> */}
-            <div className="flex-1 flex flex-col p-0">
-                <div className="flex flex-col flex-1 p-4 bg-linear-0 from-white/50 to-white/80">
-                    <div className="mb-6 flex items-center gap-4">
-                        <FaceRobotSmile className="size-8 text-white" />
-                        <div className="text-xl text-white">SMILe</div>
+        <div className="fixed left-0 top-0 w-72 h-screen p-2 flex flex-col">
+            <Surface className="flex-1 flex text-sm flex-col h-full bg-gray-50 shadow rounded-xl">
+                <div className="">
+                    <div className="p-4 flex items-center">
+                        <div className="flex-1">Smile Organization</div>
+                        <Bell />
                     </div>
-                    <div className="flex-1 space-y-4">
-                        <div className="">
-                            <ul className="">
-                                <li>
-                                    <NavButton active icon={<House strokeWidth={0.3} />} label={'Home'} href={'/dashboard'} />
-                                </li>
-                            </ul>
-                        </div>
-                        {/* Komersial */}
-                        <div className="">
-                            <div className="text-xs uppercase mb-3">Komersial</div>
-                            <ul className="">
-                                <li>
-                                    <NavButton active icon={<Envelope />} label={'Email'} href={'/komersial/email'} />
-                                </li>
-                                <li>
-                                    <NavButton active icon={<HandPointRight />} label={'Penawaran'} href={'/komersial/penawaran'}/>
-                                </li>
-                            </ul>
-                        </div>
-                        {/* Oprasinal */}
-                        <div className="">
-                            <div className="text-xs uppercase mb-3">Oprasional</div>
-                            <ul className="">
-                                <li>
-                                    <NavButton active icon={<RoundBrackets />} label={'Ops'} href={'/oprasional/oprasional'}/>
-                                </li>
-                                <li>
-                                    <NavButton active icon={<TagDollar />} label={'Pembayaran'} href={'/oprasional/pembayaran'} />
-                                </li>
-                            </ul>
-                        </div>
-                        <div className="">
-                            <div className="text-xs font-light uppercase mb-3">Master Data</div>
-                            <ul className="">
-                                <li>
-                                    <NavButton icon={<Persons />} label={'Pegawai'} />
-                                </li>
-                                <li>
-                                    <NavButton icon={<Timestamps />} label={'Jabatan'}/>
-                                </li>
-                                <li>
-                                    <NavButton icon={<LogoYandexCloud />} label={'Kapal'} />
-                                </li>
-                                <li>
-                                    <NavButton icon={<MapPin />} label={'Lokasi'}/>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div className="">
-                        <NavButton onPress={logout} icon={<LogoUbuntu />} label={'Logout'} />
-                    </div>
-                    
                 </div>
-            </div>
+                <div className="flex-1 overflow-auto">
+                    <ul className="px-4 space-y-6">
+                        <li>
+                            <div className="text-xs mb-2">Home</div>
+                            <div className="space-y-1">
+                                <NavButton onPress={() => navigate({to: '/dashboard'})} icon={<House />} name={'Home'} />
+                                <NavButton onPress={() => navigate({to: '/komersial/email'})}  icon={<Envelope />} name={'Email'} />
+                                <NavButton onPress={() => navigate({to: '/komersial/penawaran'})} icon={<Circles5Random />} name={'Penawaran'} />
+                                <NavButton icon={<Rocket />} name={'Operasional'} />
+                                <NavButton icon={<Flask />} name={'Casbon'} />
+                            </div>
+                        </li>
+                        <li>
+                            <div className="text-xs mb-2">Master Data</div>
+                            <div className="space-y-1">
+                                <NavButton icon={<LogoDocker />} name={'Kapal'} />
+                                <NavButton icon={<MapPin />} name={'Pelabuhan'} />
+                                <NavButton icon={<Persons />} name={'Pegawai'} />
+                                <NavButton icon={<Megaphone />} name={'Pekerjaan'} />
+                                <NavButton icon={<Mug />} name={'Jenis Pekerjaan'} />
+                            </div>
+                        </li>
+                        <li>
+                            <div className="text-xs mb-2">Settings</div>
+                            <div className="space-y-1">
+                                <NavButton icon={<LogoDocker />} name={'Approval'} />
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div className="p-4">
+                    <div className="flex items-center">
+                        <div className="flex-1 flex items-center gap-2">
+                            <Avatar size='sm'>
+                                <Avatar.Image src='https://img.heroui.chat/image/avatar?w=400&h=400&u=4' />
+                            </Avatar>
+                            <div className="">
+                                <div className="">Account</div>
+                                <Label>{user.full_name}</Label>
+                            </div>
+                        </div>
+                        <Button onPress={logout} variant="ghost" size="sm" isIconOnly>
+                            <ArrowRightFromSquare className="text-red-700" />
+                        </Button>
+                    </div>
+                </div>
+            </Surface>
         </div>
     )
 }

@@ -1,4 +1,4 @@
-import { Card, SearchField, Table } from '@heroui/react'
+import { Card, SearchField, Surface, Table } from '@heroui/react'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useEmailService } from '../../../services/email.service'
@@ -38,12 +38,12 @@ function RouteComponent() {
     const totalPage = Math.ceil(data?.count / 10)
 
     return (
-        <div className="mt-10">
+        <Surface className='px-6 mt-1'>
             <HeaderPage title={'Email Quotation'} />
-            <Card className='mt-6'>
+            <Card>
                 <Card.Header>
-                    <Card.Title className='text-xl font-bold'>Mail Inbox</Card.Title>
-                    <div className="mt-7">
+                    <Card.Title className='text-xl'>Mail Inbox</Card.Title>
+                    <div className="mt-4">
                         <SearchField className={'w-100'}>
                             <SearchField.Group>
                                 <SearchField.SearchIcon />
@@ -60,7 +60,10 @@ function RouteComponent() {
                                 <Table.Content>
                                     <Table.Header>
                                         <Table.Column isRowHeader>
-                                            Subject
+                                            Email
+                                        </Table.Column>
+                                        <Table.Column>
+                                            From
                                         </Table.Column>
                                         <Table.Column>
                                             
@@ -89,6 +92,6 @@ function RouteComponent() {
                     </div>
                 </Card.Content>
             </Card>
-        </div>
+        </Surface>
     )
 }
