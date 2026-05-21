@@ -1,4 +1,4 @@
-import { Button, Card, Description, Label, SearchField, Table } from '@heroui/react'
+import { Button, Card, Chip, Description, Label, SearchField, Table, Tag, TagGroup } from '@heroui/react'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { usePenawaranService } from '../../../../services/penawaran.service'
@@ -7,6 +7,7 @@ import { Route as RouteIcon, ArrowShapeTurnUpRight } from '@gravity-ui/icons'
 import HeaderPage from '../../../../components/HeaderPage'
 import { formatRupiah } from '../../../../utils/formatCurrency'
 import PaginationTable from '../../../../components/PaginationTable'
+import StatusChiper from '../../../../components/StatusChiper'
 
 
 export const Route = createFileRoute('/_protected/komersial/penawaran/')({
@@ -76,6 +77,7 @@ function RouteComponent() {
                   <Table.Column>
                     Nilai
                   </Table.Column>
+                  <Table.Column>Status</Table.Column>
                   <Table.Column></Table.Column>
                 </Table.Header>
                 <Table.Body>
@@ -101,6 +103,9 @@ function RouteComponent() {
                           </Table.Cell>
                           <Table.Cell>
                             { formatRupiah(i.progress.budget || '0') }
+                          </Table.Cell>
+                          <Table.Cell className={'truncate'}>
+                            <StatusChiper status={i.status[0]?.name} />
                           </Table.Cell>
                           <Table.Cell>
                             <Button onPress={() => navigate({to: `/komersial/penawaran/${i.id}`})} isIconOnly size='sm'>
