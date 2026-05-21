@@ -42,9 +42,13 @@ const Pekerjaan = ({id, canEdit}) => {
                         <Table.Column>
                             Total
                         </Table.Column>
-                        <Table.Column>
-                            Aksi
-                        </Table.Column>
+                        {
+                            canEdit && (
+                                <Table.Column>
+                                    Aksi
+                                </Table.Column>
+                            )
+                        }
                     </Table.Header>
                     <Table.Body
                         renderEmptyState={() => (
@@ -55,7 +59,14 @@ const Pekerjaan = ({id, canEdit}) => {
                             )}
                     >
                         {
-                            items?.map((i, index) => {
+                            items?.filter((t) => !t.is_aggency_fee).map((i, index) => {
+                                return (
+                                    <ItemPenawaranPekerjaan  canEdit={canEdit} id={id} item={i} key={index} />
+                                )
+                            })
+                        }
+                        {
+                            items?.filter((t) => t.is_aggency_fee).map((i, index) => {
                                 return (
                                     <ItemPenawaranPekerjaan  canEdit={canEdit} id={id} item={i} key={index} />
                                 )
@@ -64,7 +75,7 @@ const Pekerjaan = ({id, canEdit}) => {
                     </Table.Body>
                 </Table.Content>
             </Table.ScrollContainer>
-            {
+            {/* {
                 items?.length > 0 && (
                     <Table.Footer className='justify-end gap-6'>
                         <div className="flex flex-col">
@@ -77,7 +88,7 @@ const Pekerjaan = ({id, canEdit}) => {
                         </div>
                     </Table.Footer>
                 )
-            }
+            } */}
         </Table>
     </Surface>
 

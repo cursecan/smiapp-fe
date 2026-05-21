@@ -20,7 +20,7 @@ const ItemPenawaranPekerjaan = ({id, item, canEdit}) => {
                 ) : (
                     <div className="">
                         <div className="flex gap-6">
-                            <div className={`flex-1 ${item.parent && 'pl-6'}`}>
+                            <div className={`flex-1`}>
                                 <div className="">{ item.barang_jasa }</div>
                                 {
                                     !!item.keterangan && <Description>{item.keterangan}</Description>
@@ -48,24 +48,28 @@ const ItemPenawaranPekerjaan = ({id, item, canEdit}) => {
                 )
             }
         </Table.Cell>
-        <Table.Cell className={'w-0 truncate'}>
-            {
-                canEdit && (
-                        <div className="flex gap-2 justify-end">
-                            {
-                                !item.parent && (
-                                    <ItemPenawaranModal simple id={id} parent={item.id} />
-                                )
-                            }
-                            {/* Update */}
-                            <UpdateItemModal item={item} />
-                            
-                            {/* Delete */}
-                            <DeleteItemModal item={item} />
-                        </div>
-                )
-            }
-        </Table.Cell>
+        {
+            canEdit && (
+                <Table.Cell className={'w-0 truncate'}>
+                    {
+                        canEdit && (
+                                <div className="flex gap-2 justify-end">
+                                    {
+                                        !item.parent && (
+                                            <ItemPenawaranModal simple id={id} parent={item.id} />
+                                        )
+                                    }
+                                    {/* Update */}
+                                    <UpdateItemModal item={item} />
+                                    
+                                    {/* Delete */}
+                                    <DeleteItemModal item={item} />
+                                </div>
+                        )
+                    }
+                </Table.Cell>
+            )
+        }
     </Table.Row>
   )
 }
