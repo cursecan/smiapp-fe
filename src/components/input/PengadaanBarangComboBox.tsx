@@ -4,8 +4,8 @@ import ComboBoxComponent from "./ComboBoxComponent"
 
 const PengadaanBarangComboBox = ({value, onChange=()=>{}, ...props}) => {
     const fnQuery = async (pageParam, queryKey) => useJenisPekerjaanService.list({pageParam, queryKey})
-
-    const {data:selectedData} = useQuery({
+    
+    const {data:selectedData, isLoading} = useQuery({
         queryKey: ['jenispekerjaan-detail-combox', value],
         queryFn: async () => {
             return await useJenisPekerjaanService.detail(value)
@@ -16,6 +16,11 @@ const PengadaanBarangComboBox = ({value, onChange=()=>{}, ...props}) => {
         },
         enabled: !!value
     })
+
+    if (isLoading) {
+        return null
+    }
+
   return (
     <ComboBoxComponent
         label={'Jenis Pekerjaan'}

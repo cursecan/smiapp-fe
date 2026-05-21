@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 const CustomerComboBox = ({label, value, onChange=()=>{}, ...props}) => {
     const fnQuery = (pageParam, queryKey) => useCustomerService.list({pageParam, queryKey})
 
-    const {data: selectedData} = useQuery({
+    const {data: selectedData, isLoading} = useQuery({
       queryKey: ['customer-detail-combox', value],
       queryFn: async () => {
         return await useCustomerService.detail(value)
@@ -16,6 +16,11 @@ const CustomerComboBox = ({label, value, onChange=()=>{}, ...props}) => {
       },
       enabled: !!value
     })
+
+    if (isLoading) {
+      return null
+    }
+
 
   return (
     <ComboBoxComponent

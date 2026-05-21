@@ -6,9 +6,10 @@ import ComboBoxComponent from "./ComboBoxComponent"
 
 const PelabuhanComboBox = ({label, value, onChange=()=>{}, ...props}) => {
     // const [pageParam, setPageParam] = useState(1)
+    
     const fnQuery = (pageParam, queryKey) => usePelabuhanService.list({pageParam, queryKey})
 
-    const { data:selectedPelabuhan } = useQuery({
+    const { data:selectedPelabuhan, isLoading } = useQuery({
         queryKey: ['pelabuhan', value],
         queryFn: async () => {
             return await usePelabuhanService.detail(value)
@@ -19,6 +20,10 @@ const PelabuhanComboBox = ({label, value, onChange=()=>{}, ...props}) => {
         },
         enabled: !!value
     })
+
+    if (isLoading) {
+        return null
+    }
     
 
   return (
