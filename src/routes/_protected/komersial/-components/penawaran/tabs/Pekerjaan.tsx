@@ -55,14 +55,14 @@ const Pekerjaan = ({penawaran, canEdit}) => {
                         {
                             items?.filter((t) => !t.is_aggency_fee).map((i, index) => {
                                 return (
-                                    <ItemPenawaranPekerjaan  canEdit={canEdit} id={id} item={i} key={index} />
+                                    <ItemPenawaranPekerjaan  canEdit={canEdit} id={penawaran.id} item={i} key={index} />
                                 )
                             })
                         }
                         {
                             items?.filter((t) => t.is_aggency_fee).map((i, index) => {
                                 return (
-                                    <ItemPenawaranPekerjaan  canEdit={canEdit} id={id} item={i} key={index} />
+                                    <ItemPenawaranPekerjaan  canEdit={canEdit} id={penawaran.id} item={i} key={index} />
                                 )
                             })
                         }
