@@ -4,7 +4,7 @@ import UpdateItemModal from './UpdateItemModal'
 import DeleteItemModal from './DeleteItemModal'
 import { formatRupiah } from '../../../../../utils/formatCurrency'
 
-const ItemPenawaranPekerjaan = ({id, item, canEdit}) => {
+const ItemPenawaranPekerjaan = ({id, pelabuhan, item, canEdit}) => {
     // console.log(canEdit, 'canedit');
     
   return (
@@ -56,7 +56,7 @@ const ItemPenawaranPekerjaan = ({id, item, canEdit}) => {
                                 <div className="flex gap-2 justify-end">
                                     {
                                         !item.parent && (
-                                            <ItemPenawaranModal simple id={id} parent={item.id} />
+                                            <ItemPenawaranModal pelabuhan={pelabuhan} simple id={id} parent={item.id} />
                                         )
                                     }
                                     {/* Update */}
