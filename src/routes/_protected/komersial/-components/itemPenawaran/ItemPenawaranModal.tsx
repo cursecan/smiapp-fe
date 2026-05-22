@@ -7,8 +7,9 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { usePekerjaanService } from '../../../../../services/masterdata/pekerjaanService'
 import { useItemPenawaranService } from '../../../../../services/penawaran.service'
 import { formatRupiah } from '../../../../../utils/formatCurrency'
+import { useState } from 'react'
 
-const ItemPenawaranModal = ({id, parent, simple=false, disable=false}) => {
+const ItemPenawaranModal = ({id, pelabuhan, parent, simple=false, disable=false}) => {
     const state = useOverlayState()
     const form = {
         penawaran: '',
@@ -23,9 +24,11 @@ const ItemPenawaranModal = ({id, parent, simple=false, disable=false}) => {
         is_header: false
     }
 
+    const [search, setSearch] = useState('')
+
     const {data: pekerjaan} = useQuery({
-        queryKey: ['pekerjaan-list-modal'],
-        queryFn: async () => usePekerjaanService.list(),
+        queryKey: ['pekerjaan-list-modal', pelabuhan, search],
+        queryFn: async ({queryKey}) => usePekerjaanService.list({queryKey}),
         select: (data) => data.data
     })
 
@@ -56,7 +59,7 @@ const ItemPenawaranModal = ({id, parent, simple=false, disable=false}) => {
             <SearchField>
                 <SearchField.Group>
                     <SearchField.SearchIcon />
-                    <SearchField.Input placeholder='Cari nama pekerjaan'/>
+                    <SearchField.Input placeholder='Cari nama pekerjaan' onChange={(e) => setSearch(e.target.value)} />
                     <SearchField.ClearButton />
                 </SearchField.Group>
             </SearchField>

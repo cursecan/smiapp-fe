@@ -1,32 +1,26 @@
 import { Tray } from '@gravity-ui/icons'
-import { Description, EmptyState, Label, Surface, Table } from '@heroui/react'
+import {EmptyState, Surface, Table } from '@heroui/react'
 import { useQuery } from '@tanstack/react-query'
 import { usePenawaranService } from '../../../../../../services/penawaran.service'
 import ItemPenawaranModal from '../../itemPenawaran/ItemPenawaranModal'
 import ItemPenawaranPekerjaan from '../../itemPenawaran/ItemPenawaranPekerjaan'
-import { formatRupiah } from '../../../../../../utils/formatCurrency'
 
-const Pekerjaan = ({id, canEdit}) => {
+const Pekerjaan = ({penawaran, canEdit}) => {
     const {data: items, isLoading} = useQuery({
         queryKey: ['item-penawaran'],
-        queryFn: async () => await usePenawaranService.items(id),
-        select: (data) => data.data
+        queryFn: async () => await usePenawaranService.items(penawaran.id),
+        select: (data) => data.data,
+        enabled: !!penawaran.id
     })
 
     if (isLoading) {
         return <div className="">Loading...</div>
     }
-    // console.log(items);
-    
-
-    const total_hpp = items.filter(i => !i.is_header).reduce((a,b) => (a+Number(b.harga_hpp * b.qty)), 0)
-    const total_satuan = items.filter(i=> !i.is_header).reduce((a,b) => (a+Number(b.harga_satuan * b.qty)), 0)
-    
 
   return (
     <Surface className='p-3 rounded-2xl'>
         <div className="flex justify-end mb-3">
-            <ItemPenawaranModal disable={!canEdit} id={id} />
+            <ItemPenawaranModal disable={!canEdit} id={penawaran.id} pelabuhan={penawaran.pelabuhan?.id} />
         </div>
 
         <Table>

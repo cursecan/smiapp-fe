@@ -194,7 +194,7 @@ function RouteComponent() {
               
               <DokumenPenawaran canEdit={canEdit} data={data} />
               
-              <Pekerjaan id={id} canEdit={canEdit} />
+              <Pekerjaan penawaran={data} canEdit={canEdit} />
               
               {
                 data?.sumber_penugasan && (
