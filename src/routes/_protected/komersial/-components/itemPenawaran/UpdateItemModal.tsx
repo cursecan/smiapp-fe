@@ -8,7 +8,7 @@ import CurrencyInput from '../../../../../components/input/CurrencyInput'
 
 const UpdateItemModal = ({item}) => {
     const state = useOverlayState()
-    const [dataForm, setDataForm] = useState({...item})
+    const [dataForm, setDataForm] = useState({...item, parent: item.parent ? item.parent.id : ''})
 
     const qc = useQueryClient()
     const mutation = useMutation({

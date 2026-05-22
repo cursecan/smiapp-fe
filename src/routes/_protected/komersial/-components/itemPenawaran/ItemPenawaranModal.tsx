@@ -25,7 +25,6 @@ const ItemPenawaranModal = ({id, pelabuhan, parent, simple=false, disable=false}
     }
 
     const [search, setSearch] = useState('')
-
     const {data: pekerjaan} = useQuery({
         queryKey: ['pekerjaan-list-modal', pelabuhan, search],
         queryFn: async ({queryKey}) => usePekerjaanService.list({queryKey}),
@@ -41,7 +40,7 @@ const ItemPenawaranModal = ({id, pelabuhan, parent, simple=false, disable=false}
     })
 
     const handleCreateItem = (p) => {
-        mutation.mutate({...form, penawaran: id, reference_item: p.id, barang_jasa: p.nama_pekerjaan, harga_satuan: p.hpp, harga_hpp: p.hpp, parent: parent ? parent.id : ''})
+        mutation.mutate({...form, penawaran: id, reference_item: p.id, barang_jasa: p.nama_pekerjaan, harga_satuan: p.hpp, harga_hpp: p.hpp, parent: parent ? parent : ''})
     }
 
 
