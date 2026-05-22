@@ -41,7 +41,7 @@ const ItemPenawaranModal = ({id, pelabuhan, parent, simple=false, disable=false}
     })
 
     const handleCreateItem = (p) => {
-        mutation.mutate({...form, penawaran: id, reference_item: p.id, barang_jasa: p.nama_pekerjaan, harga_satuan: p.hpp, harga_hpp: p.hpp, parent: parent ? parent : ''})
+        mutation.mutate({...form, penawaran: id, reference_item: p.id, barang_jasa: p.nama_pekerjaan, harga_satuan: p.hpp, harga_hpp: p.hpp, parent: parent ? parent.id : ''})
     }
 
 
