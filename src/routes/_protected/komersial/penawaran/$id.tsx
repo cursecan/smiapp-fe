@@ -257,7 +257,7 @@ function RouteComponent() {
                     <>
                       <ReplyEmailModal payload={data} isDisabled={data?.has_email_reply} fnQuery={(payload) => usePenawaranService.reply_email(data?.id, payload)} queryKey={['detail-penawaran', id]} />
                       <DownloadPenawaran data={data} />
-                      <DisposisiOperasionalModal isDisabled={data?.has_ops || data?.has_email_reply} penawaran={data} />
+                      <DisposisiOperasionalModal isDisabled={data?.has_ops || !data?.has_email_reply} penawaran={data} />
                     </>
                   )
                 }
