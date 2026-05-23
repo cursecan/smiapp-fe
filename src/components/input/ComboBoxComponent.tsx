@@ -1,5 +1,5 @@
 import { Label, ComboBox, Input, ListBox, EmptyState, Collection, ListBoxLoadMoreItem, Spinner, Description } from '@heroui/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDebounce } from 'use-debounce'
 import { useInfiniteQuery } from '@tanstack/react-query'
 
@@ -16,7 +16,7 @@ const ComboBoxComponent = ({label, onChange=()=>{}, fnQuery, keyName, filter, va
         getNextPageParam: (lastPage) => {
             // console.log(lastPage, 'lastpage');
             
-            if (!lastPage.data.nexts) return undefined
+            if (!lastPage.data.next) return undefined
 
             const url = new URL(lastPage.data.next)
             return Number(url.searchParams.get('page'))
@@ -41,13 +41,15 @@ const ComboBoxComponent = ({label, onChange=()=>{}, fnQuery, keyName, filter, va
         onChange(e)
     }
 
-    // useEffect(() => {
-    //     if (value) {
-    //         setSelectedKey(value.id)
-    //         setSearch(value.name)
-    //     }
+    useEffect(() => {
+        if (value) {
+            const exist = items?.find(i => i.id=value.id)
+            if (exist===undefined) {
+                items.push(value)
+            }           
+        }
 
-    // }, [value])
+    }, [value])
 
 
   return (

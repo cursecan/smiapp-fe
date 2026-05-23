@@ -3,16 +3,20 @@ import { Chip } from "@heroui/react"
 
 const StatusChiper = ({status}) => {
     const master = {
-        inisiasi: 'default',
+        '': 'default',
         approval_manager: 'accent',
+        disposisi_operasional: 'warning',
+        progress_operasional: 'accent',
         selesai: 'success'
     }
 
-    const clean_status = status.replace(/\s+/g, "_").toLowerCase()
-    const selected = master[clean_status]
+    const result = status.replace(/_/g, " ")
+        .replace(/\b\w/g, c => c.toUpperCase());
+
+    const selected = master[status]
   
     return (
-        <Chip color={selected}>{status}</Chip>
+        <Chip color={selected}>{result || 'Inisiasi'}</Chip>
     )
 
 }

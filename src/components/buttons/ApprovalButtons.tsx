@@ -61,6 +61,7 @@ const ApprovalButtons = ({
         },
         onError: (er) => {
             toast.danger({message: 'Gagal', description: er.message})
+            closeState()
         }
     })
 
@@ -80,7 +81,7 @@ const ApprovalButtons = ({
     }
 
     const errorSubmit = (errors) => {
-        console.log(errors, 'errors');
+        // console.log(errors, 'errors');
         
         alert('Harap lengkapi data dengan benar.')
         onError(errors)
@@ -88,7 +89,7 @@ const ApprovalButtons = ({
     }
 
     const handleSubmitForm = (dataForm) => {
-        console.log(dataForm, 'dataformss');
+        // console.log(dataForm, 'dataformss');
         
         submit_mutation.mutate(dataForm)
     }
@@ -116,7 +117,7 @@ const ApprovalButtons = ({
                                     </AlertDialog.Body>
                                     <AlertDialog.Footer>
                                         <Button slot={'close'} variant="tertiary">Close</Button>
-                                        <Button onPress={form.handleSubmit(handleSaveForm, errorSave)}>Ya, Simpan</Button>
+                                        <Button isDisabled={save_mutation.isPending} onPress={form.handleSubmit(handleSaveForm, errorSave)}>Ya, Simpan</Button>
                                     </AlertDialog.Footer>
                                 </AlertDialog.Dialog>
                             </AlertDialog.Container>
@@ -141,7 +142,7 @@ const ApprovalButtons = ({
                                             </AlertDialog.Body>
                                             <AlertDialog.Footer>
                                                 <Button slot={'close'} variant="tertiary">Close</Button>
-                                                <Button onPress={form.handleSubmit(handleSubmitForm, errorSubmit)}>Ya, Lanjutkan</Button>
+                                                <Button isDisabled={submit_mutation.isPending} onPress={form.handleSubmit(handleSubmitForm, errorSubmit)}>Ya, Lanjutkan</Button>
                                             </AlertDialog.Footer>
                                         </AlertDialog.Dialog>
                                     </AlertDialog.Container>

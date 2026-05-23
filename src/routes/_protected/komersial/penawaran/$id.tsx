@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { createFileRoute, useParams } from '@tanstack/react-router'
+import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
 import { usePenawaranService } from '../../../../services/penawaran.service'
 import {  Breadcrumbs, Button, Card, CloseButton, Description,  Disclosure,  Label,  Surface, Table  } from '@heroui/react'
-import { CheckDouble, Clock,  Eye, LogoDocker } from '@gravity-ui/icons'
+import { ArrowUpRightFromSquare, CheckDouble, Clock,  Eye, LogoDocker } from '@gravity-ui/icons'
 
 import { formatDate } from '../../../../utils/dateFormat'
 import KapalComboBox from '../../../../components/input/KapalComboBox'
@@ -23,7 +23,6 @@ import CustomerComboBox from '../../../../components/input/CustomerComboBox'
 import DokumenPenawaran from '../-components/penawaran/DokumenPenawaran'
 import ReplyEmailModal from '../-components/penawaran/ReplyEmailModal'
 import DisposisiOperasionalModal from '../-components/penawaran/DisposisiOperasionalModal'
-import { useOprasionalService } from '../../../../services/oprasional/oprasionalService'
 import DownloadPenawaran from '../-components/penawaran/DownloadPenawaran'
 
 export const Route = createFileRoute('/_protected/komersial/penawaran/$id')({
@@ -39,11 +38,13 @@ function RouteComponent() {
     select: (data) => data.data
   })
 
+  const navigate = useNavigate()
+
 
   const [kapal, setkapal] = useState('')
   const [errors, setErrors] = useState(null)
 
-  const {canEdit, canApprove} = useSchema(data)
+  const {canEdit, canApprove, hasAuth} = useSchema(data)
   const {control, handleSubmit, reset, getValues, formState: {isValid}} = useForm({resolver: zodResolver(usePenawaranSchema), mode: "onChange", defaultValues: data || {}})
   
   const qc  = useQueryClient()
@@ -67,8 +68,9 @@ function RouteComponent() {
   })
 
 
-  const handleAppendKapal = () => {
-    mutation.mutate({id, payload: {kapal_id: kapal}})
+  const handleAppendKapal = (e) => {
+    setkapal(e)
+    mutation.mutate({id, payload: {kapal_id: e}})
   }
 
   const handleRemoveKapal = (e) => {
@@ -151,8 +153,8 @@ function RouteComponent() {
                   { canEdit && (
                     <div className="flex items-center gap-3 mb-3">
                       <Label> Pilih Kapal : </Label>
-                      <KapalComboBox readOnly={!canEdit} value={kapal} onChange={setkapal} />
-                      <Button onPress={handleAppendKapal} variant='secondary'>Add Kapal</Button>
+                      <KapalComboBox readOnly={!canEdit} value={kapal} onChange={handleAppendKapal} />
+                      {/* <Button onPress={handleAppendKapal} variant='secondary'>Add Kapal</Button> */}
                     </div>
                   )}
                   <Table>
@@ -175,7 +177,7 @@ function RouteComponent() {
                                     {k.nama_kapal}
                                   </Table.Cell>
                                   <Table.Cell className={'w-0 truncate'}>
-                                    <CloseButton isDisabled={!canEdit} onPress={() => handleRemoveKapal(k.id)} />
+                                    <CloseButton className={canEdit && 'bg-danger-soft text-danger'} isDisabled={!canEdit} onPress={() => handleRemoveKapal(k.id)} />
                                   </Table.Cell>
                                 </Table.Row>
                               )
@@ -195,7 +197,8 @@ function RouteComponent() {
               <DokumenPenawaran canEdit={canEdit} data={data} />
               
               <Pekerjaan penawaran={data} canEdit={canEdit} />
-              
+
+
               {
                 data?.sumber_penugasan && (
                   <Surface className='p-3 rounded-2xl text-center'>
@@ -250,12 +253,23 @@ function RouteComponent() {
                   onError={setErrors}
                 />
                 {
-                  data?.status[0]?.completed && (
+                  data?.approvals[0]?.step === 3 && hasAuth && (
                     <>
                       <ReplyEmailModal payload={data} isDisabled={data?.has_email_reply} fnQuery={(payload) => usePenawaranService.reply_email(data?.id, payload)} queryKey={['detail-penawaran', id]} />
                       <DownloadPenawaran data={data} />
-                      <DisposisiOperasionalModal isDisabled={data?.has_ops} fnQuery={() => useOprasionalService.create({penawaran: data.id})} queryKey={['detail-penawaran', id]}  />
+                      <DisposisiOperasionalModal isDisabled={data?.has_ops || data?.has_email_reply} penawaran={data} />
                     </>
+                  )
+                }
+                {
+                  data?.oprasional && (
+                    <div className="flex-1 flex justify-end">
+                      <Button onPress={() => navigate({to: `/oprasional/oprasional/${data.oprasional}`})} variant='tertiary'>
+                        <ArrowUpRightFromSquare />
+                        Lihat Operasional
+                      </Button>
+
+                    </div>
                   )
                 }
               </div>

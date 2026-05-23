@@ -4,6 +4,7 @@ import ComboBoxComponent from "./ComboBoxComponent"
 
 const PengadaanBarangComboBox = ({value, onChange=()=>{}, ...props}) => {
     const fnQuery = async (pageParam, queryKey) => useJenisPekerjaanService.list({pageParam, queryKey})
+    console.log(value, 'valvalvava');
     
     const {data:selectedData, isLoading} = useQuery({
         queryKey: ['jenispekerjaan-detail-combox', value],

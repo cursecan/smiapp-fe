@@ -36,7 +36,7 @@ const AssideBar = () => {
                                 <NavButton onPress={() => navigate({to: '/dashboard'})} icon={<House />} name={'Home'} />
                                 <NavButton onPress={() => navigate({to: '/komersial/email'})}  icon={<Envelope />} name={'Email'} />
                                 <NavButton onPress={() => navigate({to: '/komersial/penawaran'})} icon={<Circles5Random />} name={'Penawaran'} />
-                                <NavButton icon={<Rocket />} name={'Operasional'} />
+                                <NavButton onPress={() => navigate({to: '/oprasional/oprasional'})} icon={<Circles5Random />} icon={<Rocket />} name={'Operasional'} />
                                 <NavButton icon={<Flask />} name={'Casbon'} />
                             </div>
                         </li>

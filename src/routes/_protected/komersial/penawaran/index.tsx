@@ -105,7 +105,7 @@ function RouteComponent() {
                             { formatRupiah(i.progress.budget || '0') }
                           </Table.Cell>
                           <Table.Cell className={'truncate'}>
-                            <StatusChiper status={i.status[0]?.name} />
+                            <StatusChiper status={i.status} />
                           </Table.Cell>
                           <Table.Cell>
                             <Button onPress={() => navigate({to: `/komersial/penawaran/${i.id}`})} isIconOnly size='sm'>

@@ -1,4 +1,4 @@
-import { Button, Label, ProgressBar, useOverlayState } from "@heroui/react"
+import { Button, Label, ProgressBar, Spinner, useOverlayState } from "@heroui/react"
 import ModalComponent from "../../../../../components/modals/ModalComponent"
 import { Cloud } from "@gravity-ui/icons"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
@@ -52,7 +52,7 @@ const UploadDokumenModal = ({data, canEdit=false}) => {
             hideFooter
             // hideHeader
         >
-            <div className="">
+            <div className="relative">
                 <div className="mb-1">
                     <Label>Accepted document only .pdf & image</Label>
                 </div>
@@ -71,20 +71,14 @@ const UploadDokumenModal = ({data, canEdit=false}) => {
 
                     )
                 }
-                {/* <div className="">
-                    {progress} %
-                </div> */}
-                {/* <div {...getRootProps()} className="p-6 border-2 rounded-2xl border-dashed bg-amber-50">
-                    <input {...getInputProps()} />
-                    <div className="text-center">
-                        <div className="flex items-center justify-center">
-                            <Cloud className="size-5" />
+                
+                {
+                    mutation.isPending && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <Spinner />
                         </div>
-                        <div className="mt-2">
-                            Drag and drop file here.
-                        </div>
-                    </div>
-                </div> */}
+                    )
+                }
             </div>
 
         </ModalComponent>
