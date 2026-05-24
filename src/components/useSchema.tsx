@@ -20,3 +20,10 @@ export const useSchema = (schema) => {
     canEdit, canApprove, hasAuth
   }
 }
+
+
+export const getApprovalStatus = (modul) => {
+  const data = JSON.parse(localStorage.getItem('approval')).map(i => ({...i, name_id: i.name.replace(/\s+/g, "_").toLowerCase()}))
+
+  return data.filter(i=> i.approval.modul_name===modul)
+}

@@ -4,6 +4,7 @@ import axios from 'axios'
 import { useState } from 'react'
 import { useAuth } from '../auth/AuthProvider'
 import { FaceRobotSmile } from '@gravity-ui/icons'
+import { useApprovalService } from '../services/settings/approvalService'
 
 export const Route = createFileRoute('/login')({
   component: RouteComponent,
@@ -38,8 +39,13 @@ function RouteComponent() {
       })
       const { user, access } = res.data
       await login(user, access)
+
+
+      const res_apps = await useApprovalService.list()
+      localStorage.setItem('approval', JSON.stringify(res_apps.data.results))
       
-      console.log(res.data);
+      
+      // console.log(res.data);
       navigate({to: '/komersial/penawaran', replace: true})
 
     } catch (error) {

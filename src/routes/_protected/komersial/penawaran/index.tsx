@@ -8,21 +8,24 @@ import HeaderPage from '../../../../components/HeaderPage'
 import { formatRupiah } from '../../../../utils/formatCurrency'
 import PaginationTable from '../../../../components/PaginationTable'
 import StatusChiper from '../../../../components/StatusChiper'
+import { getApprovalStatus } from '../../../../components/useSchema'
+import StatusApprovalFilter from '../../../../components/StatusApprovalFilter'
 
 
 export const Route = createFileRoute('/_protected/komersial/penawaran/')({
   component: RouteComponent,
   validateSearch: (search) => ({
     page: Number(search.page ?? 1),
-    q: String(search.q ?? '')
+    q: String(search.q ?? ''),
+    filter: String(search.filter ?? '')
   })
 })
 
 function RouteComponent() {
   const navigate = useNavigate()
-  const {page, q} = Route.useSearch()
+  const {page, q, filter} = Route.useSearch()
   const {data: penawaran} = useQuery({
-    queryKey: ['penawaran-list', page, q],
+    queryKey: ['penawaran-list', page, q, filter],
     queryFn: async ({queryKey}) => usePenawaranService.getList({queryKey}),
     select: (data) => data.data
   })
@@ -34,7 +37,7 @@ function RouteComponent() {
   }
 
   const totalPages = Math.ceil(penawaran?.count/10)
-
+  const approval_status = getApprovalStatus('Penawaran')
 
   // if (isLoading) {
   //   return <div className="">Loading</div>
@@ -49,7 +52,7 @@ function RouteComponent() {
       <Card className=''>
         <Card.Header>
           <div className="flex items-center">
-            <div className="flex-1">
+            <div className="flex-1 flex items-center gap-4">
               <SearchField className={'w-100'}>
                   <SearchField.Group>
                       <SearchField.SearchIcon />
@@ -57,7 +60,9 @@ function RouteComponent() {
                       <SearchField.ClearButton onPress={() => navigate({search: (prev) => ({...prev, q: undefined})})} />
                   </SearchField.Group>
               </SearchField>
+              <StatusApprovalFilter data={approval_status} onChange={(e) => navigate({search: (prev) => ({...prev, filter: e})})} />
             </div>
+
             <div className="">
               <ModalPenawaran />
             </div>
