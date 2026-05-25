@@ -9,7 +9,7 @@ import { usePekerjaanService } from '../../../../../../services/masterdata/peker
 import { useState } from 'react'
 import CurrencyInput from '../../../../../../components/input/CurrencyInput'
 
-const Pekerjaan = ({penawaran, canEdit}) => {
+const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
     const state = useOverlayState()
     const [form, setForm] = useState({
         penawaran: penawaran.id,
@@ -32,10 +32,10 @@ const Pekerjaan = ({penawaran, canEdit}) => {
     })
 
     const {data: master_data, isLoading: masterLoading} = useQuery({
-        queryKey: ['master-kerjaan-list-modal', '', penawaran.pelabuhan?.id],
+        queryKey: ['master-kerjaan-list-modal', '', pelabuhan?.id],
         queryFn: async ({queryKey}) => usePekerjaanService.list({queryKey}),
         select: (data) => data.data,
-        enabled: !!penawaran.pelabuhan?.id
+        enabled: !!pelabuhan?.id
     })
 
     const qc = useQueryClient()
@@ -57,7 +57,6 @@ const Pekerjaan = ({penawaran, canEdit}) => {
         return <div className="">Loading...</div>
     }
 
-    console.log(master_data, 'masterdata');
     
 
   return (
@@ -82,7 +81,7 @@ const Pekerjaan = ({penawaran, canEdit}) => {
                                 <RadioGroup onChange={handleCreateItem}>
                                     <Label>Reference Master Pekerjaan</Label>
                                     {
-                                        master_data.results.map(m => {
+                                        master_data?.results.map(m => {
                                             return (
                                                 <Radio key={m.id} value={m.id}>
                                                     <Radio.Control>

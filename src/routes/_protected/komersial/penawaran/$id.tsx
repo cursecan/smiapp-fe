@@ -43,6 +43,7 @@ function RouteComponent() {
 
   const [kapal, setkapal] = useState('')
   const [errors, setErrors] = useState(null)
+  const [pelabuhan, setPelabuhan] = useState(null)
 
   const {canEdit, canApprove, hasAuth} = useSchema(data)
   const {control, handleSubmit, reset, getValues, formState: {isValid}} = useForm({resolver: zodResolver(usePenawaranSchema), mode: "onChange", defaultValues: data || {}})
@@ -91,9 +92,18 @@ function RouteComponent() {
   }, [data, reset])
 
 
+  useEffect(() => {
+    if (data) {
+      setPelabuhan(data?.pelabuhan)
+    }
+  }, [])
+
+
   if (isLoading) {
     return (<>Loading....</>)
   }
+
+  
   
 
   return <div className="">
@@ -144,7 +154,7 @@ function RouteComponent() {
                   control={control}
                   render={({field}) => (
                     // <WilayahComboBox readOnly={!canEdit} {...field} value={field.value} onChange={(e) => field.onChange(e)} />
-                    <PelabuhanComboBox isDisabled={!canEdit} isInvalid={!field.value} label={'Palabuhan / Wilayah'} {...field} value={field.value || ''} onChange={(e) => field.onChange(e)} />
+                    <PelabuhanComboBox isDisabled={!canEdit} isInvalid={!field.value} label={'Palabuhan / Wilayah'} {...field} value={field.value || ''} onChange={(e) => field.onChange(e)} setPelabuhan={(e) => setPelabuhan(e)} />
                   )}
                 />
               </div>
@@ -196,7 +206,7 @@ function RouteComponent() {
               
               <DokumenPenawaran canEdit={canEdit} data={data} />
               
-              <Pekerjaan penawaran={data} canEdit={canEdit} />
+              <Pekerjaan pelabuhan={pelabuhan} penawaran={data} canEdit={canEdit} />
 
 
               {

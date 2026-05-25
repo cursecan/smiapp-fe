@@ -4,7 +4,7 @@ import { usePelabuhanService } from "../../services/masterdata/pelabuhanService"
 import ComboBoxComponent from "./ComboBoxComponent"
 
 
-const PelabuhanComboBox = ({label, value, onChange=()=>{}, ...props}) => {
+const PelabuhanComboBox = ({label, value, onChange=()=>{}, setPelabuhan, ...props}) => {
     // const [pageParam, setPageParam] = useState(1)
     
     const fnQuery = (pageParam, queryKey) => usePelabuhanService.list({pageParam, queryKey})
@@ -16,6 +16,7 @@ const PelabuhanComboBox = ({label, value, onChange=()=>{}, ...props}) => {
         }, 
         select: (res) => {
             const data = res.data
+            setPelabuhan(data)
             return {...data, name: data.nama_pelabuhan}
         },
         enabled: !!value
