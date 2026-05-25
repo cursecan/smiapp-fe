@@ -58,7 +58,7 @@ const ReplyEmailModal = ({payload, fnQuery, queryKey, isDisabled=false}) => {
                 </div>
                 <div className="flex justify-end gap-2">
                     <Button onPress={state.close} variant="tertiary">Batal</Button>
-                    <Button onPress={handleSubmit}>Kirim</Button>
+                    <Button isDisabled={mutation.isPending} onPress={handleSubmit}>Kirim</Button>
                 </div>
             </div>
         </Surface>
