@@ -61,8 +61,8 @@ const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
     }
     
     const total_hpp = items?.filter(i => !i.is_aggency_fee).reduce((a, b) => a + Number(b.harga_satuan)*b.qty, 0)
-    const total_aggency = items?.filter(i => i.is_aggency_fee).reduce((a, b) => a + Number(b.harga_satuan), 0)
-    const total_ppn = items?.filter(i => i.is_ppn).reduce((a, b) => a + (Number(b.harga_satuan)*0.11)*100, 0)/100
+    const total_aggency = items?.filter(i => i.is_aggency_fee).reduce((a, b) => a + Number(b.harga_satuan)*b.qty, 0)
+    const total_ppn = items?.filter(i => i.is_ppn).reduce((a, b) => a + (Number(b.harga_satuan)*b.qty*0.11)*100, 0)/100
     
     
     
