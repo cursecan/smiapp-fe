@@ -147,10 +147,14 @@ const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
                                 )
                             })
                         }
-                        <Table.Row>
-                            <Table.Cell colSpan={2}><strong>TOTAL</strong></Table.Cell>
-                            <Table.Cell><strong>{formatRupiah(total_hpp)}</strong></Table.Cell>
-                        </Table.Row>
+                        {
+                            items?.length > 0 && (
+                                <Table.Row>
+                                    <Table.Cell colSpan={2}><strong>TOTAL</strong></Table.Cell>
+                                    <Table.Cell><strong>{formatRupiah(total_hpp)}</strong></Table.Cell>
+                                </Table.Row>
+                            )
+                        }
                         {
                             items?.filter((t) => t.is_aggency_fee).map((i, index) => {
                                 return (
@@ -158,14 +162,21 @@ const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
                                 )
                             })
                         }
-                        <Table.Row>
-                            <Table.Cell colSpan={2}><strong>PPN 11%</strong></Table.Cell>
-                            <Table.Cell><strong>{formatRupiah(total_ppn)}</strong></Table.Cell>
-                        </Table.Row>
-                        <Table.Row>
-                            <Table.Cell colSpan={2}><strong>GRAND TOTAL</strong></Table.Cell>
-                            <Table.Cell><strong>{formatRupiah(total_hpp + total_aggency + total_ppn)}</strong></Table.Cell>
-                        </Table.Row>
+                        {
+                            items?.length > 0 && (
+                                <>
+                                    <Table.Row>
+                                        <Table.Cell colSpan={2}><strong>PPN 11%</strong></Table.Cell>
+                                        <Table.Cell><strong>{formatRupiah(total_ppn)}</strong></Table.Cell>
+                                    </Table.Row>
+                                    <Table.Row>
+                                        <Table.Cell colSpan={2}><strong>GRAND TOTAL</strong></Table.Cell>
+                                        <Table.Cell><strong>{formatRupiah(total_hpp + total_aggency + total_ppn)}</strong></Table.Cell>
+                                    </Table.Row>
+                                
+                                </>
+                            )
+                        }
 
                         
                     </Table.Body>
