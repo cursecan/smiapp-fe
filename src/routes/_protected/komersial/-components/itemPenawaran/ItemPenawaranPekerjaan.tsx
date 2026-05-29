@@ -1,5 +1,4 @@
 import { Description, Label, Table } from '@heroui/react'
-import ItemPenawaranModal from './ItemPenawaranModal'
 import UpdateItemModal from './UpdateItemModal'
 import DeleteItemModal from './DeleteItemModal'
 import { formatRupiah } from '../../../../../utils/formatCurrency'
