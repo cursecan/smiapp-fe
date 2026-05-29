@@ -1,5 +1,5 @@
 import { Tray } from '@gravity-ui/icons'
-import {Button, Description, EmptyState, Label, ModalHeader, Radio, RadioGroup, Surface, Table, useOverlayState } from '@heroui/react'
+import {Button, Description, EmptyState, Label, ModalHeader, Radio, RadioGroup, Surface, Tab, Table, useOverlayState } from '@heroui/react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useItemPenawaranService, usePenawaranService } from '../../../../../../services/penawaran.service'
 import ItemPenawaranPekerjaan from '../../itemPenawaran/ItemPenawaranPekerjaan'
@@ -152,6 +152,9 @@ const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
                                 <Table.Row>
                                     <Table.Cell colSpan={2}><strong>TOTAL</strong></Table.Cell>
                                     <Table.Cell><strong>{formatRupiah(total_hpp)}</strong></Table.Cell>
+                                    {
+                                        canEdit && <Table.Cell></Table.Cell>
+                                    }
                                 </Table.Row>
                             )
                         }
@@ -168,10 +171,16 @@ const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
                                     <Table.Row>
                                         <Table.Cell colSpan={2}><strong>PPN 11%</strong></Table.Cell>
                                         <Table.Cell><strong>{formatRupiah(total_ppn)}</strong></Table.Cell>
+                                        {
+                                            canEdit && <Table.Cell></Table.Cell>
+                                        }
                                     </Table.Row>
                                     <Table.Row>
                                         <Table.Cell colSpan={2}><strong>GRAND TOTAL</strong></Table.Cell>
                                         <Table.Cell><strong>{formatRupiah(total_hpp + total_aggency + total_ppn)}</strong></Table.Cell>
+                                        {
+                                            canEdit && <Table.Cell></Table.Cell>
+                                        }
                                     </Table.Row>
                                 
                                 </>

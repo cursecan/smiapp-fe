@@ -54,11 +54,6 @@ const ItemPenawaranPekerjaan = ({id, pelabuhan, item, canEdit}) => {
                     {
                         canEdit && (
                                 <div className="flex gap-2 justify-end">
-                                    {
-                                        !item.parent && (
-                                            <ItemPenawaranModal pelabuhan={pelabuhan} simple id={id} parent={item.id} />
-                                        )
-                                    }
                                     {/* Update */}
                                     <UpdateItemModal item={item} />
                                     
