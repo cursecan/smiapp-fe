@@ -36,9 +36,10 @@ const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
     })
 
     const {data: master_data, isLoading: masterLoading} = useQuery({
-        queryKey: ['master-kerjaan-list-modal', '', penawaran?.jenis_pekerjaan?.id === '0a7bb214-fffd-4e05-9e59-f0c27301852f' ? '' : pelabuhan?.id],
+        queryKey: ['master-kerjaan-list-modal', '', pelabuhan?.id],
         queryFn: async ({queryKey}) => usePekerjaanService.list({queryKey}),
-        select: (data) => data.data
+        select: (data) => data.data,
+        enabled: !!pelabuhan?.id
     })
 
     const qc = useQueryClient()
