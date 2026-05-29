@@ -1,5 +1,5 @@
 import { Tray } from '@gravity-ui/icons'
-import {Button, EmptyState, Label, Radio, RadioGroup, Surface, Table, useOverlayState } from '@heroui/react'
+import {Button, Description, EmptyState, Label, ModalHeader, Radio, RadioGroup, Surface, Table, useOverlayState } from '@heroui/react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useItemPenawaranService, usePenawaranService } from '../../../../../../services/penawaran.service'
 import ItemPenawaranPekerjaan from '../../itemPenawaran/ItemPenawaranPekerjaan'
@@ -8,6 +8,7 @@ import ModalComponent from '../../../../../../components/modals/ModalComponent'
 import { usePekerjaanService } from '../../../../../../services/masterdata/pekerjaanService'
 import { useState } from 'react'
 import CurrencyInput from '../../../../../../components/input/CurrencyInput'
+import { formatRupiah } from '../../../../../../utils/formatCurrency'
 
 const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
     const state = useOverlayState()
@@ -56,7 +57,12 @@ const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
     if (isLoading || masterLoading) {
         return <div className="">Loading...</div>
     }
-
+    
+    const total_hpp = items?.filter(i => !i.is_aggency_fee).reduce((a, b) => a + Number(b.harga_satuan)*b.qty, 0)
+    const total_aggency = items?.filter(i => i.is_aggency_fee).reduce((a, b) => a + Number(b.harga_satuan), 0)
+    const total_ppn = items?.filter(i => i.is_ppn).reduce((a, b) => a + (Number(b.harga_satuan)*0.11)*100, 0)/100
+    
+    
     
 
   return (
@@ -141,6 +147,10 @@ const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
                                 )
                             })
                         }
+                        <Table.Row>
+                            <Table.Cell colSpan={2}><strong>TOTAL</strong></Table.Cell>
+                            <Table.Cell><strong>{formatRupiah(total_hpp)}</strong></Table.Cell>
+                        </Table.Row>
                         {
                             items?.filter((t) => t.is_aggency_fee).map((i, index) => {
                                 return (
@@ -148,23 +158,19 @@ const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
                                 )
                             })
                         }
+                        <Table.Row>
+                            <Table.Cell colSpan={2}><strong>PPN 11%</strong></Table.Cell>
+                            <Table.Cell><strong>{formatRupiah(total_ppn)}</strong></Table.Cell>
+                        </Table.Row>
+                        <Table.Row>
+                            <Table.Cell colSpan={2}><strong>GRAND TOTAL</strong></Table.Cell>
+                            <Table.Cell><strong>{formatRupiah(total_hpp + total_aggency + total_ppn)}</strong></Table.Cell>
+                        </Table.Row>
+
+                        
                     </Table.Body>
                 </Table.Content>
             </Table.ScrollContainer>
-            {/* {
-                items?.length > 0 && (
-                    <Table.Footer className='justify-end gap-6'>
-                        <div className="flex flex-col">
-                            <Description>Total HPP</Description>
-                            <Label>{formatRupiah(total_hpp)}</Label>
-                        </div>
-                        <div className="flex flex-col">
-                            <Description>Total RAB</Description>
-                            <Label>{formatRupiah(total_satuan)}</Label>
-                        </div>
-                    </Table.Footer>
-                )
-            } */}
         </Table>
 
 
