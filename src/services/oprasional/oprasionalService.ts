@@ -12,7 +12,10 @@ export const useOprasionalService = {
     detail: (id) => {
         return api.get(`/oprasional/opr/${id}/`)
     },
-    catatan: (id) => {
-        return api.get(`/oprasional/opr/${id}/catatan/`)
+    progress: (id) => {
+        return api.get(`/oprasional/opr/${id}/progress/`)
     },
+    upload: (payload) => {
+        return api.post('/oprasional/upload-progress/', payload)
+    }
 }

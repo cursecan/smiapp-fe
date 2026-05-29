@@ -43,7 +43,7 @@ const ComboBoxComponent = ({label, onChange=()=>{}, fnQuery, keyName, filter, va
 
     useEffect(() => {
         if (value) {
-            const exist = items?.find(i => i.id=value.id)
+            const exist = items.find(i => i.id=value.id)
             if (exist===undefined) {
                 items.push(value)
             }           

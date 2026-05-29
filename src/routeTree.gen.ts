@@ -18,9 +18,12 @@ import { Route as ProtectedDashboardRouteImport } from './routes/_protected/dash
 import { Route as ProtectedKomersialEmailRouteImport } from './routes/_protected/komersial/email'
 import { Route as ProtectedOprasionalPembayaranIndexRouteImport } from './routes/_protected/oprasional/pembayaran/index'
 import { Route as ProtectedOprasionalOprasionalIndexRouteImport } from './routes/_protected/oprasional/oprasional/index'
+import { Route as ProtectedOprasionalCasbonIndexRouteImport } from './routes/_protected/oprasional/casbon/index'
 import { Route as ProtectedKomersialPenawaranIndexRouteImport } from './routes/_protected/komersial/penawaran/index'
 import { Route as ProtectedOprasionalPembayaranIdRouteImport } from './routes/_protected/oprasional/pembayaran/$id'
 import { Route as ProtectedOprasionalOprasionalIdRouteImport } from './routes/_protected/oprasional/oprasional/$id'
+import { Route as ProtectedOprasionalCasbonCreateRouteImport } from './routes/_protected/oprasional/casbon/create'
+import { Route as ProtectedOprasionalCasbonIdRouteImport } from './routes/_protected/oprasional/casbon/$id'
 import { Route as ProtectedKomersialPenawaranIdRouteImport } from './routes/_protected/komersial/penawaran/$id'
 
 const LoginRoute = LoginRouteImport.update({
@@ -69,6 +72,12 @@ const ProtectedOprasionalOprasionalIndexRoute =
     path: '/oprasional/oprasional/',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
+const ProtectedOprasionalCasbonIndexRoute =
+  ProtectedOprasionalCasbonIndexRouteImport.update({
+    id: '/oprasional/casbon/',
+    path: '/oprasional/casbon/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 const ProtectedKomersialPenawaranIndexRoute =
   ProtectedKomersialPenawaranIndexRouteImport.update({
     id: '/komersial/penawaran/',
@@ -87,6 +96,18 @@ const ProtectedOprasionalOprasionalIdRoute =
     path: '/oprasional/oprasional/$id',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
+const ProtectedOprasionalCasbonCreateRoute =
+  ProtectedOprasionalCasbonCreateRouteImport.update({
+    id: '/oprasional/casbon/create',
+    path: '/oprasional/casbon/create',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
+const ProtectedOprasionalCasbonIdRoute =
+  ProtectedOprasionalCasbonIdRouteImport.update({
+    id: '/oprasional/casbon/$id',
+    path: '/oprasional/casbon/$id',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 const ProtectedKomersialPenawaranIdRoute =
   ProtectedKomersialPenawaranIdRouteImport.update({
     id: '/komersial/penawaran/$id',
@@ -102,9 +123,12 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof ProtectedDashboardRoute
   '/komersial/email': typeof ProtectedKomersialEmailRoute
   '/komersial/penawaran/$id': typeof ProtectedKomersialPenawaranIdRoute
+  '/oprasional/casbon/$id': typeof ProtectedOprasionalCasbonIdRoute
+  '/oprasional/casbon/create': typeof ProtectedOprasionalCasbonCreateRoute
   '/oprasional/oprasional/$id': typeof ProtectedOprasionalOprasionalIdRoute
   '/oprasional/pembayaran/$id': typeof ProtectedOprasionalPembayaranIdRoute
   '/komersial/penawaran/': typeof ProtectedKomersialPenawaranIndexRoute
+  '/oprasional/casbon/': typeof ProtectedOprasionalCasbonIndexRoute
   '/oprasional/oprasional/': typeof ProtectedOprasionalOprasionalIndexRoute
   '/oprasional/pembayaran/': typeof ProtectedOprasionalPembayaranIndexRoute
 }
@@ -116,9 +140,12 @@ export interface FileRoutesByTo {
   '/dashboard': typeof ProtectedDashboardRoute
   '/komersial/email': typeof ProtectedKomersialEmailRoute
   '/komersial/penawaran/$id': typeof ProtectedKomersialPenawaranIdRoute
+  '/oprasional/casbon/$id': typeof ProtectedOprasionalCasbonIdRoute
+  '/oprasional/casbon/create': typeof ProtectedOprasionalCasbonCreateRoute
   '/oprasional/oprasional/$id': typeof ProtectedOprasionalOprasionalIdRoute
   '/oprasional/pembayaran/$id': typeof ProtectedOprasionalPembayaranIdRoute
   '/komersial/penawaran': typeof ProtectedKomersialPenawaranIndexRoute
+  '/oprasional/casbon': typeof ProtectedOprasionalCasbonIndexRoute
   '/oprasional/oprasional': typeof ProtectedOprasionalOprasionalIndexRoute
   '/oprasional/pembayaran': typeof ProtectedOprasionalPembayaranIndexRoute
 }
@@ -132,9 +159,12 @@ export interface FileRoutesById {
   '/_protected/dashboard': typeof ProtectedDashboardRoute
   '/_protected/komersial/email': typeof ProtectedKomersialEmailRoute
   '/_protected/komersial/penawaran/$id': typeof ProtectedKomersialPenawaranIdRoute
+  '/_protected/oprasional/casbon/$id': typeof ProtectedOprasionalCasbonIdRoute
+  '/_protected/oprasional/casbon/create': typeof ProtectedOprasionalCasbonCreateRoute
   '/_protected/oprasional/oprasional/$id': typeof ProtectedOprasionalOprasionalIdRoute
   '/_protected/oprasional/pembayaran/$id': typeof ProtectedOprasionalPembayaranIdRoute
   '/_protected/komersial/penawaran/': typeof ProtectedKomersialPenawaranIndexRoute
+  '/_protected/oprasional/casbon/': typeof ProtectedOprasionalCasbonIndexRoute
   '/_protected/oprasional/oprasional/': typeof ProtectedOprasionalOprasionalIndexRoute
   '/_protected/oprasional/pembayaran/': typeof ProtectedOprasionalPembayaranIndexRoute
 }
@@ -148,9 +178,12 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/komersial/email'
     | '/komersial/penawaran/$id'
+    | '/oprasional/casbon/$id'
+    | '/oprasional/casbon/create'
     | '/oprasional/oprasional/$id'
     | '/oprasional/pembayaran/$id'
     | '/komersial/penawaran/'
+    | '/oprasional/casbon/'
     | '/oprasional/oprasional/'
     | '/oprasional/pembayaran/'
   fileRoutesByTo: FileRoutesByTo
@@ -162,9 +195,12 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/komersial/email'
     | '/komersial/penawaran/$id'
+    | '/oprasional/casbon/$id'
+    | '/oprasional/casbon/create'
     | '/oprasional/oprasional/$id'
     | '/oprasional/pembayaran/$id'
     | '/komersial/penawaran'
+    | '/oprasional/casbon'
     | '/oprasional/oprasional'
     | '/oprasional/pembayaran'
   id:
@@ -177,9 +213,12 @@ export interface FileRouteTypes {
     | '/_protected/dashboard'
     | '/_protected/komersial/email'
     | '/_protected/komersial/penawaran/$id'
+    | '/_protected/oprasional/casbon/$id'
+    | '/_protected/oprasional/casbon/create'
     | '/_protected/oprasional/oprasional/$id'
     | '/_protected/oprasional/pembayaran/$id'
     | '/_protected/komersial/penawaran/'
+    | '/_protected/oprasional/casbon/'
     | '/_protected/oprasional/oprasional/'
     | '/_protected/oprasional/pembayaran/'
   fileRoutesById: FileRoutesById
@@ -257,6 +296,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedOprasionalOprasionalIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
+    '/_protected/oprasional/casbon/': {
+      id: '/_protected/oprasional/casbon/'
+      path: '/oprasional/casbon'
+      fullPath: '/oprasional/casbon/'
+      preLoaderRoute: typeof ProtectedOprasionalCasbonIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
     '/_protected/komersial/penawaran/': {
       id: '/_protected/komersial/penawaran/'
       path: '/komersial/penawaran'
@@ -278,6 +324,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedOprasionalOprasionalIdRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
+    '/_protected/oprasional/casbon/create': {
+      id: '/_protected/oprasional/casbon/create'
+      path: '/oprasional/casbon/create'
+      fullPath: '/oprasional/casbon/create'
+      preLoaderRoute: typeof ProtectedOprasionalCasbonCreateRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/oprasional/casbon/$id': {
+      id: '/_protected/oprasional/casbon/$id'
+      path: '/oprasional/casbon/$id'
+      fullPath: '/oprasional/casbon/$id'
+      preLoaderRoute: typeof ProtectedOprasionalCasbonIdRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
     '/_protected/komersial/penawaran/$id': {
       id: '/_protected/komersial/penawaran/$id'
       path: '/komersial/penawaran/$id'
@@ -292,9 +352,12 @@ interface ProtectedRouteRouteChildren {
   ProtectedDashboardRoute: typeof ProtectedDashboardRoute
   ProtectedKomersialEmailRoute: typeof ProtectedKomersialEmailRoute
   ProtectedKomersialPenawaranIdRoute: typeof ProtectedKomersialPenawaranIdRoute
+  ProtectedOprasionalCasbonIdRoute: typeof ProtectedOprasionalCasbonIdRoute
+  ProtectedOprasionalCasbonCreateRoute: typeof ProtectedOprasionalCasbonCreateRoute
   ProtectedOprasionalOprasionalIdRoute: typeof ProtectedOprasionalOprasionalIdRoute
   ProtectedOprasionalPembayaranIdRoute: typeof ProtectedOprasionalPembayaranIdRoute
   ProtectedKomersialPenawaranIndexRoute: typeof ProtectedKomersialPenawaranIndexRoute
+  ProtectedOprasionalCasbonIndexRoute: typeof ProtectedOprasionalCasbonIndexRoute
   ProtectedOprasionalOprasionalIndexRoute: typeof ProtectedOprasionalOprasionalIndexRoute
   ProtectedOprasionalPembayaranIndexRoute: typeof ProtectedOprasionalPembayaranIndexRoute
 }
@@ -303,9 +366,12 @@ const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedDashboardRoute: ProtectedDashboardRoute,
   ProtectedKomersialEmailRoute: ProtectedKomersialEmailRoute,
   ProtectedKomersialPenawaranIdRoute: ProtectedKomersialPenawaranIdRoute,
+  ProtectedOprasionalCasbonIdRoute: ProtectedOprasionalCasbonIdRoute,
+  ProtectedOprasionalCasbonCreateRoute: ProtectedOprasionalCasbonCreateRoute,
   ProtectedOprasionalOprasionalIdRoute: ProtectedOprasionalOprasionalIdRoute,
   ProtectedOprasionalPembayaranIdRoute: ProtectedOprasionalPembayaranIdRoute,
   ProtectedKomersialPenawaranIndexRoute: ProtectedKomersialPenawaranIndexRoute,
+  ProtectedOprasionalCasbonIndexRoute: ProtectedOprasionalCasbonIndexRoute,
   ProtectedOprasionalOprasionalIndexRoute:
     ProtectedOprasionalOprasionalIndexRoute,
   ProtectedOprasionalPembayaranIndexRoute:

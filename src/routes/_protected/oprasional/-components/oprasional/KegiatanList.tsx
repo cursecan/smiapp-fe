@@ -1,8 +1,9 @@
 import {  useQuery } from "@tanstack/react-query"
 import {usePenawaranService } from "../../../../../services/penawaran.service"
-import {  Card, Table } from "@heroui/react"
-import { useOprasionalService } from "../../../../../services/oprasional/oprasionalService"
+import { Table } from "@heroui/react"
 import ItemKegiatan from "./ItemKegiatan"
+import UploadDocProgressModal from "./progressCatatan/UploadDocProgressModal"
+import { useOprasionalService } from "../../../../../services/oprasional/oprasionalService"
 
 const KegiatanList = ({data}) => {
     const { data:kegiatan, isLoading:loadingKegiatan } = useQuery({
@@ -13,56 +14,65 @@ const KegiatanList = ({data}) => {
         select: (data) => data.data.filter(i => !i.is_header),
         enabled: !!data?.penawaran.id
     }) 
-
-    const { data:catatan, isLoading:loadingCatatan} = useQuery({
-        queryKey: ['catatan-list'],
+    const { data:progress, isLoading:loadingProgress } = useQuery({
+        queryKey: ['progress-list'],
         queryFn: async () => {
-            return await useOprasionalService.catatan(data?.id)
+            return await useOprasionalService.progress(data?.id)
         },
         select: (data) => data.data,
         enabled: !!data?.id
-    }) 
+    })
+ 
+    
 
-    if (loadingKegiatan || loadingCatatan) {
+    if (loadingKegiatan || loadingProgress) {
         return <div className="">Loading...</div>
     }
 
-    const kegiatan_ops = kegiatan.map(i => {
-        const my_catatan = catatan.filter(m=> m.item_penawaran===i.id)
-        return {...i, catatan: my_catatan}
+
+    const progress_kegiatan = kegiatan.map(k => {
+        const item = {...k, docs: []}
+        progress.forEach(p => {
+            if (p.item_penawaran.includes(k.id)) {
+                item.docs.push({filename: p.filename, filepath: p.filepath, ket: p.keterangan})
+            }
+        }) 
+
+        return item
     })
 
-
   return (
-    <Card>
-        <Card.Header>
-            <Card.Title>Progress Pekerjaan</Card.Title>
-        </Card.Header>
-        <Card.Content>
-            <Table>
-                <Table.ScrollContainer>
-                    <Table.Content>
-                        <Table.Header>
-                            {/* <Table.Column isRowHeader className={'w-0 truncate'}>No</Table.Column> */}
-                            <Table.Column isRowHeader className={'truncate'}>Progress</Table.Column>
-                            <Table.Column>Barang / Jasa</Table.Column>
-                            <Table.Column className={'truncate w-0'}></Table.Column>
-                        </Table.Header>
-                        <Table.Body>
-                            {
-                                kegiatan_ops?.map((i, index) => {
-                                    return (
-                                        <ItemKegiatan item={{...i, index}} key={index} />
-                                    )
-                                })
-                            }
+    <div className="">
+        <div className="mb-4 flex justify-end">
+            <UploadDocProgressModal ops={data?.id} data={kegiatan} />
 
-                        </Table.Body>
-                    </Table.Content>
-                </Table.ScrollContainer>
-            </Table>
-        </Card.Content>
-    </Card>
+        </div>
+        <Table>
+            <Table.ScrollContainer>
+                <Table.Content>
+                    <Table.Header>
+                        <Table.Column isRowHeader >
+                            Progress
+                        </Table.Column>
+                        <Table.Column>Pekerjaan</Table.Column>
+                        <Table.Column>Qty</Table.Column>
+                        <Table.Column>Amount</Table.Column>
+                        <Table.Column>More</Table.Column>
+                    </Table.Header>
+                    <Table.Body>
+                        {
+                            progress_kegiatan?.map((i, index) => {
+                                return (
+                                    <ItemKegiatan key={index} item={{...i, index:index}} />
+                                )
+                            })
+                        }
+                    </Table.Body>
+                </Table.Content>
+            </Table.ScrollContainer>
+        </Table>
+        
+    </div>
   )
 }
 

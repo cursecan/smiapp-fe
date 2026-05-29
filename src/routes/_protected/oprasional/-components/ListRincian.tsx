@@ -24,12 +24,7 @@ const ListRincian = ({pembayaran}) => {
   return (
     <div className="">
         <CreateModalRincian pembayaran={pembayaran} />
-        {/* <Card className='mt-3' variant='secondary'>
-            <Card.Header>
-                <Card.Title>Nama Barang & Jasa</Card.Title>
-            </Card.Header>
 
-        </Card> */}
         <Table className='mt-3'>
             <Table.ScrollContainer>
                 <Table.Content>

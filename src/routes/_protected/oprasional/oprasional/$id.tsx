@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
 import { useOprasionalService } from '../../../../services/oprasional/oprasionalService'
 import HeaderPage from '../../../../components/HeaderPage'
-import { Breadcrumbs, Card, Description, Label, Surface, Table } from '@heroui/react'
+import { Breadcrumbs, Button, Card, Description, Label, Surface, Tab, Table, Tabs } from '@heroui/react'
 import { House } from '@gravity-ui/icons'
 import KegiatanList from '../-components/oprasional/KegiatanList'
 
@@ -118,7 +118,33 @@ function RouteComponent() {
                 </Card.Content>
             </Card>
             <div className="flex-1">
-                <KegiatanList data={data} />
+                <Tabs variant='secondary'>
+                    <Tabs.ListContainer>
+                        <Tabs.List>
+                            <Tabs.Tab id={'pekerjaan'}>
+                                Pekerjaan
+                                <Tabs.Indicator />
+                            </Tabs.Tab>
+                            <Tabs.Tab id={'casbon'}>
+                                Casbon
+                                <Tabs.Indicator />
+                            </Tabs.Tab>
+                        </Tabs.List>
+                    </Tabs.ListContainer>
+                    <Tabs.Panel id={'pekerjaan'}>
+                        <KegiatanList data={data} />
+                    </Tabs.Panel>
+                    <Tabs.Panel id={'casbon'}>
+                        <div className="">
+                            <div className="flex justify-end">
+                                <Button onPress={() => navigate({to: '/oprasional/casbon/create'})} variant='secondary'>Permohonan Casbon</Button>
+                            </div>
+                        </div>
+                    </Tabs.Panel>
+                </Tabs>
+                <div className="mt-4">
+                    <Button isDisabled>Submit Approval</Button>
+                </div>
             </div>
         </div>
     </div>

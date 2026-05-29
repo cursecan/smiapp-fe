@@ -1,13 +1,18 @@
 
-import { Label, ProgressCircle, Table } from "@heroui/react"
+import { Accordion, Card, CloseButton, Description, Label, ProgressCircle, Surface, Table, useOverlayState } from "@heroui/react"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import CreateCatatanModal from "./progressCatatan/CreateCatatanModal"
 import CatatanModal from "./progressCatatan/CatatanModal"
+import { ArrowChevronDown, Briefcase, Car, ChevronDown, File, FileLetterP } from "@gravity-ui/icons"
+import CurrencyInput from "../../../../../components/input/CurrencyInput"
+import { formatRupiah } from "../../../../../utils/formatCurrency"
+import ModalComponent from "../../../../../components/modals/ModalComponent"
+import { Link } from "@heroui/react"
 
 const ItemKegiatan = ({item}) => {
     const {reset} = useForm({defaultValues: item || {}})
-
+    const state = useOverlayState()
     
     useEffect(() => {
         if (item) {
@@ -15,35 +20,46 @@ const ItemKegiatan = ({item}) => {
         }
 
     }, [item, reset])
+    
 
 
   return (
-    
-
     <Table.Row>
-        {/* <Table.Cell>
-            {item.index+1}
-        </Table.Cell> */}
-        <Table.Cell className={'w-0 truncate'}>
-            <div className="flex items-center gap-2">
-                <ProgressCircle value={item.progress}>
-                    <ProgressCircle.Track>
-                        <ProgressCircle.TrackCircle />
-                        <ProgressCircle.FillCircle />
-                    </ProgressCircle.Track>
-                </ProgressCircle>
-                <Label>{item.progress}%</Label>
+        <Table.Cell>{item.progress} %</Table.Cell>
+        <Table.Cell>{item.barang_jasa}</Table.Cell>
+        <Table.Cell>{item.qty}</Table.Cell>
+        <Table.Cell>{ formatRupiah(item.harga_satuan)}</Table.Cell>
+        <Table.Cell className={'truncate w-0'}>
+            <ModalComponent
+                size={'lg'}
+                state={state}
+                heading={'Dokumen Upload'}
+                buttonTrigger={<CloseButton onPress={state.setOpen} className={'bg-rose-500 text-white'}>
+                    <ArrowChevronDown />
+                </CloseButton>}
+                hideFooter
+            >
+                <div className="mt-2">
+                    <ul className="">
+                        {
+                            item.docs.map((i, index) => {
+                                return (
+                                    <li key={index}>
+                                        <Link href={i.filepath} target="_blank">
+                                            <div className="flex items-center">
+                                                <img src='/pdf_icon.png' className="w-10" />
+                                                <Label className="text-gray-400 text-xs">{i.filename.split('_').splice(1).join('_')}</Label>
+                                            </div>
+                                        </Link>
 
-            </div>
-        </Table.Cell>
-        <Table.Cell>
-            <Label>{item.barang_jasa} {!!item.parent && `(${item.parent.barang_jasa})`}</Label>
-        </Table.Cell>
-        <Table.Cell>
-            <div className="flex gap-2 items-center">
-                <CreateCatatanModal item={item} />
-                <CatatanModal catatan={item.catatan || []} />
-            </div>
+                                    </li>
+                                )
+                            })
+                        }
+                    </ul>
+                </div>
+
+            </ModalComponent>
         </Table.Cell>
     </Table.Row>
   )
