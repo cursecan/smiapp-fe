@@ -24,8 +24,6 @@ const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
         keterangan: '',
         is_header: false
     })
-
-    console.log(penawaran, 'penawaran');
     
 
     const {data: items, isLoading} = useQuery({
@@ -36,10 +34,10 @@ const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
     })
 
     const {data: master_data, isLoading: masterLoading} = useQuery({
-        queryKey: ['master-kerjaan-list-modal', '', pelabuhan?.id],
+        queryKey: ['master-kerjaan-list-modal', '', pelabuhan?.id, penawaran?.jenis_pekerjaan?.id ],
         queryFn: async ({queryKey}) => usePekerjaanService.list({queryKey}),
         select: (data) => data.data,
-        enabled: !!pelabuhan?.id
+        enabled: !!pelabuhan?.id && !!penawaran?.jenis_pekerjaan?.id
     })
 
     const qc = useQueryClient()
