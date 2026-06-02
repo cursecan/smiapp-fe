@@ -14,7 +14,6 @@ const ComboBoxComponent = ({label, onChange=()=>{}, fnQuery, keyName, filter, va
         queryFn: ({pageParam, queryKey}) => fnQuery(pageParam, queryKey),
         initialPageParam: 1,
         getNextPageParam: (lastPage) => {
-            // console.log(lastPage, 'lastpage');
             
             if (!lastPage.data.next) return undefined
 

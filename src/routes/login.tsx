@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { useAuth } from '../auth/AuthProvider'
 import { FaceRobotSmile } from '@gravity-ui/icons'
 import { useApprovalService } from '../services/settings/approvalService'
+import { useJenisPekerjaanService } from '../services/masterdata/jenisPekerjaanService'
 
 export const Route = createFileRoute('/login')({
   component: RouteComponent,
@@ -43,6 +44,9 @@ function RouteComponent() {
 
       const res_apps = await useApprovalService.list()
       localStorage.setItem('approval', JSON.stringify(res_apps.data.results))
+
+      const res_pekerjaan = await useJenisPekerjaanService.list()
+      localStorage.setItem('j_pekerjaan', JSON.stringify(res_pekerjaan.data.results))
       
       
       // console.log(res.data);

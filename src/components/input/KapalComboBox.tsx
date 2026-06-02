@@ -3,7 +3,7 @@ import { useKapalService } from '../../services/masterdata/kapalService'
 import ComboBoxComponent from './ComboBoxComponent'
 
 const KapalComboBox = ({label, value, onChange=()=>{}}) => {
-    const fnQuery = async (pageParam, queryKey) => useKapalService.list({pageParam, queryKey})
+  const fnQuery = async (pageParam, queryKey) => useKapalService.list({pageParam, queryKey})
     
   return (
 

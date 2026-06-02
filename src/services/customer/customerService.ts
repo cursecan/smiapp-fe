@@ -5,6 +5,10 @@ export const useCustomerService = {
         const [, q] = queryKey
         return api.get('/customer/customer/', {params: {page: pageParam, q}})
     },
+    supplier: ({pageParam, queryKey}) => {
+        const [, q] = queryKey
+        return api.get('/customer/customer/supplier/', {params: {page: pageParam, q}})
+    },
     create: (payload) => {
         return api.post('/customer/customer/', payload)
     },

@@ -1,10 +1,14 @@
 import { useQuery } from '@tanstack/react-query'
-import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
+import { createFileRoute, Link, useNavigate, useParams } from '@tanstack/react-router'
 import { useOprasionalService } from '../../../../services/oprasional/oprasionalService'
 import HeaderPage from '../../../../components/HeaderPage'
-import { Breadcrumbs, Button, Card, Description, Label, Surface, Tab, Table, Tabs } from '@heroui/react'
+import { Breadcrumbs, Button, Card, Chip, Description, Label, Surface, Tab, Table, Tabs } from '@heroui/react'
 import { House } from '@gravity-ui/icons'
 import KegiatanList from '../-components/oprasional/KegiatanList'
+import { useItemCasbonService } from '../../../../services/oprasional/casbonItemService'
+import { useCasbonService } from '../../../../services/oprasional/casbonService'
+import { formatRupiah } from '../../../../utils/formatCurrency'
+import { formatDate } from '../../../../utils/dateFormat'
 
 export const Route = createFileRoute('/_protected/oprasional/oprasional/$id')({
   component: RouteComponent,
@@ -13,6 +17,7 @@ export const Route = createFileRoute('/_protected/oprasional/oprasional/$id')({
 function RouteComponent() {
     const { id } = useParams({from: '/_protected/oprasional/oprasional/$id'})
     const navigate = useNavigate()
+
     const { data, isLoading } = useQuery({
         queryKey: ['oprasional', id],
         queryFn: async () => {
@@ -21,8 +26,15 @@ function RouteComponent() {
         select: (data) => data.data
     })
 
+    const {data: casbon, isLoading: casbonLoading} = useQuery({
+        queryKey: ['casbon-item-list-ref'],
+        queryFn: () => useOprasionalService.casbon(id),
+        select: (res) => res.data,
+        enabled: !!id
+    })
 
-    if (isLoading) {
+
+    if (isLoading || casbonLoading) {
         return <div className="">Loading</div>
     }
 
@@ -136,15 +148,47 @@ function RouteComponent() {
                     </Tabs.Panel>
                     <Tabs.Panel id={'casbon'}>
                         <div className="">
-                            <div className="flex justify-end">
-                                <Button onPress={() => navigate({to: '/oprasional/casbon/create'})} variant='secondary'>Permohonan Casbon</Button>
+                            <div className="flex justify-end mb-5">
+                                <Button onPress={() => navigate({to: `/oprasional/casbon/create?ref=${data.id}`})} variant='primary'>Permohonan Casbon</Button>
                             </div>
+                            <Table>
+                                <Table.ScrollContainer>
+                                    <Table.Content>
+                                        <Table.Header>
+                                            <Table.Column isRowHeader>Nomor</Table.Column>
+                                            {/* <Table.Column>Tgl</Table.Column> */}
+                                            <Table.Column>Total</Table.Column>
+                                            <Table.Column>
+                                                Status
+                                            </Table.Column>
+                                        </Table.Header>
+                                        <Table.Body>
+                                            {
+                                                casbon.map(i => {
+                                                    return (
+                                                        <Table.Row key={i.id}>
+                                                            <Table.Cell>
+                                                                <Link to={`/oprasional/casbon/${i.id}`}>{i.nomor}</Link>
+                                                            </Table.Cell>
+                                                            {/* <Table.Cell>{formatDate(i.create_at)}</Table.Cell> */}
+                                                            <Table.Cell>{formatRupiah(i.total)}</Table.Cell>
+                                                            <Table.Cell className={'w-0 truncate'}>
+                                                                <Chip>Waiting Approval</Chip>
+                                                            </Table.Cell>
+                                                        </Table.Row>
+                                                    )
+                                                })
+                                            }
+                                        </Table.Body>
+                                    </Table.Content>
+                                </Table.ScrollContainer>
+                            </Table>
                         </div>
                     </Tabs.Panel>
                 </Tabs>
-                <div className="mt-4">
+                {/* <div className="mt-4">
                     <Button isDisabled>Submit Approval</Button>
-                </div>
+                </div> */}
             </div>
         </div>
     </div>

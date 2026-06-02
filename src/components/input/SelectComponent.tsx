@@ -1,5 +1,5 @@
 import { Description, Label, ListBox, Select } from '@heroui/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const SelectComponent = ({
     label,
@@ -15,12 +15,16 @@ const SelectComponent = ({
         }
         return value
     }
-    const [selectedValue, setSelectedValue] = useState(a)
+    const [selectedValue, setSelectedValue] = useState(null)
 
     const changeValue = (e) => {
         setSelectedValue(e)
         onChange(e)
     }
+
+    useEffect(() => {
+        setSelectedValue(a())
+    }, [value])
 
 
   return (

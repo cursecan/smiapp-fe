@@ -1,23 +1,42 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate, useParams, useSearch } from '@tanstack/react-router'
 import HeaderPage from '../../../../components/HeaderPage'
-import { Breadcrumbs, Button, Card, Checkbox, CheckboxGroup, Label, labelVariants, Radio, Surface } from '@heroui/react'
+import { Breadcrumbs, Button, Card, Checkbox, CheckboxGroup, Label } from '@heroui/react'
 import InputText from '../../../../components/input/InputText'
 import SelectComponent from '../../../../components/input/SelectComponent'
 import CustomerComboBox from '../../../../components/input/CustomerComboBox'
-import CurrencyInput from '../../../../components/input/CurrencyInput'
-import { useRef, useState } from 'react'
+import {  useState } from 'react'
+import OperasionalComboBox from '../../../../components/input/OperasionalComboBox'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useCasbonService } from '../../../../services/oprasional/casbonService'
 
 export const Route = createFileRoute('/_protected/oprasional/casbon/create')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
+  const navigate = useNavigate()
+  const t = Route.useSearch()
+  
   const [form, setForm] = useState({
-    pekerjaan: '',
-    qty: 0,
-    satuan: '',
-    harga: 0
+    opr: t.ref ?? '',
+    tkp: ['pembayaran'],
+    type_pembayaran: '',
+    supplier: ''
   })
+
+
+  const qc = useQueryClient()
+
+  const mutate = useMutation({
+    mutationFn: (payload) => useCasbonService.create(payload),
+    onSuccess: (res) => {
+      navigate({to: `/oprasional/casbon/${res.data.id}`})
+    }
+  })
+
+  const handleSubmit = () => {
+    mutate.mutate({...form, pembayaran: form.tkp.includes('pembayaran'), casbon: form.tkp.includes('casbon'), petty_cash: form.tkp.includes('petty_cash')})
+  }
 
   return (
     <div className="">
@@ -33,12 +52,12 @@ function RouteComponent() {
           <Card variant='secondary'>
             <Card.Content>
               <div className="flex flex-col gap-4">
-                <div className="flex">
-                  <InputText label={'Nomor Pengajuan'} placeholder={'EFOFIN.1000'} />
+                {/* <div className="flex">
+                  <InputText isDisabled label={'Nomor Pengajuan'} placeholder={'EFOFIN.1000'} />
 
-                </div>
-                <InputText label={'Pekerjaan'} />
-                <CheckboxGroup className={'flex flex-row gap-10'}>
+                </div> */}
+                <OperasionalComboBox isDisabled value={form.opr} onChange={(e) => setForm({...form, opr:e})} />
+                <CheckboxGroup value={form.tkp} onChange={(e) => setForm({...form, tkp: e})} className={'flex flex-row gap-10'}>
                   <Checkbox value='pembayaran'>
                     <Checkbox.Control>
                       <Checkbox.Indicator />
@@ -64,10 +83,10 @@ function RouteComponent() {
                     </Checkbox.Content>
                   </Checkbox>
                 </CheckboxGroup>
-                <SelectComponent className={'w-40'} label={'Metode Bayar'} placeholder="Pilih" data={[{id: 'cash', label: 'Tunai'}, {id: 'tf', label: 'Transfer'}]} />
-                <CustomerComboBox label={'Supplier'}  className="max-w-sm w-full" />
+                <SelectComponent className={'w-40'} value={form.type_pembayaran} onChange={e => setForm({...form, type_pembayaran: e})} label={'Metode Bayar'} placeholder="Pilih" data={[{id: 'CA', label: 'Tunai'}, {id: 'TF', label: 'Transfer'}]} />
+                <CustomerComboBox supplier label={'Supplier'} value={form.supplier} onChange={(e) => setForm({...form, supplier: e})}  className="max-w-sm w-full" />
                 <div className="flex justify-end">
-                  <Button>Simpan</Button>
+                  <Button onPress={handleSubmit}>Simpan</Button>
                 </div>
               </div>
             </Card.Content>

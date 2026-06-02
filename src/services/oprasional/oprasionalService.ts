@@ -9,6 +9,10 @@ export const useOprasionalService = {
         const [, page, q] = queryKey
         return api.get('/oprasional/opr/', {params: {page, q}})
     },
+    active_list: ({queryKey}) => {
+        const [, page, q] = queryKey
+        return api.get('/oprasional/opr/active/', {params: {page, q}})
+    },
     detail: (id) => {
         return api.get(`/oprasional/opr/${id}/`)
     },
@@ -17,5 +21,8 @@ export const useOprasionalService = {
     },
     upload: (payload) => {
         return api.post('/oprasional/upload-progress/', payload)
+    },
+    casbon: (id) => {
+        return api.get(`/oprasional/opr/${id}/casbon/`)
     }
 }

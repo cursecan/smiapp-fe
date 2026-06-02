@@ -8,8 +8,9 @@ import HeaderPage from '../../../../components/HeaderPage'
 import { formatRupiah } from '../../../../utils/formatCurrency'
 import PaginationTable from '../../../../components/PaginationTable'
 import StatusChiper from '../../../../components/StatusChiper'
-import { getApprovalStatus } from '../../../../components/useSchema'
+import { getApprovalStatus, getJenisPekerjaan } from '../../../../components/useSchema'
 import StatusApprovalFilter from '../../../../components/StatusApprovalFilter'
+import JenisPekerjaanFilter from '../../../../components/JenisPekerjaanFilter'
 
 
 export const Route = createFileRoute('/_protected/komersial/penawaran/')({
@@ -17,15 +18,16 @@ export const Route = createFileRoute('/_protected/komersial/penawaran/')({
   validateSearch: (search) => ({
     page: Number(search.page ?? 1),
     q: String(search.q ?? ''),
-    filter: String(search.filter ?? '')
+    filter: String(search.filter ?? ''),
+    pekerjaan: String(search.pekerjaan ?? '')
   })
 })
 
 function RouteComponent() {
   const navigate = useNavigate()
-  const {page, q, filter} = Route.useSearch()
+  const {page, q, filter, pekerjaan} = Route.useSearch()
   const {data: penawaran} = useQuery({
-    queryKey: ['penawaran-list', page, q, filter],
+    queryKey: ['penawaran-list', page, q, filter, pekerjaan],
     queryFn: async ({queryKey}) => usePenawaranService.getList({queryKey}),
     select: (data) => data.data
   })
@@ -38,6 +40,7 @@ function RouteComponent() {
 
   const totalPages = Math.ceil(penawaran?.count/10)
   const approval_status = getApprovalStatus('Penawaran')
+  const filter_pekerjaan = getJenisPekerjaan()
 
   // if (isLoading) {
   //   return <div className="">Loading</div>
@@ -60,6 +63,7 @@ function RouteComponent() {
                       <SearchField.ClearButton onPress={() => navigate({search: (prev) => ({...prev, q: undefined})})} />
                   </SearchField.Group>
               </SearchField>
+              <JenisPekerjaanFilter data={filter_pekerjaan} onChange={(e) => navigate({search: (prev) => ({...prev, pekerjaan: e})})} />
               <StatusApprovalFilter data={approval_status} onChange={(e) => navigate({search: (prev) => ({...prev, filter: e})})} />
             </div>
 

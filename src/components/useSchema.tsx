@@ -27,3 +27,9 @@ export const getApprovalStatus = (modul) => {
 
   return data.filter(i=> i.approval.modul_name===modul)
 }
+
+
+export const getJenisPekerjaan = () => {
+  const data = JSON.parse(localStorage.getItem('j_pekerjaan')).map(i => ({...i, name_id: i.id, name: i.jenis_pekerjaan}))
+  return data
+}

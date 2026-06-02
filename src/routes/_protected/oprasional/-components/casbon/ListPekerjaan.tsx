@@ -1,0 +1,151 @@
+import { Button, Card, Checkbox, Label, Table } from "@heroui/react"
+import InputText from "../../../../../components/input/InputText"
+import CurrencyInput from "../../../../../components/input/CurrencyInput"
+import SatuanSelect from "../../../../../components/input/SatuanSelect"
+import { useState } from "react"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useItemCasbonService } from "../../../../../services/oprasional/casbonItemService"
+import { useToast } from "../../../../../lib/useToast"
+import { useCasbonService } from "../../../../../services/oprasional/casbonService"
+import CasbonListItem from "./CasbonListItem"
+import { formatRupiah } from "../../../../../utils/formatCurrency"
+
+const ListPekerjaan = ({casbon}) => {
+    const [isContent, setISContent] = useState(true)
+    const [form, setForm] = useState({
+        pekerjaan: '',
+        qty: 1,
+        satuan: '',
+        harga: 0,
+        keterangan: '',
+    })
+
+
+    const {data: casbon_items, isLoading} = useQuery({
+        queryKey: ['casbon-item-list', casbon.id],
+        queryFn: () => useCasbonService.items(casbon.id),
+        enabled: !!casbon.id,
+        select: (res) => res.data
+    })
+
+
+    const qc = useQueryClient()
+    const toast = useToast()
+
+    const initData = () => {
+        setForm({
+            pekerjaan: '',
+            qty: 1,
+            satuan: '',
+            harga: 0,
+            keterangan: '',
+        })
+    }
+
+    const save = useMutation({
+        mutationFn: (payload) => useItemCasbonService.create(payload),
+        onSuccess: () => {
+            qc.invalidateQueries({queryKey: ['casbon-item-list']})
+            toast.success({message: 'Success', description:'Berhasil disimpan.'})
+            initData()
+        }
+    })
+
+
+    const handeSave = () => {
+        save.mutate({...form, casbon: casbon.id})
+    }
+
+    
+    if (isLoading) {
+        return null
+    }
+    
+    const total_bef_ppn = casbon_items?.reduce((a, b) => a + Number(b.harga) * b.qty, 0)
+    const total_ppn = 0
+    const total_after_ppn = total_bef_ppn + total_ppn
+
+
+
+  return (
+    <Card variant='secondary'>
+        <Card.Content>
+            <Table>
+                <Table.ScrollContainer>
+                    <Table.Content>
+                        <Table.Header>
+                            <Table.Column isRowHeader>
+                                Pekerjaan
+                            </Table.Column>
+                            <Table.Column className={'w-10'}>Vol</Table.Column>
+                            <Table.Column className={'w-32'}>Satuan</Table.Column>
+                            <Table.Column className={'w-40'}>Harga</Table.Column>
+                            <Table.Column className={'w-40'}>Total</Table.Column>
+                            <Table.Column className={'w-0'}></Table.Column>
+                        </Table.Header>
+                        <Table.Body>
+                            {
+                                casbon_items.map((i, index) => {
+                                    return (
+                                        <CasbonListItem key={index} item={i} />
+                                    )
+                                })
+                            }
+
+                            {
+                                casbon_items.length > 0 && (
+                                    <>
+                                        <Table.Row>
+                                            <Table.Cell colSpan={4} className={'text-center'}><strong>Total Sebelum PPn</strong></Table.Cell>
+                                            <Table.Cell>{formatRupiah(total_bef_ppn)}</Table.Cell>
+                                            <Table.Cell></Table.Cell>
+                                        </Table.Row>
+                                        <Table.Row>
+                                            <Table.Cell colSpan={4} className={'text-center'}><strong>PPn 11%</strong></Table.Cell>
+                                            <Table.Cell>{formatRupiah(total_ppn)}</Table.Cell>
+                                            <Table.Cell></Table.Cell>
+                                        </Table.Row>
+                                        <Table.Row>
+                                            <Table.Cell colSpan={4} className={'text-center'}><strong>Total Setelah PPn</strong></Table.Cell>
+                                            <Table.Cell>{formatRupiah(total_after_ppn)}</Table.Cell>
+                                            <Table.Cell></Table.Cell>
+                                        </Table.Row>
+                                    </>
+                                    
+                                )
+                            }
+                        </Table.Body>
+                    </Table.Content>
+                </Table.ScrollContainer>
+            </Table>
+            <div className="flex gap-2 flex-col mt-4">
+                <Checkbox id="is-content-selected" isSelected={isContent} onChange={setISContent}>
+                    <Checkbox.Control>
+                        <Checkbox.Indicator />
+                    </Checkbox.Control>
+                    <Checkbox.Content>
+                        <Label>Content</Label>
+                    </Checkbox.Content>
+                </Checkbox>
+                <InputText value={form.pekerjaan} onChange={(e) => setForm({...form, pekerjaan: e.target.value})} label="Pekerjaan" />
+                <div className="flex gap-4 items-end">
+                    {
+                        isContent && (
+                            <>
+                                <div className="w-16">
+                                    <CurrencyInput label={'Volume'} value={form.qty} onChange={(e) => setForm({...form, qty: e})} />
+                                </div>
+                                <SatuanSelect label={'Satuan'} value={form.satuan} onChange={(e) => setForm({...form, satuan: e})} />
+                                <CurrencyInput label={'Harga'} value={form.harga} onChange={(e) => setForm({...form, harga: e})} />
+                            </>
+                        )
+                    }
+                    <Button onPress={handeSave}>Add</Button>
+                </div>
+            </div>
+        </Card.Content>
+    </Card>
+  )
+}
+
+export default ListPekerjaan

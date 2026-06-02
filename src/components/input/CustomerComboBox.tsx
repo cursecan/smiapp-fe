@@ -2,8 +2,13 @@ import ComboBoxComponent from './ComboBoxComponent'
 import { useCustomerService } from '../../services/customer/customerService'
 import { useQuery } from '@tanstack/react-query'
 
-const CustomerComboBox = ({label, value, onChange=()=>{}, ...props}) => {
-    const fnQuery = (pageParam, queryKey) => useCustomerService.list({pageParam, queryKey})
+const CustomerComboBox = ({label, value, onChange=()=>{}, supplier=false, ...props}) => {
+    const fnQuery = (pageParam, queryKey) => {
+      if (supplier) {
+        return useCustomerService.supplier({pageParam, queryKey})
+      }
+      return useCustomerService.list({pageParam, queryKey})
+    }
 
     const {data: selectedData, isLoading} = useQuery({
       queryKey: ['customer-detail-combox', value],
