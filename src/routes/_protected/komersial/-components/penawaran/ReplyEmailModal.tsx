@@ -8,10 +8,10 @@ import { useState } from "react"
 const ReplyEmailModal = ({payload, fnQuery, queryKey, isDisabled=false}) => {
     const state = useOverlayState()
     const toast = useToast()
-    const re_subject = `Re: ${payload.sumber_penugasan.subject}`
-    const email_to = payload.sumber_penugasan.customer?.email || ''
-    const company = payload.sumber_penugasan?.customer?.company?.company_name || ''
-    const full_name = payload.sumber_penugasan?.customer?.full_name
+    const re_subject = payload.sumber_penugasan ? `Re: ${payload.sumber_penugasan?.subject}` : payload.nama_project
+    const email_to = payload.customer?.email || ''
+    const company = payload.customer?.company?.company_name || ''
+    const full_name = payload.customer?.full_name
     const body = `Kepada Yth.\n${company}\n${full_name}\n\nBerikut kami kirimkan Penawaran Harga ${payload.nama_project}`
 
     const [data, setData] = useState({

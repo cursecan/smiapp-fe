@@ -79,6 +79,20 @@ function RouteComponent() {
   }
 
 
+  const update_customer_mutt = useMutation({
+    mutationFn: (payload) => usePenawaranService.update_customer(id, payload),
+    onSuccess: () => {
+      qc.invalidateQueries({
+        queryKey: ['detail-penawaran', id]
+      })
+    }
+  })
+
+  const onChangeCustomer = (e) => {
+    update_customer_mutt.mutate({customer_id: e})
+  }
+
+
   useEffect(() => {
     if (data) {
       // console.log(data);
@@ -243,13 +257,15 @@ function RouteComponent() {
                 )
               }
 
-              <Controller
+              {/* <Controller
                 name='customer'
                 control={control}
                 render={({field}) => (
                   <CustomerComboBox isDisabled={!!data?.customer} label={'Pemberi Kerja'} {...field} value={field.value || ''} onChange={(e) => field.onChange(e)} />
                 )}
-              />
+              /> */}
+
+              <CustomerComboBox isDisabled={!!data?.sumber_penugasan} label={'Pemberi Kerja'} value={data?.customer?.id} onChange={onChangeCustomer} />
 
               <div className="flex items-center gap-3">
                 <ApprovalButtons
@@ -265,7 +281,7 @@ function RouteComponent() {
                 {
                   data?.approvals[0]?.step === 3 && hasAuth && (
                     <>
-                      <ReplyEmailModal payload={data} isDisabled={data?.has_email_reply} fnQuery={(payload) => usePenawaranService.reply_email(data?.id, payload)} queryKey={['detail-penawaran', id]} />
+                      <ReplyEmailModal payload={data} isDisabled={data?.has_email_reply || !data?.customer} fnQuery={(payload) => usePenawaranService.reply_email(data?.id, payload)} queryKey={['detail-penawaran', id]} />
                       <DownloadPenawaran data={data} />
                       <DisposisiOperasionalModal isDisabled={data?.has_ops || !data?.has_email_reply} penawaran={data} />
                     </>

@@ -31,6 +31,9 @@ export const usePenawaranService = {
     },
     reply_email: (id, payload) => {
         return api.post(`/komersial/penawaran/${id}/reply-email/`, payload)
+    },
+    update_customer: (id, payload) => {
+        return api.put(`/komersial/penawaran/${id}/update_customer/`, payload)
     }
 }
 
