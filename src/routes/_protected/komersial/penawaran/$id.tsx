@@ -247,7 +247,7 @@ function RouteComponent() {
                 name='customer'
                 control={control}
                 render={({field}) => (
-                  <CustomerComboBox isDisabled={!!data?.sumber_penugasan} label={'Pemberi Kerja'} {...field} value={field.value || ''} onChange={(e) => field.onChange(e)} />
+                  <CustomerComboBox isDisabled={!!data?.customer} label={'Pemberi Kerja'} {...field} value={field.value || ''} onChange={(e) => field.onChange(e)} />
                 )}
               />
 
