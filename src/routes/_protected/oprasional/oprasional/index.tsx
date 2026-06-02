@@ -33,7 +33,7 @@ function RouteComponent() {
     const totalPage = Math.ceil(data?.count / 10)
 
   return (
-    <div className="mt-10">
+    <div className="">
         <HeaderPage
             title={'Operasional'}
         />

@@ -2,13 +2,9 @@ import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, Link, useNavigate, useParams } from '@tanstack/react-router'
 import { useOprasionalService } from '../../../../services/oprasional/oprasionalService'
 import HeaderPage from '../../../../components/HeaderPage'
-import { Breadcrumbs, Button, Card, Chip, Description, Label, Surface, Tab, Table, Tabs } from '@heroui/react'
-import { House } from '@gravity-ui/icons'
+import { Breadcrumbs, Button, Card, Chip, Description, Label, Surface, Table, Tabs } from '@heroui/react'
 import KegiatanList from '../-components/oprasional/KegiatanList'
-import { useItemCasbonService } from '../../../../services/oprasional/casbonItemService'
-import { useCasbonService } from '../../../../services/oprasional/casbonService'
 import { formatRupiah } from '../../../../utils/formatCurrency'
-import { formatDate } from '../../../../utils/dateFormat'
 
 export const Route = createFileRoute('/_protected/oprasional/oprasional/$id')({
   component: RouteComponent,
@@ -39,24 +35,18 @@ function RouteComponent() {
     }
 
   return (
-    <div className="mt-10">
+    <div className="">
         <HeaderPage
-        title={`Detail Oprasional`}
-        >
-            <div className="mt-6">
-                <Breadcrumbs>
-                <Breadcrumbs.Item>
-                    <House />
-                </Breadcrumbs.Item>
+            title={`Detail Oprasional`}
+            breadchrumb={<Breadcrumbs>
                 <Breadcrumbs.Item onPress={() => navigate({to: '/oprasional/oprasional'})}>
                     Oprasional
                 </Breadcrumbs.Item>
                 <Breadcrumbs.Item>
                     Detail
                 </Breadcrumbs.Item>
-                </Breadcrumbs>
-            </div>
-        </HeaderPage>
+            </Breadcrumbs>}
+        />
 
         <div className="mt-6 flex gap-10">
             <Card className='w-100'>

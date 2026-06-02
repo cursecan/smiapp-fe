@@ -5,7 +5,7 @@ const InputText = ({label, value, onChange=()=>{}, error, ...props}) => {
     return (
         <TextField isInvalid={!!error} isDisabled={props.isDisabled}>
             <Label>{label}</Label>
-            <Input autoComplete="Anderi" value={value} onChange={onChange} placeholder={props.placeholder} />
+            <Input autoComplete="Anderi" value={value} onChange={onChange} placeholder={props.placeholder} type={props.type || 'text'} />
             {
                 !!error && (
                     <FieldError>{error.message}</FieldError>

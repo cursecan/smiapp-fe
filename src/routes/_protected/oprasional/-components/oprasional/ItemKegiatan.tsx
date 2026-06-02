@@ -1,11 +1,8 @@
 
-import { Accordion, Card, CloseButton, Description, Label, ProgressCircle, Surface, Table, useOverlayState } from "@heroui/react"
+import { CloseButton, Label, Table, useOverlayState } from "@heroui/react"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
-import CreateCatatanModal from "./progressCatatan/CreateCatatanModal"
-import CatatanModal from "./progressCatatan/CatatanModal"
-import { ArrowChevronDown, Briefcase, Car, ChevronDown, File, FileLetterP } from "@gravity-ui/icons"
-import CurrencyInput from "../../../../../components/input/CurrencyInput"
+import { ArrowChevronDown } from "@gravity-ui/icons"
 import { formatRupiah } from "../../../../../utils/formatCurrency"
 import ModalComponent from "../../../../../components/modals/ModalComponent"
 import { Link } from "@heroui/react"

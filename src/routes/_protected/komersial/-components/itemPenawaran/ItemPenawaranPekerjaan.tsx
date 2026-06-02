@@ -3,7 +3,7 @@ import UpdateItemModal from './UpdateItemModal'
 import DeleteItemModal from './DeleteItemModal'
 import { formatRupiah } from '../../../../../utils/formatCurrency'
 
-const ItemPenawaranPekerjaan = ({id, pelabuhan, item, canEdit}) => {
+const ItemPenawaranPekerjaan = ({ item, canEdit}) => {
     // console.log(canEdit, 'canedit');
     
   return (

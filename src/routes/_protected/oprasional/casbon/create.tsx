@@ -1,12 +1,11 @@
-import { createFileRoute, useNavigate, useParams, useSearch } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import HeaderPage from '../../../../components/HeaderPage'
 import { Breadcrumbs, Button, Card, Checkbox, CheckboxGroup, Label } from '@heroui/react'
-import InputText from '../../../../components/input/InputText'
 import SelectComponent from '../../../../components/input/SelectComponent'
 import CustomerComboBox from '../../../../components/input/CustomerComboBox'
 import {  useState } from 'react'
 import OperasionalComboBox from '../../../../components/input/OperasionalComboBox'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { useCasbonService } from '../../../../services/oprasional/casbonService'
 
 export const Route = createFileRoute('/_protected/oprasional/casbon/create')({
@@ -24,8 +23,6 @@ function RouteComponent() {
     supplier: ''
   })
 
-
-  const qc = useQueryClient()
 
   const mutate = useMutation({
     mutationFn: (payload) => useCasbonService.create(payload),

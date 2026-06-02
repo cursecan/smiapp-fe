@@ -1,4 +1,4 @@
-import { Button, Checkbox, CheckboxGroup, Label, Spinner, Surface, useOverlayState } from "@heroui/react"
+import { Button, Checkbox, CheckboxGroup, Label, ProgressBar, Spinner, Surface, useOverlayState } from "@heroui/react"
 import ModalComponent from "../../../../../../components/modals/ModalComponent"
 import InputText from "../../../../../../components/input/InputText"
 import { useRef, useState } from "react"
@@ -104,6 +104,17 @@ const UploadDocProgressModal = ({data, ops}) => {
             </div>
             <div className="space-y-3">
                 <input accept=".pdf" ref={fileRef} className="border-2 w-full p-2 border-dashed" type="file" />
+                {
+                    mutation.isPending && (
+                        <ProgressBar size="sm" color="success" value={progress}>
+                            <Label>Uploading...</Label>
+                            <ProgressBar.Output />
+                            <ProgressBar.Track>
+                                <ProgressBar.Fill />
+                            </ProgressBar.Track>
+                        </ProgressBar>
+                    )
+                }
                 <InputText value={form.keterangan} onChange={(e) => setForm({...form, keterangan: e.target.value})} placeholder="Keterangan" />
                 <div className="">
                     <Checkbox value={form.is_done} onChange={(e) => setForm({...form, is_done:e})} >

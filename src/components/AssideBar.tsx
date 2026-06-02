@@ -1,22 +1,28 @@
 import {  Envelope, Persons, House, MapPin, Bell, Circles5Random, Rocket, Flask, LogoDocker, Megaphone, Mug, ArrowRightFromSquare } from "@gravity-ui/icons"
 import { useAuth } from "../auth/AuthProvider"
-import { Avatar, Button, Label, Surface } from "@heroui/react"
-import { useNavigate } from "@tanstack/react-router"
+import { Avatar, Button, Description, Label, Surface } from "@heroui/react"
+import { useLocation, useNavigate } from "@tanstack/react-router"
 
 
-const NavButton = ({icon, name, onPress=()=>{}}) => {
+const NavButton = ({icon, name, active=false, onPress=()=>{}}) => {
     return (
-        <Button onPress={onPress} fullWidth className={'rounded-lg flex justify-start'} variant="ghost">
+        <Button onPress={onPress} fullWidth className={'rounded-lg flex justify-start'} variant={active ? 'tertiary' : 'ghost'}>
             {
                 icon && icon
             }
-            <div className="">{name}</div>
+            <div className="flex-1 text-left">{name}</div>
+            {
+                active && <div className="flex">
+                    <div className="p-1 rounded-full bg-red-500"></div>
+                </div>
+            }
         </Button>
     )
 }
 
 
 const AssideBar = () => {
+    const location = useLocation()
     const navigate = useNavigate()
     const { logout, user } = useAuth()
     return (
@@ -33,11 +39,11 @@ const AssideBar = () => {
                         <li>
                             <div className="text-xs mb-2">Home</div>
                             <div className="space-y-1">
-                                <NavButton onPress={() => navigate({to: '/dashboard'})} icon={<House />} name={'Home'} />
-                                <NavButton onPress={() => navigate({to: '/komersial/email'})}  icon={<Envelope />} name={'Email'} />
-                                <NavButton onPress={() => navigate({to: '/komersial/penawaran'})} icon={<Circles5Random />} name={'Penawaran'} />
-                                <NavButton onPress={() => navigate({to: '/oprasional/oprasional'})} icon={<Circles5Random />} icon={<Rocket />} name={'Operasional'} />
-                                <NavButton icon={<Flask />} name={'Casbon'} />
+                                <NavButton active={location.pathname.includes('/dashboard')} onPress={() => navigate({to: '/dashboard'})} icon={<House />} name={'Home'} />
+                                <NavButton active={location.pathname.includes('/komersial/email')} onPress={() => navigate({to: '/komersial/email'})}  icon={<Envelope />} name={'Email'} />
+                                <NavButton active={location.pathname.includes('/komersial/penawaran')} onPress={() => navigate({to: '/komersial/penawaran'})} icon={<Circles5Random />} name={'Penawaran'} />
+                                <NavButton active={location.pathname.includes('/oprasional/oprasional')} onPress={() => navigate({to: '/oprasional/oprasional'})} icon={<Circles5Random />} icon={<Rocket />} name={'Operasional'} />
+                                <NavButton active={location.pathname.includes('/oprasional/casbon')}  onPress={() => navigate({to: '/oprasional/casbon'})} icon={<Flask />} name={'Casbon'} />
                             </div>
                         </li>
                         <li>
@@ -64,13 +70,14 @@ const AssideBar = () => {
                             <Avatar size='sm'>
                                 <Avatar.Image src='https://img.heroui.chat/image/avatar?w=400&h=400&u=4' />
                             </Avatar>
-                            <div className="">
-                                <div className="">Account</div>
+                            <div className="flex flex-col">
+                                {/* <div className="">Account</div> */}
                                 <Label>{user.full_name}</Label>
+                                <Description>{user.pegawai?.jabatan || '-'}</Description>
                             </div>
                         </div>
-                        <Button onPress={logout} variant="ghost" size="sm" isIconOnly>
-                            <ArrowRightFromSquare className="text-red-700" />
+                        <Button onPress={logout} variant="danger" size="sm" isIconOnly>
+                            <ArrowRightFromSquare className="white" />
                         </Button>
                     </div>
                 </div>
