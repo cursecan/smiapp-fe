@@ -75,8 +75,15 @@ const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
                     <div className="flex-1">
                         <InputText placeholder="Masukan nama barang atau jasa." label={'Nama Barang & Jasa'} value={form.barang_jasa} onChange={(e) => setForm({...form, barang_jasa: e.target.value})} />
                     </div>
-                    <InputText label={'Qty'} value={form.qty} onChange={(e) => setForm({...form, qty: e.target.value})} />
-                    <CurrencyInput label={'Harga'} value={form.harga_satuan} onChange={(e) => setForm({...form, harga_satuan: e})} />
+                    <div className="flex-1">
+                        <InputText label={'Keterangan'} value={form.keterangan} onChange={(e) => setForm({...form, keterangan: e.target.value})} />
+                    </div>
+                    <div className="w-16">
+                        <InputText label={'Qty'} value={form.qty} onChange={(e) => setForm({...form, qty: e.target.value})} />
+                    </div>
+                    <div className="w-32">
+                        <CurrencyInput label={'Harga'} value={form.harga_satuan} onChange={(e) => setForm({...form, harga_satuan: e})} />
+                    </div>
                     <div className="flex flex-col justify-end">
                         <ModalComponent 
                             buttonTrigger={<Button isDisabled={!form.barang_jasa} variant='secondary' onPress={state.setOpen} size='sm'>Simpan</Button>}
@@ -119,10 +126,13 @@ const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
                         <Table.Column isRowHeader>
                             Barang / Jasa
                         </Table.Column>
-                        <Table.Column>
+                        <Table.Column className={'w-20'}>
+                            Volume
+                        </Table.Column>
+                        <Table.Column className={'w-32'}>
                             Harga Satuan
                         </Table.Column>
-                        <Table.Column>
+                        <Table.Column className={'w-32'}>
                             Total
                         </Table.Column>
                         {
@@ -151,7 +161,7 @@ const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
                         {
                             items?.length > 0 && (
                                 <Table.Row>
-                                    <Table.Cell colSpan={2}><strong>TOTAL</strong></Table.Cell>
+                                    <Table.Cell colSpan={3}><strong>TOTAL</strong></Table.Cell>
                                     <Table.Cell><strong>{formatRupiah(total_hpp)}</strong></Table.Cell>
                                     {
                                         canEdit && <Table.Cell></Table.Cell>
@@ -170,14 +180,14 @@ const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
                             items?.length > 0 && (
                                 <>
                                     <Table.Row>
-                                        <Table.Cell colSpan={2}><strong>PPN 11%</strong></Table.Cell>
+                                        <Table.Cell colSpan={3}><strong>PPN 11%</strong></Table.Cell>
                                         <Table.Cell><strong>{formatRupiah(total_ppn)}</strong></Table.Cell>
                                         {
                                             canEdit && <Table.Cell></Table.Cell>
                                         }
                                     </Table.Row>
                                     <Table.Row>
-                                        <Table.Cell colSpan={2}><strong>GRAND TOTAL</strong></Table.Cell>
+                                        <Table.Cell colSpan={3}><strong>GRAND TOTAL</strong></Table.Cell>
                                         <Table.Cell><strong>{formatRupiah(total_hpp + total_aggency + total_ppn)}</strong></Table.Cell>
                                         {
                                             canEdit && <Table.Cell></Table.Cell>

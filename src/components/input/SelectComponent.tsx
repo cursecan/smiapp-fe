@@ -23,7 +23,7 @@ const SelectComponent = ({
     }
 
     useEffect(() => {
-        setSelectedValue(a())
+        setSelectedValue(a)
     }, [value])
 
 

@@ -31,11 +31,14 @@ const ItemPenawaranPekerjaan = ({ item, canEdit}) => {
                 )
             }
         </Table.Cell>
+        <Table.Cell>
+            {item.qty}
+        </Table.Cell>
         <Table.Cell className={'w-0 truncate'}>
             {
                 !item.is_header && (
                     <div className="">
-                        {item.qty} x @{ formatRupiah(item.harga_satuan)}
+                        { formatRupiah(item.harga_satuan)}
                     </div>
                 )
             }
