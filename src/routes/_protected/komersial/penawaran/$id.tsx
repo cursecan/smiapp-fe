@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
 import { usePenawaranService } from '../../../../services/penawaran.service'
 import {  Breadcrumbs, Button, Card, CloseButton, Description,  Disclosure,  Label,  Surface, Table  } from '@heroui/react'
-import { ArrowUpRightFromSquare, CheckDouble, Clock,  Eye, LogoDocker } from '@gravity-ui/icons'
+import { ArrowUpRightFromSquare,  Eye, LogoDocker } from '@gravity-ui/icons'
 
 import { formatDate } from '../../../../utils/dateFormat'
 import KapalComboBox from '../../../../components/input/KapalComboBox'
@@ -24,6 +24,7 @@ import DokumenPenawaran from '../-components/penawaran/DokumenPenawaran'
 import ReplyEmailModal from '../-components/penawaran/ReplyEmailModal'
 import DisposisiOperasionalModal from '../-components/penawaran/DisposisiOperasionalModal'
 import DownloadPenawaran from '../-components/penawaran/DownloadPenawaran'
+import CardStepper from '../../../../components/CardStepper'
 
 export const Route = createFileRoute('/_protected/komersial/penawaran/$id')({
   component: RouteComponent,
@@ -307,43 +308,7 @@ function RouteComponent() {
       </div>
       
       <div className="w-72">
-        <Card>
-          <Card.Header>
-            <Card.Title>Progress Status</Card.Title>
-            <Card.Description>
-              Lorem ipsum dolor sit amet.
-            </Card.Description>
-          </Card.Header>
-          <Card.Content>
-            <div className="flex flex-col gap-6">
-              {
-                data?.stepper.map((s, index) => {
-                  return (
-                    <Surface key={index} className='flex items-center gap-6'>
-                      <Surface className={`p-2 rounded-xl ${s.approved_at ? 'bg-success' : 'bg-amber-100'}`}>
-                        {
-                          s.approved_at ? <CheckDouble /> : <Clock />
-                        }
-                      </Surface>
-                      <Surface className='flex flex-col flex-1'>
-                        <Label>{s.name}</Label>
-                        {
-                          s.approved_at && (
-                            <>
-                              <Description>{s.step > 1 ? 'Approved' : 'Created'} by {s.approval_by?.full_name}</Description>
-                              <Description>{formatDate(s.approved_at)}</Description>
-                            </>
-                          )
-                        }
-                      </Surface>
-                    </Surface>
-
-                  )
-                })
-              }
-            </div>
-          </Card.Content>
-        </Card>
+        <CardStepper stepper={data?.stepper} />
       </div>
     </div>
   </div>

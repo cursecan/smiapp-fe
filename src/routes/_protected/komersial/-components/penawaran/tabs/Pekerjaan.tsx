@@ -102,7 +102,7 @@ const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
                                                         <Radio.Indicator />
                                                     </Radio.Control>
                                                     <Radio.Content>
-                                                        <Label>{m.nama_pekerjaan}</Label>
+                                                        <Label>{m.nama_pekerjaan} ({m.pelabuhan.nama_pelabuhan|| '-'}) - {formatRupiah(m.hpp)}</Label>
                                                     </Radio.Content>
                                                 </Radio>
                                             )
@@ -112,9 +112,6 @@ const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
                             </Surface>
                         </ModalComponent>
                     </div>
-                    {/* <ItemPenawaranModal items={items}  disable={!canEdit} id={penawaran.id} pelabuhan={penawaran.pelabuhan?.id} /> */}
-
-                    {/* <PekerjaanComboBox /> */}
                 </div>
             )
         }

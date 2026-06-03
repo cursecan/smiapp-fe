@@ -1,10 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
-import { createFileRoute, Link, useNavigate, useParams } from '@tanstack/react-router'
+import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
 import { useOprasionalService } from '../../../../services/oprasional/oprasionalService'
 import HeaderPage from '../../../../components/HeaderPage'
-import { Breadcrumbs, Button, Card, Chip, Description, Label, Surface, Table, Tabs } from '@heroui/react'
+import { Breadcrumbs, Button, Card, Chip, CloseButton, Description, Label, Surface, Table, Tabs } from '@heroui/react'
 import KegiatanList from '../-components/oprasional/KegiatanList'
 import { formatRupiah } from '../../../../utils/formatCurrency'
+import { ArrowChevronRight, Plus } from '@gravity-ui/icons'
+import { formatSimpleDate } from '../../../../utils/dateFormat'
 
 export const Route = createFileRoute('/_protected/oprasional/oprasional/$id')({
   component: RouteComponent,
@@ -28,6 +30,10 @@ function RouteComponent() {
         select: (res) => res.data,
         enabled: !!id
     })
+
+    const total_casbon = casbon?.reduce((a, b) => a + b.total, 0)
+    const total_budget = data?.penawaran.progress.budget
+    const profit = total_budget - total_casbon
 
 
     if (isLoading || casbonLoading) {
@@ -120,62 +126,105 @@ function RouteComponent() {
                 </Card.Content>
             </Card>
             <div className="flex-1">
-                <Tabs variant='secondary'>
-                    <Tabs.ListContainer>
-                        <Tabs.List>
-                            <Tabs.Tab id={'pekerjaan'}>
-                                Pekerjaan
-                                <Tabs.Indicator />
-                            </Tabs.Tab>
-                            <Tabs.Tab id={'casbon'}>
-                                Casbon
-                                <Tabs.Indicator />
-                            </Tabs.Tab>
-                        </Tabs.List>
-                    </Tabs.ListContainer>
-                    <Tabs.Panel id={'pekerjaan'}>
-                        <KegiatanList data={data} />
-                    </Tabs.Panel>
-                    <Tabs.Panel id={'casbon'}>
-                        <div className="">
-                            <div className="flex justify-end mb-5">
-                                <Button onPress={() => navigate({to: `/oprasional/casbon/create?ref=${data.id}`})} variant='primary'>Permohonan Casbon</Button>
-                            </div>
-                            <Table>
-                                <Table.ScrollContainer>
-                                    <Table.Content>
-                                        <Table.Header>
-                                            <Table.Column isRowHeader>Nomor</Table.Column>
-                                            {/* <Table.Column>Tgl</Table.Column> */}
-                                            <Table.Column>Total</Table.Column>
-                                            <Table.Column>
-                                                Status
-                                            </Table.Column>
-                                        </Table.Header>
-                                        <Table.Body>
-                                            {
-                                                casbon.map(i => {
-                                                    return (
-                                                        <Table.Row key={i.id}>
-                                                            <Table.Cell>
-                                                                <Link to={`/oprasional/casbon/${i.id}`}>{i.nomor}</Link>
-                                                            </Table.Cell>
-                                                            {/* <Table.Cell>{formatDate(i.create_at)}</Table.Cell> */}
-                                                            <Table.Cell>{formatRupiah(i.total)}</Table.Cell>
-                                                            <Table.Cell className={'w-0 truncate'}>
-                                                                <Chip>Waiting Approval</Chip>
-                                                            </Table.Cell>
-                                                        </Table.Row>
-                                                    )
-                                                })
-                                            }
-                                        </Table.Body>
-                                    </Table.Content>
-                                </Table.ScrollContainer>
-                            </Table>
-                        </div>
-                    </Tabs.Panel>
-                </Tabs>
+                <Card>
+                    <Card.Header>
+                        <Card.Title>Operasional Activity</Card.Title>
+                        <Description>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nulla, harum?</Description>
+                    </Card.Header>
+                    <Card.Content>
+                        <Tabs>
+                            <Tabs.ListContainer>
+                                <Tabs.List className='w-fit *:data-[selected=true]:text-accent-foreground'>
+                                    <Tabs.Tab id={'pekerjaan'}>
+                                        <span>Progress</span>
+                                        <Tabs.Indicator className='bg-accent' />
+                                    </Tabs.Tab>
+                                    <Tabs.Tab id={'casbon'}>
+                                        Casbon
+                                        <Tabs.Indicator className='bg-accent' />
+                                    </Tabs.Tab>
+                                </Tabs.List>
+                            </Tabs.ListContainer>
+                            <Tabs.Panel id={'pekerjaan'}>
+                                <KegiatanList data={data} />
+                            </Tabs.Panel>
+                            <Tabs.Panel id={'casbon'}>
+                                <div className="">
+                                    <div className="flex justify-end mb-5">
+                                        <Button onPress={() => navigate({to: `/oprasional/casbon/create?ref=${data.id}`})} variant='primary' className={'bg-success'}><Plus /> Casbon</Button>
+                                    </div>
+                                    <Table>
+                                        <Table.ScrollContainer>
+                                            <Table.Content>
+                                                <Table.Header>
+                                                    <Table.Column isRowHeader>Nomor</Table.Column>
+                                                    <Table.Column>Tanggal Dibuat</Table.Column>
+                                                    <Table.Column>Amount</Table.Column>
+                                                    <Table.Column>
+                                                        Status
+                                                    </Table.Column>
+                                                    <Table.Column className={'w-0'}>
+                                                    </Table.Column>
+                                                </Table.Header>
+                                                <Table.Body>
+                                                    {
+                                                        casbon.map((i, index) => {
+                                                            return (
+                                                                <Table.Row key={index}>
+                                                                    <Table.Cell>
+                                                                        <div className="flex flex-col">
+                                                                            <Label>Ke-{index+1}</Label>
+                                                                            <Description>{i.nomor}</Description>
+                                                                        </div>
+                                                                    </Table.Cell>
+                                                                    <Table.Cell>{formatSimpleDate(i.create_at)}</Table.Cell>
+                                                                    <Table.Cell className={'w-40'}>{formatRupiah(i.total)}</Table.Cell>
+                                                                    <Table.Cell className={'w-0 truncate'}>
+                                                                        <Chip>Waiting Approval</Chip>
+                                                                    </Table.Cell>
+                                                                    <Table.Cell>
+                                                                        <CloseButton onPress={() => navigate({to: `/oprasional/casbon/${i.id}`})} className={'bg-accent text-accent-foreground'}>
+                                                                            <ArrowChevronRight />
+                                                                        </CloseButton>
+                                                                    </Table.Cell>
+                                                                </Table.Row>
+                                                            )
+                                                        })
+                                                    }
+
+                                                    <Table.Row>
+                                                        <Table.Cell colSpan={2} className={'text-right'}>
+                                                            Casbon
+                                                        </Table.Cell>
+                                                        <Table.Cell colSpan={3}>
+                                                            {formatRupiah(total_casbon)}
+                                                        </Table.Cell>
+                                                    </Table.Row>
+                                                    <Table.Row>
+                                                        <Table.Cell colSpan={2} className={'text-right'}>
+                                                            Budget RAB
+                                                        </Table.Cell>
+                                                        <Table.Cell colSpan={3}>
+                                                            <div className="flex gap-5 items-center">
+                                                                <span>
+                                                                    {formatRupiah(total_budget)} 
+                                                                </span>
+                                                                {
+                                                                    profit > 0 ? <span className='text-success'>{formatRupiah(profit)}</span> : <span className='text-danger'>({formatRupiah(profit)})</span>
+                                                                }
+
+                                                            </div>
+                                                        </Table.Cell>
+                                                    </Table.Row>
+                                                </Table.Body>
+                                            </Table.Content>
+                                        </Table.ScrollContainer>
+                                    </Table>
+                                </div>
+                            </Tabs.Panel>
+                        </Tabs>
+                    </Card.Content>
+                </Card>
                 {/* <div className="mt-4">
                     <Button isDisabled>Submit Approval</Button>
                 </div> */}

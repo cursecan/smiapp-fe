@@ -10,6 +10,7 @@ import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import ListPekerjaan from '../-components/casbon/ListPekerjaan'
 import { Link as LinkIcon } from '@gravity-ui/icons'
+import CardStepper from '../../../../components/CardStepper'
 
 export const Route = createFileRoute('/_protected/oprasional/casbon/$id')({
   component: RouteComponent,
@@ -118,7 +119,9 @@ function RouteComponent() {
         
         <ListPekerjaan casbon={data} />
       </div>
-      <div className="w-100"></div>
+      <div className="w-100">
+        <CardStepper stepper={data?.stepper} />
+      </div>
     </div>
     </div>
 
