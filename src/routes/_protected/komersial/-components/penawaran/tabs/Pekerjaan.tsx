@@ -102,7 +102,7 @@ const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
                                                         <Radio.Indicator />
                                                     </Radio.Control>
                                                     <Radio.Content>
-                                                        <Label>{m.nama_pekerjaan} ({m.pelabuhan.nama_pelabuhan|| '-'}) - {formatRupiah(m.hpp)}</Label>
+                                                        <Label>{m.nama_pekerjaan} ({m.pelabuhan?.nama_pelabuhan|| '-'}) - {formatRupiah(m.hpp)}</Label>
                                                     </Radio.Content>
                                                 </Radio>
                                             )
