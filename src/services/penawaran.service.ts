@@ -14,8 +14,8 @@ export const usePenawaranService = {
     edit: (id, payload) => {
         return api.put(`/komersial/penawaran/${id}/`, payload)
     },
-    submit: (id) => {
-        return api.post(`/komersial/penawaran/${id}/submit/`)
+    submit: (id, payload) => {
+        return api.post(`/komersial/penawaran/${id}/submit/`, payload)
     },
     items: (id) => {
         return api.get(`/komersial/penawaran/${id}/items/`)

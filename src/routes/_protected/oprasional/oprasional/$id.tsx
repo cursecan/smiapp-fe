@@ -2,11 +2,12 @@ import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
 import { useOprasionalService } from '../../../../services/oprasional/oprasionalService'
 import HeaderPage from '../../../../components/HeaderPage'
-import { Breadcrumbs, Button, Card, Chip, CloseButton, Description, Label, Surface, Table, Tabs } from '@heroui/react'
+import { Breadcrumbs, Button, Card, CloseButton, Description, Label, Surface, Table, Tabs } from '@heroui/react'
 import KegiatanList from '../-components/oprasional/KegiatanList'
 import { formatRupiah } from '../../../../utils/formatCurrency'
 import { ArrowChevronRight, Plus } from '@gravity-ui/icons'
 import { formatSimpleDate } from '../../../../utils/dateFormat'
+import StatusChiper from '../../../../components/StatusChiper'
 
 export const Route = createFileRoute('/_protected/oprasional/oprasional/$id')({
   component: RouteComponent,
@@ -180,7 +181,7 @@ function RouteComponent() {
                                                                     <Table.Cell>{formatSimpleDate(i.create_at)}</Table.Cell>
                                                                     <Table.Cell className={'w-40'}>{formatRupiah(i.total)}</Table.Cell>
                                                                     <Table.Cell className={'w-0 truncate'}>
-                                                                        <Chip>Waiting Approval</Chip>
+                                                                        <StatusChiper status={i.status} />
                                                                     </Table.Cell>
                                                                     <Table.Cell>
                                                                         <CloseButton onPress={() => navigate({to: `/oprasional/casbon/${i.id}`})} className={'bg-accent text-accent-foreground'}>

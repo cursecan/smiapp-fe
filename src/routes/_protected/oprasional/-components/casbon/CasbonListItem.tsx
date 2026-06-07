@@ -1,7 +1,7 @@
 import { CloseButton, Table } from "@heroui/react"
 import { formatRupiah } from "../../../../../utils/formatCurrency"
 
-const CasbonListItem = ({item}) => {
+const CasbonListItem = ({item, canEdit=false}) => {
 
     const total = Number(item.harga) * item.qty
 
@@ -15,7 +15,7 @@ const CasbonListItem = ({item}) => {
         <Table.Cell>{formatRupiah(item.harga)}</Table.Cell>
         <Table.Cell>{formatRupiah(total)}</Table.Cell>
         <Table.Cell>
-            <CloseButton />
+            <CloseButton isDisabled={!canEdit} />
         </Table.Cell>
     </Table.Row>
   )

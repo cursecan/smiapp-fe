@@ -11,7 +11,13 @@ export const useCasbonService = {
     detail: (id) => {
         return api.get(`oprasional/casbon/${id}/`)
     },
+    update: (id, payload) => {
+        return api.put(`oprasional/casbon/${id}/`, payload)
+    },
     items: (id) => {
         return api.get(`oprasional/casbon/${id}/items/`)
+    },
+    submit: (id) => {
+        return api.post(`oprasional/casbon/${id}/submit/`)
     }
 }

@@ -10,7 +10,7 @@ import { useCasbonService } from "../../../../../services/oprasional/casbonServi
 import CasbonListItem from "./CasbonListItem"
 import { formatRupiah } from "../../../../../utils/formatCurrency"
 
-const ListPekerjaan = ({casbon}) => {
+const ListPekerjaan = ({casbon, canEdit=false}) => {
     const [isContent, setISContent] = useState(true)
     const [form, setForm] = useState({
         pekerjaan: '',
@@ -87,7 +87,7 @@ const ListPekerjaan = ({casbon}) => {
                             {
                                 casbon_items.map((i, index) => {
                                     return (
-                                        <CasbonListItem key={index} item={i} />
+                                        <CasbonListItem canEdit={canEdit} key={index} item={i} />
                                     )
                                 })
                             }
@@ -118,31 +118,36 @@ const ListPekerjaan = ({casbon}) => {
                     </Table.Content>
                 </Table.ScrollContainer>
             </Table>
-            <div className="flex gap-2 flex-col mt-4">
-                <Checkbox id="is-content-selected" isSelected={isContent} onChange={setISContent}>
-                    <Checkbox.Control>
-                        <Checkbox.Indicator />
-                    </Checkbox.Control>
-                    <Checkbox.Content>
-                        <Label>Content</Label>
-                    </Checkbox.Content>
-                </Checkbox>
-                <InputText value={form.pekerjaan} onChange={(e) => setForm({...form, pekerjaan: e.target.value})} label="Pekerjaan" />
-                <div className="flex gap-4 items-end">
-                    {
-                        isContent && (
-                            <>
-                                <div className="w-16">
-                                    <CurrencyInput label={'Volume'} value={form.qty} onChange={(e) => setForm({...form, qty: e})} />
-                                </div>
-                                <SatuanSelect label={'Satuan'} value={form.satuan} onChange={(e) => setForm({...form, satuan: e})} />
-                                <CurrencyInput label={'Harga'} value={form.harga} onChange={(e) => setForm({...form, harga: e})} />
-                            </>
-                        )
-                    }
-                    <Button onPress={handeSave}>Add</Button>
-                </div>
-            </div>
+            {
+                canEdit && (
+                    <div className="flex gap-2 flex-col mt-4">
+                        <Checkbox id="is-content-selected" isSelected={isContent} onChange={setISContent}>
+                            <Checkbox.Control>
+                                <Checkbox.Indicator />
+                            </Checkbox.Control>
+                            <Checkbox.Content>
+                                <Label>Content</Label>
+                            </Checkbox.Content>
+                        </Checkbox>
+                        <InputText value={form.pekerjaan} onChange={(e) => setForm({...form, pekerjaan: e.target.value})} label="Pekerjaan" />
+                        <div className="flex gap-4 items-end">
+                            {
+                                isContent && (
+                                    <>
+                                        <div className="w-16">
+                                            <CurrencyInput label={'Volume'} value={form.qty} onChange={(e) => setForm({...form, qty: e})} />
+                                        </div>
+                                        <SatuanSelect label={'Satuan'} value={form.satuan} onChange={(e) => setForm({...form, satuan: e})} />
+                                        <CurrencyInput label={'Harga'} value={form.harga} onChange={(e) => setForm({...form, harga: e})} />
+                                    </>
+                                )
+                            }
+                            <Button onPress={handeSave}>Add</Button>
+                        </div>
+                    </div>
+
+                )
+            }
         </Card.Content>
     </Card>
   )

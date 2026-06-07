@@ -1,6 +1,8 @@
-import { AlertDialog, Button, useOverlayState } from "@heroui/react"
+import { AlertDialog, Button, Description, Label, Surface, Switch, useOverlayState } from "@heroui/react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useToast } from "../../lib/useToast"
+import { useEffect, useState } from "react"
+import InputText from "../input/InputText"
 
 
 const ApprovalButtons = ({
@@ -13,8 +15,6 @@ const ApprovalButtons = ({
     noValidationSave=false,
     onError=()=>{}
 }) => {
-
-    
     const save_state = useOverlayState()
     const req_state = useOverlayState()
     const app_state = useOverlayState()
@@ -28,6 +28,11 @@ const ApprovalButtons = ({
     }
 
     const qc = useQueryClient()
+
+    const [appform, setAppForm] = useState({
+        is_decline: false,
+        message: ''
+    })
     
     const save_mutation = useMutation({
         mutationFn: saveFn,
@@ -51,11 +56,11 @@ const ApprovalButtons = ({
         mutationFn: submitFn,
         onSuccess: () => {
             // toast.success()
+            setAppForm({is_decline: false, message: ''})
             if (queryKey) {
                 qc.invalidateQueries({
                     queryKey: [...queryKey]
                 })
-
             }
             closeState()
         },
@@ -88,11 +93,17 @@ const ApprovalButtons = ({
         
     }
 
-    const handleSubmitForm = (dataForm) => {
+    const handleSubmitForm = () => {
         // console.log(dataForm, 'dataformss');
-        
-        submit_mutation.mutate(dataForm)
+        submit_mutation.mutate({...appform, is_approve: !appform.is_decline})
     }
+
+    useEffect(() => {
+        if (!appform.is_decline) {
+            setAppForm({...appform, message: ''})
+        }
+
+    }, [appform.is_decline])
 
 
   return (
@@ -163,17 +174,36 @@ const ApprovalButtons = ({
                                 <AlertDialog.CloseTrigger />
                                 <AlertDialog.Header>
                                     <AlertDialog.Icon status="success" />
-                                    <AlertDialog.Heading>Approval</AlertDialog.Heading>
+                                    <AlertDialog.Heading>Approval Process</AlertDialog.Heading>
                                 </AlertDialog.Header>
                                 <AlertDialog.Body>
-                                    <div className="">
-                                        Apakah kamu yakin menyetujui permintaan aproval data tersebut?
+                                    <div className="px-1 space-y-3">
+                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, quidem?</p>
+                                        <div className="">
+                                            <Switch isSelected={appform.is_decline} onChange={(e) => setAppForm({...appform, is_decline: e})}>
+                                                <Switch.Control className={appform.is_decline ? 'bg-danger' : ''} >
+                                                    <Switch.Thumb />
+                                                </Switch.Control>
+                                                <Switch.Content>
+                                                    <Label>Decline Approval</Label>
+                                                    <Description>Lorem ipsum dolor sit amet.</Description>
+                                                </Switch.Content>
+                                            </Switch>
+                                        </div>
+                                        {
+                                            appform.is_decline && (
+                                                <Surface variant="secondary" className="p-3 rounded-xl mt-4">
+                                                    <InputText value={appform.message} onChange={(e) => setAppForm({...appform, message: e.target.value})} label={'Catatan'} />
+                                                </Surface>
+
+                                            )
+                                        }
                                     </div>
                                 </AlertDialog.Body>
                                 <AlertDialog.Footer>
                                     {/* <Button slot={'close'} variant="tertiary">Close</Button> */}
-                                    <Button variant="danger" slot={'close'}>Tolak</Button>
-                                    <Button onPress={form.handleSubmit(handleSubmitForm, errorSubmit)}>Setujui</Button>
+                                    <Button variant="tertiary" slot={'close'}>Close</Button>
+                                    <Button variant={appform.is_decline ? 'danger' : 'primary'} onPress={form.handleSubmit(handleSubmitForm, errorSubmit)}>Submit</Button>
                                 </AlertDialog.Footer>
                             </AlertDialog.Dialog>
                         </AlertDialog.Container>

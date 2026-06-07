@@ -275,7 +275,7 @@ function RouteComponent() {
                   isCanEdit={canEdit}
                   form={{handleSubmit, getValues, isValid}}
                   saveFn={(payload) => usePenawaranService.edit(data.id, payload)}
-                  submitFn={() => usePenawaranService.submit(data.id)}
+                  submitFn={(payload) => usePenawaranService.submit(data.id, payload)}
                   queryKey={['detail-penawaran', id]}
                   onError={setErrors}
                 />
@@ -283,9 +283,13 @@ function RouteComponent() {
                   data?.approvals[0]?.step === 3 && hasAuth && (
                     <>
                       <ReplyEmailModal payload={data} isDisabled={data?.has_email_reply || !data?.customer} fnQuery={(payload) => usePenawaranService.reply_email(data?.id, payload)} queryKey={['detail-penawaran', id]} />
-                      <DownloadPenawaran data={data} />
                       <DisposisiOperasionalModal isDisabled={data?.has_ops || !data?.has_email_reply} penawaran={data} />
                     </>
+                  )
+                }
+                {
+                  data?.approvals[ 0]?.step >= 2 && (
+                    <DownloadPenawaran data={data} />
                   )
                 }
                 {

@@ -24,9 +24,9 @@ const DownloadPenawaran = ({data}) => {
         <>
             {
                 data?.doc_pesanan ? (
-                    <Link href={data?.doc_pesanan} target="_blank">Doc. Penawaran</Link>
+                    <Link href={data?.doc_pesanan} target="_blank">Download Doc. Penawaran</Link>
                 ) : (
-                    <Button onPress={handleDownload}>Doc. Penawaran</Button>
+                    <Button onPress={handleDownload}>Preview Penawaran</Button>
                 )
             }
         </>

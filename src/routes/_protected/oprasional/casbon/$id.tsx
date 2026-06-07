@@ -11,6 +11,13 @@ import { Controller, useForm } from 'react-hook-form'
 import ListPekerjaan from '../-components/casbon/ListPekerjaan'
 import { Link as LinkIcon } from '@gravity-ui/icons'
 import CardStepper from '../../../../components/CardStepper'
+import ApprovalButtons from '../../../../components/buttons/ApprovalButtons'
+import { useSchema } from '../../../../components/useSchema'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useCasbonSchema } from '../../../../schemas/casbonSchema'
+import DownloadButton from '../../../../components/buttons/DownloadButton'
+
+import { api } from '../../../../lib/api'
 
 export const Route = createFileRoute('/_protected/oprasional/casbon/$id')({
   component: RouteComponent,
@@ -19,14 +26,18 @@ export const Route = createFileRoute('/_protected/oprasional/casbon/$id')({
 function RouteComponent() {
   const navigate = useNavigate()
   const { id } = useParams({from: '/_protected/oprasional/casbon/$id'})
+
+  
   const {data, isLoading} = useQuery({
-    queryKey: ['casbon-list', id],
+    queryKey: ['casbon-detail', id],
     queryFn: () => useCasbonService.detail(id),
     select: (res) => res.data,
     enabled: !!id
   })
 
-  const {control, reset} = useForm()
+const {control, reset, handleSubmit, getValues, formState:{isValid}} = useForm({resolver: zodResolver(useCasbonSchema), mode:'onChange', defaultValues: data || {}})
+
+  const { canApprove, canEdit } = useSchema(data)
 
 
 
@@ -63,12 +74,12 @@ function RouteComponent() {
           </Card.Header>
           <Card.Content>
             <div className="flex flex-col gap-4">
-              <OperasionalComboBox isDisabled value={data.opr} />
+              <OperasionalComboBox isReadOnly value={data.opr} />
               <Controller
                 name='pcp'
                 control={control}
                 render={({field}) => (
-                  <CheckboxGroup value={field.value ?? []} onChange={(e) => field.onChange(e)} className={'flex flex-row gap-10'}>
+                  <CheckboxGroup isReadOnly={!canEdit} value={field.value ?? []} onChange={(e) => field.onChange(e)} className={'flex flex-row gap-10'}>
                       <Checkbox value='pembayaran'>
                         <Checkbox.Control>
                           <Checkbox.Indicator />
@@ -85,7 +96,7 @@ function RouteComponent() {
                           <Label>Casbon</Label>
                         </Checkbox.Content>
                       </Checkbox>
-                      <Checkbox value='petycash'>
+                      <Checkbox value='petty_cash'>
                         <Checkbox.Control>
                           <Checkbox.Indicator />
                         </Checkbox.Control>
@@ -100,24 +111,39 @@ function RouteComponent() {
                 name='type_pembayaran'
                 control={control}
                 render={({field}) => (
-                  <SelectComponent className={'w-40'} value={field.value ?? ''} onChange={e => field.onChange(e)} label={'Metode Bayar'} placeholder="Pilih" data={[{id: 'CA', label: 'Tunai'}, {id: 'TF', label: 'Transfer'}]} />
+                  <SelectComponent isDisabled={!canEdit} className={'w-40'} value={field.value ?? ''} onChange={e => field.onChange(e)} label={'Metode Bayar'} placeholder="Pilih" data={[{id: 'CA', label: 'Tunai'}, {id: 'TF', label: 'Transfer'}]} />
                 )}
               />
               <Controller 
                 name='supplier'
                 control={control}
                 render={({field}) => (
-                  <CustomerComboBox supplier label={'Supplier'} value={field.value ?? ''} onChange={(e) => field.onChange(e)}  className="max-w-sm w-full" />
+                  <CustomerComboBox isReadOnly={!canEdit} supplier label={'Supplier'} value={field.value ?? ''} onChange={(e) => field.onChange(e)}  className="max-w-sm w-full" />
                 )}
               />
               <div className="flex justify-end">
-                <Button onPress={() => navigate({to: `/oprasional/oprasional/${data.opr}`})} variant='tertiary'><LinkIcon /> Operasional</Button>
+                <Button onPress={() => navigate({to: `/oprasional/oprasional/${data.opr}`})}><LinkIcon /> Operasional</Button>
               </div>
             </div>
           </Card.Content>
         </Card>
         
-        <ListPekerjaan casbon={data} />
+        <ListPekerjaan canEdit={canEdit}  casbon={data} />
+
+        <div className="flex items-center gap-3">
+          <ApprovalButtons
+            noValidationSave
+              isCanApprove={canApprove}
+              isCanEdit={canEdit}
+              form={{handleSubmit, getValues, isValid}}
+              saveFn={(payload) => useCasbonService.update(data.id, payload)}
+              submitFn={() => useCasbonService.submit(data.id)}
+              queryKey={['casbon-detail', id]}
+              // onError={setErrors}
+          />
+
+          <DownloadButton filename={'fofin.pdf'} fetch={async () => await api.get(`oprasional/casbon/${id}/preview/`,  {responseType: 'blob'})} />
+        </div>
       </div>
       <div className="w-100">
         <CardStepper stepper={data?.stepper} />
