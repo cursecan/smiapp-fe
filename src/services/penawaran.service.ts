@@ -11,6 +11,9 @@ export const usePenawaranService = {
     create: (payload) => {
         return api.post('/komersial/penawaran/', payload)
     },
+    revise: (payload) => {
+        return api.post('/komersial/penawaran/revise/', payload)
+    },
     edit: (id, payload) => {
         return api.put(`/komersial/penawaran/${id}/`, payload)
     },

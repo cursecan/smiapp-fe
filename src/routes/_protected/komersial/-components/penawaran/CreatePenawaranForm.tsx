@@ -4,8 +4,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { usePenawaranService } from "../../../../../services/penawaran.service"
 import { useCustomerService } from "../../../../../services/customer/customerService"
 import { useNavigate } from "@tanstack/react-router"
+import InputText from "../../../../../components/input/InputText"
 
-const CreatePenawaranForm = ({pesanan, state}) => {
+const CreatePenawaranForm = ({pesanan, state, is_revisi=false}) => {
     const [form, setForm] = useState({
         nama_project: pesanan?.subject || '',
         customer: pesanan?.customer?.id || '',
@@ -13,6 +14,7 @@ const CreatePenawaranForm = ({pesanan, state}) => {
         judul_penugasan: '',
         nomor_penugasan: '',
         sumber_penugasan: pesanan?.id || '',
+        ex_penawaran: '',
     })
     const navigate = useNavigate()
 
@@ -34,20 +36,41 @@ const CreatePenawaranForm = ({pesanan, state}) => {
         }
     })
 
+    const revisi_mutation = useMutation({
+        mutationFn: (payload) => usePenawaranService.revise(payload),
+        onSuccess: (res) => {
+            qc.invalidateQueries({queryKey: ['penawaran-list']})
+            state.close()
+            
+            navigate({to: `/komersial/penawaran/${res.data.id}`})
+        }
+    })
+
 
   return (
     <div className="">
 
         <Surface className="p-4">
             <form action="" className="space-y-6">
-                <TextField isRequired>
-                    <Label>Nama Project</Label>
-                    <Input value={form.nama_project} onChange={e=>setForm({...form, nama_project: e.target.value})} />
-                </TextField>
-                <TextField>
-                    <Label>Nomor PO/SPK</Label>
-                    <Input value={form.nomor_penugasan} onChange={e=>setForm({...form, nomor_penugasan: e.target.value})} />
-                </TextField>
+                {
+                    is_revisi ? (
+                        <>
+                            <InputText value={form.ex_penawaran} onChange={(e) => setForm({...form, ex_penawaran: e.target.value})} label={'No. Penawaran Lama'} />
+
+                        </>
+                    ) : (
+                        <>
+                            <TextField isRequired>
+                                <Label>Nama Project</Label>
+                                <Input value={form.nama_project} onChange={e=>setForm({...form, nama_project: e.target.value})} />
+                            </TextField>
+                            <TextField>
+                                <Label>Nomor PO/SPK</Label>
+                                <Input value={form.nomor_penugasan} onChange={e=>setForm({...form, nomor_penugasan: e.target.value})} />
+                            </TextField>
+                        </>
+                    )
+                }
                 {/* <TextField isRequired>
                     <Label>Surat Pesanan</Label>
                     <Input value={form.judul_penugasan} onChange={e=>setForm({...form, judul_penugasan: e.target.value})} />
@@ -61,7 +84,15 @@ const CreatePenawaranForm = ({pesanan, state}) => {
         </Surface>
         <div className="flex justify-end items-center gap-2">
             <Button variant="tertiary" onPress={state.close}>Close</Button>
-            <Button onPress={() => mutation.mutate(form)}>Submit</Button>
+            {
+                is_revisi ? (
+                    <Button onPress={() => revisi_mutation.mutate(form)}>
+                        Revisi
+                    </Button>
+                ) : (
+                    <Button onPress={() => mutation.mutate(form)}>Submit</Button>
+                )
+            }
         </div>
     </div>
   )
