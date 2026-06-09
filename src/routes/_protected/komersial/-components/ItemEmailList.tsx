@@ -1,12 +1,11 @@
-import { Button, Description, Dropdown, Label, Table, useOverlayState } from '@heroui/react'
+import { Button, Description, Dropdown, Label, Table } from '@heroui/react'
 import { formatDate } from "../../../../utils/dateFormat"
-import { Envelope } from '@gravity-ui/icons'
+import { ArrowChevronRight, Envelope } from '@gravity-ui/icons'
 import ModalPenawaran from './penawaran/ModalPenawaran'
 import { useNavigate } from '@tanstack/react-router'
 
 const ItemEmailList = ({item}) => {
     const navigate = useNavigate()
-
   return (
     <Table.Row key={item.id}>
         <Table.Cell>
@@ -33,14 +32,39 @@ const ItemEmailList = ({item}) => {
         <Table.Cell>
             <div className="flex items-center gap-2 justify-end">
                 {
-                    !!item.penawaran && <Button className={'text-danger'} isDisabled={item.penawaran.is_revised} onPress={() => navigate({to: `/komersial/penawaran/${item.penawaran.id}`})} variant='ghost'>
-                        {
-                            item.penawaran.is_revised ? <s>Lihat Penawaran</s> : <span>Lihat Penawaran</span>
-                        }
-                    </Button>
+                    (!!item.penawaran && item.penawaran.length) > 0 && (
+                        <Dropdown>
+                            <Button>Penawaran ({item.penawaran.length})</Button>
+                            <Dropdown.Popover>
+                                <Dropdown.Menu>
+                                    {
+                                        item.penawaran.map((i,index) => {
+                                            return (
+                                                <Dropdown.Item key={index} id={`penawaran_${index}`} isDisabled={i.is_revised} onPress={() => navigate({to: `/komersial/penawaran/${i.id}`})}>
+                                                    <div className="flex justify-center">
+                                                        <ArrowChevronRight />
+                                                    </div>
+                                                    <div className="flex flex-col">
+                                                        <Label>{i.nomor}</Label>
+                                                        <Description>{i.pelabuhan}</Description>
+                                                    </div>
+                                                </Dropdown.Item>
+                                            )
+                                        })
+                                    }
+                                </Dropdown.Menu>
+                            </Dropdown.Popover>
+                        </Dropdown>
+                    ) 
+
+                    // !!item.penawaran && <Button className={'text-danger'} isDisabled={item.penawaran.is_revised} onPress={() => navigate({to: `/komersial/penawaran/${item.penawaran.id}`})} variant='ghost'>
+                    //     {
+                    //         item.penawaran.is_revised ? <s>Lihat Penawaran</s> : <span>Lihat Penawaran</span>
+                    //     }
+                    // </Button>
                 }
-                <ModalPenawaran simple disabled={!!item.penawaran} pesanan={item} />
-                 <ModalPenawaran simple revise pesanan={item} />
+                <ModalPenawaran simple pesanan={item} />
+                <ModalPenawaran simple revise pesanan={item} />
 
             </div>
         </Table.Cell>
