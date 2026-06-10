@@ -12,7 +12,7 @@ import { formatRupiah } from '../../../../../../utils/formatCurrency'
 import SimpleComboBox from '../../../../../../components/input/SimpleComboBox'
 import { useSatuanService } from '../../../../../../services/masterdata/satuanService'
 
-const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
+const Pekerjaan = ({penawaran, canEdit}) => {
     const state = useOverlayState()
     const [form, setForm] = useState({
         penawaran: penawaran.id,
@@ -27,6 +27,9 @@ const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
         keterangan: '',
         is_header: false
     })
+
+    const pelabuhan = penawaran.pelabuhan?.id ?? ''
+    const jenis = penawaran.jenis_pekerjaan?.is ?? ''
     
 
     const {data: items, isLoading} = useQuery({
@@ -36,11 +39,12 @@ const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
         enabled: !!penawaran.id
     })
 
+    
     const {data: master_data, isLoading: masterLoading} = useQuery({
-        queryKey: ['master-kerjaan-list-modal', '', pelabuhan?.id, penawaran?.jenis_pekerjaan?.id ],
+        queryKey: ['master-kerjaan-list-modal', '', pelabuhan, jenis ],
         queryFn: async ({queryKey}) => usePekerjaanService.list({queryKey}),
         select: (data) => data.data,
-        enabled: !!pelabuhan?.id && !!penawaran?.jenis_pekerjaan?.id
+        enabled: (!!pelabuhan && !!jenis)
     })
 
     const qc = useQueryClient()

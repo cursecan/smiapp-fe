@@ -50,6 +50,8 @@ function RouteComponent() {
   const {canEdit, canApprove, hasAuth} = useSchema(data)
   const {control, handleSubmit, reset, getValues, formState: {isValid}} = useForm({resolver: zodResolver(usePenawaranSchema), mode: "onChange", defaultValues: data || {}})
   
+  
+  
   const qc  = useQueryClient()
   const mutation = useMutation({
     mutationFn: async ({id, payload}) => {
@@ -118,8 +120,6 @@ function RouteComponent() {
   if (isLoading) {
     return (<>Loading....</>)
   }
-
-  
   
 
   return <div className="">
@@ -238,7 +238,7 @@ function RouteComponent() {
               
               <DokumenPenawaran canEdit={canEdit} data={data} />
               
-              <Pekerjaan pelabuhan={pelabuhan} penawaran={data} canEdit={canEdit} />
+              <Pekerjaan penawaran={data} canEdit={canEdit} />
 
 
               {
