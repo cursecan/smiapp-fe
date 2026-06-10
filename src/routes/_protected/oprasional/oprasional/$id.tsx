@@ -32,7 +32,7 @@ function RouteComponent() {
         enabled: !!id
     })
 
-    const total_casbon = casbon?.reduce((a, b) => a + b.total, 0)
+    const total_casbon = casbon?.reduce((a, b) => a + b.total.hpp, 0)
     const total_budget = data?.penawaran.progress.budget
     const profit = total_budget - total_casbon
 
@@ -179,7 +179,7 @@ function RouteComponent() {
                                                                         </div>
                                                                     </Table.Cell>
                                                                     <Table.Cell>{formatSimpleDate(i.create_at)}</Table.Cell>
-                                                                    <Table.Cell className={'w-40'}>{formatRupiah(i.total)}</Table.Cell>
+                                                                    <Table.Cell className={'w-40'}>{formatRupiah(i.total.hpp)}</Table.Cell>
                                                                     <Table.Cell className={'w-0 truncate'}>
                                                                         <StatusChiper status={i.status} />
                                                                     </Table.Cell>

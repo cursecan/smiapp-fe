@@ -1,10 +1,11 @@
-import { Button, Input, Label, Surface, TextField } from "@heroui/react"
+import { Button, Input, Label, Surface, TextField, toast } from "@heroui/react"
 import { useState } from "react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { usePenawaranService } from "../../../../../services/penawaran.service"
 import { useCustomerService } from "../../../../../services/customer/customerService"
 import { useNavigate } from "@tanstack/react-router"
 import InputText from "../../../../../components/input/InputText"
+import { useToast } from "../../../../../lib/useToast"
 
 const CreatePenawaranForm = ({pesanan, state, is_revisi=false}) => {
     const [form, setForm] = useState({
@@ -17,6 +18,7 @@ const CreatePenawaranForm = ({pesanan, state, is_revisi=false}) => {
         ex_penawaran: '',
     })
     const navigate = useNavigate()
+    const toast = useToast()
 
     const qc = useQueryClient()
     const mutation = useMutation({
@@ -33,6 +35,10 @@ const CreatePenawaranForm = ({pesanan, state, is_revisi=false}) => {
             state.close()
             
             navigate({to: `/komersial/penawaran/${res.data.id}`})
+        },
+        onError: (err) => {
+            // console.log(err.message);
+            toast.danger({message: 'Failed', description: err.message})
         }
     })
 

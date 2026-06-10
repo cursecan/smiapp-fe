@@ -7,6 +7,7 @@ import {  useState } from 'react'
 import OperasionalComboBox from '../../../../components/input/OperasionalComboBox'
 import { useMutation } from '@tanstack/react-query'
 import { useCasbonService } from '../../../../services/oprasional/casbonService'
+import { useToast } from '../../../../lib/useToast'
 
 export const Route = createFileRoute('/_protected/oprasional/casbon/create')({
   component: RouteComponent,
@@ -15,6 +16,7 @@ export const Route = createFileRoute('/_protected/oprasional/casbon/create')({
 function RouteComponent() {
   const navigate = useNavigate()
   const t = Route.useSearch()
+  const toast = useToast()
   
   const [form, setForm] = useState({
     opr: t.ref ?? '',
@@ -28,6 +30,9 @@ function RouteComponent() {
     mutationFn: (payload) => useCasbonService.create(payload),
     onSuccess: (res) => {
       navigate({to: `/oprasional/casbon/${res.data.id}`})
+    },
+    onError: (err) => {
+      toast.danger({message: 'Failed', description: err.message})
     }
   })
 

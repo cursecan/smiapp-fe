@@ -20,7 +20,7 @@ const DownloadButton = ({filename, fetch=()=>{}}) => {
  
  
      return (
-         <Button onPress={handleDownload}>Download</Button>
+         <Button variant="danger-soft" onPress={handleDownload}>Review Casbon</Button>
      )
  }
 

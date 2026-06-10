@@ -42,16 +42,16 @@ function RouteComponent() {
         <Card className='mt-6'>
             <Card.Header>
                 <div className="flex items-center">
-            <div className="flex-1">
-              <SearchField className={'w-100'}>
-                  <SearchField.Group>
-                      <SearchField.SearchIcon />
-                      <SearchField.Input onChange={() => {}} placeholder='Search...' className={'w-90'} />
-                      <SearchField.ClearButton onPress={() => setSearch('')} />
-                  </SearchField.Group>
-              </SearchField>
-            </div>
-          </div>
+                    <div className="flex-1">
+                    <SearchField className={'w-100'}>
+                        <SearchField.Group>
+                            <SearchField.SearchIcon />
+                            <SearchField.Input onChange={() => {}} placeholder='Search...' className={'w-90'} />
+                            <SearchField.ClearButton onPress={() => setSearch('')} />
+                        </SearchField.Group>
+                    </SearchField>
+                    </div>
+                </div>
             </Card.Header>
             <Card.Content>
                 <Table>
