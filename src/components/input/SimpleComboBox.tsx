@@ -1,7 +1,6 @@
 import { Collection, ComboBox, EmptyState, Input, Label, ListBox, ListBoxLoadMoreItem, Spinner } from "@heroui/react"
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
-import { usePelabuhanService } from "../../services/masterdata/pelabuhanService";
 import { useDebounce } from "use-debounce";
 
 
@@ -15,12 +14,10 @@ const SimpleComboBox = ({label, fetchUrl, fetchDetailUrl, value=null, query=[], 
     const [selectedKey, setSelectedKey] = useState("")
     const [searchBounce] = useDebounce(search, 600)
 
-    
-    
     const {data: selectedData} = useQuery({
         queryKey: ['combox-detail3', value],
         queryFn: fetchDetailUrl,
-        enabled: !!value,
+        enabled: !!value && typeof(value) === 'string',
         select: (data) => {
             const resData = data.data
             if (filter) {
