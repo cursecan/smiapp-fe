@@ -29,7 +29,7 @@ const Pekerjaan = ({penawaran, canEdit}) => {
     })
 
     const pelabuhan = penawaran.pelabuhan?.id ?? ''
-    const jenis = penawaran.jenis_pekerjaan?.is ?? ''
+    const jenis = penawaran.jenis_pekerjaan?.id ?? ''
     
 
     const {data: items, isLoading} = useQuery({
@@ -38,7 +38,7 @@ const Pekerjaan = ({penawaran, canEdit}) => {
         select: (data) => data.data,
         enabled: !!penawaran.id
     })
-
+    
     
     const {data: master_data, isLoading: masterLoading} = useQuery({
         queryKey: ['master-kerjaan-list-modal', '', pelabuhan, jenis ],
