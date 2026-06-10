@@ -34,6 +34,9 @@ const ItemPenawaranPekerjaan = ({ item, canEdit}) => {
         <Table.Cell>
             {item.qty}
         </Table.Cell>
+        <Table.Cell className={'truncate'}>
+            { item.satuan?.nama_satuan || '-'}
+        </Table.Cell>
         <Table.Cell className={'w-0 truncate'}>
             {
                 !item.is_header && (

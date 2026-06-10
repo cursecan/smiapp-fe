@@ -2,7 +2,7 @@ import {api} from '../../lib/api'
 
 
 export const usePelabuhanService = {
-    list: ({pageParam, queryKey}) => {
+     list: ({pageParam, queryKey}) => {
         const [, q] = queryKey
         return api.get('/master/pelabuhan/', {params: {page: pageParam, q}})
     },

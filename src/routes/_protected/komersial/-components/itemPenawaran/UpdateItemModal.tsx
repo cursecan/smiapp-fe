@@ -5,10 +5,12 @@ import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useItemPenawaranService } from '../../../../../services/penawaran.service'
 import CurrencyInput from '../../../../../components/input/CurrencyInput'
+import SimpleComboBox from '../../../../../components/input/SimpleComboBox'
+import { useSatuanService } from '../../../../../services/masterdata/satuanService'
 
 const UpdateItemModal = ({item}) => {
     const state = useOverlayState()
-    const [dataForm, setDataForm] = useState({...item, parent: item.parent ? item.parent.id : ''})
+    const [dataForm, setDataForm] = useState({...item, satuan: item.satuan?.id || '',  parent: item.parent ? item.parent.id : ''})
 
     const qc = useQueryClient()
     const mutation = useMutation({
@@ -24,9 +26,6 @@ const UpdateItemModal = ({item}) => {
     const handleSave = () => {
         mutation.mutate({id: item.id, payload: dataForm})
     }
-
-    console.log(dataForm);
-    
 
   return (
     <ModalComponent
@@ -50,10 +49,19 @@ const UpdateItemModal = ({item}) => {
                                 <Label>Volume</Label>
                                 <Input type='number' value={dataForm.qty} onChange={(e) => setDataForm({...dataForm, qty:e.target.value})} />
                             </TextField>
-                            <TextField>
+                            {/* <TextField>
                                 <Label>Satuan</Label>
                                 <Input value={'Slot'} />
-                            </TextField>
+                            </TextField> */}
+                            <SimpleComboBox
+                                label={'Satuan'}
+                                query={['satuan-list-combox']}
+                                filter={(i) => ({...i, name: i.nama_satuan})}
+                                fetchUrl={() => useSatuanService.list()}
+                                fetchDetailUrl={({queryKey}) => useSatuanService.detail(queryKey.at(1))}
+                                value={dataForm.satuan}
+                                onChange={(e) => setDataForm({...dataForm, satuan: e})}
+                            />
                         </div>
                         <TextField>
                             <Label>Biaya HPP</Label>

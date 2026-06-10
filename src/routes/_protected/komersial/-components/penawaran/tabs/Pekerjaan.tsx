@@ -9,6 +9,8 @@ import { usePekerjaanService } from '../../../../../../services/masterdata/peker
 import { useState } from 'react'
 import CurrencyInput from '../../../../../../components/input/CurrencyInput'
 import { formatRupiah } from '../../../../../../utils/formatCurrency'
+import SimpleComboBox from '../../../../../../components/input/SimpleComboBox'
+import { useSatuanService } from '../../../../../../services/masterdata/satuanService'
 
 const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
     const state = useOverlayState()
@@ -18,6 +20,7 @@ const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
         parent: '',
         code: '',
         barang_jasa: '',
+        satuan: '',
         qty: 1,
         harga_satuan: '0',
         harga_hpp: 0,
@@ -70,47 +73,54 @@ const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
     <Surface className='p-3 rounded-2xl'>
         {
             canEdit && (
-
-                <div className="flex mb-3 gap-3">
-                    <div className="flex-1">
-                        <InputText placeholder="Masukan nama barang atau jasa." label={'Nama Barang & Jasa'} value={form.barang_jasa} onChange={(e) => setForm({...form, barang_jasa: e.target.value})} />
-                    </div>
-                    <div className="flex-1">
-                        <InputText label={'Keterangan'} value={form.keterangan} onChange={(e) => setForm({...form, keterangan: e.target.value})} />
-                    </div>
-                    <div className="w-16">
-                        <InputText label={'Qty'} value={form.qty} onChange={(e) => setForm({...form, qty: e.target.value})} />
-                    </div>
-                    <div className="w-32">
-                        <CurrencyInput label={'Harga'} value={form.harga_satuan} onChange={(e) => setForm({...form, harga_satuan: e})} />
-                    </div>
-                    <div className="flex flex-col justify-end">
-                        <ModalComponent 
-                            buttonTrigger={<Button isDisabled={!form.barang_jasa} variant='secondary' onPress={state.setOpen} size='sm'>Simpan</Button>}
-                            state={state}
-                            heading={'Pilih'}
-                            hideFooter
-                        >
-                            <Surface className='mt-6'>
-                                <RadioGroup onChange={handleCreateItem}>
-                                    <Label>Reference Master Pekerjaan</Label>
-                                    {
-                                        master_data?.results.map(m => {
-                                            return (
-                                                <Radio key={m.id} value={m.id}>
-                                                    <Radio.Control>
-                                                        <Radio.Indicator />
-                                                    </Radio.Control>
-                                                    <Radio.Content>
-                                                        <Label>{m.nama_pekerjaan} ({m.pelabuhan?.nama_pelabuhan|| '-'}) - {formatRupiah(m.hpp)}</Label>
-                                                    </Radio.Content>
-                                                </Radio>
-                                            )
-                                        })
-                                    }
-                                </RadioGroup>
-                            </Surface>
-                        </ModalComponent>
+                <div className="mb-3 space-y-3">
+                    <div className="flex gap-3">
+                        <div className="flex-1">
+                            <InputText placeholder="Masukan nama barang atau jasa." label={'Nama Barang & Jasa'} value={form.barang_jasa} onChange={(e) => setForm({...form, barang_jasa: e.target.value})} />
+                        </div>
+                        <div className="w-16">
+                            <InputText label={'Qty'} value={form.qty} onChange={(e) => setForm({...form, qty: e.target.value})} />
+                        </div>
+                        <SimpleComboBox
+                            label={'Satuan'}
+                            query={['satuan-combox-list']}
+                            fetchUrl={() => useSatuanService.list()}
+                            fetchDetailUrl={({queryKey}) => useSatuanService.detail(queryKey.at(1))}
+                            filter={(i) => ({...i, name: i.nama_satuan})}
+                            value={form.satuan}
+                            onChange={(e) => setForm({...form, satuan: e})}
+                        />
+                        <div className="w-32">
+                            <CurrencyInput label={'Harga'} value={form.harga_satuan} onChange={(e) => setForm({...form, harga_satuan: e})} />
+                        </div>
+                        <div className="flex flex-col justify-end">
+                            <ModalComponent 
+                                buttonTrigger={<Button isDisabled={!form.barang_jasa} variant='secondary' onPress={state.setOpen} size='sm'>Simpan</Button>}
+                                state={state}
+                                heading={'Pilih'}
+                                hideFooter
+                            >
+                                <Surface className='mt-6'>
+                                    <RadioGroup onChange={handleCreateItem}>
+                                        <Label>Reference Master Pekerjaan</Label>
+                                        {
+                                            master_data?.results.map(m => {
+                                                return (
+                                                    <Radio key={m.id} value={m.id}>
+                                                        <Radio.Control>
+                                                            <Radio.Indicator />
+                                                        </Radio.Control>
+                                                        <Radio.Content>
+                                                            <Label>{m.nama_pekerjaan} ({m.pelabuhan?.nama_pelabuhan|| '-'}) - {formatRupiah(m.hpp)}</Label>
+                                                        </Radio.Content>
+                                                    </Radio>
+                                                )
+                                            })
+                                        }
+                                    </RadioGroup>
+                                </Surface>
+                            </ModalComponent>
+                        </div>
                     </div>
                 </div>
             )
@@ -125,6 +135,9 @@ const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
                         </Table.Column>
                         <Table.Column className={'w-20'}>
                             Volume
+                        </Table.Column>
+                        <Table.Column className={'w-20'}>
+                            Satuan
                         </Table.Column>
                         <Table.Column className={'w-32'}>
                             Harga Satuan
@@ -158,7 +171,7 @@ const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
                         {
                             items?.length > 0 && (
                                 <Table.Row>
-                                    <Table.Cell colSpan={3}><strong>TOTAL</strong></Table.Cell>
+                                    <Table.Cell colSpan={4}><strong>TOTAL</strong></Table.Cell>
                                     <Table.Cell><strong>{formatRupiah(total_hpp)}</strong></Table.Cell>
                                     {
                                         canEdit && <Table.Cell></Table.Cell>
@@ -177,14 +190,14 @@ const Pekerjaan = ({penawaran, pelabuhan, canEdit}) => {
                             items?.length > 0 && (
                                 <>
                                     <Table.Row>
-                                        <Table.Cell colSpan={3}><strong>PPN 11%</strong></Table.Cell>
+                                        <Table.Cell colSpan={4}><strong>PPN 11%</strong></Table.Cell>
                                         <Table.Cell><strong>{formatRupiah(total_ppn)}</strong></Table.Cell>
                                         {
                                             canEdit && <Table.Cell></Table.Cell>
                                         }
                                     </Table.Row>
                                     <Table.Row>
-                                        <Table.Cell colSpan={3}><strong>GRAND TOTAL</strong></Table.Cell>
+                                        <Table.Cell colSpan={4}><strong>GRAND TOTAL</strong></Table.Cell>
                                         <Table.Cell><strong>{formatRupiah(total_hpp + total_aggency + total_ppn)}</strong></Table.Cell>
                                         {
                                             canEdit && <Table.Cell></Table.Cell>

@@ -11,8 +11,6 @@ import { useEffect, useState } from 'react'
 import { useForm, Controller } from "react-hook-form"
 import InputText from '../../../../components/input/InputText'
 import HeaderPage from '../../../../components/HeaderPage'
-import PengadaanBarangComboBox from '../../../../components/input/PengadaanBarangComboBox'
-import PelabuhanComboBox from '../../../../components/input/PelabuhanComboBox'
 import ApprovalButtons from '../../../../components/buttons/ApprovalButtons'
 import Pekerjaan from '../-components/penawaran/tabs/Pekerjaan'
 
@@ -25,6 +23,9 @@ import ReplyEmailModal from '../-components/penawaran/ReplyEmailModal'
 import DisposisiOperasionalModal from '../-components/penawaran/DisposisiOperasionalModal'
 import DownloadPenawaran from '../-components/penawaran/DownloadPenawaran'
 import CardStepper from '../../../../components/CardStepper'
+import SimpleComboBox from '../../../../components/input/SimpleComboBox'
+import { usePelabuhanService } from '../../../../services/masterdata/pelabuhanService'
+import { useJenisPekerjaanService } from '../../../../services/masterdata/jenisPekerjaanService'
 
 export const Route = createFileRoute('/_protected/komersial/penawaran/$id')({
   component: RouteComponent,
@@ -160,7 +161,16 @@ function RouteComponent() {
                   name="jenis_pekerjaan"
                   control={control}
                   render={({field}) => (
-                    <PengadaanBarangComboBox isDisabled={!canEdit} isInvalid={!field.value} {...field} value={field.value || ''} onChange={(e) => field.onChange(e)} />
+                    <SimpleComboBox
+                      label={'Jenis Pekerjaan'}
+                      filter={(i) => ({...i, name: i.jenis_pekerjaan})}
+                      fetchUrl={() => useJenisPekerjaanService.list()}
+                      fetchDetailUrl={({queryKey}) => useJenisPekerjaanService.detail(queryKey.at(1))}
+                      query={['jenis-pek-combox-list']}
+                      value={field?.value ?? ''}
+                      onChange={(e) => field.onChange(e)}
+                    />
+                  
                   )}
                 />
 
@@ -168,8 +178,15 @@ function RouteComponent() {
                   name='pelabuhan'
                   control={control}
                   render={({field}) => (
-                    // <WilayahComboBox readOnly={!canEdit} {...field} value={field.value} onChange={(e) => field.onChange(e)} />
-                    <PelabuhanComboBox isDisabled={!canEdit} isInvalid={!field.value} label={'Palabuhan / Wilayah'} {...field} value={field.value || ''} onChange={(e) => field.onChange(e)} setPelabuhan={(e) => setPelabuhan(e)} />
+                    <SimpleComboBox 
+                      label={'Pelabuhan'}
+                      filter={(i) => ({...i, name: i.nama_pelabuhan})}
+                      fetchUrl={({ pageParam, queryKey }) => usePelabuhanService.list({pageParam, queryKey})}
+                      fetchDetailUrl={({queryKey}) => usePelabuhanService.detail(queryKey.at(1))}
+                      query={['pelabuhan-combox']}
+                      value={field?.value ?? ''}
+                      onChange={(e) => field.onChange(e)}
+                     />
                   )}
                 />
               </div>
