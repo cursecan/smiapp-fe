@@ -300,7 +300,7 @@ function RouteComponent() {
                   data?.approvals[0]?.step === 3 && hasAuth && (
                     <>
                       <ReplyEmailModal payload={data} isDisabled={data?.has_email_reply || !data?.customer} fnQuery={(payload) => usePenawaranService.reply_email(data?.id, payload)} queryKey={['detail-penawaran', id]} />
-                      <DisposisiOperasionalModal isDisabled={data?.has_ops || !data?.has_email_reply} penawaran={data} />
+                      <DisposisiOperasionalModal isDisabled={!data?.has_email_reply} penawaran={data} />
                     </>
                   )
                 }
@@ -316,7 +316,6 @@ function RouteComponent() {
                         <ArrowUpRightFromSquare />
                         Lihat Operasional
                       </Button>
-
                     </div>
                   )
                 }
