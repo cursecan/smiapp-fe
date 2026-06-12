@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import HeaderPage from '../../../../components/HeaderPage'
-import { Avatar, Card, Chip, Description, ProgressBar, SearchField, Table } from '@heroui/react'
+import { Avatar, Card, Chip, Description, Label, ProgressBar, SearchField, Table } from '@heroui/react'
 import { useQuery } from '@tanstack/react-query'
 import { useOprasionalService } from '../../../../services/oprasional/oprasionalService'
 
@@ -61,7 +61,7 @@ function RouteComponent() {
                                 <Table.Column isRowHeader className={'w-50 truncate'}>Agen</Table.Column>
                                 <Table.Column>Penawaran</Table.Column>
                                 <Table.Column>Progress</Table.Column>
-                                <Table.Column className={'truncate w-0'}>Budget</Table.Column>
+                                <Table.Column className={'truncate w-0'}>Nilai Penawaran</Table.Column>
                                 <Table.Column className={'truncate w-0'}>Status</Table.Column>
                             </Table.Header>
                             <Table.Body>
@@ -95,9 +95,10 @@ function RouteComponent() {
                                                     </ProgressBar>
                                                 </Table.Cell>
                                                 <Table.Cell className={'truncate w-0'}>
-                                                    {
-                                                        formatRupiah(i.penawaran.progress?.budget || 0)
-                                                    }
+                                                    <div className="flex flex-col">
+                                                        <Label>{formatRupiah(i.nilai_penawaran)}</Label>
+                                                        <Description>{formatRupiah(i.ppn)} (PPN 11%)</Description>
+                                                    </div>
                                                 </Table.Cell>
                                                 <Table.Cell className={'truncate'}>
                                                     <Chip>{i.status[0]?.name}</Chip>
