@@ -1,11 +1,38 @@
-import { Button, Description, Dropdown, Label, Table } from '@heroui/react'
+import { Button, Checkbox, Description, Dropdown, Label, Table } from '@heroui/react'
 import { formatDate } from "../../../../utils/dateFormat"
-import { ArrowChevronRight, Envelope } from '@gravity-ui/icons'
+import { ArrowChevronRight, Envelope, Eye, EyeClosed } from '@gravity-ui/icons'
 import ModalPenawaran from './penawaran/ModalPenawaran'
 import { useNavigate } from '@tanstack/react-router'
+import { useEffect, useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useEmailService } from '../../../../services/email.service'
 
 const ItemEmailList = ({item}) => {
+    const [isHide, setIsHide] = useState(false)
+    const [showContent, setShowContent] = useState(false)
+
     const navigate = useNavigate()
+    
+
+    const qc = useQueryClient()
+    const mutation = useMutation({
+        mutationFn: () => useEmailService.toggle(item.id),
+        onSuccess: () => {
+            qc.invalidateQueries({queryKey: ['email-list']})
+        }
+    })
+
+    const handleChange = () => {
+        mutation.mutate()
+    }
+
+    useEffect(() => {
+        if(item) {
+            setIsHide(item.is_hide)
+        }
+    }, [item])
+
+
   return (
     <Table.Row key={item.id}>
         <Table.Cell>
@@ -16,9 +43,25 @@ const ItemEmailList = ({item}) => {
                     <div className="">
                         <Description>
                             {
-                                item.body.length > 250 ? item.body.slice(0, 250) + '...' : item.body
+                                showContent ? <span>{item.body}</span> : (item.body.length > 250 ? item.body.slice(0, 250) + '...' : item.body)
                             }
                         </Description>
+                        <div className="flex items-center gap-4 text-xs">
+                            <button onClick={() => setShowContent((prev) => !prev)} className='text-red-900 flex items-center gap-1'>
+                                {!showContent ? <EyeClosed /> : <Eye />}
+                            </button>
+                            <div className="">
+                                <Checkbox isSelected={isHide} onChange={handleChange}>
+                                    <Checkbox.Control>
+                                        <Checkbox.Indicator />
+                                    </Checkbox.Control>
+                                    <Checkbox.Content>
+                                        <Label>Hide</Label>
+                                    </Checkbox.Content>
+                                </Checkbox>
+                            </div>
+                            
+                        </div>
                     </div>
                 </div>
             </div>
