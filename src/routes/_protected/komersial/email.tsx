@@ -39,7 +39,7 @@ function RouteComponent() {
     const totalPage = Math.ceil(data?.count / 10)
 
     const onChangeSholAll = (e) => {
-        navigate({search: (prev) => ({...prev, all: e}) })
+        navigate({search: (prev) => ({...prev, all: e, page: 1}) })
         // setShowAll(e)
     }
 
