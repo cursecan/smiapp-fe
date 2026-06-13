@@ -61,8 +61,8 @@ function RouteComponent() {
                                 <Table.Column isRowHeader className={'w-50 truncate'}>Agen</Table.Column>
                                 <Table.Column>Penawaran</Table.Column>
                                 <Table.Column>Progress</Table.Column>
-                                <Table.Column className={'truncate w-0'}>Nilai Penawaran</Table.Column>
-                                <Table.Column className={'truncate w-0'}>Status</Table.Column>
+                                <Table.Column className={'w-0'}>Nilai Penawaran</Table.Column>
+                                <Table.Column className={'w-0'}>Status</Table.Column>
                             </Table.Header>
                             <Table.Body>
                                 {
@@ -94,10 +94,10 @@ function RouteComponent() {
                                                         </ProgressBar.Track>
                                                     </ProgressBar>
                                                 </Table.Cell>
-                                                <Table.Cell className={'truncate w-0'}>
+                                                <Table.Cell className={'truncate'}>
                                                     <div className="flex flex-col">
                                                         <Label>{formatRupiah(i.nilai_penawaran)}</Label>
-                                                        <Description>{formatRupiah(i.ppn)} (PPN 11%)</Description>
+                                                        <Description className='truncate'>{formatRupiah(i.ppn)} (PPN)</Description>
                                                     </div>
                                                 </Table.Cell>
                                                 <Table.Cell className={'truncate'}>
