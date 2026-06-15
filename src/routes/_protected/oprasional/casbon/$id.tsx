@@ -1,11 +1,10 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
 import { useCasbonService } from '../../../../services/oprasional/casbonService'
 import HeaderPage from '../../../../components/HeaderPage'
 import { Breadcrumbs, Button, Card, Checkbox, CheckboxGroup, Label } from '@heroui/react'
 import OperasionalComboBox from '../../../../components/input/OperasionalComboBox'
 import SelectComponent from '../../../../components/input/SelectComponent'
-import CustomerComboBox from '../../../../components/input/CustomerComboBox'
 import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import ListPekerjaan from '../-components/casbon/ListPekerjaan'
@@ -18,6 +17,9 @@ import { useCasbonSchema } from '../../../../schemas/casbonSchema'
 import DownloadButton from '../../../../components/buttons/DownloadButton'
 
 import { api } from '../../../../lib/api'
+import InputText from '../../../../components/input/InputText'
+import SimpleComboBox from '../../../../components/input/SimpleComboBox'
+import { useCustomerService } from '../../../../services/customer/customerService'
 
 export const Route = createFileRoute('/_protected/oprasional/casbon/$id')({
   component: RouteComponent,
@@ -35,11 +37,21 @@ function RouteComponent() {
     enabled: !!id
   })
 
-const {control, reset, handleSubmit, getValues, formState:{isValid}} = useForm({resolver: zodResolver(useCasbonSchema), mode:'onChange', defaultValues: data || {}})
+  const {control, reset, handleSubmit, getValues, formState:{isValid}} = useForm({resolver: zodResolver(useCasbonSchema), mode:'onChange', defaultValues: data || {}})
 
   const { canApprove, canEdit } = useSchema(data)
+  
+  const qc = useQueryClient()
+  const change_suppli_mutation = useMutation({
+    mutationFn: (payload) => useCasbonService.change_supply(id, payload),
+    onSuccess: () => {
+      qc.invalidateQueries({queryKey: ['casbon-detail', id]})
+    }
+  })
 
-
+  const handleChangeSupply = (e) => {
+    change_suppli_mutation.mutate({supplier_id: e})
+  }
 
   useEffect(() => {
     if (data) {
@@ -70,7 +82,7 @@ const {control, reset, handleSubmit, getValues, formState:{isValid}} = useForm({
       <div className="flex-1 flex-col space-y-4">
         <Card variant='secondary'>
           <Card.Header>
-            <Card.Title>No. {data.nomor}</Card.Title>
+            <Card.Title>#{data.nomor}</Card.Title>
           </Card.Header>
           <Card.Content>
             <div className="flex flex-col gap-4">
@@ -118,9 +130,25 @@ const {control, reset, handleSubmit, getValues, formState:{isValid}} = useForm({
                 name='supplier'
                 control={control}
                 render={({field}) => (
-                  <CustomerComboBox isReadOnly={!canEdit} supplier label={'Supplier'} value={field.value ?? ''} onChange={(e) => field.onChange(e)}  className="max-w-sm w-full" />
+                  <SimpleComboBox
+                    label={'Supplier / Pemohon'}
+                    fetchUrl={({pageParam, queryKey}) => useCustomerService.supplier({pageParam, queryKey})}
+                    filter={(i) => ({...i, name: i.full_name})}
+                    fetchDetailUrl={({queryKey}) => useCustomerService.detail(queryKey.at(1))}
+                    query={['supplier-combox']}
+                    value={field.value}
+                    onChange={(e) => {handleChangeSupply(e)}}
+                    isDisabled={!canEdit}
+                  />
+                  // <CustomerComboBox isReadOnly={!canEdit} supplier label={'Supplier'} value={field.value ?? ''} onChange={(e) => field.onChange(e)}  className="max-w-sm w-full" />
                 )}
               />
+
+              <div className="flex items-center gap-4">
+                <InputText label={'No. Rekening'} value={data.bank_rekening} isReadOnly />
+                <InputText label={'Nama Rekening'} value={data.nama_rekening} isReadOnly />
+              </div>
+
               <div className="flex justify-end">
                 <Button onPress={() => navigate({to: `/oprasional/oprasional/${data.opr}`})}><LinkIcon /> Operasional</Button>
               </div>
@@ -132,7 +160,7 @@ const {control, reset, handleSubmit, getValues, formState:{isValid}} = useForm({
 
         <div className="flex items-center gap-3">
           <ApprovalButtons
-            noValidationSave
+              noValidationSave
               isCanApprove={canApprove}
               isCanEdit={canEdit}
               form={{handleSubmit, getValues, isValid}}

@@ -39,6 +39,8 @@ function RouteComponent() {
                   </Table.Column>
                   <Table.Column>Supplier</Table.Column>
                   <Table.Column className={'w-0'}>Nominal</Table.Column>
+                  <Table.Column className={'w-0'}>PPn</Table.Column>
+                  <Table.Column className={'w-0 truncate'}>Grand Total</Table.Column>
                   <Table.Column className={'w-0'}>Status</Table.Column>
                   <Table.Column className={'w-0'}></Table.Column>
                 </Table.Header>
@@ -57,7 +59,13 @@ function RouteComponent() {
                               </div>
                             </Table.Cell>
                             <Table.Cell>
-                              { formatRupiah(i.total)}
+                              { formatRupiah(i.total_hpp)}
+                            </Table.Cell>
+                            <Table.Cell>
+                              { formatRupiah(i.ppn)}
+                            </Table.Cell>
+                            <Table.Cell>
+                              { formatRupiah(i.grand_total)}
                             </Table.Cell>
                             <Table.Cell  className={'truncate'}>
                               <StatusChiper status={i.status} />

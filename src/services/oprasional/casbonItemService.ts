@@ -10,5 +10,8 @@ export const useItemCasbonService = {
     },
     update: (id, payload) => {
         return api.put(`oprasional/item-casbon/${id}/`, payload)
+    },
+    drop: (id) => {
+        return api.post(`oprasional/item-casbon/${id}/drop/`)
     }
 }

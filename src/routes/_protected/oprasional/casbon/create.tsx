@@ -8,6 +8,8 @@ import OperasionalComboBox from '../../../../components/input/OperasionalComboBo
 import { useMutation } from '@tanstack/react-query'
 import { useCasbonService } from '../../../../services/oprasional/casbonService'
 import { useToast } from '../../../../lib/useToast'
+import SimpleComboBox from '../../../../components/input/SimpleComboBox'
+import { useCustomerService } from '../../../../services/customer/customerService'
 
 export const Route = createFileRoute('/_protected/oprasional/casbon/create')({
   component: RouteComponent,
@@ -86,7 +88,16 @@ function RouteComponent() {
                   </Checkbox>
                 </CheckboxGroup>
                 <SelectComponent className={'w-40'} value={form.type_pembayaran} onChange={e => setForm({...form, type_pembayaran: e})} label={'Metode Bayar'} placeholder="Pilih" data={[{id: 'CA', label: 'Tunai'}, {id: 'TF', label: 'Transfer'}]} />
-                <CustomerComboBox supplier label={'Supplier'} value={form.supplier} onChange={(e) => setForm({...form, supplier: e})}  className="max-w-sm w-full" />
+                <SimpleComboBox
+                  label={'Supplier / Pemohon'}
+                  fetchUrl={({pageParam, queryKey}) => useCustomerService.supplier({pageParam, queryKey})}
+                  filter={(i) => ({...i, name: i.full_name})}
+                  fetchDetailUrl={({queryKey}) => useCustomerService.detail(queryKey.at(1))}
+                  query={['supplier-combox']}
+                  value={form.supplier}
+                  onChange={(e) => setForm({...form, supplier: e})}
+                />
+                
                 <div className="flex justify-end">
                   <Button onPress={handleSubmit}>Simpan</Button>
                 </div>

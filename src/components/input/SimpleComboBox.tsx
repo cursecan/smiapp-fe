@@ -80,6 +80,7 @@ const SimpleComboBox = ({label, fetchUrl, fetchDetailUrl, value=null, query=[], 
       onInputChange={setSearch}
       selectedKey={selectedKey}
       onSelectionChange={handleChangeSelect}
+      isDisabled={props.isDisabled}
     >
         { label && <Label>{label}</Label>}
       

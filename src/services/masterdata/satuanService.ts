@@ -7,5 +7,8 @@ export const useSatuanService = {
     },
     detail: (id) => {
         return api.get(`master/satuan/${id}/`)
+    },
+    update: (id, payload) => {
+        return api.put(`master/satuan/${id}/`, payload)
     }
 }

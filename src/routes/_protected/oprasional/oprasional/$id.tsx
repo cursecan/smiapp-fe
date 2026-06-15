@@ -32,9 +32,12 @@ function RouteComponent() {
         enabled: !!id
     })
 
-    const total_casbon = casbon?.reduce((a, b) => a + b.total.hpp, 0)
-    const total_budget = data?.penawaran.progress.budget
-    const profit = total_budget - total_casbon
+    console.log(casbon);
+    
+
+    const total_approved_casbon = casbon?.filter(i => i.is_approve).reduce((a, b) => a + Number(b.total_hpp), 0)
+    const unapprove_casbon = casbon?.filter(i => !i.is_approve).reduce((a, b) => a + Number(b.total_hpp), 0)
+    const profit = data?.nilai_penawaran - total_approved_casbon
 
 
     if (isLoading || casbonLoading) {
@@ -179,7 +182,7 @@ function RouteComponent() {
                                                                         </div>
                                                                     </Table.Cell>
                                                                     <Table.Cell>{formatSimpleDate(i.create_at)}</Table.Cell>
-                                                                    <Table.Cell className={'w-40'}>{formatRupiah(i.total.hpp)}</Table.Cell>
+                                                                    <Table.Cell className={'w-40'}>{formatRupiah(i.total_hpp)}</Table.Cell>
                                                                     <Table.Cell className={'w-0 truncate'}>
                                                                         <StatusChiper status={i.status} />
                                                                     </Table.Cell>
@@ -192,24 +195,31 @@ function RouteComponent() {
                                                             )
                                                         })
                                                     }
-
                                                     <Table.Row>
                                                         <Table.Cell colSpan={2} className={'text-right'}>
-                                                            Casbon
+                                                            Casbon Belum Approval
                                                         </Table.Cell>
                                                         <Table.Cell colSpan={3}>
-                                                            {formatRupiah(total_casbon)}
+                                                            {formatRupiah(unapprove_casbon)}
                                                         </Table.Cell>
                                                     </Table.Row>
                                                     <Table.Row>
                                                         <Table.Cell colSpan={2} className={'text-right'}>
-                                                            Budget RAB
+                                                            Approved Casbon
+                                                        </Table.Cell>
+                                                        <Table.Cell colSpan={3}>
+                                                            {formatRupiah(total_approved_casbon)}
+                                                        </Table.Cell>
+                                                    </Table.Row>
+                                                    <Table.Row>
+                                                        <Table.Cell colSpan={2} className={'text-right'}>
+                                                            <b>Nilai Penawaran</b>
                                                         </Table.Cell>
                                                         <Table.Cell colSpan={3}>
                                                             <div className="flex gap-5 items-center">
-                                                                <span>
-                                                                    {formatRupiah(total_budget)} 
-                                                                </span>
+                                                                <b>
+                                                                    {formatRupiah(data?.nilai_penawaran)} 
+                                                                </b>
                                                                 {
                                                                     profit > 0 ? <span className='text-success'>{formatRupiah(profit)}</span> : <span className='text-danger'>({formatRupiah(profit)})</span>
                                                                 }

@@ -19,5 +19,9 @@ export const useCasbonService = {
     },
     submit: (id) => {
         return api.post(`oprasional/casbon/${id}/submit/`)
-    }
+    },
+    change_supply: (id, payload) => {
+        return api.post(`oprasional/casbon/${id}/supply-change/`, payload)
+    },
+
 }

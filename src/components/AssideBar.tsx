@@ -1,4 +1,4 @@
-import {  Envelope, Persons, House, MapPin, Bell, Circles5Random, Rocket, Flask, LogoDocker, Megaphone, Mug, ArrowRightFromSquare } from "@gravity-ui/icons"
+import {  Envelope, Persons, House, MapPin, Bell, Circles5Random, Rocket, Flask, LogoDocker, Megaphone, Mug, ArrowRightFromSquare, CircleDollar } from "@gravity-ui/icons"
 import { useAuth } from "../auth/AuthProvider"
 import { Avatar, Button, Description, Label, Surface } from "@heroui/react"
 import { useLocation, useNavigate } from "@tanstack/react-router"
@@ -44,6 +44,12 @@ const AssideBar = () => {
                                 <NavButton active={location.pathname.includes('/komersial/penawaran')} onPress={() => navigate({to: '/komersial/penawaran'})} icon={<Circles5Random />} name={'Penawaran'} />
                                 <NavButton active={location.pathname.includes('/oprasional/oprasional')} onPress={() => navigate({to: '/oprasional/oprasional'})} icon={<Circles5Random />} icon={<Rocket />} name={'Operasional'} />
                                 <NavButton active={location.pathname.includes('/oprasional/casbon')}  onPress={() => navigate({to: '/oprasional/casbon'})} icon={<Flask />} name={'Casbon'} />
+                            </div>
+                        </li>
+                        <li>
+                            <div className="text-xs mb-2">Keuangan</div>
+                            <div className="space-y-1">
+                                <NavButton active={location.pathname.includes('/dashboard')} onPress={() => navigate({to: '/keuangan/expense'})} icon={<CircleDollar />} name={'Expense'} />
                             </div>
                         </li>
                         <li>

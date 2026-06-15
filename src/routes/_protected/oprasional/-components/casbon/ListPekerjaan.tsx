@@ -12,6 +12,7 @@ import { formatRupiah } from "../../../../../utils/formatCurrency"
 
 const ListPekerjaan = ({casbon, canEdit=false}) => {
     const [isContent, setISContent] = useState(true)
+    const [openCreate, setOpenCreate] = useState(false)
     const [form, setForm] = useState({
         pekerjaan: '',
         qty: 1,
@@ -70,6 +71,49 @@ const ListPekerjaan = ({casbon, canEdit=false}) => {
   return (
     <Card variant='secondary'>
         <Card.Content>
+            {
+                canEdit && (
+                    <>
+                        {
+                            openCreate ? (
+                                <div className="flex gap-2 flex-col mt-4 mb-5">
+                                    <Checkbox id="is-content-selected" isSelected={isContent} onChange={setISContent}>
+                                        <Checkbox.Control>
+                                            <Checkbox.Indicator />
+                                        </Checkbox.Control>
+                                        <Checkbox.Content>
+                                            <Label>Content</Label>
+                                        </Checkbox.Content>
+                                    </Checkbox>
+                                    <InputText value={form.pekerjaan} onChange={(e) => setForm({...form, pekerjaan: e.target.value})} label="Pekerjaan" />
+                                    <div className="flex gap-4 items-end">
+                                        {
+                                            isContent && (
+                                                <>
+                                                    <div className="w-16">
+                                                        <CurrencyInput label={'Volume'} value={form.qty} onChange={(e) => setForm({...form, qty: e})} />
+                                                    </div>
+                                                    <SatuanSelect label={'Satuan'} value={form.satuan} onChange={(e) => setForm({...form, satuan: e})} />
+                                                    <CurrencyInput label={'Harga'} value={form.harga} onChange={(e) => setForm({...form, harga: e})} />
+                                                </>
+                                            )
+                                        }
+                                        <div className="flex-1 flex justify-end gap-2">
+                                            <Button variant="danger-soft" onPress={() => setOpenCreate(false)}>Cancel</Button>
+                                            <Button onPress={handeSave}>Add</Button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="flex justify-end">
+                                    <Button onPress={() => setOpenCreate(true)} variant="secondary">Create Item Casbon</Button>
+                                </div>
+                            )
+                        }
+                    </>
+
+                )
+            }
             <Table>
                 <Table.ScrollContainer>
                     <Table.Content>
@@ -78,9 +122,9 @@ const ListPekerjaan = ({casbon, canEdit=false}) => {
                                 Pekerjaan
                             </Table.Column>
                             <Table.Column className={'w-10'}>Vol</Table.Column>
-                            <Table.Column className={'w-32'}>Satuan</Table.Column>
-                            <Table.Column className={'w-40'}>Harga</Table.Column>
-                            <Table.Column className={'w-40'}>Total</Table.Column>
+                            <Table.Column className={'w-24'}>Satuan</Table.Column>
+                            <Table.Column className={'w-24'}>Harga</Table.Column>
+                            <Table.Column className={'w-24'}>Total</Table.Column>
                             <Table.Column className={'w-0'}></Table.Column>
                         </Table.Header>
                         <Table.Body>
@@ -118,36 +162,7 @@ const ListPekerjaan = ({casbon, canEdit=false}) => {
                     </Table.Content>
                 </Table.ScrollContainer>
             </Table>
-            {
-                canEdit && (
-                    <div className="flex gap-2 flex-col mt-4">
-                        <Checkbox id="is-content-selected" isSelected={isContent} onChange={setISContent}>
-                            <Checkbox.Control>
-                                <Checkbox.Indicator />
-                            </Checkbox.Control>
-                            <Checkbox.Content>
-                                <Label>Content</Label>
-                            </Checkbox.Content>
-                        </Checkbox>
-                        <InputText value={form.pekerjaan} onChange={(e) => setForm({...form, pekerjaan: e.target.value})} label="Pekerjaan" />
-                        <div className="flex gap-4 items-end">
-                            {
-                                isContent && (
-                                    <>
-                                        <div className="w-16">
-                                            <CurrencyInput label={'Volume'} value={form.qty} onChange={(e) => setForm({...form, qty: e})} />
-                                        </div>
-                                        <SatuanSelect label={'Satuan'} value={form.satuan} onChange={(e) => setForm({...form, satuan: e})} />
-                                        <CurrencyInput label={'Harga'} value={form.harga} onChange={(e) => setForm({...form, harga: e})} />
-                                    </>
-                                )
-                            }
-                            <Button onPress={handeSave}>Add</Button>
-                        </div>
-                    </div>
-
-                )
-            }
+            
         </Card.Content>
     </Card>
   )
