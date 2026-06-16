@@ -130,7 +130,7 @@ const Pekerjaan = ({penawaran, canEdit}) => {
             )
         }
 
-        <Table>
+        <Table className='font-mono'>
             <Table.ScrollContainer>
                 <Table.Content>
                     <Table.Header>

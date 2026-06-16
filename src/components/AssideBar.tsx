@@ -49,7 +49,7 @@ const AssideBar = () => {
                         <li>
                             <div className="text-xs mb-2">Keuangan</div>
                             <div className="space-y-1">
-                                <NavButton active={location.pathname.includes('/dashboard')} onPress={() => navigate({to: '/keuangan/expense'})} icon={<CircleDollar />} name={'Expense'} />
+                                <NavButton active={location.pathname.includes('/keuangan/expense')} onPress={() => navigate({to: '/keuangan/expense'})} icon={<CircleDollar />} name={'Expense'} />
                             </div>
                         </li>
                         <li>

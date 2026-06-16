@@ -114,7 +114,7 @@ const ListPekerjaan = ({casbon, canEdit=false}) => {
 
                 )
             }
-            <Table>
+            <Table className="font-mono">
                 <Table.ScrollContainer>
                     <Table.Content>
                         <Table.Header>

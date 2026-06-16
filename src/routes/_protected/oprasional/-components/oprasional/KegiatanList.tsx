@@ -47,7 +47,7 @@ const KegiatanList = ({data}) => {
             <UploadDocProgressModal ops={data?.id} data={kegiatan} />
 
         </div>
-        <Table>
+        <Table className="font-mono">
             <Table.ScrollContainer>
                 <Table.Content>
                     <Table.Header>

@@ -58,7 +58,7 @@ function RouteComponent() {
                                     <Description>Wilayah</Description>
                                     <Label>{data?.opr?.penawaran?.pelabuhan?.nama_pelabuhan}</Label>
                                 </div>
-                                <Table>
+                                <Table className='font-mono'>
                                     <Table.ScrollContainer>
                                         <Table.Content>
                                             <Table.Header>
@@ -76,7 +76,7 @@ function RouteComponent() {
                                                 </Table.Row>
                                                 <Table.Row>
                                                     <Table.Cell>
-                                                        Total Cabon
+                                                        Total Casbon
                                                     </Table.Cell>
                                                     <Table.Cell className={'text-right'}>
                                                         { formatRupiah(data?.total_casbon) }
@@ -84,7 +84,7 @@ function RouteComponent() {
                                                 </Table.Row>
                                                 <Table.Row>
                                                     <Table.Cell>
-                                                        Total Exprnse
+                                                        Total Expense
                                                     </Table.Cell>
                                                     <Table.Cell className={'text-right'}>
                                                         { formatRupiah(data?.total_expense) }

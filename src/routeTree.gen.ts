@@ -27,6 +27,7 @@ import { Route as ProtectedOprasionalCasbonCreateRouteImport } from './routes/_p
 import { Route as ProtectedOprasionalCasbonIdRouteImport } from './routes/_protected/oprasional/casbon/$id'
 import { Route as ProtectedKomersialPenawaranIdRouteImport } from './routes/_protected/komersial/penawaran/$id'
 import { Route as ProtectedKeuanganExpenseIdRouteImport } from './routes/_protected/keuangan/expense/$id'
+import { Route as ProtectedKeuanganExpenseTransferIdRouteImport } from './routes/_protected/keuangan/expense/transfer/$id'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -128,6 +129,12 @@ const ProtectedKeuanganExpenseIdRoute =
     path: '/keuangan/expense/$id',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
+const ProtectedKeuanganExpenseTransferIdRoute =
+  ProtectedKeuanganExpenseTransferIdRouteImport.update({
+    id: '/keuangan/expense/transfer/$id',
+    path: '/keuangan/expense/transfer/$id',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -147,6 +154,7 @@ export interface FileRoutesByFullPath {
   '/oprasional/casbon/': typeof ProtectedOprasionalCasbonIndexRoute
   '/oprasional/oprasional/': typeof ProtectedOprasionalOprasionalIndexRoute
   '/oprasional/pembayaran/': typeof ProtectedOprasionalPembayaranIndexRoute
+  '/keuangan/expense/transfer/$id': typeof ProtectedKeuanganExpenseTransferIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -166,6 +174,7 @@ export interface FileRoutesByTo {
   '/oprasional/casbon': typeof ProtectedOprasionalCasbonIndexRoute
   '/oprasional/oprasional': typeof ProtectedOprasionalOprasionalIndexRoute
   '/oprasional/pembayaran': typeof ProtectedOprasionalPembayaranIndexRoute
+  '/keuangan/expense/transfer/$id': typeof ProtectedKeuanganExpenseTransferIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -187,6 +196,7 @@ export interface FileRoutesById {
   '/_protected/oprasional/casbon/': typeof ProtectedOprasionalCasbonIndexRoute
   '/_protected/oprasional/oprasional/': typeof ProtectedOprasionalOprasionalIndexRoute
   '/_protected/oprasional/pembayaran/': typeof ProtectedOprasionalPembayaranIndexRoute
+  '/_protected/keuangan/expense/transfer/$id': typeof ProtectedKeuanganExpenseTransferIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -208,6 +218,7 @@ export interface FileRouteTypes {
     | '/oprasional/casbon/'
     | '/oprasional/oprasional/'
     | '/oprasional/pembayaran/'
+    | '/keuangan/expense/transfer/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -227,6 +238,7 @@ export interface FileRouteTypes {
     | '/oprasional/casbon'
     | '/oprasional/oprasional'
     | '/oprasional/pembayaran'
+    | '/keuangan/expense/transfer/$id'
   id:
     | '__root__'
     | '/'
@@ -247,6 +259,7 @@ export interface FileRouteTypes {
     | '/_protected/oprasional/casbon/'
     | '/_protected/oprasional/oprasional/'
     | '/_protected/oprasional/pembayaran/'
+    | '/_protected/keuangan/expense/transfer/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -385,6 +398,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedKeuanganExpenseIdRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
+    '/_protected/keuangan/expense/transfer/$id': {
+      id: '/_protected/keuangan/expense/transfer/$id'
+      path: '/keuangan/expense/transfer/$id'
+      fullPath: '/keuangan/expense/transfer/$id'
+      preLoaderRoute: typeof ProtectedKeuanganExpenseTransferIdRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
   }
 }
 
@@ -402,6 +422,7 @@ interface ProtectedRouteRouteChildren {
   ProtectedOprasionalCasbonIndexRoute: typeof ProtectedOprasionalCasbonIndexRoute
   ProtectedOprasionalOprasionalIndexRoute: typeof ProtectedOprasionalOprasionalIndexRoute
   ProtectedOprasionalPembayaranIndexRoute: typeof ProtectedOprasionalPembayaranIndexRoute
+  ProtectedKeuanganExpenseTransferIdRoute: typeof ProtectedKeuanganExpenseTransferIdRoute
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
@@ -420,6 +441,8 @@ const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
     ProtectedOprasionalOprasionalIndexRoute,
   ProtectedOprasionalPembayaranIndexRoute:
     ProtectedOprasionalPembayaranIndexRoute,
+  ProtectedKeuanganExpenseTransferIdRoute:
+    ProtectedKeuanganExpenseTransferIdRoute,
 }
 
 const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(
