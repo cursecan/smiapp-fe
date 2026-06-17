@@ -75,12 +75,11 @@ const SimpleComboBox = ({label, fetchUrl, fetchDetailUrl, value=null, query=[], 
   return (
     <ComboBox
       allowsEmptyCollection
-      className="w-[256px]"
       inputValue={search}
       onInputChange={setSearch}
       selectedKey={selectedKey}
       onSelectionChange={handleChangeSelect}
-      isDisabled={props.isDisabled}
+      {...props}
     >
         { label && <Label>{label}</Label>}
       

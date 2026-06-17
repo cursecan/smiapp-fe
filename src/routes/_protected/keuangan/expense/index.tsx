@@ -63,10 +63,10 @@ function RouteComponent() {
                                 Nilai Penawaran
                             </Table.Column>
                              <Table.Column className={'w-0 truncate'}>
-                                Total Casbon
+                                Casbon
                             </Table.Column>
                             <Table.Column className={'w-0 truncate'}>
-                                Total Expense
+                                Sudah Diproses
                             </Table.Column>
                             <Table.Column className={'w-0'}>
                                 Status

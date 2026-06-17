@@ -10,6 +10,7 @@ import { useCasbonService } from '../../../../services/oprasional/casbonService'
 import { useToast } from '../../../../lib/useToast'
 import SimpleComboBox from '../../../../components/input/SimpleComboBox'
 import { useCustomerService } from '../../../../services/customer/customerService'
+import { useOprasionalService } from '../../../../services/oprasional/oprasionalService'
 
 export const Route = createFileRoute('/_protected/oprasional/casbon/create')({
   component: RouteComponent,
@@ -19,6 +20,7 @@ function RouteComponent() {
   const navigate = useNavigate()
   const t = Route.useSearch()
   const toast = useToast()
+  
   
   const [form, setForm] = useState({
     opr: t.ref ?? '',
@@ -60,7 +62,16 @@ function RouteComponent() {
                   <InputText isDisabled label={'Nomor Pengajuan'} placeholder={'EFOFIN.1000'} />
 
                 </div> */}
-                <OperasionalComboBox isDisabled value={form.opr} onChange={(e) => setForm({...form, opr:e})} />
+                <SimpleComboBox
+                  label={'Dasar Pekerjaan'}
+                  fetchUrl={({pageParam, queryKey}) => useOprasionalService.active_list({pageParam, queryKey})}
+                  filter={(i) => ({...i, name: i.pekerjaan})}
+                  fetchDetailUrl={({queryKey}) => useOprasionalService.detail(queryKey.at(1))}
+                  query={['op-combox-list']}
+                  value={form.opr}
+                  onChange={(e) => setForm({...form, supplier: e})}
+                  isReadOnly
+                />
                 <CheckboxGroup value={form.tkp} onChange={(e) => setForm({...form, tkp: e})} className={'flex flex-row gap-10'}>
                   <Checkbox value='pembayaran'>
                     <Checkbox.Control>

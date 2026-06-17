@@ -18,9 +18,11 @@ function RouteComponent() {
         select: (res) => res.data
     })
 
+    
     if (isLoading) {
         return <div className="">Loading...</div>
     }
+    
 
   return (
     <div className="">
@@ -88,6 +90,14 @@ function RouteComponent() {
                                                     </Table.Cell>
                                                     <Table.Cell className={'text-right'}>
                                                         { formatRupiah(data?.total_expense) }
+                                                    </Table.Cell>
+                                                </Table.Row>
+                                                 <Table.Row>
+                                                    <Table.Cell className={'text-gray-500'}>
+                                                        Belum Dibayar
+                                                    </Table.Cell>
+                                                    <Table.Cell className={'text-right text-gray-500'}>
+                                                        { formatRupiah(data?.total_casbon - data?.total_expense) }
                                                     </Table.Cell>
                                                 </Table.Row>
                                             </Table.Body>

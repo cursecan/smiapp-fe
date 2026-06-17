@@ -1,6 +1,6 @@
 import { Button, Drawer } from "@heroui/react"
 
-const DrawerComponent = ({children, buttonTrigger, heading, state, hideHeader=false, hideFooter=false}) => {
+const DrawerComponent = ({children, buttonTrigger, footerButtons, heading, state, hideHeader=false, hideFooter=false}) => {
   return (
     <Drawer>
         { buttonTrigger && buttonTrigger }
@@ -20,10 +20,7 @@ const DrawerComponent = ({children, buttonTrigger, heading, state, hideHeader=fa
                     { 
                         !hideFooter && (
                             <Drawer.Footer>
-                                <Button slot="close" variant="secondary">
-                                    Cancel
-                                </Button>
-                                <Button slot="close">Confirm</Button>
+                                { footerButtons && footerButtons}
                             </Drawer.Footer>
 
                         )

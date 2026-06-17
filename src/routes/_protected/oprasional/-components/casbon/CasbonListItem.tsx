@@ -1,6 +1,6 @@
 import { Button, CloseButton, Description, Label, Surface, Table, useOverlayState } from "@heroui/react"
 import { formatRupiah } from "../../../../../utils/formatCurrency"
-import { Pencil } from "@gravity-ui/icons"
+import { Check, Pencil } from "@gravity-ui/icons"
 import ModalComponent from "../../../../../components/modals/ModalComponent"
 import { Controller, useForm } from "react-hook-form"
 import { useEffect } from "react"
@@ -10,6 +10,7 @@ import SimpleComboBox from "../../../../../components/input/SimpleComboBox"
 import { useSatuanService } from "../../../../../services/masterdata/satuanService"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useItemCasbonService } from "../../../../../services/oprasional/casbonItemService"
+import CheckboxInput from "../../../../../components/input/CheckboxInput"
 
 const CasbonListItem = ({item, canEdit=false}) => {
 
@@ -60,9 +61,14 @@ const CasbonListItem = ({item, canEdit=false}) => {
             </div>
         </Table.Cell>
         <Table.Cell>{item.qty}</Table.Cell>
-        <Table.Cell>{item.satuan.nama_satuan}</Table.Cell>
+        <Table.Cell>{item.satuan?.nama_satuan || '-'}</Table.Cell>
         <Table.Cell>{formatRupiah(item.harga)}</Table.Cell>
         <Table.Cell>{formatRupiah(total)}</Table.Cell>
+        <Table.Cell>
+            {
+                item.is_ppn ? <Check /> : '-' 
+            }
+        </Table.Cell>
         <Table.Cell>
             <div className="flex items-center gap-1">
                 <ModalComponent 
@@ -119,6 +125,13 @@ const CasbonListItem = ({item, canEdit=false}) => {
                                 render={({field}) => (
                                     <CurrencyInput label={'Nominal'} value={field?.value ?? ''} onChange={(e) => field.onChange(e)} />
                                 )} 
+                            />
+                            <Controller
+                                name='is_ppn'
+                                control={control}
+                                render={({field}) => (
+                                    <CheckboxInput label={'PPn 11%'} value={field.value} onChange={(e) => field.onChange(e)} />
+                                )}
                             />
                             <div className="flex items-center justify-end gap-3">
                                 <Button onPress={handleSubmit(onSubmit)}>Simpan</Button>

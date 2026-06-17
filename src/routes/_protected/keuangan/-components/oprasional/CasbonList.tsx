@@ -11,7 +11,13 @@ const CasbonList = ({data=[]}) => {
                         Casbon
                     </Table.Column>
                     <Table.Column className={'w-0 truncate'}>
-                        Nominal
+                        Total Pengajuan
+                    </Table.Column>
+                    <Table.Column className={'w-0 truncate'}>
+                        Sudah Diproses
+                    </Table.Column>
+                    <Table.Column className={'w-0 truncate'}>
+                        Biaya Lainya
                     </Table.Column>
                     <Table.Column className={'w-0 truncate'}>
                         Status

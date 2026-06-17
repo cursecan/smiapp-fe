@@ -1,5 +1,5 @@
 
-import { Button, Card, Checkbox, Description, Label, ProgressBar, Spinner, Surface, Table, useOverlayState } from "@heroui/react"
+import { Button, Card, Checkbox, Description, Label, ProgressBar, Spinner, Surface, Table, Tag, TagGroup, useOverlayState } from "@heroui/react"
 import { formatRupiah } from "../../../../../utils/formatCurrency"
 import ModalComponent from "../../../../../components/modals/ModalComponent"
 import CurrencyInput from "../../../../../components/input/CurrencyInput"
@@ -102,19 +102,44 @@ const CasbonItem = ({item}) => {
             <Table.Cell>
                 <div className="flex flex-col">
                     <Label>{item.nomor}</Label>
+                    <div className="mt-1">
+                        <TagGroup>
+                            <TagGroup.List>
+                                { item.pembayaran && <Tag className={'bg-accent-soft text-accent'}>Pembayaran</Tag>}
+                                { item.casbon && <Tag className={'bg-warning-soft text-orange-500'}>Casbon</Tag>}
+                                { item.petycash && <Tag className={'bg-success-soft text-success'}>Petty Cash</Tag>}
+                            </TagGroup.List>
+                        </TagGroup>
+                    </div>
                     {/* <DownloadButton filename={file_name} fetch={async () => await api.get(`oprasional/casbon/${item.id}/preview/`,  {responseType: 'blob'})} /> */}
                 </div>
             </Table.Cell>
             <Table.Cell>
                 {formatRupiah(item.grand_total)}
             </Table.Cell>
+            <Table.Cell>
+                {formatRupiah(item.total_expense.total)}
+            </Table.Cell>
+            <Table.Cell>
+                {formatRupiah(item.total_expense.total_lainya)}
+            </Table.Cell>
             <Table.Cell className={'truncate'}>
                 <StatusChiper status={item.status} />
             </Table.Cell>
             <Table.Cell>
-                <DrawerComponent state={state} heading={item.nomor} hideFooter buttonTrigger={
+                <DrawerComponent state={state} heading={item.nomor} buttonTrigger={
                     <Button onPress={state.setOpen}>Action</Button>
-                }>  
+                }
+                    footerButtons={(
+                        <div className="flex gap-3">
+                            {
+                                item.total_expense < item.grand_total && (
+                                    <Button onPress={expanse_state.setOpen}>Upload Bukti Transfer</Button>
+                                )
+                            }
+                        </div>
+                    )}
+                >  
                     <div className="space-y-5 flex flex-col">
                         <Label>{item.nama_project}</Label>
                         <div className="flex gap-4">
@@ -145,14 +170,6 @@ const CasbonItem = ({item}) => {
                             <Label className="uppercase">{item.bank_rekening??'-'} {item.nama_rekening??'-'}</Label>
                         </div>
                         <ItemList casbon={item} data={casbonItem} />
-                        <div className="flex gap-3">
-                            {
-                                item.total_expense < item.grand_total && (
-                                    <Button onPress={expanse_state.setOpen}>Upload Bukti Transfer</Button>
-                                )
-                            }
-                        </div>
-
                     </div>
 
                 </DrawerComponent>

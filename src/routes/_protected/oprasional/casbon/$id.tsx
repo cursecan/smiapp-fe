@@ -120,12 +120,35 @@ function RouteComponent() {
                 )}
               />
               <Controller
-                name='type_pembayaran'
+                name='is_ppn'
                 control={control}
                 render={({field}) => (
-                  <SelectComponent isDisabled={!canEdit} className={'w-40'} value={field.value ?? ''} onChange={e => field.onChange(e)} label={'Metode Bayar'} placeholder="Pilih" data={[{id: 'CA', label: 'Tunai'}, {id: 'TF', label: 'Transfer'}]} />
+                  <Checkbox isReadOnly={!canEdit} isSelected={field.value} onChange={(e) => field.onChange(e)}>
+                    <Checkbox.Control>
+                      <Checkbox.Indicator />
+                    </Checkbox.Control>
+                    <Checkbox.Content>
+                      <Label>PPN 11%</Label>
+                    </Checkbox.Content>
+                  </Checkbox>
                 )}
               />
+              <div className="flex items-center gap-3">
+                <Controller
+                  name='type_pembayaran'
+                  control={control}
+                  render={({field}) => (
+                    <SelectComponent isDisabled={!canEdit} className={'w-40'} value={field.value ?? ''} onChange={e => field.onChange(e)} label={'Metode Bayar'} placeholder="Pilih" data={[{id: 'CA', label: 'Tunai'}, {id: 'TF', label: 'Transfer'}]} />
+                  )}
+                />
+                <Controller
+                  name='pph_rate'
+                  control={control}
+                  render={({field}) => (
+                    <SelectComponent isDisabled={!canEdit} className={'w-40'} value={field.value ?? ''} onChange={e => field.onChange(e)} label={'Potongan PPh'} placeholder="Pilih" data={[{id: 0.025, label: 'Perorangan 2,5%'}, {id: 0.02, label: 'Korporasi 2%'}]} />
+                  )}
+                />
+              </div>
               <Controller 
                 name='supplier'
                 control={control}

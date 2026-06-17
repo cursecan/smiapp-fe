@@ -2,12 +2,13 @@ import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
 import { useOprasionalService } from '../../../../services/oprasional/oprasionalService'
 import HeaderPage from '../../../../components/HeaderPage'
-import { Breadcrumbs, Button, Card, CloseButton, Description, Label, Surface, Table, Tabs } from '@heroui/react'
+import { Breadcrumbs, Button, Card, CloseButton, Description, Label, Surface, Table, Tabs, useOverlayState } from '@heroui/react'
 import KegiatanList from '../-components/oprasional/KegiatanList'
 import { formatRupiah } from '../../../../utils/formatCurrency'
 import { ArrowChevronRight, Plus } from '@gravity-ui/icons'
 import { formatSimpleDate } from '../../../../utils/dateFormat'
 import StatusChiper from '../../../../components/StatusChiper'
+import ModalComponent from '../../../../components/modals/ModalComponent'
 
 export const Route = createFileRoute('/_protected/oprasional/oprasional/$id')({
   component: RouteComponent,
@@ -16,6 +17,8 @@ export const Route = createFileRoute('/_protected/oprasional/oprasional/$id')({
 function RouteComponent() {
     const { id } = useParams({from: '/_protected/oprasional/oprasional/$id'})
     const navigate = useNavigate()
+
+     const state_delete = useOverlayState()
 
     const { data, isLoading } = useQuery({
         queryKey: ['oprasional', id],
@@ -31,9 +34,6 @@ function RouteComponent() {
         select: (res) => res.data,
         enabled: !!id
     })
-
-    console.log(casbon);
-    
 
     const total_approved_casbon = casbon?.filter(i => i.is_approve).reduce((a, b) => a + Number(b.total_hpp), 0)
     const unapprove_casbon = casbon?.filter(i => !i.is_approve).reduce((a, b) => a + Number(b.total_hpp), 0)
@@ -186,10 +186,12 @@ function RouteComponent() {
                                                                     <Table.Cell className={'w-0 truncate'}>
                                                                         <StatusChiper status={i.status} />
                                                                     </Table.Cell>
-                                                                    <Table.Cell>
-                                                                        <CloseButton onPress={() => navigate({to: `/oprasional/casbon/${i.id}`})} className={'bg-accent text-accent-foreground'}>
-                                                                            <ArrowChevronRight />
-                                                                        </CloseButton>
+                                                                    <Table.Cell className={'truncate'}>
+                                                                        <div className="flex items-center gap-2">
+                                                                            <CloseButton onPress={() => navigate({to: `/oprasional/casbon/${i.id}`})} className={'bg-accent text-accent-foreground'}>
+                                                                                <ArrowChevronRight />
+                                                                            </CloseButton>
+                                                                        </div>
                                                                     </Table.Cell>
                                                                 </Table.Row>
                                                             )

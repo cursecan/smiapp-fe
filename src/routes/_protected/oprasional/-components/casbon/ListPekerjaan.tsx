@@ -9,6 +9,7 @@ import { useToast } from "../../../../../lib/useToast"
 import { useCasbonService } from "../../../../../services/oprasional/casbonService"
 import CasbonListItem from "./CasbonListItem"
 import { formatRupiah } from "../../../../../utils/formatCurrency"
+import CheckboxInput from "../../../../../components/input/CheckboxInput"
 
 const ListPekerjaan = ({casbon, canEdit=false}) => {
     const [isContent, setISContent] = useState(true)
@@ -17,6 +18,7 @@ const ListPekerjaan = ({casbon, canEdit=false}) => {
         pekerjaan: '',
         qty: 1,
         satuan: '',
+        is_ppn: false,
         harga: 0,
         keterangan: '',
     })
@@ -38,6 +40,7 @@ const ListPekerjaan = ({casbon, canEdit=false}) => {
             pekerjaan: '',
             qty: 1,
             satuan: '',
+            is_ppn: false,
             harga: 0,
             keterangan: '',
         })
@@ -63,9 +66,10 @@ const ListPekerjaan = ({casbon, canEdit=false}) => {
     }
     
     const total_bef_ppn = casbon_items?.reduce((a, b) => a + Number(b.harga) * b.qty, 0)
-    const total_ppn = 0
-    const total_after_ppn = total_bef_ppn + total_ppn
-
+    const total_ppn = !casbon.is_ppn ? 0 : Math.ceil(casbon_items.reduce((a, b) => a + Number(b.harga) * b.qty * (b.is_ppn ? 0.11 : 0), 0))
+    const total_pph = Math.ceil(total_bef_ppn * casbon.pph_rate)
+    const total_after_ppn = total_bef_ppn + total_ppn - total_pph
+    
 
 
   return (
@@ -77,7 +81,7 @@ const ListPekerjaan = ({casbon, canEdit=false}) => {
                         {
                             openCreate ? (
                                 <div className="flex gap-2 flex-col mt-4 mb-5">
-                                    <Checkbox id="is-content-selected" isSelected={isContent} onChange={setISContent}>
+                                    <Checkbox isDisabled id="is-content-selected" isSelected={isContent} onChange={setISContent}>
                                         <Checkbox.Control>
                                             <Checkbox.Indicator />
                                         </Checkbox.Control>
@@ -95,6 +99,7 @@ const ListPekerjaan = ({casbon, canEdit=false}) => {
                                                     </div>
                                                     <SatuanSelect label={'Satuan'} value={form.satuan} onChange={(e) => setForm({...form, satuan: e})} />
                                                     <CurrencyInput label={'Harga'} value={form.harga} onChange={(e) => setForm({...form, harga: e})} />
+                                                    <CheckboxInput label={'Is PPn'} value={form.is_ppn} onChange={(e) => setForm({...form, is_ppn: e})} />
                                                 </>
                                             )
                                         }
@@ -125,6 +130,7 @@ const ListPekerjaan = ({casbon, canEdit=false}) => {
                             <Table.Column className={'w-24'}>Satuan</Table.Column>
                             <Table.Column className={'w-24'}>Harga</Table.Column>
                             <Table.Column className={'w-24'}>Total</Table.Column>
+                            <Table.Column className={'w-0'}>PPn</Table.Column>
                             <Table.Column className={'w-0'}></Table.Column>
                         </Table.Header>
                         <Table.Body>
@@ -142,17 +148,22 @@ const ListPekerjaan = ({casbon, canEdit=false}) => {
                                         <Table.Row>
                                             <Table.Cell colSpan={4} className={'text-center'}><strong>Total Sebelum PPn</strong></Table.Cell>
                                             <Table.Cell>{formatRupiah(total_bef_ppn)}</Table.Cell>
-                                            <Table.Cell></Table.Cell>
+                                            <Table.Cell colSpan={2}></Table.Cell>
                                         </Table.Row>
                                         <Table.Row>
                                             <Table.Cell colSpan={4} className={'text-center'}><strong>PPn 11%</strong></Table.Cell>
                                             <Table.Cell>{formatRupiah(total_ppn)}</Table.Cell>
-                                            <Table.Cell></Table.Cell>
+                                            <Table.Cell colSpan={2}></Table.Cell>
+                                        </Table.Row>
+                                        <Table.Row>
+                                            <Table.Cell colSpan={4} className={'text-center'}><strong>Pot. PPh {casbon.pph_rate * 100}%</strong></Table.Cell>
+                                            <Table.Cell>({formatRupiah(total_pph)})</Table.Cell>
+                                            <Table.Cell colSpan={2}></Table.Cell>
                                         </Table.Row>
                                         <Table.Row>
                                             <Table.Cell colSpan={4} className={'text-center'}><strong>Total Setelah PPn</strong></Table.Cell>
                                             <Table.Cell>{formatRupiah(total_after_ppn)}</Table.Cell>
-                                            <Table.Cell></Table.Cell>
+                                            <Table.Cell colSpan={2}></Table.Cell>
                                         </Table.Row>
                                     </>
                                     

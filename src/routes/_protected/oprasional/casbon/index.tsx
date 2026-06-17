@@ -6,6 +6,7 @@ import { useCasbonService } from '../../../../services/oprasional/casbonService'
 import { formatRupiah } from '../../../../utils/formatCurrency'
 import StatusChiper from '../../../../components/StatusChiper'
 import { ArrowChevronRight, Tray } from '@gravity-ui/icons'
+import { formatDate } from '../../../../utils/dateFormat'
 
 export const Route = createFileRoute('/_protected/oprasional/casbon/')({
   component: RouteComponent,
@@ -57,9 +58,8 @@ function RouteComponent() {
                     Nomor
                   </Table.Column>
                   <Table.Column>Supplier</Table.Column>
-                  <Table.Column className={'w-0'}>Nominal</Table.Column>
-                  <Table.Column className={'w-0'}>PPn</Table.Column>
-                  <Table.Column className={'w-0 truncate'}>Grand Total</Table.Column>
+                  <Table.Column>Pemohon</Table.Column>
+                  <Table.Column className={'w-0 truncate'}>Total Rupiah</Table.Column>
                   <Table.Column className={'w-0'}>Status</Table.Column>
                   <Table.Column className={'w-0'}></Table.Column>
                 </Table.Header>
@@ -76,7 +76,11 @@ function RouteComponent() {
                         return (
                           <Table.Row>
                             <Table.Cell>
-                              <Label>{ i.nomor }</Label>
+                              <div className="flex flex-col">
+                                <Label>{ i.nomor }</Label>
+                                <Description>{formatDate(i.create_at)}</Description>
+
+                              </div>
                             </Table.Cell>
                             <Table.Cell>
                               <div className="flex flex-col">
@@ -85,10 +89,10 @@ function RouteComponent() {
                               </div>
                             </Table.Cell>
                             <Table.Cell>
-                              { formatRupiah(i.total_hpp)}
-                            </Table.Cell>
-                            <Table.Cell>
-                              { formatRupiah(i.ppn)}
+                              <div className="flex flex-col">
+                                <Label>{i.create_by.full_name}</Label>
+                                <Description>{i.create_by.pegawai?.jabatan || '-'}</Description>
+                              </div>
                             </Table.Cell>
                             <Table.Cell>
                               { formatRupiah(i.grand_total)}

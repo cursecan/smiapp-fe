@@ -54,6 +54,12 @@ const ItemList = ({casbon, data=[]}) => {
                     </Table.Row>
                     <Table.Row>
                         <Table.Cell className={'text-left font-semibold'} colSpan={3}>
+                            Potongan PPh {casbon.pph_rate * 100}%
+                        </Table.Cell>
+                        <Table.Cell className={'font-semibold'}>{formatRupiah(casbon.pph)}</Table.Cell>
+                    </Table.Row>
+                    <Table.Row>
+                        <Table.Cell className={'text-left font-semibold'} colSpan={3}>
                             Grand Total
                         </Table.Cell>
                         <Table.Cell className={'font-semibold'}>{formatRupiah(casbon.grand_total)}</Table.Cell>

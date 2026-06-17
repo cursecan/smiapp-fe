@@ -5,13 +5,15 @@ export const useOprasionalService = {
     create: (payload) => {
         return api.post('/oprasional/opr/', payload)
     },
-    list: ({queryKey}) => {
+    list: ({pageParam, queryKey}) => {
         const [, page, q] = queryKey
-        return api.get('/oprasional/opr/', {params: {page, q}})
+        return api.get('/oprasional/opr/', {params: {page:pageParam, q}})
     },
-    active_list: ({queryKey}) => {
-        const [, page, q] = queryKey
-        return api.get('/oprasional/opr/active/', {params: {page, q}})
+    active_list: ({pageParam, queryKey}) => {
+        console.log(queryKey, '0000000000000');
+        
+        const [, q] = queryKey
+        return api.get('/oprasional/opr/active/', {params: {page: pageParam, q}})
     },
     detail: (id) => {
         return api.get(`/oprasional/opr/${id}/`)
