@@ -1,9 +1,9 @@
-import { Button, Card, Description, Label, SearchField, Table } from '@heroui/react'
+import { Button, Card, Description, EmptyState, Label, SearchField, Table } from '@heroui/react'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { usePenawaranService } from '../../../../services/penawaran.service'
 import ModalPenawaran from '../-components/penawaran/ModalPenawaran'
-import { Route as RouteIcon, ArrowShapeTurnUpRight } from '@gravity-ui/icons'
+import { Route as RouteIcon, ArrowShapeTurnUpRight, Tray } from '@gravity-ui/icons'
 import HeaderPage from '../../../../components/HeaderPage'
 import { formatRupiah } from '../../../../utils/formatCurrency'
 import PaginationTable from '../../../../components/PaginationTable'
@@ -34,7 +34,7 @@ function RouteComponent() {
 
   const changeSearch =(e) => {
     setTimeout(() => {
-      navigate({search: (prev) => ({...prev, q: e.target.value})})
+      navigate({search: (prev) => ({...prev, q: e.target.value, page:1})})
     }, 800);
   }
 
@@ -89,7 +89,14 @@ function RouteComponent() {
                   <Table.Column>Status</Table.Column>
                   <Table.Column></Table.Column>
                 </Table.Header>
-                <Table.Body>
+                <Table.Body
+                  renderEmptyState={() => (
+                    <EmptyState className="flex h-full w-full flex-col items-center justify-center gap-4 text-center">
+                        <Tray />
+                        <span className="text-sm text-muted">No results found</span>
+                    </EmptyState>
+                    )}
+                >
                   {
                     penawaran?.results.map(i => {
                       return (

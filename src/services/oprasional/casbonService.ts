@@ -2,8 +2,9 @@ import { api } from '../../lib/api'
 
 
 export const useCasbonService = {
-    list: () => {
-        return api.get('oprasional/casbon/')
+    list: ({queryKey}) => {
+        const [, page, q] = queryKey
+        return api.get('oprasional/casbon/', {params: {page, q}})
     },
     create: (payload) => {
         return api.post('oprasional/casbon/', payload)

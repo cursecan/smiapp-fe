@@ -1,12 +1,13 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import HeaderPage from '../../../../components/HeaderPage'
-import { Avatar, Card, Chip, Description, Label, ProgressBar, SearchField, Table } from '@heroui/react'
+import { Avatar, Card, Chip, Description, EmptyState, Label, ProgressBar, SearchField, Table } from '@heroui/react'
 import { useQuery } from '@tanstack/react-query'
 import { useOprasionalService } from '../../../../services/oprasional/oprasionalService'
 
 import { formatRupiah } from '../../../../utils/formatCurrency'
 import { fallbackName } from '../../../../utils/useFallbackName'
 import PaginationTable from '../../../../components/PaginationTable'
+import { Tray } from '@gravity-ui/icons'
 
 export const Route = createFileRoute('/_protected/oprasional/oprasional/')({
   component: RouteComponent,
@@ -17,18 +18,25 @@ export const Route = createFileRoute('/_protected/oprasional/oprasional/')({
 })
 
 function RouteComponent() {
-    // const navigate = useNavigate()
+    const navigate = useNavigate()
     const {page, q} = Route.useSearch()
 
-    const {data, isLoading}= useQuery({
+    const {data}= useQuery({
         queryKey: ['oprasional_list', page, q],
         queryFn: async ({queryKey}) => useOprasionalService.list({queryKey}),
         select: (data) => data.data
     })
 
-    if (isLoading) {
-        return <div className="">Loading...</div>
+    // if (isLoading) {
+    //     return <div className="">Loading...</div>
+    // }
+
+    const changeSearch =(e) => {
+        setTimeout(() => {
+        navigate({search: (prev) => ({...prev, q: e.target.value, page: 1})})
+        }, 800);
     }
+
 
     const totalPage = Math.ceil(data?.count / 10)
 
@@ -46,7 +54,7 @@ function RouteComponent() {
                     <SearchField className={'w-100'}>
                         <SearchField.Group>
                             <SearchField.SearchIcon />
-                            <SearchField.Input onChange={() => {}} placeholder='Search...' className={'w-90'} />
+                            <SearchField.Input onChange={changeSearch} placeholder='Search...' className={'w-90'} />
                             <SearchField.ClearButton onPress={() => setSearch('')} />
                         </SearchField.Group>
                     </SearchField>
@@ -64,7 +72,14 @@ function RouteComponent() {
                                 <Table.Column className={'w-0'}>Nilai Penawaran</Table.Column>
                                 <Table.Column className={'w-0'}>Status</Table.Column>
                             </Table.Header>
-                            <Table.Body>
+                            <Table.Body
+                                renderEmptyState={() => (
+                                    <EmptyState className="flex h-full w-full flex-col items-center justify-center gap-4 text-center">
+                                        <Tray />
+                                        <span className="text-sm text-muted">No results found</span>
+                                    </EmptyState>
+                                    )}
+                            >
                                 {
                                     data?.results?.map(i => {
                                         return (

@@ -11,11 +11,6 @@ const NavButton = ({icon, name, active=false, onPress=()=>{}}) => {
                 icon && icon
             }
             <div className="flex-1 text-left">{name}</div>
-            {
-                active && <div className="flex">
-                    <div className="p-1 rounded-full bg-red-500"></div>
-                </div>
-            }
         </Button>
     )
 }
@@ -30,7 +25,11 @@ const AssideBar = () => {
             <Surface className="flex-1 flex text-sm flex-col h-full bg-gray-50 shadow rounded-xl">
                 <div className="">
                     <div className="p-4 flex items-center">
-                        <div className="flex-1">Smile Organization</div>
+                        <div className="flex-1">
+                            <div className="">SMILE</div>
+                            <Description>Digital Marine Ecosystem</Description>
+                            {/* Sea Management Integrated Lifecycle Environment */}
+                        </div>
                         <Bell />
                     </div>
                 </div>
