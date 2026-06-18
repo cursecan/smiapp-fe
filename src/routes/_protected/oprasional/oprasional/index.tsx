@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import HeaderPage from '../../../../components/HeaderPage'
-import { Avatar, Card, Chip, Description, EmptyState, Label, ProgressBar, SearchField, Table } from '@heroui/react'
+import { Avatar, Card, Checkbox, Chip, Description, EmptyState, Label, ProgressBar, SearchField, Table } from '@heroui/react'
 import { useQuery } from '@tanstack/react-query'
 import { useOprasionalService } from '../../../../services/oprasional/oprasionalService'
 
@@ -13,16 +13,17 @@ export const Route = createFileRoute('/_protected/oprasional/oprasional/')({
   component: RouteComponent,
   validateSearch: (search) => ({
     page: Number(search.page ?? 1),
-    q: String(search.q ?? '')
+    q: String(search.q ?? ''),
+    all: Boolean(search.all ?? true)
   })
 })
 
 function RouteComponent() {
     const navigate = useNavigate()
-    const {page, q} = Route.useSearch()
+    const {page, q, all} = Route.useSearch()
 
     const {data}= useQuery({
-        queryKey: ['oprasional_list', page, q],
+        queryKey: ['oprasional_list', page, q, all],
         queryFn: async ({queryKey}) => useOprasionalService.list({queryKey}),
         select: (data) => data.data
     })
@@ -50,14 +51,22 @@ function RouteComponent() {
         <Card className='mt-6'>
             <Card.Header>
                 <div className="flex items-center">
-                    <div className="flex-1">
-                    <SearchField className={'w-100'}>
-                        <SearchField.Group>
-                            <SearchField.SearchIcon />
-                            <SearchField.Input onChange={changeSearch} placeholder='Search...' className={'w-90'} />
-                            <SearchField.ClearButton onPress={() => setSearch('')} />
-                        </SearchField.Group>
-                    </SearchField>
+                    <div className="flex-1 flex gap-4 items-center">
+                        <SearchField className={'w-100'}>
+                            <SearchField.Group>
+                                <SearchField.SearchIcon />
+                                <SearchField.Input onChange={changeSearch} placeholder='Search...' className={'w-90'} />
+                                <SearchField.ClearButton onPress={() => setSearch('')} />
+                            </SearchField.Group>
+                        </SearchField>
+                        <Checkbox isSelected={all} onChange={(e) => navigate({search: (prev) => ({...prev, page: 1, all: e, q: ''})})}>
+                            <Checkbox.Control>
+                                <Checkbox.Indicator />
+                            </Checkbox.Control>
+                            <Checkbox.Content>
+                                <Label>Show All</Label>
+                            </Checkbox.Content>
+                        </Checkbox>
                     </div>
                 </div>
             </Card.Header>
