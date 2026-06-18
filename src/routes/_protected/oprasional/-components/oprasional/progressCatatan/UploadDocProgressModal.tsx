@@ -1,4 +1,4 @@
-import { Button, Checkbox, CheckboxGroup, Label, ProgressBar, Spinner, Surface, useOverlayState } from "@heroui/react"
+import { Button, Checkbox, CheckboxGroup, Description, Label, ProgressBar, Spinner, Surface, useOverlayState } from "@heroui/react"
 import ModalComponent from "../../../../../../components/modals/ModalComponent"
 import InputText from "../../../../../../components/input/InputText"
 import { useRef, useState } from "react"
@@ -90,7 +90,15 @@ const UploadDocProgressModal = ({data, ops}) => {
                                         <Checkbox.Indicator />
                                     </Checkbox.Control>
                                     <Checkbox.Content>
-                                        <Label>{i.barang_jasa}</Label> 
+                                        <div className="flex flex-col gap-1">
+                                            <Label>{i.barang_jasa}</Label> 
+                                            {
+                                                i.keterangan && (
+                                                    <Description>{i.keterangan}</Description>
+                                                )
+                                            }
+                                        </div>
+
                                     </Checkbox.Content>
                                 </Checkbox>
 
