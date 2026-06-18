@@ -7,7 +7,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useToast } from "../../../../../../lib/useToast"
 import { CloudArrowUpIn } from "@gravity-ui/icons"
 
-const UploadDocProgressModal = ({data, ops}) => {
+const UploadDocProgressModal = ({data=[], ops}) => {
     const state = useOverlayState()
     const [form, setForm] = useState({
         keterangan: '',
@@ -18,6 +18,8 @@ const UploadDocProgressModal = ({data, ops}) => {
     const fileRef = useRef(null)
     const qc = useQueryClient()
     const toast = useToast()
+
+    const clean_data = data.filter(i => i.is_aggency_fee===false && i.progress < 100)
 
     const uploadFile = async (file, onProgress) => {
         
@@ -83,7 +85,7 @@ const UploadDocProgressModal = ({data, ops}) => {
                 >
                     <Label>Pilih pekerjaan:</Label>
                     {
-                        data.map(i => {
+                        clean_data.map(i => {
                             return (
                                 <Checkbox isDisabled={i.progress === 100} key={i.id} value={i.id}>
                                     <Checkbox.Control>

@@ -30,7 +30,7 @@ const KegiatanList = ({data}) => {
     }
 
 
-    const progress_kegiatan = kegiatan.map(k => {
+    const progress_kegiatan = kegiatan.filter(i => !i.is_aggency_fee).map(k => {
         const item = {...k, docs: []}
         progress.forEach(p => {
             if (p.item_penawaran.includes(k.id)) {

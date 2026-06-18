@@ -1,5 +1,5 @@
 
-import { CloseButton, Label, Table, useOverlayState } from "@heroui/react"
+import { CloseButton, Description, Label, Table, useOverlayState } from "@heroui/react"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { ArrowChevronDown } from "@gravity-ui/icons"
@@ -23,7 +23,14 @@ const ItemKegiatan = ({item}) => {
   return (
     <Table.Row>
         <Table.Cell>{item.progress} %</Table.Cell>
-        <Table.Cell>{item.barang_jasa}</Table.Cell>
+        <Table.Cell>
+            <div className="flex flex-col gap-1">
+                <Label>{item.barang_jasa}</Label>
+                {
+                    item.ketarangan && <Description>{item.keterangan}</Description>
+                }
+            </div>
+        </Table.Cell>
         <Table.Cell>{item.qty}</Table.Cell>
         <Table.Cell>{ formatRupiah(item.harga_satuan)}</Table.Cell>
         <Table.Cell className={'truncate w-0'}>
