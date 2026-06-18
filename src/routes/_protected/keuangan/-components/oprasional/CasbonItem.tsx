@@ -132,11 +132,7 @@ const CasbonItem = ({item}) => {
                 }
                     footerButtons={(
                         <div className="flex gap-3">
-                            {
-                                item.total_expense < item.grand_total && (
-                                    <Button onPress={expanse_state.setOpen}>Upload Bukti Transfer</Button>
-                                )
-                            }
+                            <Button onPress={expanse_state.setOpen}>Upload Bukti Transfer</Button>
                         </div>
                     )}
                 >  
