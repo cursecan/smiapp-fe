@@ -5,10 +5,9 @@ import HeaderPage from '../../../../components/HeaderPage'
 import { Breadcrumbs, Button, Card, CloseButton, Description, Label, Surface, Table, Tabs, useOverlayState } from '@heroui/react'
 import KegiatanList from '../-components/oprasional/KegiatanList'
 import { formatRupiah } from '../../../../utils/formatCurrency'
-import { ArrowChevronRight, Plus } from '@gravity-ui/icons'
+import { ArrowChevronRight, ArrowRightToSquare, Plus } from '@gravity-ui/icons'
 import { formatSimpleDate } from '../../../../utils/dateFormat'
 import StatusChiper from '../../../../components/StatusChiper'
-import ModalComponent from '../../../../components/modals/ModalComponent'
 
 export const Route = createFileRoute('/_protected/oprasional/oprasional/$id')({
   component: RouteComponent,
@@ -17,8 +16,6 @@ export const Route = createFileRoute('/_protected/oprasional/oprasional/$id')({
 function RouteComponent() {
     const { id } = useParams({from: '/_protected/oprasional/oprasional/$id'})
     const navigate = useNavigate()
-
-     const state_delete = useOverlayState()
 
     const { data, isLoading } = useQuery({
         queryKey: ['oprasional', id],
@@ -38,6 +35,8 @@ function RouteComponent() {
     const total_approved_casbon = casbon?.filter(i => i.is_approve).reduce((a, b) => a + Number(b.total_hpp), 0)
     const unapprove_casbon = casbon?.filter(i => !i.is_approve).reduce((a, b) => a + Number(b.total_hpp), 0)
     const profit = data?.nilai_penawaran - total_approved_casbon
+
+    const dokumen_penugasan = data?.penawaran?.dok_penawaran?.filter(i => i.doc_type !== 'UN') ?? []
 
 
     if (isLoading || casbonLoading) {
@@ -98,25 +97,82 @@ function RouteComponent() {
                             <Description>Jenis Pekerjaan</Description>
                             <Label>{data?.penawaran.jenis_pekerjaan.jenis_pekerjaan}</Label>
                         </div>
-                        {/* <div className="flex flex-col space-y-2">
-                            <Description>Budget RAB</Description>
-                            <Label>{formatRupiah(data?.penawaran.progress.budget)}</Label>
-                        </div> */}
+                        {
+                            data?.penawaran.kapal.length > 0 && (
+                                <Surface className='p-3 rounded-2xl'>
+                                    <Table>
+                                        <Table.ScrollContainer>
+                                            <Table.Content>
+                                                <Table.Header >
+                                                    <Table.Column isRowHeader>
+                                                        Kapal
+                                                    </Table.Column>
+                                                </Table.Header>
+                                                <Table.Body>
+                                                    {
+                                                        data?.penawaran.kapal.map(i => {
+                                                            return (
+                                                                <Table.Row key={i.id}>
+                                                                    <Table.Cell>{i.nama_kapal}</Table.Cell>
+                                                                </Table.Row>
+                                                            )
+                                                        })
+                                                    }
+                                                </Table.Body>
+                                            </Table.Content>
+                                        </Table.ScrollContainer>
+                                    </Table>
+                                </Surface>
+                            )
+                        }
+
                         <Surface className='p-3 rounded-2xl'>
                             <Table>
                                 <Table.ScrollContainer>
                                     <Table.Content>
-                                        <Table.Header >
+                                        <Table.Header>
                                             <Table.Column isRowHeader>
-                                                Kapal
+                                                Dok. Dasar Pekerjaan
                                             </Table.Column>
+                                            <Table.Column></Table.Column>
                                         </Table.Header>
                                         <Table.Body>
                                             {
-                                                data?.penawaran.kapal.map(i => {
+                                                data?.penawaran.doc_pesanan && (
+                                                    <Table.Row>
+                                                        <Table.Cell>
+                                                            <Label>
+                                                                {data?.penawaran?.nomor}
+                                                            </Label>
+                                                        </Table.Cell>
+                                                        <Table.Cell>
+                                                            <a className='text-accent' target='_blank' href={data?.penawaran.doc_pesanan}>
+                                                                <div className="flex items-center gap-1">
+                                                                    Download
+                                                                    <ArrowRightToSquare />
+                                                                </div>
+                                                            </a>
+                                                        </Table.Cell>
+                                                    </Table.Row>
+                                                )
+                                            }
+                                            {
+                                                dokumen_penugasan.map(i => {
                                                     return (
                                                         <Table.Row key={i.id}>
-                                                            <Table.Cell>{i.nama_kapal}</Table.Cell>
+                                                            <Table.Cell>
+                                                                <Label>
+                                                                    { i.doc_type == 'ND' ? 'Nota Dinas' : 'Surat Pesanan'}
+                                                                </Label>
+                                                            </Table.Cell>
+                                                            <Table.Cell className={'w-0 truncate'}>
+                                                                <a className='text-accent' target='_blank' href={i.filepath}>
+                                                                    <div className="flex items-center gap-1">
+                                                                        Download
+                                                                        <ArrowRightToSquare />
+                                                                    </div>
+                                                                </a>
+                                                            </Table.Cell>
                                                         </Table.Row>
                                                     )
                                                 })

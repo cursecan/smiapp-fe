@@ -1,10 +1,8 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import HeaderPage from '../../../../components/HeaderPage'
-import { Breadcrumbs, Button, Card, Checkbox, CheckboxGroup, Label } from '@heroui/react'
+import { Alert, Breadcrumbs, Button, Card, Checkbox, Label, Radio, RadioGroup } from '@heroui/react'
 import SelectComponent from '../../../../components/input/SelectComponent'
-import CustomerComboBox from '../../../../components/input/CustomerComboBox'
-import {  useState } from 'react'
-import OperasionalComboBox from '../../../../components/input/OperasionalComboBox'
+import {  useEffect, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { useCasbonService } from '../../../../services/oprasional/casbonService'
 import { useToast } from '../../../../lib/useToast'
@@ -24,8 +22,9 @@ function RouteComponent() {
   
   const [form, setForm] = useState({
     opr: t.ref ?? '',
-    tkp: ['pembayaran'],
-    type_pembayaran: '',
+    pembayaran: true,
+    tkp: 'petty_cash',
+    type_pembayaran: 'TF',
     supplier: ''
   })
 
@@ -40,8 +39,14 @@ function RouteComponent() {
     }
   })
 
+  useEffect(() => {
+    if (form.tkp === 'petty_cash') {
+      setForm({...form, supplier: '', type_pembayaran: 'TF'})
+    }
+  }, [form.tkp])
+
   const handleSubmit = () => {
-    mutate.mutate({...form, pembayaran: form.tkp.includes('pembayaran'), casbon: form.tkp.includes('casbon'), petty_cash: form.tkp.includes('petty_cash')})
+    mutate.mutate({...form, casbon: form.tkp==='casbon', petty_cash: form.tkp==='petty_cash'})
   }
 
   return (
@@ -72,42 +77,59 @@ function RouteComponent() {
                   onChange={(e) => setForm({...form, supplier: e})}
                   isReadOnly
                 />
-                <CheckboxGroup value={form.tkp} onChange={(e) => setForm({...form, tkp: e})} className={'flex flex-row gap-10'}>
-                  <Checkbox value='pembayaran'>
-                    <Checkbox.Control>
-                      <Checkbox.Indicator />
-                    </Checkbox.Control>
-                    <Checkbox.Content>
-                      <Label>Pembayaran</Label>
-                    </Checkbox.Content>
-                  </Checkbox>
-                  <Checkbox value='casbon'>
-                    <Checkbox.Control>
-                      <Checkbox.Indicator />
-                    </Checkbox.Control>
-                    <Checkbox.Content>
-                      <Label>Casbon</Label>
-                    </Checkbox.Content>
-                  </Checkbox>
-                  <Checkbox value='petycash'>
-                    <Checkbox.Control>
-                      <Checkbox.Indicator />
-                    </Checkbox.Control>
-                    <Checkbox.Content>
-                      <Label>Petty Cash</Label>
-                    </Checkbox.Content>
-                  </Checkbox>
-                </CheckboxGroup>
-                <SelectComponent className={'w-40'} value={form.type_pembayaran} onChange={e => setForm({...form, type_pembayaran: e})} label={'Metode Bayar'} placeholder="Pilih" data={[{id: 'CA', label: 'Tunai'}, {id: 'TF', label: 'Transfer'}]} />
-                <SimpleComboBox
-                  label={'Supplier / Pemohon'}
-                  fetchUrl={({pageParam, queryKey}) => useCustomerService.supplier({pageParam, queryKey})}
-                  filter={(i) => ({...i, name: i.full_name})}
-                  fetchDetailUrl={({queryKey}) => useCustomerService.detail(queryKey.at(1))}
-                  query={['supplier-combox']}
-                  value={form.supplier}
-                  onChange={(e) => setForm({...form, supplier: e})}
-                />
+
+                <Checkbox value={form.pembayaran} onChange={(e) => setForm({...form, pembayaran: e})}>
+                  <Checkbox.Control>
+                    <Checkbox.Indicator />
+                  </Checkbox.Control>
+                  <Checkbox.Content>
+                    <Label>Pembayaran</Label>
+                  </Checkbox.Content>
+                </Checkbox>
+                <RadioGroup orientation='horizontal' value={form.tkp} onChange={(e) => setForm({...form, tkp: e})}>
+                  <Radio value='petty_cash'>
+                      <Radio.Control>
+                        <Radio.Indicator />
+                      </Radio.Control>
+                      <Radio.Content>
+                        <Label>Petty Cash</Label>
+                      </Radio.Content>
+                  </Radio>
+                  <Radio value='casbon'>
+                      <Radio.Control>
+                        <Radio.Indicator />
+                      </Radio.Control>
+                      <Radio.Content>
+                        <Label>Casbon</Label>
+                      </Radio.Content>
+                  </Radio>
+                </RadioGroup>
+                {
+                  form.tkp !== 'petty_cash' ? (
+                    <>
+                      <SelectComponent className={'w-40'} value={form.type_pembayaran} onChange={e => setForm({...form, type_pembayaran: e})} label={'Metode Bayar'} placeholder="Pilih" data={[{id: 'CA', label: 'Tunai'}, {id: 'TF', label: 'Transfer'}]} />
+                      <SimpleComboBox
+                        label={'Supplier / Pemohon'}
+                        fetchUrl={({pageParam, queryKey}) => useCustomerService.supplier({pageParam, queryKey})}
+                        filter={(i) => ({...i, name: i.full_name})}
+                        fetchDetailUrl={({queryKey}) => useCustomerService.detail(queryKey.at(1))}
+                        query={['supplier-combox']}
+                        value={form.supplier}
+                        onChange={(e) => setForm({...form, supplier: e})}
+                      />
+                    </>
+                  ) : (
+                    <Alert>
+                      <Alert.Indicator />
+                      <Alert.Content>
+                        <Alert.Title>Pengajuan Pembayaran Petty Cash</Alert.Title>
+                        <Alert.Description>
+                            Pengajuan untuk pelakukan pembayaran PNBP dan biaya operasional dadakan menggunakan kas kecil.
+                        </Alert.Description>
+                      </Alert.Content>
+                    </Alert>
+                  )
+                }
                 
                 <div className="flex justify-end">
                   <Button onPress={handleSubmit}>Simpan</Button>

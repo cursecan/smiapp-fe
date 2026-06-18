@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
 import { useCasbonService } from '../../../../services/oprasional/casbonService'
 import HeaderPage from '../../../../components/HeaderPage'
-import { Breadcrumbs, Button, Card, Checkbox, CheckboxGroup, Label } from '@heroui/react'
+import { Alert, Breadcrumbs, Button, Card, Checkbox, CheckboxGroup, Label } from '@heroui/react'
 import OperasionalComboBox from '../../../../components/input/OperasionalComboBox'
 import SelectComponent from '../../../../components/input/SelectComponent'
 import { useEffect } from 'react'
@@ -91,7 +91,7 @@ function RouteComponent() {
                 name='pcp'
                 control={control}
                 render={({field}) => (
-                  <CheckboxGroup isReadOnly={!canEdit} value={field.value ?? []} onChange={(e) => field.onChange(e)} className={'flex flex-row gap-10'}>
+                  <CheckboxGroup isReadOnly value={field.value ?? []} onChange={(e) => field.onChange(e)} className={'flex flex-row gap-10'}>
                       <Checkbox value='pembayaran'>
                         <Checkbox.Control>
                           <Checkbox.Indicator />
@@ -123,7 +123,7 @@ function RouteComponent() {
                 name='is_ppn'
                 control={control}
                 render={({field}) => (
-                  <Checkbox isReadOnly={!canEdit} isSelected={field.value} onChange={(e) => field.onChange(e)}>
+                  <Checkbox isReadOnly={!canEdit || data.petty_cash} isSelected={field.value} onChange={(e) => field.onChange(e)}>
                     <Checkbox.Control>
                       <Checkbox.Indicator />
                     </Checkbox.Control>
@@ -138,39 +138,57 @@ function RouteComponent() {
                   name='type_pembayaran'
                   control={control}
                   render={({field}) => (
-                    <SelectComponent isDisabled={!canEdit} className={'w-40'} value={field.value ?? ''} onChange={e => field.onChange(e)} label={'Metode Bayar'} placeholder="Pilih" data={[{id: 'CA', label: 'Tunai'}, {id: 'TF', label: 'Transfer'}]} />
+                    <SelectComponent isDisabled={!canEdit || data.petty_cash} className={'w-40'} value={field.value ?? ''} onChange={e => field.onChange(e)} label={'Metode Bayar'} placeholder="Pilih" data={[{id: 'CA', label: 'Tunai'}, {id: 'TF', label: 'Transfer'}]} />
                   )}
                 />
                 <Controller
                   name='pph_rate'
                   control={control}
                   render={({field}) => (
-                    <SelectComponent isDisabled={!canEdit} className={'w-40'} value={field.value ?? ''} onChange={e => field.onChange(e)} label={'Potongan PPh'} placeholder="Pilih" data={[{id: 0, label: 'Non PPH'}, {id: 0.025, label: 'Perorangan 2,5%'}, {id: 0.02, label: 'Korporasi 2%'}]} />
+                    <SelectComponent isDisabled={!canEdit || data.petty_cash} className={'w-40'} value={field.value ?? ''} onChange={e => field.onChange(e)} label={'Potongan PPh'} placeholder="Pilih" data={[{id: 0, label: 'Non PPH'}, {id: 0.025, label: 'Perorangan 2,5%'}, {id: 0.02, label: 'Korporasi 2%'}]} />
                   )}
                 />
               </div>
-              <Controller 
-                name='supplier'
-                control={control}
-                render={({field}) => (
-                  <SimpleComboBox
-                    label={'Supplier / Pemohon'}
-                    fetchUrl={({pageParam, queryKey}) => useCustomerService.supplier({pageParam, queryKey})}
-                    filter={(i) => ({...i, name: i.full_name})}
-                    fetchDetailUrl={({queryKey}) => useCustomerService.detail(queryKey.at(1))}
-                    query={['supplier-combox']}
-                    value={field.value}
-                    onChange={(e) => {handleChangeSupply(e)}}
-                    isDisabled={!canEdit}
-                  />
-                  // <CustomerComboBox isReadOnly={!canEdit} supplier label={'Supplier'} value={field.value ?? ''} onChange={(e) => field.onChange(e)}  className="max-w-sm w-full" />
-                )}
-              />
 
-              <div className="flex items-center gap-4">
-                <InputText label={'No. Rekening'} value={data.bank_rekening} isReadOnly />
-                <InputText label={'Nama Rekening'} value={data.nama_rekening} isReadOnly />
-              </div>
+              {
+                !data.petty_cash ? (
+                  <>
+                  
+                    <Controller 
+                      name='supplier'
+                      control={control}
+                      render={({field}) => (
+                        <SimpleComboBox
+                          label={'Supplier / Pemohon'}
+                          fetchUrl={({pageParam, queryKey}) => useCustomerService.supplier({pageParam, queryKey})}
+                          filter={(i) => ({...i, name: i.full_name})}
+                          fetchDetailUrl={({queryKey}) => useCustomerService.detail(queryKey.at(1))}
+                          query={['supplier-combox']}
+                          value={field.value}
+                          onChange={(e) => {handleChangeSupply(e)}}
+                          isDisabled={!canEdit}
+                        />
+                        // <CustomerComboBox isReadOnly={!canEdit} supplier label={'Supplier'} value={field.value ?? ''} onChange={(e) => field.onChange(e)}  className="max-w-sm w-full" />
+                      )}
+                    />
+
+                    <div className="flex items-center gap-4">
+                      <InputText label={'No. Rekening'} value={data.bank_rekening} isReadOnly />
+                      <InputText label={'Nama Rekening'} value={data.nama_rekening} isReadOnly />
+                    </div>
+                  </>
+                ) : (
+                  <Alert status="accent">
+                    <Alert.Indicator />
+                    <Alert.Content>
+                      <Alert.Title>Perhatian</Alert.Title>
+                      <Alert.Description>
+                        Unutk pengajuan Petty Cash harap sertakan <u>Nomor Billing</u> atau <u>Virtual Account</u> untuk setiap item permohonan.
+                      </Alert.Description>
+                    </Alert.Content>
+                  </Alert>
+                )
+              }
 
               <div className="flex justify-end">
                 <Button onPress={() => navigate({to: `/oprasional/oprasional/${data.opr}`})}><LinkIcon /> Operasional</Button>

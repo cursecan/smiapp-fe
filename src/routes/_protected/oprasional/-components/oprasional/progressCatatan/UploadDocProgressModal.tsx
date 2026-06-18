@@ -19,7 +19,7 @@ const UploadDocProgressModal = ({data=[], ops}) => {
     const qc = useQueryClient()
     const toast = useToast()
 
-    const clean_data = data.filter(i => i.is_aggency_fee===false && i.progress < 100)
+    const clean_data = data.filter(i => !i.is_aggency_fee && i.progress < 100)
 
     const uploadFile = async (file, onProgress) => {
         

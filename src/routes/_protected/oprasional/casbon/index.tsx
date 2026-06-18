@@ -1,12 +1,11 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import HeaderPage from '../../../../components/HeaderPage'
-import { Button, Card, Description, EmptyState, Label, SearchField, Table, TableBody } from '@heroui/react'
+import { Button, Card, Description, EmptyState, Label, SearchField, Table, Tag, TagGroup } from '@heroui/react'
 import { useQuery } from '@tanstack/react-query'
 import { useCasbonService } from '../../../../services/oprasional/casbonService'
 import { formatRupiah } from '../../../../utils/formatCurrency'
 import StatusChiper from '../../../../components/StatusChiper'
-import { ArrowChevronRight, Tray } from '@gravity-ui/icons'
-import { formatDate } from '../../../../utils/dateFormat'
+import { ArrowChevronRight,Tray } from '@gravity-ui/icons'
 
 export const Route = createFileRoute('/_protected/oprasional/casbon/')({
   component: RouteComponent,
@@ -76,15 +75,27 @@ function RouteComponent() {
                         return (
                           <Table.Row>
                             <Table.Cell>
-                              <div className="flex flex-col">
+                              <div className="flex flex-col gap-1">
                                 <Label>{ i.nomor }</Label>
-                                <Description>{formatDate(i.create_at)}</Description>
+                                <TagGroup>
+                                  <TagGroup.List>
+                                    {
+                                      i.pembayaran && <Tag className={'bg-accent-soft text-accent'}>Pembayaran</Tag>
+                                    }
+                                    {
+                                      i.petty_cash && <Tag className={'bg-warning-soft text-warning'}>Petty Cash</Tag>
+                                    }
+                                    {
+                                      i.casbon && <Tag className={'bg-success-soft text-success'}>Casbon</Tag>
+                                    }
+                                  </TagGroup.List>
+                                </TagGroup>
 
                               </div>
                             </Table.Cell>
                             <Table.Cell>
                               <div className="flex flex-col">
-                                <Label>{ i.supplier.full_name}</Label>
+                                <Label>{ i.supplier?.full_name || 'Tidak Tersedia'}</Label>
                                 <Description>{i.supplier?.company?.company_name || '-'}</Description>
                               </div>
                             </Table.Cell>
