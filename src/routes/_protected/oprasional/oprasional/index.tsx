@@ -14,16 +14,16 @@ export const Route = createFileRoute('/_protected/oprasional/oprasional/')({
   validateSearch: (search) => ({
     page: Number(search.page ?? 1),
     q: String(search.q ?? ''),
-    all: Boolean(search.all ?? true)
+    only: Boolean(search.only ?? true)
   })
 })
 
 function RouteComponent() {
     const navigate = useNavigate()
-    const {page, q, all} = Route.useSearch()
+    const {page, q, only} = Route.useSearch()
 
     const {data}= useQuery({
-        queryKey: ['oprasional_list', page, q, all],
+        queryKey: ['oprasional_list', page, q, only],
         queryFn: async ({queryKey}) => useOprasionalService.list({queryKey}),
         select: (data) => data.data
     })
@@ -59,12 +59,12 @@ function RouteComponent() {
                                 <SearchField.ClearButton onPress={() => setSearch('')} />
                             </SearchField.Group>
                         </SearchField>
-                        <Checkbox isSelected={all} onChange={(e) => navigate({search: (prev) => ({...prev, page: 1, all: e, q: ''})})}>
+                        <Checkbox isSelected={only} onChange={(e) => navigate({search: (prev) => ({...prev, page: 1, only: e, q: ''})})}>
                             <Checkbox.Control>
                                 <Checkbox.Indicator />
                             </Checkbox.Control>
                             <Checkbox.Content>
-                                <Label>Show All</Label>
+                                <Label>Hide Other</Label>
                             </Checkbox.Content>
                         </Checkbox>
                     </div>
