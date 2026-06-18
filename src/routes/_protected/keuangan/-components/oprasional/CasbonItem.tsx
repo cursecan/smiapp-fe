@@ -129,12 +129,8 @@ const CasbonItem = ({item}) => {
             <Table.Cell>
                 <DrawerComponent state={state} heading={item.nomor} buttonTrigger={
                     <Button onPress={state.setOpen}>Action</Button>
-                }
-                    footerButtons={(
-                        <div className="flex gap-3">
-                            <Button onPress={expanse_state.setOpen}>Upload Bukti Transfer</Button>
-                        </div>
-                    )}
+                    }
+                    hideFooter
                 >  
                     <div className="space-y-5 flex flex-col">
                         <Label>{item.nama_project}</Label>
@@ -166,8 +162,10 @@ const CasbonItem = ({item}) => {
                             <Label className="uppercase">{item.bank_rekening??'-'} {item.nama_rekening??'-'}</Label>
                         </div>
                         <ItemList casbon={item} data={casbonItem} />
+                        <div className="flex gap-3">
+                            <Button onPress={expanse_state.setOpen}>Upload Bukti Transfer</Button>
+                        </div>
                     </div>
-
                 </DrawerComponent>
 
                 <ModalComponent
