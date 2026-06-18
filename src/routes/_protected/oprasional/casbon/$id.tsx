@@ -86,6 +86,7 @@ function RouteComponent() {
           </Card.Header>
           <Card.Content>
             <div className="flex flex-col gap-4">
+              <InputText label={'No. PO/SPK'} value={data?.spk} isReadOnly />
               <OperasionalComboBox isReadOnly value={data.opr} />
               <Controller
                 name='pcp'
