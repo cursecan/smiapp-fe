@@ -24,5 +24,10 @@ export const useCasbonService = {
     change_supply: (id, payload) => {
         return api.post(`oprasional/casbon/${id}/supply-change/`, payload)
     },
-
+    tagihan_files: (id) => {
+        return api.get(`oprasional/casbon/${id}/tagihan-files/`)
+    },
+    expenses: (id) => {
+        return api.get(`oprasional/casbon/${id}/expenses/`)
+    }
 }

@@ -65,23 +65,23 @@ const ItemList = ({casbon, data=[]}) => {
                         <Table.Cell className={'font-semibold'}>{formatRupiah(casbon.grand_total)}</Table.Cell>
                     </Table.Row>
                     {
-                        casbon.total_expense > 0  && (
+                        casbon.total_expense.total > 0  && (
                             <Table.Row>
                                 <Table.Cell className={'text-left text-success'} colSpan={3}>
                                     Sudah Ditransfer
                                 </Table.Cell>
-                                <Table.Cell className={' text-success'}>{formatRupiah(casbon.total_expense)}</Table.Cell>
+                                <Table.Cell className={' text-success'}>{formatRupiah(casbon.total_expense.total)}</Table.Cell>
                             </Table.Row>
 
                         )
                     }
                     {
-                        casbon.grand_total-casbon.total_expense > 0 && (
+                        casbon.grand_total-casbon.total_expense.total > 0 && (
                             <Table.Row>
                                 <Table.Cell className={'text-left text-danger'} colSpan={3}>
-                                    Belum Transfer
+                                    Sisa Belum Transfer
                                 </Table.Cell>
-                                <Table.Cell className={'text-danger'}>{formatRupiah(casbon.grand_total-casbon.total_expense)}</Table.Cell>
+                                <Table.Cell className={'text-danger'}>{formatRupiah(casbon.grand_total-casbon.total_expense.total)}</Table.Cell>
                             </Table.Row>
 
                         )

@@ -20,6 +20,7 @@ import { api } from '../../../../lib/api'
 import InputText from '../../../../components/input/InputText'
 import SimpleComboBox from '../../../../components/input/SimpleComboBox'
 import { useCustomerService } from '../../../../services/customer/customerService'
+import UploadTagihanModal from '../-components/casbon/UploadTagihanModal'
 
 export const Route = createFileRoute('/_protected/oprasional/casbon/$id')({
   component: RouteComponent,
@@ -70,7 +71,7 @@ function RouteComponent() {
 
 
   return (
-    <div className="">
+    <div className="mb-6">
       <HeaderPage
         breadchrumb={<Breadcrumbs>
           <Breadcrumbs.Item>Casbon</Breadcrumbs.Item>
@@ -191,8 +192,15 @@ function RouteComponent() {
                 )
               }
 
-              <div className="flex justify-end">
-                <Button onPress={() => navigate({to: `/oprasional/oprasional/${data.opr}`})}><LinkIcon /> Operasional</Button>
+              <div className="flex items-center gap-3">
+                <div className="flex-1 flex items-center gap-3">
+                  <DownloadButton filename={'fofin.pdf'} fetch={async () => await api.get(`oprasional/casbon/${id}/preview/`,  {responseType: 'blob'})} />
+                </div>
+                <div className="flex items-center gap-3">
+                  <UploadTagihanModal casbon={data} />
+                  <Button onPress={() => navigate({to: `/oprasional/oprasional/${data.opr}`})}><LinkIcon /> Operasional</Button>
+
+                </div>
               </div>
             </div>
           </Card.Content>
@@ -212,7 +220,7 @@ function RouteComponent() {
               // onError={setErrors}
           />
 
-          <DownloadButton filename={'fofin.pdf'} fetch={async () => await api.get(`oprasional/casbon/${id}/preview/`,  {responseType: 'blob'})} />
+          
         </div>
       </div>
       <div className="w-100">

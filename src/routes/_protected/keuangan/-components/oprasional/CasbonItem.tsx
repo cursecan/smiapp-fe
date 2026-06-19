@@ -14,6 +14,9 @@ import DrawerComponent from "../../../../../components/DrawerComponent"
 import CheckboxInput from "../../../../../components/input/CheckboxInput"
 
 import { api } from '../../../../../lib/api'
+import { formatDate, formatSimpleDate } from "../../../../../utils/dateFormat"
+import { CloudArrowUpIn } from "@gravity-ui/icons"
+import { process } from "zod/v4/core"
 
 
 const CasbonItem = ({item}) => {
@@ -41,6 +44,13 @@ const CasbonItem = ({item}) => {
         enabled: !!item?.id && !!state.isOpen
     })
 
+    const {data: expenses} = useQuery({
+        queryKey: ['casbon-expenses-list', item?.id],
+        queryFn: () => useCasbonService.expenses(item?.id),
+        select: (res) => res.data,
+        enabled: !!item?.id && !!state.isOpen
+    })
+
     const saveBuktiTransfer = async (file, onProgress) => {
         const formData = new FormData()
         formData.append('file', file)
@@ -61,25 +71,35 @@ const CasbonItem = ({item}) => {
 
         return res.data
     }
+    
 
     const save_mutation = useMutation({
         mutationFn: async ({file, onProgress}) => {
             return await saveBuktiTransfer(file, onProgress)
         },
-        onSuccess: () => {
-            qc.invalidateQueries({
-                queryKey: ['exp-oprasiona-detail']
-            })
+        onSuccess: async () => {
+            await Promise.all([
+                qc.invalidateQueries({
+                    queryKey: ['exp-oprasiona-detail']
+                }),
+                qc.invalidateQueries({
+                    queryKey: ['casbon-expenses-list']
+                })
+            ])
             expanse_state.close()
             setForm({...form, amount: 0, biaya_lainya: 0})
             toast.success({message: 'Success', description: 'Update expese sukses.'})
             fileRef.current.value = ''
+            setProgress(0)
         },
         onError: (err) => {
             toast.danger({message: 'Erros', description: err.message})
             fileRef.current.value = ''
+            setProgress(0)
         }
     })
+
+
     const handleSubmit = (e) => {
         e.preventDefault()
         if (!fileRef.current?.files?.length) {
@@ -126,10 +146,14 @@ const CasbonItem = ({item}) => {
                 <StatusChiper status={item.status} />
             </Table.Cell>
             <Table.Cell>
-                <DrawerComponent state={state} heading={item.nomor} buttonTrigger={
+                <DrawerComponent hideFooter={item.status === 'sudah_transfer'}  state={state} heading={item.nomor} buttonTrigger={
                     <Button onPress={state.setOpen}>Action</Button>
                     }
-                    hideFooter
+                    footerButtons={
+                        <>
+                            <Button  onPress={expanse_state.setOpen}>Process Bukti Transfer</Button>
+                        </>
+                    }
                 >  
                     <div className="space-y-5 flex flex-col">
                         <Label>{item.nama_project}</Label>
@@ -161,12 +185,46 @@ const CasbonItem = ({item}) => {
                             <Label className="uppercase">{item.bank_rekening??'-'} {item.nama_rekening??'-'}</Label>
                         </div>
                         <ItemList casbon={item} data={casbonItem} />
-                        <div className="flex gap-3">
-                            <Button onPress={expanse_state.setOpen}>Upload Bukti Transfer</Button>
-                        </div>
+                        {
+                            expenses?.length > 0 && (
+                                <Table>
+                                    <Table.ScrollContainer>
+                                        <Table.Content>
+                                            <Table.Header>
+                                                <Table.Column isRowHeader>
+                                                    Bukti Transfer
+                                                </Table.Column>
+                                                <Table.Column>Nominal</Table.Column>
+                                                <Table.Column>Attachment</Table.Column>
+                                            </Table.Header>
+                                            <Table.Body>
+                                                {
+                                                    expenses?.map((i, index) => {
+                                                        return (
+                                                            <Table.Row key={index}>
+                                                                <Table.Cell>
+                                                                    {/* Upload at {formatDate(i.create_at)} */}
+                                                                    Upload by {i.create_by?.full_name} <br /> 
+                                                                    <Description>{formatDate(i.create_at)}</Description>
+                                                                </Table.Cell>
+                                                                <Table.Cell>{formatRupiah(i.amount)}</Table.Cell>
+                                                                <Table.Cell>
+                                                                    <a href={i.dok_transfer} target="_blank" className="text-blue-500 gap-1 flex items-center">
+                                                                        <CloudArrowUpIn /> Download
+                                                                    </a>
+                                                                </Table.Cell>
+                                                            </Table.Row>
+                                                        )
+                                                    })
+                                                }
+                                            </Table.Body>
+                                        </Table.Content>
+                                    </Table.ScrollContainer>
+                                </Table>
+                            )
+                        }
                     </div>
                 </DrawerComponent>
-
                 <ModalComponent
                     state={expanse_state}
                     hideFooter
@@ -206,7 +264,7 @@ const CasbonItem = ({item}) => {
                             
                             <div className="flex justify-end gap-2">
                                 <Button type="button" onPress={expanse_state.close} variant="tertiary">Close</Button>
-                                <Button type="submit">Submit</Button>
+                                <Button isDisabled={save_mutation.isPending} type="submit">Submit</Button>
                             </div>
                         </form>
                     </Surface>
