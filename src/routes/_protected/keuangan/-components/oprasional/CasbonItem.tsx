@@ -170,20 +170,26 @@ const CasbonItem = ({item}) => {
                             <Description>Pemohon</Description>
                             <Label>{item.create_by.full_name} { item.create_by.pegawai && <span>({item.create_by.pegawai.jabatan})</span>}</Label>
                         </div>
-                        <div className="flex items-center">
-                            <div className="flex flex-col gap-1 flex-1">
-                                <Description>Supplier</Description>
-                                <Label>{item.supplier.company ? item.supplier.company.company_name : item.supplier.full_name}</Label>
-                            </div>
-                            <div className="flex flex-col gap-1 flex-1">
-                                <Description>No. NPWP</Description>
-                                <Label>-</Label>
-                            </div>
-                        </div>
-                        <div className="flex flex-col gap-1 flex-1">
-                            <Description>Rekening</Description>
-                            <Label className="uppercase">{item.bank_rekening??'-'} {item.nama_rekening??'-'}</Label>
-                        </div>
+                        {
+                            item.supplier && (
+                                <>
+                                    <div className="flex items-center">
+                                        <div className="flex flex-col gap-1 flex-1">
+                                            <Description>Supplier</Description>
+                                            <Label>{item.supplier?.company ? item.supplier?.company?.company_name : item.supplier?.full_name}</Label>
+                                        </div>
+                                        <div className="flex flex-col gap-1 flex-1">
+                                            <Description>No. NPWP</Description>
+                                            <Label>-</Label>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col gap-1 flex-1">
+                                        <Description>Rekening</Description>
+                                        <Label className="uppercase">{item.bank_rekening??'-'} {item.nama_rekening??'-'}</Label>
+                                    </div>
+                                </>
+                            )
+                        }
                         <ItemList casbon={item} data={casbonItem} />
                         {
                             expenses?.length > 0 && (
