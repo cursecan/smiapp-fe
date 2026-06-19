@@ -197,7 +197,7 @@ function RouteComponent() {
                   <DownloadButton filename={'fofin.pdf'} fetch={async () => await api.get(`oprasional/casbon/${id}/preview/`,  {responseType: 'blob'})} />
                 </div>
                 <div className="flex items-center gap-3">
-                  <UploadTagihanModal casbon={data} />
+                  <UploadTagihanModal canEdit={canEdit} casbon={data} />
                   <Button onPress={() => navigate({to: `/oprasional/oprasional/${data.opr}`})}><LinkIcon /> Operasional</Button>
 
                 </div>
