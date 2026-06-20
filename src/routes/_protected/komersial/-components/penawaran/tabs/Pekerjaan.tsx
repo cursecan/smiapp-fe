@@ -25,6 +25,7 @@ const Pekerjaan = ({penawaran, canEdit}) => {
         harga_satuan: '0',
         harga_hpp: 0,
         keterangan: '',
+        sub_content: '',
         is_header: false
     })
 

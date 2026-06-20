@@ -1,5 +1,5 @@
 import ModalComponent from '../../../../../components/modals/ModalComponent'
-import { Button, CloseButton, Description, Input, Label, TextField, useOverlayState } from '@heroui/react'
+import { Button, CloseButton, Description, Input, Label, TextArea, TextField, useOverlayState } from '@heroui/react'
 import { Pencil } from '@gravity-ui/icons'
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -41,6 +41,8 @@ const UpdateItemModal = ({item}) => {
                 <Label>{ dataForm.is_header ? 'Header' : 'Pekerjaan'}</Label>
                 <Input value={dataForm.barang_jasa} onChange={(e) => setDataForm({...dataForm, barang_jasa:e.target.value})} />
             </TextField>
+            <TextArea className={'h-24'} value={dataForm.sub_content} onChange={(e) => setDataForm({...dataForm, sub_content: e.target.value})} fullWidth placeholder='Detail sub content...' />
+            
             {
                 !dataForm.is_header && (
                     <>
@@ -49,6 +51,7 @@ const UpdateItemModal = ({item}) => {
                                 <Label>Volume</Label>
                                 <Input type='number' value={dataForm.qty} onChange={(e) => setDataForm({...dataForm, qty:e.target.value})} />
                             </TextField>
+
                             {/* <TextField>
                                 <Label>Satuan</Label>
                                 <Input value={'Slot'} />
@@ -63,18 +66,21 @@ const UpdateItemModal = ({item}) => {
                                 onChange={(e) => setDataForm({...dataForm, satuan: e})}
                             />
                         </div>
-                        <TextField>
-                            <Label>Biaya HPP</Label>
-                            <CurrencyInput value={dataForm.harga_hpp} onChange={(e) => setDataForm({...dataForm, harga_hpp: e})}  />
-                            {/* <Input type='number' value={dataForm.harga_hpp} onChange={(e) => setDataForm({...dataForm, harga_hpp:e.target.value})} /> */}
-                            <Description>Biaya dapat disesuaikan dengan harga vendor.</Description>
-                        </TextField>
-                        <TextField>
-                            <Label>Biaya Satuan</Label>
-                            <CurrencyInput value={dataForm.harga_satuan} onChange={(e) => setDataForm({...dataForm, harga_satuan: e})} />
-                            {/* <Input type='number' value={dataForm.harga_satuan} onChange={(e) => setDataForm({...dataForm, harga_satuan:e.target.value})} /> */}
-                            <Description>Estimasi biaya sesuai invoice.</Description>
-                        </TextField>
+                        <div className="flex items-center gap-5">
+                            <TextField>
+                                <Label>Biaya HPP</Label>
+                                <CurrencyInput value={dataForm.harga_hpp} onChange={(e) => setDataForm({...dataForm, harga_hpp: e})}  />
+                                {/* <Input type='number' value={dataForm.harga_hpp} onChange={(e) => setDataForm({...dataForm, harga_hpp:e.target.value})} /> */}
+                                <Description>Biaya dapat disesuaikan dengan harga vendor.</Description>
+                            </TextField>
+                            <TextField>
+                                <Label>Biaya Satuan</Label>
+                                <CurrencyInput value={dataForm.harga_satuan} onChange={(e) => setDataForm({...dataForm, harga_satuan: e})} />
+                                {/* <Input type='number' value={dataForm.harga_satuan} onChange={(e) => setDataForm({...dataForm, harga_satuan:e.target.value})} /> */}
+                                <Description>Estimasi biaya sesuai invoice.</Description>
+                            </TextField>
+
+                        </div>
                         <TextField>
                             <Label>Keterangan</Label>
                             <Input value={dataForm.keterangan} onChange={(e) => setDataForm({...dataForm, keterangan: e.target.value})}/>

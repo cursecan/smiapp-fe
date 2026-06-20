@@ -22,6 +22,13 @@ const ItemPenawaranPekerjaan = ({ item, canEdit}) => {
                             <div className={`flex-1`}>
                                 <div className="">{ item.barang_jasa }</div>
                                 {
+                                    !!item.sub_content_html && (
+                                        <Description>
+                                            <div className="ml-5" dangerouslySetInnerHTML={{__html: item.sub_content_html}}></div>
+                                        </Description>
+                                    )
+                                }
+                                {
                                     !!item.keterangan && <Description>{item.keterangan}</Description>
                                 }
                             </div>
