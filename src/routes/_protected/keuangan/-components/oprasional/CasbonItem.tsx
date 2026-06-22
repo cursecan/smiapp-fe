@@ -198,7 +198,7 @@ const CasbonItem = ({item}) => {
                         }
                         <TextField>
                             <Description>Catatan</Description>
-                            <TextArea fullWidth className={'h-16'} value={item.catatan} fullWidth className={'h-16'} readOnly />
+                            <TextArea placeholder="Tidak ada lampiran catatan." fullWidth className={'h-16'} value={item.catatan} fullWidth className={'h-16'} readOnly />
                         </TextField>
                         <ItemList casbon={item} data={casbonItem} />
                         {
