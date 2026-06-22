@@ -6,21 +6,24 @@ import { useCasbonService } from '../../../../services/oprasional/casbonService'
 import { formatRupiah } from '../../../../utils/formatCurrency'
 import StatusChiper from '../../../../components/StatusChiper'
 import { ArrowChevronRight,Tray } from '@gravity-ui/icons'
+import StatusApprovalFilter from '../../../../components/StatusApprovalFilter'
+import { getApprovalStatus } from '../../../../components/useSchema'
 
 export const Route = createFileRoute('/_protected/oprasional/casbon/')({
   component: RouteComponent,
   validateSearch: (search) => ({
     page: Number(search?.page ?? 1),
-    q: String(search?.q ?? '')
+    q: String(search?.q ?? ''),
+    filter: String(search?.filter ?? '')
   })
 })
 
 function RouteComponent() {
   const navigate = useNavigate()
-  const {page, q} = Route.useSearch()
+  const {page, q, filter} = Route.useSearch()
 
   const {data} = useQuery({
-    queryKey: ['casbon-list', page, q],
+    queryKey: ['casbon-list', page, q, filter],
     queryFn: async ({queryKey}) => useCasbonService.list({queryKey}),
     select: (res) => res.data
   })
@@ -31,6 +34,8 @@ function RouteComponent() {
         }, 800);
     }
 
+  const approval_status = getApprovalStatus('Casbon')
+
 
   return (
     <div className="">
@@ -38,7 +43,7 @@ function RouteComponent() {
 
       <Card className='mt-6'>
         <Card.Header>
-          <div className="flex items-center">
+          <div className="flex items-center gap-5">
             <SearchField className={'w-100'}>
                   <SearchField.Group>
                       <SearchField.SearchIcon />
@@ -46,6 +51,7 @@ function RouteComponent() {
                       <SearchField.ClearButton onPress={() => navigate({search: (prev) => ({...prev, q: undefined})})} />
                   </SearchField.Group>
               </SearchField>
+              <StatusApprovalFilter data={approval_status} onChange={(e) => navigate({search: (prev) => ({...prev, filter: e})})} />
           </div>
         </Card.Header>
         <Card.Content>
