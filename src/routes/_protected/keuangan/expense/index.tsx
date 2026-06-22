@@ -1,11 +1,11 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import HeaderPage from '../../../../components/HeaderPage'
-import { Button, Card, Description, EmptyState, Label, SearchField, Table } from '@heroui/react'
+import { Button, Card, Chip, Description, EmptyState, Label, SearchField, Tab, Table } from '@heroui/react'
 import { useQuery } from '@tanstack/react-query'
 import { useExpOprasionalService } from '../../../../services/keuangan/op_expense'
 import { formatRupiah } from '../../../../utils/formatCurrency'
 import StatusChiper from '../../../../components/StatusChiper'
-import { ArrowChevronRight, Tray } from '@gravity-ui/icons'
+import { ArrowChevronRight, ArrowLeft, Tray } from '@gravity-ui/icons'
 
 export const Route = createFileRoute('/_protected/keuangan/expense/')({
   component: RouteComponent,
@@ -14,6 +14,7 @@ export const Route = createFileRoute('/_protected/keuangan/expense/')({
     q: String(search?.q ?? '')
   })
 })
+
 
 function RouteComponent() {
     const { page, q } = Route.useSearch()
@@ -59,18 +60,21 @@ function RouteComponent() {
                             <Table.Column isRowHeader>
                                 Project
                             </Table.Column>
+                            <Table.Column>
+                                Casbon
+                            </Table.Column>
                             <Table.Column className={'w-0 truncate'}>
                                 Nilai Penawaran
                             </Table.Column>
-                             <Table.Column className={'w-0 truncate'}>
-                                Casbon
+                            <Table.Column className={'w-0 truncate'}>
+                                Total Casbon
                             </Table.Column>
                             <Table.Column className={'w-0 truncate'}>
                                 Sudah Diproses
                             </Table.Column>
-                            <Table.Column className={'w-0'}>
+                            {/* <Table.Column className={'w-0'}>
                                 Status
-                            </Table.Column>
+                            </Table.Column> */}
                             <Table.Column className={'w-0'}></Table.Column>
                         </Table.Header>
                         <Table.Body
@@ -94,12 +98,28 @@ function RouteComponent() {
                                                     </Description>
                                                 </div>
                                             </Table.Cell>
-                                            <Table.Cell className={'truncate'}>{ formatRupiah(i.opr.nilai_penawaran) }</Table.Cell>
-                                            <Table.Cell className={'truncate'}>{ formatRupiah(i.total_casbon) }</Table.Cell>
-                                            <Table.Cell className={'truncate'}>{ formatRupiah(i.total_expense) }</Table.Cell>
                                             <Table.Cell>
-                                                <StatusChiper status={''} />
+                                                <div className="flex flex-col gap-2">
+                                                    {
+                                                        i.casbon.map(casbon => {
+                                                            return (
+                                                                <div key={casbon.id} className="flex items-center gap-1">
+                                                                    <Chip>{casbon.nomor}</Chip>
+                                                                    <ArrowChevronRight />
+                                                                    <Chip className={`text-white ${casbon.casbon ? 'bg-warning' : 'bg-success'}`} >{casbon.casbon ? 'Casbon' : 'Petty Cash'}</Chip>
+                                                                </div>
+                                                            )
+                                                        })
+                                                    }
+
+                                                </div>
                                             </Table.Cell>
+                                            <Table.Cell className={'truncate'}>{ formatRupiah(i.opr.nilai_penawaran) }</Table.Cell>
+                                            <Table.Cell className={'truncate text-accent'}>{ formatRupiah(i.total_casbon) }</Table.Cell>
+                                            <Table.Cell className={'truncate'}>{ formatRupiah(i.total_expense) } ({(i.total_expense/i.total_casbon*100).toFixed(2)}%)</Table.Cell>
+                                            {/* <Table.Cell>
+                                                <StatusChiper status={''} />
+                                            </Table.Cell> */}
                                             <Table.Cell>
                                                 <div className="flex">
                                                     <Button onPress={() => navigate({to: `/keuangan/expense/${i.id}`})} isIconOnly>

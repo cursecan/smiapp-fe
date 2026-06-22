@@ -126,7 +126,7 @@ const CasbonItem = ({item}) => {
                             <TagGroup.List>
                                 { item.pembayaran && <Tag className={'bg-accent-soft text-accent'}>Pembayaran</Tag>}
                                 { item.casbon && <Tag className={'bg-warning-soft text-orange-500'}>Casbon</Tag>}
-                                { item.petycash && <Tag className={'bg-success-soft text-success'}>Petty Cash</Tag>}
+                                { item.petty_cash && <Tag className={'bg-success-soft text-success'}>Petty Cash</Tag>}
                             </TagGroup.List>
                         </TagGroup>
                     </div>
