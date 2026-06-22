@@ -6,5 +6,6 @@ export const useCasbonSchema = z.object({
     type_pembayaran: z.string().min(1, 'Type pembayaran harus diisi'),
     pph_rate: z.float32().default(0),
     is_ppn: z.boolean().default(false),
-    supplier: z.string().nullable().default('')
+    supplier: z.string().nullable().default(''),
+    catatan: z.string()
 })

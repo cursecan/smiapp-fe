@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
 import { useCasbonService } from '../../../../services/oprasional/casbonService'
 import HeaderPage from '../../../../components/HeaderPage'
-import { Alert, Breadcrumbs, Button, Card, Checkbox, CheckboxGroup, Label } from '@heroui/react'
+import { Alert, Breadcrumbs, Button, Card, Checkbox, CheckboxGroup, Label, TextArea, TextField } from '@heroui/react'
 import OperasionalComboBox from '../../../../components/input/OperasionalComboBox'
 import SelectComponent from '../../../../components/input/SelectComponent'
 import { useEffect } from 'react'
@@ -151,7 +151,18 @@ function RouteComponent() {
                   )}
                 />
               </div>
-
+              <div className="">
+                <Controller
+                  name='catatan'
+                  control={control}
+                  render={({field}) => (
+                    <TextField>
+                      <Label>Catatan</Label>
+                      <TextArea readOnly={!canEdit} fullWidth className={'h-20'} value={field.value} onChange={(e) => field.onChange(e.target.value)} />
+                    </TextField>
+                  )}
+                />
+              </div>
               {
                 !data.petty_cash ? (
                   <>

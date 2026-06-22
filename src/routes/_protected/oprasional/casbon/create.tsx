@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import HeaderPage from '../../../../components/HeaderPage'
-import { Alert, Breadcrumbs, Button, Card, Checkbox, Label, Radio, RadioGroup } from '@heroui/react'
+import { Alert, Breadcrumbs, Button, Card, Checkbox, Description, Label, Radio, RadioGroup, TextArea, TextField } from '@heroui/react'
 import SelectComponent from '../../../../components/input/SelectComponent'
 import {  useEffect, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
@@ -25,7 +25,8 @@ function RouteComponent() {
     pembayaran: true,
     tkp: 'petty_cash',
     type_pembayaran: 'TF',
-    supplier: ''
+    supplier: '',
+    catatan: ''
   })
 
 
@@ -104,6 +105,10 @@ function RouteComponent() {
                       </Radio.Content>
                   </Radio>
                 </RadioGroup>
+                <TextField>
+                  <TextArea fullWidth className={'h-20'} placeholder='Catatan...' value={form.catatan} onChange={(e) => setForm({...form, catatan: e.target.value})} />
+                  <Description>* Catatan permintaan casbon bisa diisi dengan nomor invoice atau informasi vendor lainya.</Description>
+                </TextField>
                 {
                   form.tkp !== 'petty_cash' ? (
                     <>
@@ -130,7 +135,7 @@ function RouteComponent() {
                     </Alert>
                   )
                 }
-                
+              
                 <div className="flex justify-end">
                   <Button onPress={handleSubmit}>Simpan</Button>
                 </div>

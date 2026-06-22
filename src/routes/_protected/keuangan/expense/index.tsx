@@ -61,7 +61,7 @@ function RouteComponent() {
                                 Project
                             </Table.Column>
                             <Table.Column>
-                                Casbon
+                                On Processing Casbon
                             </Table.Column>
                             <Table.Column className={'w-0 truncate'}>
                                 Nilai Penawaran
@@ -101,7 +101,7 @@ function RouteComponent() {
                                             <Table.Cell>
                                                 <div className="flex flex-col gap-2">
                                                     {
-                                                        i.casbon.map(casbon => {
+                                                        i.progressing_casbon.length > 0 ? i.progressing_casbon.map(casbon => {
                                                             return (
                                                                 <div key={casbon.id} className="flex items-center gap-1">
                                                                     <Chip>{casbon.nomor}</Chip>
@@ -109,14 +109,16 @@ function RouteComponent() {
                                                                     <Chip className={`text-white ${casbon.casbon ? 'bg-warning' : 'bg-success'}`} >{casbon.casbon ? 'Casbon' : 'Petty Cash'}</Chip>
                                                                 </div>
                                                             )
-                                                        })
+                                                        }) : (
+                                                            <div className="">-</div>
+                                                        )
                                                     }
 
                                                 </div>
                                             </Table.Cell>
                                             <Table.Cell className={'truncate'}>{ formatRupiah(i.opr.nilai_penawaran) }</Table.Cell>
                                             <Table.Cell className={'truncate text-accent'}>{ formatRupiah(i.total_casbon) }</Table.Cell>
-                                            <Table.Cell className={'truncate'}>{ formatRupiah(i.total_expense) } ({(i.total_expense/i.total_casbon*100).toFixed(2)}%)</Table.Cell>
+                                            <Table.Cell className={'truncate'}>{ formatRupiah(i.total_expense) }</Table.Cell>
                                             {/* <Table.Cell>
                                                 <StatusChiper status={''} />
                                             </Table.Cell> */}

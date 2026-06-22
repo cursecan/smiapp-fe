@@ -1,5 +1,5 @@
 
-import { Button, Description, Label, ProgressBar, Spinner, Surface, Table, Tag, TagGroup, useOverlayState } from "@heroui/react"
+import { Button, Description, Label, ProgressBar, Spinner, Surface, Tab, Table, Tag, TagGroup, TextArea, TextField, useOverlayState } from "@heroui/react"
 import { formatRupiah } from "../../../../../utils/formatCurrency"
 import ModalComponent from "../../../../../components/modals/ModalComponent"
 import CurrencyInput from "../../../../../components/input/CurrencyInput"
@@ -16,7 +16,6 @@ import CheckboxInput from "../../../../../components/input/CheckboxInput"
 import { api } from '../../../../../lib/api'
 import { formatDate, formatSimpleDate } from "../../../../../utils/dateFormat"
 import { CloudArrowUpIn } from "@gravity-ui/icons"
-import { process } from "zod/v4/core"
 
 
 const CasbonItem = ({item}) => {
@@ -47,6 +46,13 @@ const CasbonItem = ({item}) => {
     const {data: expenses} = useQuery({
         queryKey: ['casbon-expenses-list', item?.id],
         queryFn: () => useCasbonService.expenses(item?.id),
+        select: (res) => res.data,
+        enabled: !!item?.id && !!state.isOpen
+    })
+
+    const {data: billings} = useQuery({
+        queryKey: ['invoice-bill-list', item?.id],
+        queryFn: () => useCasbonService.tagihan_files(item?.id),
         select: (res) => res.data,
         enabled: !!item?.id && !!state.isOpen
     })
@@ -190,7 +196,46 @@ const CasbonItem = ({item}) => {
                                 </>
                             )
                         }
+                        <TextField>
+                            <Description>Catatan</Description>
+                            <TextArea fullWidth className={'h-16'} value={item.catatan} fullWidth className={'h-16'} readOnly />
+                        </TextField>
                         <ItemList casbon={item} data={casbonItem} />
+                        {
+                            billings?.length > 0 && (
+                                <Table>
+                                    <Table.ScrollContainer>
+                                        <Table.Content>
+                                            <Table.Header>
+                                                <Table.Column isRowHeader>
+                                                    Invoice / Tagihan
+                                                </Table.Column>
+                                                <Table.Column></Table.Column>
+                                            </Table.Header>
+                                            <Table.Body>
+                                                {
+                                                    billings?.map(b => {
+                                                        return (
+                                                            <Table.Row key={b.id}>
+                                                                <Table.Cell>
+                                                                    { b.file_name }
+                                                                </Table.Cell>
+                                                                <Table.Cell className={'w-0 truncate'}>
+                                                                    <a className="text-blue-500" href={b.file_path} target="_blank">
+                                                                        <CloudArrowUpIn />
+                                                                    </a>
+                                                                </Table.Cell>
+                                                            </Table.Row>
+                                                        )
+                                                    })
+                                                }
+                                            </Table.Body>
+                                        </Table.Content>
+                                    </Table.ScrollContainer>
+                                </Table>
+                            )
+                        }
+
                         {
                             expenses?.length > 0 && (
                                 <Table>
