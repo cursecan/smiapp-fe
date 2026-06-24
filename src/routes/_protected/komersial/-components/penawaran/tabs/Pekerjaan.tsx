@@ -6,11 +6,12 @@ import ItemPenawaranPekerjaan from '../../itemPenawaran/ItemPenawaranPekerjaan'
 import InputText from '../../../../../../components/input/InputText'
 import ModalComponent from '../../../../../../components/modals/ModalComponent'
 import { usePekerjaanService } from '../../../../../../services/masterdata/pekerjaanService'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import CurrencyInput from '../../../../../../components/input/CurrencyInput'
 import { formatRupiah } from '../../../../../../utils/formatCurrency'
 import SimpleComboBox from '../../../../../../components/input/SimpleComboBox'
 import { useSatuanService } from '../../../../../../services/masterdata/satuanService'
+import SelectComponent from '../../../../../../components/input/SelectComponent'
 
 const Pekerjaan = ({penawaran, canEdit}) => {
     const state = useOverlayState()
@@ -58,6 +59,27 @@ const Pekerjaan = ({penawaran, canEdit}) => {
         }
     })
 
+    const header_contensts = useMemo(() => {
+        const filtered_items = items.filter(i => i.level===0).map(i => ({id: i.id, label: i.barang_jasa}))
+        
+        return filtered_items
+    })
+
+    const sorted_content = useMemo(() => {
+        let sortered = []
+
+        const non_agency_items = items.filter(i => !i.is_aggency_fee)
+        const headers = non_agency_items.filter(i => i.is_header)
+        headers.forEach(h => {
+            sortered.push(h)
+            const contents = items.filter(i => i.parent?.id === h.id)
+            sortered = [...sortered, ...contents]
+        });
+        
+        const no_header_items = items.filter(i => !i.is_header && !i.parent)
+        return [...sortered, ...no_header_items]
+    })
+
     const handleCreateItem = (e) => {
         mutation.mutate({...form, reference_item: e})
     }
@@ -67,9 +89,9 @@ const Pekerjaan = ({penawaran, canEdit}) => {
         return <div className="">Loading...</div>
     }
     
-    const total_hpp = items?.filter(i => !i.is_aggency_fee).reduce((a, b) => a + Number(b.harga_satuan)*b.qty, 0)
-    const total_aggency = items?.filter(i => i.is_aggency_fee).reduce((a, b) => a + Number(b.harga_satuan)*b.qty, 0)
-    const total_ppn = items?.filter(i => i.is_ppn).reduce((a, b) => a + (Number(b.harga_satuan)*b.qty*0.11)*100, 0)/100
+    const total_hpp = items?.filter(i => !i.is_aggency_fee && !i.is_header).reduce((a, b) => a + Number(b.harga_satuan)*b.qty, 0)
+    const total_aggency = items?.filter(i => i.is_aggency_fee && !i.is_header).reduce((a, b) => a + Number(b.harga_satuan)*b.qty, 0)
+    const total_ppn = items?.filter(i => i.is_ppn && !i.is_header).reduce((a, b) => a + (Number(b.harga_satuan)*b.qty*0.11)*100, 0)/100
     
     
     
@@ -79,53 +101,60 @@ const Pekerjaan = ({penawaran, canEdit}) => {
         {
             canEdit && (
                 <div className="mb-3 space-y-3">
-                    <div className="flex gap-3">
-                        <div className="flex-1">
-                            <InputText placeholder="Masukan nama barang atau jasa." label={'Nama Barang & Jasa'} value={form.barang_jasa} onChange={(e) => setForm({...form, barang_jasa: e.target.value})} />
+                    <div className="flex flex-col space-y-3">
+                        <div className="">
+                            <SelectComponent label={'Title Header'} value={form.parent} onChange={(e) => setForm({...form, parent: e})} data={header_contensts} />
                         </div>
-                        <div className="w-16">
-                            <InputText label={'Qty'} value={form.qty} onChange={(e) => setForm({...form, qty: e.target.value})} />
+
+                        <div className="flex gap-3">
+                            <div className="flex-1">
+                                <InputText placeholder="Masukan nama barang atau jasa." label={'Nama Barang & Jasa'} value={form.barang_jasa} onChange={(e) => setForm({...form, barang_jasa: e.target.value})} />
+                            </div>
+                            <div className="w-16">
+                                <InputText label={'Qty'} value={form.qty} onChange={(e) => setForm({...form, qty: e.target.value})} />
+                            </div>
+                            <SimpleComboBox
+                                label={'Satuan'}
+                                query={['satuan-combox-list']}
+                                fetchUrl={() => useSatuanService.list()}
+                                fetchDetailUrl={({queryKey}) => useSatuanService.detail(queryKey.at(1))}
+                                filter={(i) => ({...i, name: i.nama_satuan})}
+                                value={form.satuan}
+                                onChange={(e) => setForm({...form, satuan: e})}
+                            />
+                            <div className="w-32">
+                                <CurrencyInput label={'Harga'} value={form.harga_satuan} onChange={(e) => setForm({...form, harga_satuan: e})} />
+                            </div>
+                            <div className="flex flex-col justify-end">
+                                <ModalComponent 
+                                    buttonTrigger={<Button isDisabled={!form.barang_jasa} variant='secondary' onPress={state.setOpen} size='sm'>Simpan</Button>}
+                                    state={state}
+                                    heading={'Pilih'}
+                                    hideFooter
+                                >
+                                    <Surface className='mt-6'>
+                                        <RadioGroup onChange={handleCreateItem}>
+                                            <Label>Reference Master Pekerjaan</Label>
+                                            {
+                                                master_data?.results.map(m => {
+                                                    return (
+                                                        <Radio key={m.id} value={m.id}>
+                                                            <Radio.Control>
+                                                                <Radio.Indicator />
+                                                            </Radio.Control>
+                                                            <Radio.Content>
+                                                                <Label>{m.nama_pekerjaan} ({m.pelabuhan?.nama_pelabuhan|| '-'}) - {formatRupiah(m.hpp)}</Label>
+                                                            </Radio.Content>
+                                                        </Radio>
+                                                    )
+                                                })
+                                            }
+                                        </RadioGroup>
+                                    </Surface>
+                                </ModalComponent>
+                            </div>
                         </div>
-                        <SimpleComboBox
-                            label={'Satuan'}
-                            query={['satuan-combox-list']}
-                            fetchUrl={() => useSatuanService.list()}
-                            fetchDetailUrl={({queryKey}) => useSatuanService.detail(queryKey.at(1))}
-                            filter={(i) => ({...i, name: i.nama_satuan})}
-                            value={form.satuan}
-                            onChange={(e) => setForm({...form, satuan: e})}
-                        />
-                        <div className="w-32">
-                            <CurrencyInput label={'Harga'} value={form.harga_satuan} onChange={(e) => setForm({...form, harga_satuan: e})} />
-                        </div>
-                        <div className="flex flex-col justify-end">
-                            <ModalComponent 
-                                buttonTrigger={<Button isDisabled={!form.barang_jasa} variant='secondary' onPress={state.setOpen} size='sm'>Simpan</Button>}
-                                state={state}
-                                heading={'Pilih'}
-                                hideFooter
-                            >
-                                <Surface className='mt-6'>
-                                    <RadioGroup onChange={handleCreateItem}>
-                                        <Label>Reference Master Pekerjaan</Label>
-                                        {
-                                            master_data?.results.map(m => {
-                                                return (
-                                                    <Radio key={m.id} value={m.id}>
-                                                        <Radio.Control>
-                                                            <Radio.Indicator />
-                                                        </Radio.Control>
-                                                        <Radio.Content>
-                                                            <Label>{m.nama_pekerjaan} ({m.pelabuhan?.nama_pelabuhan|| '-'}) - {formatRupiah(m.hpp)}</Label>
-                                                        </Radio.Content>
-                                                    </Radio>
-                                                )
-                                            })
-                                        }
-                                    </RadioGroup>
-                                </Surface>
-                            </ModalComponent>
-                        </div>
+
                     </div>
                 </div>
             )
@@ -167,7 +196,7 @@ const Pekerjaan = ({penawaran, canEdit}) => {
                             )}
                     >
                         {
-                            items?.filter((t) => !t.is_aggency_fee).map((i, index) => {
+                            sorted_content.map((i, index) => {
                                 return (
                                     <ItemPenawaranPekerjaan pelabuhan={penawaran.pelabuhan?.id}  canEdit={canEdit} id={penawaran.id} item={i} key={index} />
                                 )

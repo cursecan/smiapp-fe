@@ -13,13 +13,13 @@ const ItemPenawaranPekerjaan = ({ item, canEdit}) => {
                 item.is_header ? (
                     <div className="flex items-center justify-between">
                         <div className="flex-1">
-                            <Label>{item.barang_jasa}</Label>
+                            <Label className='text-gray-500'>{item.barang_jasa}</Label>
                         </div>
                     </div>
                 ) : (
                     <div className="">
                         <div className="flex gap-6">
-                            <div className={`flex-1`}>
+                            <div className={`flex-1 ${!!item.parent && 'pl-5'}`}>
                                 <div className="">{ item.barang_jasa }</div>
                                 {
                                     !!item.sub_content_html && (
@@ -39,10 +39,22 @@ const ItemPenawaranPekerjaan = ({ item, canEdit}) => {
             }
         </Table.Cell>
         <Table.Cell>
-            {item.qty}
+            {
+                !item.is_header && (
+                    <div className="">
+                        {item.qty}
+                    </div>
+                )
+            }
         </Table.Cell>
         <Table.Cell className={'truncate'}>
-            { item.satuan?.nama_satuan || '-'}
+            {
+                !item.is_header && (
+                    <div className="">
+                        { item.satuan?.nama_satuan || '-'}
+                    </div>
+                )
+            }
         </Table.Cell>
         <Table.Cell className={'w-0 truncate'}>
             {
