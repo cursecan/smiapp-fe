@@ -60,7 +60,7 @@ const Pekerjaan = ({penawaran, canEdit}) => {
     })
 
     const header_contensts = useMemo(() => {
-        const filtered_items = items.filter(i => i.level===0).map(i => ({id: i.id, label: i.barang_jasa}))
+        const filtered_items = items?.filter(i => i.level===0).map(i => ({id: i.id, label: i.barang_jasa}))
         
         return filtered_items
     })
@@ -68,15 +68,15 @@ const Pekerjaan = ({penawaran, canEdit}) => {
     const sorted_content = useMemo(() => {
         let sortered = []
 
-        const non_agency_items = items.filter(i => !i.is_aggency_fee)
-        const headers = non_agency_items.filter(i => i.is_header)
-        headers.forEach(h => {
+        const non_agency_items = items?.filter(i => !i.is_aggency_fee)
+        const headers = non_agency_items?.filter(i => i.is_header)
+        headers?.forEach(h => {
             sortered.push(h)
-            const contents = items.filter(i => i.parent?.id === h.id)
+            const contents = items?.filter(i => i.parent?.id === h.id)
             sortered = [...sortered, ...contents]
         });
         
-        const no_header_items = items.filter(i => !i.is_header && !i.parent)
+        const no_header_items = items?.filter(i => !i.is_header && !i.parent) || []
         return [...sortered, ...no_header_items]
     })
 
