@@ -1,7 +1,7 @@
-import { Button, Checkbox, CheckboxGroup, Description, Label, ProgressBar, Spinner, Surface, useOverlayState } from "@heroui/react"
+import { Button, Checkbox, CheckboxGroup, Description, Label, ProgressBar, Slider, Spinner, Surface, TextArea, useOverlayState } from "@heroui/react"
 import ModalComponent from "../../../../../../components/modals/ModalComponent"
 import InputText from "../../../../../../components/input/InputText"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { api } from '../../../../../../lib/api'
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useToast } from "../../../../../../lib/useToast"
@@ -18,6 +18,8 @@ const UploadDocProgressModal = ({data=[], ops}) => {
     const fileRef = useRef(null)
     const qc = useQueryClient()
     const toast = useToast()
+
+    const [qprogress, setQprogress] = useState(0)
 
     const clean_data = data.filter(i => !i.is_aggency_fee && i.progress < 100)
 
@@ -68,6 +70,10 @@ const UploadDocProgressModal = ({data=[], ops}) => {
         mutation.mutate({file: fileRef.current.files[0], onProgress: setProgress})
     }
 
+    useEffect(() => {
+        form.is_done ? setQprogress(100) : setQprogress(0)
+    }, [form.is_done])
+
 
   return (
     <ModalComponent
@@ -77,8 +83,8 @@ const UploadDocProgressModal = ({data=[], ops}) => {
         hideFooter
         hideHeader
     >
-        <Surface className="space-y-4 mt-2 relative">
-            <div className="">
+        <Surface className="space-y-6 mt-2 relative">
+            <Surface variant="secondary" className="rounded-xl p-3">
                 <CheckboxGroup
                     value={form.item_penawaran}
                     onChange={(e) => setForm({...form, item_penawaran: e})}
@@ -108,7 +114,7 @@ const UploadDocProgressModal = ({data=[], ops}) => {
                         })
                     }
                 </CheckboxGroup>
-            </div>
+            </Surface>
             <div className="mb-1">
                 <Label>Accepted document only .pdf & image</Label>
             </div>
@@ -125,7 +131,15 @@ const UploadDocProgressModal = ({data=[], ops}) => {
                         </ProgressBar>
                     )
                 }
-                <InputText value={form.keterangan} onChange={(e) => setForm({...form, keterangan: e.target.value})} placeholder="Keterangan" />
+                {/* <InputText value={form.keterangan} onChange={(e) => setForm({...form, keterangan: e.target.value})} placeholder="Keterangan" /> */}
+                <TextArea value={form.keterangan} onChange={(e) => setForm({...form, keterangan: e.target.value})} placeholder="Tulis catatan..." variant="secondary" fullWidth />
+                <ProgressBar color="warning" value={qprogress}>
+                    <Label>Progress</Label>
+                    <ProgressBar.Output />
+                    <ProgressBar.Track>
+                        <ProgressBar.Fill />
+                    </ProgressBar.Track>
+                </ProgressBar>
                 <div className="">
                     <Checkbox value={form.is_done} onChange={(e) => setForm({...form, is_done:e})} >
                         <Checkbox.Control>
@@ -136,9 +150,17 @@ const UploadDocProgressModal = ({data=[], ops}) => {
                         </Checkbox.Content>
                     </Checkbox>
                 </div>
+                {/* <Slider defaultValue={90}>
+                    <Slider.Output />
+                    <Slider.Track>
+                        <Slider.Fill />
+                        <Slider.Thumb />
+                    </Slider.Track>
+                </Slider> */}
+                
             </div>
             <div className="flex justify-end">
-                <Button isDisabled={mutation.isPending} onPress={handleUpload}>Upload</Button>
+                <Button isDisabled={mutation.isPending} onPress={handleUpload}>Update Progress</Button>
             </div>
             {
                 mutation.isPending && (
