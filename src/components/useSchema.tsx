@@ -14,10 +14,12 @@ export const useSchema = (schema) => {
     const canApprove = userInApproval && approval?.can_approve && !approval?.completed
 
     const hasAuth = userInApproval
+
+    const canRevise = approval?.can_revise_by && approval?.can_revise_by === user?.id
     
 
   return {
-    canEdit, canApprove, hasAuth
+    canEdit, canApprove, hasAuth, canRevise
   }
 }
 

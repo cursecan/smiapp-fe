@@ -26,6 +26,7 @@ import CardStepper from '../../../../components/CardStepper'
 import SimpleComboBox from '../../../../components/input/SimpleComboBox'
 import { usePelabuhanService } from '../../../../services/masterdata/pelabuhanService'
 import { useJenisPekerjaanService } from '../../../../services/masterdata/jenisPekerjaanService'
+import ReviseComponent from '../-components/penawaran/ReviseComponent'
 
 export const Route = createFileRoute('/_protected/komersial/penawaran/$id')({
   component: RouteComponent,
@@ -47,7 +48,7 @@ function RouteComponent() {
   const [errors, setErrors] = useState(null)
   const [pelabuhan, setPelabuhan] = useState(null)
 
-  const {canEdit, canApprove, hasAuth} = useSchema(data)
+  const {canEdit, canApprove, hasAuth, canRevise} = useSchema(data)
   const {control, handleSubmit, reset, getValues, formState: {isValid}} = useForm({resolver: zodResolver(usePenawaranSchema), mode: "onChange", defaultValues: data || {}})
   
   
@@ -308,6 +309,9 @@ function RouteComponent() {
                   data?.approvals[ 0]?.step >= 2 && (
                     <DownloadPenawaran data={data} />
                   )
+                }
+                {
+                  canRevise && <ReviseComponent penawaran={data} />
                 }
                 {
                   data?.oprasional && (
