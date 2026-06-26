@@ -1,4 +1,4 @@
-import { Button, Label, Surface, TextArea, useOverlayState } from "@heroui/react"
+import { Button, Checkbox, Label, Surface, TextArea, useOverlayState } from "@heroui/react"
 import ModalComponent from "../../../../../components/modals/ModalComponent"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useToast } from "../../../../../lib/useToast"
@@ -17,7 +17,8 @@ const ReplyEmailModal = ({payload, fnQuery, queryKey, isDisabled=false}) => {
     const [data, setData] = useState({
         subject: re_subject,
         email_to: email_to, 
-        body: body
+        body: body,
+        save_send: true
     })
 
     const qc  = useQueryClient()
@@ -55,6 +56,16 @@ const ReplyEmailModal = ({payload, fnQuery, queryKey, isDisabled=false}) => {
                 <div className="flex flex-col gap-2">
                     <Label>Message</Label>
                     <TextArea value={data.body} onChange={(e) => setData({...data, body: e.target.value})} fullWidth rows={6} />
+                </div>
+                <div className="">
+                    <Checkbox isSelected={data.save_send} onChange={(e) => setData({...data, save_send: e})}>
+                        <Checkbox.Control>
+                            <Checkbox.Indicator />
+                        </Checkbox.Control>
+                        <Checkbox.Content>
+                            <Label>Email Send</Label>
+                        </Checkbox.Content>
+                    </Checkbox>
                 </div>
                 <div className="flex justify-end gap-2">
                     <Button onPress={state.close} variant="tertiary">Batal</Button>
