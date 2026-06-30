@@ -1,31 +1,55 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import HeaderPage from '../../components/HeaderPage'
-import { Card, Description, Surface, Table } from '@heroui/react'
+import { Card, Description, Label, Surface, Table } from '@heroui/react'
 import PeriodeFilter from '../../components/PeriodeFilter'
 import { useQuery } from '@tanstack/react-query'
 import { useDashboardService } from '../../services/dashboad/dashboardService'
 import { formatRupiah } from '../../utils/formatCurrency'
 import { useAuth } from '../../auth/AuthProvider'
+import { usePegawayService } from '../../services/masterdata/pegawayService'
+import SelectComponent from '../../components/input/SelectComponent'
+import { useMemo } from 'react'
 
 export const Route = createFileRoute('/_protected/dashboard')({
   component: RouteComponent,
   validateSearch: (search) => ({
-    filter: String(search?.filter ?? 'now')
+    period: Number(search?.period ?? 0) 
   })
 })
 
 function RouteComponent() {
   const navigate = useNavigate()
   const {user} = useAuth()
-  const {filter} = Route.useSearch()
+  const {period} = Route.useSearch()
+
+  const dataOptions = [
+    {id: 0, label: 'Bulan Berjalan'},
+    {id: 1, label: 'Bulan Lalu'},
+    {id: 2, label: '3 Bulan'},
+    {id: 3, label: '6 Bulan'}, 
+    {id: 4, label: 'Tahunsa'},
+  ]
 
   const { data } = useQuery({
-    queryKey: ['dash-resume-penawaran', filter],
+    queryKey: ['dash-resume-penawaran', period],
     queryFn: ({queryKey}) => useDashboardService.resume_penawaran({queryKey}),
     select: (res) => res.data
   })
 
+  const { data: agens } = useQuery({
+    queryKey: ['agen-list'],
+    queryFn: () => {
+      return usePegawayService.agens()
+    },
+    select: (res) => res.data
+  })
 
+
+  const agen_options = useMemo(() => {
+    const a = agens?.map(i => ({id: i.id, label: i.user.full_name})) || []
+    return [{id: '', label: 'Pilih Semua Agen'}, ...a]
+  })
+  
   
 
 
@@ -38,9 +62,13 @@ function RouteComponent() {
             <div className="flex justify-end">
               <div className="">
                 <div className="flex justify-end">
-                  <PeriodeFilter onChange={(e) => navigate({search: (prev) => ({...prev, filter: Array.from(e)[0]})})} />
+                  <div className="lex flex-col">
+                    <div className="flex justify-end">
+                      <SelectComponent value={period} data={dataOptions} onChange={(e) => navigate({search: (prev) => ({...prev, period: e})})} />
+                    </div>
+                    {/* <Description>Periode Pengamatan</Description> */}
+                  </div>
                 </div>
-                <Description>Lorem ipsum dolor sit amet consectetur.</Description>
               </div>
             </div>        
           </Card.Header>
@@ -71,7 +99,11 @@ function RouteComponent() {
                   </Card.Content>
                 </Card>
               </div>
-              <Table>
+
+              <div className="">
+                <SelectComponent data={agen_options} placeholder="Pilih Agen" />
+              </div>
+              {/* <Table>
                 <Table.ScrollContainer>
                   <Table.Content>
                     <Table.Header>
@@ -111,7 +143,7 @@ function RouteComponent() {
                     </Table.Body>
                   </Table.Content>
                 </Table.ScrollContainer>
-              </Table>
+              </Table> */}
             </div>
           </Card.Content>
         </Card>
