@@ -1,9 +1,9 @@
 import { Button, Calendar, DateField, DatePicker, Label } from '@heroui/react'
-import { parseDate } from '@internationalized/date'
+import { parseDate, today, getLocalTimeZone } from '@internationalized/date'
 import { useState } from 'react'
 
-const DateInput = ({label, value, onChange=()=>{}}) => {
-    const dt = parseDate(value)
+const DateInput = ({label, value, onChange=()=>{}, ...props}) => {
+    const dt = value ? parseDate(value) : today(getLocalTimeZone())
     const [dateValue, setDateValue] = useState(dt)
 
     const changeDateVal = (e) => {
@@ -12,7 +12,7 @@ const DateInput = ({label, value, onChange=()=>{}}) => {
     }
 
   return (
-    <DatePicker className={'w-50'} name='date' value={dateValue} onChange={changeDateVal}>
+    <DatePicker className={'w-50'} name='date' value={dateValue} onChange={changeDateVal} {...props}>
         <Label>{label}</Label>
         <DateField.Group>
             <DateField.Input>
@@ -47,10 +47,14 @@ const DateInput = ({label, value, onChange=()=>{}}) => {
             </Calendar.YearPickerGrid>
           </Calendar>
         </DatePicker.Popover>
-        <div className="flex justify-end items-center gap-2 mt-1">
-            {/* <Button size='sm' variant='secondary' onPress={() => setDateValue(today(getLocalTimeZone()))}>Set Today</Button> */}
-            <Button size='sm' variant='secondary' onPress={() => setDateValue(null)}>Clear</Button>
-        </div>
+        {
+          !props.isReadOnly && (
+            <div className="flex justify-end items-center gap-2 mt-1">
+                {/* <Button size='sm' variant='secondary' onPress={() => setDateValue(today(getLocalTimeZone()))}>Set Today</Button> */}
+                <Button size='sm' variant='secondary' onPress={() => setDateValue(null)}>Clear</Button>
+            </div>
+          )
+        }
     </DatePicker>
   )
 }

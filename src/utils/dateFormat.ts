@@ -9,3 +9,7 @@ export const formatDate = (dt) => {
 export const formatSimpleDate = (dt:Date) => {
     return format(dt, 'dd MMM yyyy')
 }
+
+export const formatSimpleDate2 = (dt) => {
+    return format(dt, 'dd/MM/yyyy')
+}

@@ -58,10 +58,10 @@ function RouteComponent() {
                     <Table.Content>
                         <Table.Header>
                             <Table.Column isRowHeader>
-                                Project
+                                Pekerjaan
                             </Table.Column>
                             <Table.Column>
-                                On Processing Casbon
+                                Daftar Casbon
                             </Table.Column>
                             <Table.Column className={'w-0 truncate'}>
                                 Nilai Penawaran
@@ -104,9 +104,15 @@ function RouteComponent() {
                                                         i.progressing_casbon.length > 0 ? i.progressing_casbon.map(casbon => {
                                                             return (
                                                                 <div key={casbon.id} className="flex items-center gap-1">
-                                                                    <Chip>{casbon.nomor}</Chip>
-                                                                    <ArrowChevronRight />
-                                                                    <Chip className={`text-white ${casbon.casbon ? 'bg-warning' : 'bg-success'}`} >{casbon.casbon ? 'Casbon' : 'Petty Cash'}</Chip>
+                                                                    <Chip variant='secondary'>{casbon.nomor}</Chip>
+                                                                    {
+                                                                        !casbon.is_close && (
+                                                                            <>
+                                                                                <ArrowChevronRight />
+                                                                                <Chip className={`text-white ${casbon.casbon ? 'bg-warning' : 'bg-success'}`} >{casbon.casbon ? 'Casbon' : 'Petty Cash'}</Chip>
+                                                                            </>
+                                                                        )
+                                                                    }
                                                                 </div>
                                                             )
                                                         }) : (

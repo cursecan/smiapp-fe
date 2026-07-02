@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
 import { useCasbonService } from '../../../../services/oprasional/casbonService'
 import HeaderPage from '../../../../components/HeaderPage'
-import { Alert, Breadcrumbs, Button, Card, Checkbox, CheckboxGroup, Label, TextArea, TextField } from '@heroui/react'
+import { Alert, Breadcrumbs, Button, Card, Checkbox, CheckboxGroup, Label, Table, TextArea, TextField } from '@heroui/react'
 import OperasionalComboBox from '../../../../components/input/OperasionalComboBox'
 import SelectComponent from '../../../../components/input/SelectComponent'
 import { useEffect } from 'react'
@@ -34,6 +34,13 @@ function RouteComponent() {
   const {data, isLoading} = useQuery({
     queryKey: ['casbon-detail', id],
     queryFn: () => useCasbonService.detail(id),
+    select: (res) => res.data,
+    enabled: !!id
+  })
+
+  const {data:expenses} = useQuery({
+    queryKey: ['expenses-list'],
+    queryFn: () => useCasbonService.expenses(id),
     select: (res) => res.data,
     enabled: !!id
   })
@@ -236,6 +243,35 @@ function RouteComponent() {
       </div>
       <div className="w-100">
         <CardStepper stepper={data?.stepper} />
+        
+        {
+          expenses?.length > 0 && (
+            <Table className='mt-10'>
+              <Table.ScrollContainer>
+                <Table.Content>
+                  <Table.Header>
+                    <Table.Column isRowHeader>
+                      Bukti Transfer
+                    </Table.Column>
+                  </Table.Header>
+                  <Table.Body>
+                    {
+                      expenses?.map(i => {
+                        return (
+                          <Table.Row key={i.id}>
+                            <Table.Cell>
+                              <a className='text-blue-600' href={i.dok_transfer} target='_blank'>{i.dok_transfer}</a>
+                            </Table.Cell>
+                          </Table.Row>
+                        )
+                      })
+                    }
+                  </Table.Body>
+                </Table.Content>
+              </Table.ScrollContainer>
+            </Table>
+          )
+        }
       </div>
     </div>
     </div>

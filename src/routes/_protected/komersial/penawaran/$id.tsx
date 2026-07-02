@@ -27,6 +27,7 @@ import SimpleComboBox from '../../../../components/input/SimpleComboBox'
 import { usePelabuhanService } from '../../../../services/masterdata/pelabuhanService'
 import { useJenisPekerjaanService } from '../../../../services/masterdata/jenisPekerjaanService'
 import ReviseComponent from '../-components/penawaran/ReviseComponent'
+import DateInput from '../../../../components/input/DateInput'
 
 export const Route = createFileRoute('/_protected/komersial/penawaran/$id')({
   component: RouteComponent,
@@ -146,7 +147,7 @@ function RouteComponent() {
                 name='nama_project'
                 control={control}
                 render={({field}) => (
-                  <InputText isDisabled={!canEdit} error={errors?.nama_project} label={"Pekerjaan"} {...field} value={field.value || ''} onChange={(e) => field.onChange(e.target.value)} />
+                  <InputText isReadOnly={!canEdit} error={errors?.nama_project} label={"Pekerjaan"} {...field} value={field.value || ''} onChange={(e) => field.onChange(e.target.value)} />
                 )}
               />
               <div className="flex gap-6">
@@ -154,10 +155,22 @@ function RouteComponent() {
                   name='nomor_penugasan'
                   control={control}
                   render={({field}) => (
-                    <InputText isDisabled={!canEdit} error={errors?.nomor_penugasan} label={'No. SPK/PO'} {...field} value={field.value} onChange={(e) => field.onChange(e.target.value)} />
+                    <InputText isReadOnly={!canEdit} error={errors?.nomor_penugasan} label={'No. SPK/PO'} {...field} value={field.value} onChange={(e) => field.onChange(e.target.value)} />
                   )}
                 />
 
+                <Controller
+                  name='tgl_surat'
+                  control={control}
+                  render={({field}) => (
+                    <DateInput label={'Tanggal SPK'} value={field.value} onChange={(e) => field.onChange(e)} isReadOnly={!canEdit} />
+                  )}              
+                />
+
+                
+              </div>
+
+              <div className="flex gap-6">
                 <Controller
                   name="jenis_pekerjaan"
                   control={control}
@@ -170,6 +183,7 @@ function RouteComponent() {
                       query={['jenis-pek-combox-list']}
                       value={field?.value ?? ''}
                       onChange={(e) => field.onChange(e)}
+                      isReadOnly={!canEdit}
                     />
                   
                   )}
@@ -187,6 +201,7 @@ function RouteComponent() {
                       query={['pelabuhan-combox']}
                       value={field?.value ?? ''}
                       onChange={(e) => field.onChange(e)}
+                      isReadOnly={!canEdit}
                      />
                   )}
                 />
@@ -297,7 +312,7 @@ function RouteComponent() {
                 />
               </div>
 
-              <CustomerComboBox isDisabled={!!data?.sumber_penugasan} label={'Pemberi Kerja'} value={data?.customer?.id} onChange={onChangeCustomer} />
+              <CustomerComboBox isReadOnly={!canEdit} isDisabled={!!data?.sumber_penugasan} label={'Pemberi Kerja'} value={data?.customer?.id} onChange={onChangeCustomer} />
 
               <div className="flex items-center gap-3">
                 <ApprovalButtons

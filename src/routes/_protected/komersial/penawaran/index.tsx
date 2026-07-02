@@ -11,6 +11,7 @@ import StatusChiper from '../../../../components/StatusChiper'
 import { getApprovalStatus, getJenisPekerjaan } from '../../../../components/useSchema'
 import StatusApprovalFilter from '../../../../components/StatusApprovalFilter'
 import JenisPekerjaanFilter from '../../../../components/JenisPekerjaanFilter'
+import { formatDate, formatSimpleDate, formatSimpleDate2 } from '../../../../utils/dateFormat'
 
 
 export const Route = createFileRoute('/_protected/komersial/penawaran/')({
@@ -81,10 +82,16 @@ function RouteComponent() {
                     Penawaran
                   </Table.Column>
                   <Table.Column>
-                    Lokasi
+                    SPK/PO
+                  </Table.Column>
+                  <Table.Column className={'truncate'}>
+                    Tanggal SPK/PO
                   </Table.Column>
                   <Table.Column>
-                    Nilai
+                    Wilayah
+                  </Table.Column>
+                  <Table.Column className={'truncate'}>
+                    Nilai Penawaran
                   </Table.Column>
                   <Table.Column>Status</Table.Column>
                   <Table.Column></Table.Column>
@@ -113,6 +120,12 @@ function RouteComponent() {
                                 </Label>
                               </div>
                             </div>
+                          </Table.Cell>
+                          <Table.Cell className={'truncate'}>
+                            { i.nomor_penugasan || '-'}
+                          </Table.Cell>
+                          <Table.Cell className={'truncate'}>
+                            { i.tgl_surat ? formatSimpleDate2(i.tgl_surat) : '-'}
                           </Table.Cell>
                           <Table.Cell>
                             { i.pelabuhan?.nama_pelabuhan || '-'}
