@@ -165,8 +165,8 @@ function RouteComponent() {
         </Card>
         
         {/* Penawaran */}
-        <div className="flex gap-10">
-          <div className="w-1/4 p-4">
+        <div className="flex gap-10 p-4">
+          <div className="w-1/4">
               <Doughnut data={donDataset} />
           </div>
           <div className="flex-1">
