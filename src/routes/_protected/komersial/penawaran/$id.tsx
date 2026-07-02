@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
 import { usePenawaranService } from '../../../../services/penawaran.service'
-import {  Breadcrumbs, Button, Card, CloseButton, Description,  Disclosure,  Label,  Surface, Table  } from '@heroui/react'
+import {  Breadcrumbs, Button, Card, CloseButton, Description,  Disclosure,  Label,  Surface, Table, TextArea  } from '@heroui/react'
 import { ArrowUpRightFromSquare,  Eye, LogoDocker } from '@gravity-ui/icons'
 
 import { formatDate } from '../../../../utils/dateFormat'
@@ -197,6 +197,9 @@ function RouteComponent() {
                     <div className="flex items-center gap-3 mb-3">
                       <Label> Pilih Kapal : </Label>
                       <KapalComboBox readOnly={!canEdit} value={kapal} onChange={handleAppendKapal} />
+                      <div className="flex-1 flex justify-end">
+                        <Label className="text-gray-700">{data?.kapal.length} Kapal</Label>
+                      </div>
                       {/* <Button onPress={handleAppendKapal} variant='secondary'>Add Kapal</Button> */}
                     </div>
                   )}
@@ -283,6 +286,16 @@ function RouteComponent() {
                   <CustomerComboBox isDisabled={!!data?.customer} label={'Pemberi Kerja'} {...field} value={field.value || ''} onChange={(e) => field.onChange(e)} />
                 )}
               /> */}
+
+              <div className="">
+                <Controller
+                  name='catatan'
+                  control={control}
+                  render={({field}) => (
+                    <TextArea disabled={!canEdit} fullWidth placeholder='Catatan...' value={field.value} onChange={(e) => field.onChange(e.target.value)} />
+                  )}
+                />
+              </div>
 
               <CustomerComboBox isDisabled={!!data?.sumber_penugasan} label={'Pemberi Kerja'} value={data?.customer?.id} onChange={onChangeCustomer} />
 

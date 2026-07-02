@@ -27,7 +27,7 @@ const AssideBar = () => {
                     <div className="p-4 flex items-center">
                         <div className="flex-1">
                             <div className="">SMILE</div>
-                            <Description>SMMI Digital Marine Ecosystem</Description>
+                            <Description>Digital Marine Ecosystem</Description>
                             {/* Sea Management Integrated Lifecycle Environment */}
                         </div>
                         <Bell />

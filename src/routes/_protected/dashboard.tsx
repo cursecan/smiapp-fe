@@ -9,6 +9,10 @@ import { useAuth } from '../../auth/AuthProvider'
 import { usePegawayService } from '../../services/masterdata/pegawayService'
 import SelectComponent from '../../components/input/SelectComponent'
 import { useMemo } from 'react'
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, Colors } from "chart.js";
+import {Doughnut} from "react-chartjs-2"
+
+ChartJS.register(ArcElement, Tooltip, Legend, Colors);
 
 export const Route = createFileRoute('/_protected/dashboard')({
   component: RouteComponent,
@@ -36,19 +40,35 @@ function RouteComponent() {
     select: (res) => res.data
   })
 
-  const { data: agens } = useQuery({
-    queryKey: ['agen-list'],
-    queryFn: () => {
-      return usePegawayService.agens()
-    },
-    select: (res) => res.data
-  })
+  console.log(data);
+  
 
 
-  const agen_options = useMemo(() => {
-    const a = agens?.map(i => ({id: i.id, label: i.user.full_name})) || []
-    return [{id: '', label: 'Pilih Semua Agen'}, ...a]
+  const donDataset = useMemo(() => {
+    return {
+      labels: data?.results.map(i => i.jenis_pekerjaan) || [],
+      datasets: [
+        {
+          label: '# of Votes',
+          data: data?.results.map(i => i.total) || []
+        }
+      ]
+    }
   })
+
+  // const { data: agens } = useQuery({
+  //   queryKey: ['agen-list'],
+  //   queryFn: () => {
+  //     return usePegawayService.agens()
+  //   },
+  //   select: (res) => res.data
+  // })
+
+
+  // const agen_options = useMemo(() => {
+  //   const a = agens?.map(i => ({id: i.id, label: i.user.full_name})) || []
+  //   return [{id: '', label: 'Pilih Semua Agen'}, ...a]
+  // })
   
   
 
@@ -56,7 +76,7 @@ function RouteComponent() {
   return (
     <div className="">
       <HeaderPage title='My Dashoard' />
-      <div className="">
+      <div className="flex flex-col gap-10">
         <Card>
           <Card.Header>
             <div className="flex justify-end">
@@ -75,7 +95,7 @@ function RouteComponent() {
           <Card.Content>
             <div className="flex flex-col gap-10">
               <div className="text-2xl">Hallo, {user?.full_name}</div>
-              <div className="grid grid-cols-4 gap-10">
+              <div className="grid grid-cols-5 gap-10">
                 <Card>
                   <Card.Header>
                     <Card.Title className='uppercase'>Penawaran</Card.Title>
@@ -84,24 +104,20 @@ function RouteComponent() {
                     <div className="text-xl font-black">
                       {formatRupiah(data?.penawaran?.total)}
                     </div>
-                    <Description>{data?.penawaran?.c_total} items</Description>
+                    <Description>{data?.penawaran?.c_total} penawaran</Description>
                   </Card.Content>
                 </Card>
                 <Card>
                   <Card.Header>
-                    <Card.Title className='uppercase'>Proses Operasional</Card.Title>
+                    <Card.Title className='uppercase'>Operasional</Card.Title>
                   </Card.Header>
                   <Card.Content>
                     <div className="text-xl font-black">
                       {formatRupiah(data?.opsr?.total)}
                     </div>
-                    <Description>{(data?.opsr?.c_total/data?.penawaran.c_total * 100).toFixed(2)} %</Description>
+                    <Description>{(data?.opsr?.c_total/data?.penawaran.c_total * 100).toFixed(2)} % proses oprasional</Description>
                   </Card.Content>
                 </Card>
-              </div>
-
-              <div className="">
-                <SelectComponent data={agen_options} placeholder="Pilih Agen" />
               </div>
               {/* <Table>
                 <Table.ScrollContainer>
@@ -147,6 +163,37 @@ function RouteComponent() {
             </div>
           </Card.Content>
         </Card>
+        
+        {/* Penawaran */}
+        <div className="flex gap-10">
+          <div className="w-1/4 p-4">
+              <Doughnut data={donDataset} />
+          </div>
+          <div className="flex-1">
+            <Table>
+              <Table.ScrollContainer>
+                <Table.Content>
+                  <Table.Header>
+                    <Table.Column>Jenis Pekerjaan</Table.Column>
+                    <Table.Column>Penawaran</Table.Column>
+                  </Table.Header>
+                  <Table.Body>
+                    {
+                      data?.results.map(i => {
+                        return (
+                          <Table.Row>
+                            <Table.Cell>{i.jenis_pekerjaan}</Table.Cell>
+                            <Table.Cell>{formatRupiah(i.total)}</Table.Cell>
+                          </Table.Row>
+                        )
+                      })
+                    }
+                  </Table.Body>
+                </Table.Content>
+              </Table.ScrollContainer>
+            </Table>
+          </div>
+        </div>
       </div>
     </div>
   )
