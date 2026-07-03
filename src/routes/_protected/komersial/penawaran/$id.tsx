@@ -163,7 +163,7 @@ function RouteComponent() {
                   name='tgl_surat'
                   control={control}
                   render={({field}) => (
-                    <DateInput label={'Tanggal SPK'} value={field.value} onChange={(e) => field.onChange(e)} isReadOnly={!canEdit} />
+                    <DateInput label={'Tanggal SPK'} value={field.value} onChange={(e) => field.onChange(e)} {...field} isReadOnly={!canEdit} />
                   )}              
                 />
 
