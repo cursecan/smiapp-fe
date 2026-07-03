@@ -15,7 +15,7 @@ const CurrencyInput = ({
     }
     
     const handleChange = (e) => {
-        const raw = e.target.value
+        const raw = String(e.target.value)
         // console.log(raw);
         const converNUmber = Number(raw.replace(/[^\d.]/g, '') ||0)
         onChange(converNUmber)
