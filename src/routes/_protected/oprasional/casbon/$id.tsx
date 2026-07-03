@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
 import { useCasbonService } from '../../../../services/oprasional/casbonService'
 import HeaderPage from '../../../../components/HeaderPage'
-import { Alert, Breadcrumbs, Button, Card, Checkbox, CheckboxGroup, Label, Table, TextArea, TextField } from '@heroui/react'
+import { Alert, Breadcrumbs, Button, Card, Checkbox, CheckboxGroup, Label, Surface, Table, TextArea, TextField } from '@heroui/react'
 import OperasionalComboBox from '../../../../components/input/OperasionalComboBox'
 import SelectComponent from '../../../../components/input/SelectComponent'
 import { useEffect } from 'react'
@@ -21,6 +21,8 @@ import InputText from '../../../../components/input/InputText'
 import SimpleComboBox from '../../../../components/input/SimpleComboBox'
 import { useCustomerService } from '../../../../services/customer/customerService'
 import UploadTagihanModal from '../-components/casbon/UploadTagihanModal'
+import CurrencyInput from '../../../../components/input/CurrencyInput'
+import DateInput from '../../../../components/input/DateInput'
 
 export const Route = createFileRoute('/_protected/oprasional/casbon/$id')({
   component: RouteComponent,
@@ -34,7 +36,10 @@ function RouteComponent() {
   const {data, isLoading} = useQuery({
     queryKey: ['casbon-detail', id],
     queryFn: () => useCasbonService.detail(id),
-    select: (res) => res.data,
+    select: (res) => {
+      const data = res.data
+      return {...data, nilai_invoice: Number(data?.nilai_invoice ?? 0)}
+    },
     enabled: !!id
   })
 
@@ -68,7 +73,7 @@ function RouteComponent() {
       if (data.pembayaran) temp.push('pembayaran')
       if (data.petty_cash) temp.push('petty_cash')
 
-      reset({...data, pcp: temp})
+      reset({...data, pcp: temp, nilai_invoice: Number(data.nilai_invoice)})
     }
   }, [data, reset])
   
@@ -212,10 +217,9 @@ function RouteComponent() {
 
               <div className="flex items-center gap-3">
                 <div className="flex-1 flex items-center gap-3">
-                  <DownloadButton filename={'fofin.pdf'} fetch={async () => await api.get(`oprasional/casbon/${id}/preview/`,  {responseType: 'blob'})} />
+                  {/* <DownloadButton filename={'fofin.pdf'} fetch={async () => await api.get(`oprasional/casbon/${id}/preview/`,  {responseType: 'blob'})} /> */}
                 </div>
                 <div className="flex items-center gap-3">
-                  <UploadTagihanModal canEdit={canEdit} casbon={data} />
                   <Button onPress={() => navigate({to: `/oprasional/oprasional/${data.opr}`})}><LinkIcon /> Operasional</Button>
 
                 </div>
@@ -223,6 +227,35 @@ function RouteComponent() {
             </div>
           </Card.Content>
         </Card>
+
+        <Surface className='rounded-2xl p-4' variant='secondary'>
+          <div className="flex gap-6">
+            <Controller
+              name="nilai_invoice"
+              control={control}
+              render={({field}) => (
+                <CurrencyInput label={'Nilai Invoice / Tagihan'} value={field.value} onChange={(e) => field.onChange(e)} {...field}  />
+              )}
+            />
+            <Controller
+              name="percent_bayar"
+              control={control}
+              render={({field}) => (
+                <SelectComponent value={field.value} onChange={(e) => field.onChange(e)} {...field} placeholder={'% Bayar'} label={'Persentase Dibayar'} data={[{id: 50, label: '50%'}, {id: 100, label: '100%'}]} />
+              )}
+            />
+            <Controller
+              name="tanggal_invoice"
+              control={control}
+              render={({field}) => (
+                <DateInput label={'Tanggal Invoice'} value={field.value} onChange={(e) => field.onChange(e)} {...field} />
+              )}              
+            />
+          </div>
+          <div className="flex justify-end">
+            <UploadTagihanModal canEdit={canEdit} casbon={data} />
+          </div>
+        </Surface>
         
         <ListPekerjaan canEdit={canEdit}  casbon={data} />
 

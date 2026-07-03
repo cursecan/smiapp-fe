@@ -54,7 +54,7 @@ const UploadTagihanModal = ({casbon, canEdit}) => {
 
 
     return (
-    <ModalComponent heading={'Dokumen Tagihan / Billing'} state={state} buttonTrigger={<Button onPress={state.setOpen} variant="secondary">Dokumen Tagihan</Button>}>
+    <ModalComponent heading={'Dokumen Tagihan / Billing'} state={state} buttonTrigger={<Button onPress={state.setOpen} variant="danger">Dokumen Tagihan</Button>}>
         <div className="">
             <Table>
                 <TableScrollContainer>

@@ -87,6 +87,8 @@ const ApprovalButtons = ({
 
     const errorSubmit = (errors) => {
         console.log(errors, 'errors');
+        console.log(form.getValues());
+        
         
         alert('Harap lengkapi data dengan benar.')
         onError(errors)

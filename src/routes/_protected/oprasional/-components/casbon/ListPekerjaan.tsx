@@ -12,6 +12,7 @@ import { formatRupiah } from "../../../../../utils/formatCurrency"
 import CheckboxInput from "../../../../../components/input/CheckboxInput"
 
 const ListPekerjaan = ({casbon, canEdit=false}) => {
+    const toast = useToast()
     const [isContent, setISContent] = useState(true)
     const [openCreate, setOpenCreate] = useState(false)
     const [form, setForm] = useState({
@@ -33,7 +34,6 @@ const ListPekerjaan = ({casbon, canEdit=false}) => {
 
 
     const qc = useQueryClient()
-    const toast = useToast()
 
     const initData = () => {
         setForm({
@@ -52,6 +52,9 @@ const ListPekerjaan = ({casbon, canEdit=false}) => {
             qc.invalidateQueries({queryKey: ['casbon-item-list']})
             toast.success({message: 'Success', description:'Berhasil disimpan.'})
             initData()
+        },
+        onError: (err) => {
+            toast.danger({message: "Failed", description: err.message})
         }
     })
 
@@ -67,7 +70,7 @@ const ListPekerjaan = ({casbon, canEdit=false}) => {
     
     const total_bef_ppn = casbon_items?.reduce((a, b) => a + Number(b.harga) * b.qty, 0)
     const total_ppn = !casbon.is_ppn ? 0 : Math.ceil(casbon_items.reduce((a, b) => a + Number(b.harga) * b.qty * (b.is_ppn ? 0.11 : 0), 0))
-    const total_pph = Math.ceil(total_bef_ppn * casbon.pph_rate)
+    const total_pph = Math.ceil(casbon.nilai_invoice * casbon.pph_rate)
     const total_after_ppn = total_bef_ppn + total_ppn - total_pph
     
 

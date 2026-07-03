@@ -1,4 +1,4 @@
-import { Button, CloseButton, Description, Label, Surface, Table, useOverlayState } from "@heroui/react"
+import { Button, CloseButton, Description, Label, Surface, Table, toast, useOverlayState } from "@heroui/react"
 import { formatRupiah } from "../../../../../utils/formatCurrency"
 import { Check, Pencil } from "@gravity-ui/icons"
 import ModalComponent from "../../../../../components/modals/ModalComponent"
@@ -11,11 +11,13 @@ import { useSatuanService } from "../../../../../services/masterdata/satuanServi
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useItemCasbonService } from "../../../../../services/oprasional/casbonItemService"
 import CheckboxInput from "../../../../../components/input/CheckboxInput"
+import { useToast } from "../../../../../lib/useToast"
 
 const CasbonListItem = ({item, canEdit=false}) => {
 
     const total = Number(item.harga) * item.qty
     const state = useOverlayState()
+    const toast = useToast()
 
     const {control, reset, handleSubmit} = useForm()
     const qc = useQueryClient()
@@ -25,6 +27,9 @@ const CasbonListItem = ({item, canEdit=false}) => {
         onSuccess: () => {
             qc.invalidateQueries({queryKey: ['casbon-item-list']}),
             state.close()
+        },
+        onError: (err) => {
+            toast.danger({message: 'Failed', description: err.message})
         }
     })
 
