@@ -10,7 +10,7 @@ import { Plus } from "@gravity-ui/icons"
 import {api} from '../../../../../lib/api'
 import { format } from "date-fns"
 
-const CreateTagihanModal = ({casbonId}) => {
+const CreateTagihanModal = ({casbonId, canEdit=false}) => {
     const today = new Date()
     const state = useOverlayState()
     const fileRef = useRef(null)
@@ -76,7 +76,7 @@ const CreateTagihanModal = ({casbonId}) => {
             state={state}
             heading={'Input Tagihan'}
             hideFooter
-            buttonTrigger={<Button onPress={state.setOpen} variant="ghost">
+            buttonTrigger={<Button isDisabled={!canEdit} onPress={state.setOpen} variant="ghost">
                 <Plus />
                 <span>Input Tagihan</span>
             </Button>}

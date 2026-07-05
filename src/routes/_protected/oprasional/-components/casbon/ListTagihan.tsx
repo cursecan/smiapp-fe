@@ -1,12 +1,11 @@
-import { Button, Card, CloseButton, Description, Label, ProgressBar, Spinner, Surface, Table, TextArea } from "@heroui/react"
+import { Card, Description, Surface, Table } from "@heroui/react"
 import CreateTagihanModal from "./CreateTagihanModal"
 import { useParams } from "@tanstack/react-router"
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { useCasbonService } from "../../../../../services/oprasional/casbonService"
-import { useToast } from "../../../../../lib/useToast"
 import ItemTagihan from "./ItemTagihan"
 
-const ListTagihan = () => {
+const ListTagihan = ({canEdit=false}) => {
     const { id } = useParams({from: '/_protected/oprasional/casbon/$id'})
     const {data} = useQuery({
         queryKey: ['tagihan-list'],
@@ -21,12 +20,11 @@ const ListTagihan = () => {
     <Card variant="secondary">
         <Card.Header>
             <div className="flex justify-end">
-                <CreateTagihanModal casbonId={id} />
+                <CreateTagihanModal canEdit={canEdit} casbonId={id} />
             </div>
             <div className="text-right">
                 <Description>Lorem ipsum dolor sit amet consectetur adipisicing elit. At, saepe.</Description>
             </div>
-            {/* <Card.Title>Tagihan Invoice</Card.Title> */}
         </Card.Header>
         <Card.Content className="flex flex-col space-y-3">
             <Surface className="rounded-2xl p-3">
@@ -45,14 +43,10 @@ const ListTagihan = () => {
                                 {
                                     data?.map(i => {
                                         return (
-                                            <ItemTagihan key={i.id} item={i} />
+                                            <ItemTagihan canEdit={canEdit} key={i.id} item={i} />
                                         )
                                     })
                                 }
-                                {/* <Table.Row>
-                                    <Table.Cell colSpan={2} className={'text-right'}>PPN</Table.Cell>
-                                    <Table.Cell colSpan={2}>0</Table.Cell>
-                                </Table.Row> */}
                                 <Table.Row>
                                     <Table.Cell colSpan={2} className={'text-right italic'}>Potongan PPh</Table.Cell>
                                     <Table.Cell colSpan={2} className={'italic'}>(0)</Table.Cell>

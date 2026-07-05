@@ -2,27 +2,20 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
 import { useCasbonService } from '../../../../services/oprasional/casbonService'
 import HeaderPage from '../../../../components/HeaderPage'
-import { Alert, Breadcrumbs, Button, Card, Checkbox, CheckboxGroup, Label, Surface, Table, TextArea, TextField } from '@heroui/react'
+import { Alert, Breadcrumbs, Button, Card, Checkbox, CheckboxGroup, Label, Table, TextArea, TextField } from '@heroui/react'
 import OperasionalComboBox from '../../../../components/input/OperasionalComboBox'
 import SelectComponent from '../../../../components/input/SelectComponent'
 import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import ListPekerjaan from '../-components/casbon/ListPekerjaan'
 import { Link as LinkIcon } from '@gravity-ui/icons'
 import CardStepper from '../../../../components/CardStepper'
 import ApprovalButtons from '../../../../components/buttons/ApprovalButtons'
 import { useSchema } from '../../../../components/useSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useCasbonSchema } from '../../../../schemas/casbonSchema'
-import DownloadButton from '../../../../components/buttons/DownloadButton'
-
-import { api } from '../../../../lib/api'
 import InputText from '../../../../components/input/InputText'
 import SimpleComboBox from '../../../../components/input/SimpleComboBox'
-import { useCustomerService } from '../../../../services/customer/customerService'
-import UploadTagihanModal from '../-components/casbon/UploadTagihanModal'
-import CurrencyInput from '../../../../components/input/CurrencyInput'
-import DateInput from '../../../../components/input/DateInput'
+import { useCustomerService } from '../../../../services/customer/customerService'\
 import ListTagihan from '../-components/casbon/ListTagihan'
 
 export const Route = createFileRoute('/_protected/oprasional/casbon/$id')({
@@ -231,35 +224,7 @@ function RouteComponent() {
           </Card.Content>
         </Card>
 
-        {/* <Surface className='rounded-2xl p-4' variant='secondary'>
-          <div className="flex gap-6">
-            <Controller
-              name="nilai_invoice"
-              control={control}
-              render={({field}) => (
-                <CurrencyInput label={'Nilai Invoice / Tagihan'} value={field.value} onChange={(e) => field.onChange(e)} {...field}  />
-              )}
-            />
-            <Controller
-              name="percent_bayar"
-              control={control}
-              render={({field}) => (
-                <SelectComponent value={field.value} onChange={(e) => field.onChange(e)} {...field} placeholder={'% Bayar'} label={'Persentase Dibayar'} data={[{id: 50, label: '50%'}, {id: 100, label: '100%'}]} />
-              )}
-            />
-            <Controller
-              name="tanggal_invoice"
-              control={control}
-              render={({field}) => (
-                <DateInput label={'Tanggal Invoice'} value={field.value} onChange={(e) => field.onChange(e)} {...field} />
-              )}              
-            />
-          </div>
-        </Surface> */}
-        
-        {/* <ListPekerjaan canEdit={canEdit}  casbon={data} /> */}
-
-        <ListTagihan />
+        <ListTagihan canEdit={canEdit} />
 
 
         <div className="flex items-center gap-3">

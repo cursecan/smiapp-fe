@@ -1,4 +1,4 @@
-import { File, PencilToLine } from "@gravity-ui/icons"
+import { File } from "@gravity-ui/icons"
 import { CloseButton, Description, Label, Table } from "@heroui/react"
 import { formatSimpleDate2 } from "../../../../../utils/dateFormat"
 import { formatRupiah } from "../../../../../utils/formatCurrency"
@@ -7,7 +7,7 @@ import { useTagihanCabonService } from "../../../../../services/oprasional/tagih
 import { useToast } from "../../../../../lib/useToast"
 import UpdateTagihanModal from "./UpdateTagihanModal"
 
-const ItemTagihan = ({item}) => {
+const ItemTagihan = ({item, canEdit=false}) => {
     const qc = useQueryClient()
     const toast = useToast()
 
@@ -49,7 +49,7 @@ const ItemTagihan = ({item}) => {
             <Table.Cell className={'truncate w-0'}>
                 <div className="flex items-center gap-2">
                     <UpdateTagihanModal item={item} />
-                    <CloseButton onPress={() => onDropHandle(item.id)} />
+                    <CloseButton isDisabled={!canEdit} onPress={() => onDropHandle(item.id)} />
                 </div>
             </Table.Cell>
         </Table.Row>

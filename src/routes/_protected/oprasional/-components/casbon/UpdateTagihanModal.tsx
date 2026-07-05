@@ -1,15 +1,14 @@
-import { Button, CloseButton, Label, ProgressBar, Spinner, TextArea, useOverlayState } from "@heroui/react"
+import { Button, CloseButton, TextArea, useOverlayState } from "@heroui/react"
 import ModalComponent from "../../../../../components/modals/ModalComponent"
 import { PencilToLine } from "@gravity-ui/icons"
-import { useRef, useState } from "react"
+import { useState } from "react"
 import DateInput from "../../../../../components/input/DateInput"
 import InputText from "../../../../../components/input/InputText"
 import CurrencyInput from "../../../../../components/input/CurrencyInput"
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import {api} from '../../../../../lib/api'
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useTagihanCabonService } from "../../../../../services/oprasional/tagihanCasbonService"
 
-const UpdateTagihanModal = ({item}) => {
+const UpdateTagihanModal = ({item, canEdit=false}) => {
     const state = useOverlayState()
     const [form, setForm] = useState({...item})
 
@@ -41,7 +40,7 @@ const UpdateTagihanModal = ({item}) => {
             size={'lg'}
             state={state}
             buttonTrigger={
-                <CloseButton onPress={state.setOpen} className={'bg-accent text-white'}>
+                <CloseButton isDisabled={!canEdit} onPress={state.setOpen} className={'bg-accent text-white'}>
                     <PencilToLine />
                 </CloseButton>
             }

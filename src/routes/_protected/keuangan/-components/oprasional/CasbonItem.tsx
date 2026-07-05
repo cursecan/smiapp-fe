@@ -196,45 +196,9 @@ const CasbonItem = ({item}) => {
                                 </>
                             )
                         }
-                        {/* <TextField>
-                            <Description>Catatan</Description>
-                            <TextArea placeholder="Tidak ada lampiran catatan." fullWidth className={'h-16'} value={item.catatan} fullWidth className={'h-16'} readOnly />
-                        </TextField> */}
+                        
                         <ItemList casbon={item} data={casbonItem} />
-                        {
-                            // billings?.length > 0 && (
-                            //     <Table>
-                            //         <Table.ScrollContainer>
-                            //             <Table.Content>
-                            //                 <Table.Header>
-                            //                     <Table.Column isRowHeader>
-                            //                         Invoice / Tagihan
-                            //                     </Table.Column>
-                            //                     <Table.Column></Table.Column>
-                            //                 </Table.Header>
-                            //                 <Table.Body>
-                            //                     {
-                            //                         billings?.map(b => {
-                            //                             return (
-                            //                                 <Table.Row key={b.id}>
-                            //                                     <Table.Cell>
-                            //                                         { b.file_name }
-                            //                                     </Table.Cell>
-                            //                                     <Table.Cell className={'w-0 truncate'}>
-                            //                                         <a className="text-blue-500" href={b.file_path} target="_blank">
-                            //                                             <CloudArrowUpIn />
-                            //                                         </a>
-                            //                                     </Table.Cell>
-                            //                                 </Table.Row>
-                            //                             )
-                            //                         })
-                            //                     }
-                            //                 </Table.Body>
-                            //             </Table.Content>
-                            //         </Table.ScrollContainer>
-                            //     </Table>
-                            // )
-                        }
+                        
 
                         {
                             expenses?.length > 0 && (
