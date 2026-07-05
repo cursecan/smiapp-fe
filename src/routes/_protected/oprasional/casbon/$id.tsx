@@ -15,7 +15,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useCasbonSchema } from '../../../../schemas/casbonSchema'
 import InputText from '../../../../components/input/InputText'
 import SimpleComboBox from '../../../../components/input/SimpleComboBox'
-import { useCustomerService } from '../../../../services/customer/customerService'\
+import { useCustomerService } from '../../../../services/customer/customerService'
 import ListTagihan from '../-components/casbon/ListTagihan'
 
 export const Route = createFileRoute('/_protected/oprasional/casbon/$id')({
