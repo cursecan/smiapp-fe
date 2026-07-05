@@ -7,8 +7,8 @@ export const useCasbonSchema = z.object({
     pph_rate: z.float32().default(0),
     is_ppn: z.boolean().default(false),
     supplier: z.string().nullable().default(''),
-    catatan: z.string(),
-    nilai_invoice: z.number().default(0),
-    tanggal_invoice: z.string().min(1, 'Tanggal invoice harus diisi'),
-    percent_bayar: z.number().min(0).max(100).default(100)
+    // catatan: z.string(),
+    // nilai_invoice: z.number().default(0),
+    // tanggal_invoice: z.string().min(1, 'Tanggal invoice harus diisi'),
+    // percent_bayar: z.number().min(0).max(100).default(100)
 })

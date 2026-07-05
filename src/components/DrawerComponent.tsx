@@ -6,7 +6,7 @@ const DrawerComponent = ({children, buttonTrigger, footerButtons, heading, state
         { buttonTrigger && buttonTrigger }
         <Drawer.Backdrop isOpen={state.isOpen} onOpenChange={state.setOpen}>
             <Drawer.Content placement="right">
-                <Drawer.Dialog className="max-w-xl w-full">
+                <Drawer.Dialog className="w-4xl">
                     {
                         !hideHeader && (
                             <Drawer.Header>

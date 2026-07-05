@@ -23,6 +23,7 @@ import { useCustomerService } from '../../../../services/customer/customerServic
 import UploadTagihanModal from '../-components/casbon/UploadTagihanModal'
 import CurrencyInput from '../../../../components/input/CurrencyInput'
 import DateInput from '../../../../components/input/DateInput'
+import ListTagihan from '../-components/casbon/ListTagihan'
 
 export const Route = createFileRoute('/_protected/oprasional/casbon/$id')({
   component: RouteComponent,
@@ -81,6 +82,8 @@ function RouteComponent() {
     return null
   }
 
+  console.log(data);
+  
 
   return (
     <div className="mb-6">
@@ -88,14 +91,14 @@ function RouteComponent() {
         breadchrumb={<Breadcrumbs>
           <Breadcrumbs.Item>Casbon</Breadcrumbs.Item>
           <Breadcrumbs.Item>Detail</Breadcrumbs.Item>
-          <Breadcrumbs.Item>{data.nomor}</Breadcrumbs.Item>
+          <Breadcrumbs.Item>{data?.nomor}</Breadcrumbs.Item>
         </Breadcrumbs>}
       />
     <div className="flex gap-10 mt-6">
       <div className="flex-1 flex-col space-y-4">
         <Card variant='secondary'>
           <Card.Header>
-            <Card.Title>#{data.nomor}</Card.Title>
+            <Card.Title>#{data?.nomor}</Card.Title>
           </Card.Header>
           <Card.Content>
             <div className="flex flex-col gap-4">
@@ -228,7 +231,7 @@ function RouteComponent() {
           </Card.Content>
         </Card>
 
-        <Surface className='rounded-2xl p-4' variant='secondary'>
+        {/* <Surface className='rounded-2xl p-4' variant='secondary'>
           <div className="flex gap-6">
             <Controller
               name="nilai_invoice"
@@ -252,12 +255,12 @@ function RouteComponent() {
               )}              
             />
           </div>
-          <div className="flex justify-end">
-            <UploadTagihanModal canEdit={canEdit} casbon={data} />
-          </div>
-        </Surface>
+        </Surface> */}
         
-        <ListPekerjaan canEdit={canEdit}  casbon={data} />
+        {/* <ListPekerjaan canEdit={canEdit}  casbon={data} /> */}
+
+        <ListTagihan />
+
 
         <div className="flex items-center gap-3">
           <ApprovalButtons

@@ -1,22 +1,30 @@
-import { Description, Label, Table } from '@heroui/react'
+import { CloseButton, Description, Label, Table } from '@heroui/react'
 import { formatRupiah } from '../../../../../../utils/formatCurrency'
+import { formatSimpleDate2 } from '../../../../../../utils/dateFormat'
+import { File } from '@gravity-ui/icons'
+import { useMemo } from 'react'
 
 const ItemList = ({casbon, data=[]}) => {
+    console.log(casbon);
+    const ppn = useMemo(() => {
+      if (casbon?.is_ppn) {
+        return Math.ceil(casbon.total_hpp * 1.1/11.1)
+      }  
+      return 0
+    })
+    
   return (
     <Table className='font-mono'>
         <Table.ScrollContainer>
             <Table.Content>
                 <Table.Header>
                     <Table.Column isRowHeader>
-                        Detail Item 
+                        Invoice / Tagihan
                     </Table.Column>
-                    <Table.Column  className={'w-0'}>
-                        Vol
+                    <Table.Column  className={'w-0 truncate'}>
+                        Tanggal Invoice
                     </Table.Column>
-                    <Table.Column className={'w-0'}>
-                        Amount
-                    </Table.Column>
-                    <Table.Column className={'w-0'}>
+                    <Table.Column className={'w-0 truncate'}>
                         Total
                     </Table.Column>
                 </Table.Header>
@@ -27,47 +35,54 @@ const ItemList = ({casbon, data=[]}) => {
                                 <Table.Row key={i.id}>
                                     <Table.Cell>
                                         <div className="flex flex-col gap-1">
-                                            <Label>{i.pekerjaan}</Label>
-                                            {
-                                                !!i.keterangan && <Description>{i.keterangan}</Description> 
-                                            }
+                                            <Label>{i.catatan}</Label>
+                                            <Description>No Inv. {i.nomor_tagihan || '-'}</Description>
+                                            <div className="mt-3">
+                                                <a href={i.file_path} target='_blank'>
+                                                    <CloseButton className={'bg-amber-500 text-white'}>
+                                                        <File />
+                                                    </CloseButton>
+                                                </a>
+                                            </div>
                                         </div>
                                     </Table.Cell>
-                                    <Table.Cell>{i.qty}</Table.Cell>
-                                    <Table.Cell>{formatRupiah(i.harga)}</Table.Cell>
-                                    <Table.Cell>{formatRupiah(i.harga * i.qty)}</Table.Cell>
+                                    <Table.Cell className={'align-baseline'}>{formatSimpleDate2(i.tgl_tagihan)}</Table.Cell>
+                                    <Table.Cell className={'align-baseline'}>{formatRupiah(i.nilai_tagihan)}</Table.Cell>
                                 </Table.Row>
                             )
                         })
                     }
                     <Table.Row>
-                        <Table.Cell className={'text-left font-semibold'} colSpan={3}>
-                            Total
+                        <Table.Cell className={'text-left font-semibold'} colSpan={2}>
+                            PPn 11%
+                        </Table.Cell>
+                        <Table.Cell className={'font-semibold'}>{formatRupiah(ppn)}</Table.Cell>
+                    </Table.Row>
+                    <Table.Row>
+                        <Table.Cell className={'text-left font-semibold'} colSpan={2}>
+                            Total Tagihan
                         </Table.Cell>
                         <Table.Cell className={'font-semibold'}>{formatRupiah(casbon.total_hpp)}</Table.Cell>
                     </Table.Row>
                     <Table.Row>
-                        <Table.Cell className={'text-left font-semibold'} colSpan={3}>
-                            PPn 11%
-                        </Table.Cell>
-                        <Table.Cell className={'font-semibold'}>{formatRupiah(casbon.ppn)}</Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
-                        <Table.Cell className={'text-left font-semibold'} colSpan={3}>
+                        <Table.Cell className={'text-left font-semibold'} colSpan={2}>
                             Potongan PPh {casbon.pph_rate * 100}%
                         </Table.Cell>
-                        <Table.Cell className={'font-semibold'}>{formatRupiah(casbon.pph)}</Table.Cell>
+                        <Table.Cell className={'font-semibold'}>({formatRupiah(casbon.pph)})</Table.Cell>
                     </Table.Row>
                     <Table.Row>
-                        <Table.Cell className={'text-left font-semibold'} colSpan={3}>
-                            Grand Total
+                        <Table.Cell className={'text-left'} colSpan={2}>
+                            <div className="flex flex-col">
+                                <Label>Grand Total</Label>
+                                <Description>Total yang harus ditransfer.</Description>
+                            </div>
                         </Table.Cell>
                         <Table.Cell className={'font-semibold'}>{formatRupiah(casbon.grand_total)}</Table.Cell>
                     </Table.Row>
                     {
                         casbon.total_expense.total > 0  && (
                             <Table.Row>
-                                <Table.Cell className={'text-left text-success'} colSpan={3}>
+                                <Table.Cell className={'text-left text-success'} colSpan={2}>
                                     Sudah Ditransfer
                                 </Table.Cell>
                                 <Table.Cell className={' text-success'}>{formatRupiah(casbon.total_expense.total)}</Table.Cell>
@@ -78,7 +93,7 @@ const ItemList = ({casbon, data=[]}) => {
                     {
                         casbon.grand_total-casbon.total_expense.total > 0 && (
                             <Table.Row>
-                                <Table.Cell className={'text-left text-danger'} colSpan={3}>
+                                <Table.Cell className={'text-left text-danger'} colSpan={2}>
                                     Sisa Belum Transfer
                                 </Table.Cell>
                                 <Table.Cell className={'text-danger'}>{formatRupiah(casbon.grand_total-casbon.total_expense.total)}</Table.Cell>
