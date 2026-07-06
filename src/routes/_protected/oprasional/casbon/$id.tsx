@@ -74,8 +74,6 @@ function RouteComponent() {
   if (isLoading) {
     return null
   }
-
-  console.log(data);
   
 
   return (
@@ -224,7 +222,7 @@ function RouteComponent() {
           </Card.Content>
         </Card>
 
-        <ListTagihan canEdit={canEdit} />
+        <ListTagihan casbon={data} canEdit={canEdit} />
 
 
         <div className="flex items-center gap-3">

@@ -4,13 +4,23 @@ import { useParams } from "@tanstack/react-router"
 import { useQuery } from "@tanstack/react-query"
 import { useCasbonService } from "../../../../../services/oprasional/casbonService"
 import ItemTagihan from "./ItemTagihan"
+import { useMemo } from "react"
+import { formatRupiah } from "../../../../../utils/formatCurrency"
 
-const ListTagihan = ({canEdit=false}) => {
+const ListTagihan = ({casbon, canEdit=false}) => {
     const { id } = useParams({from: '/_protected/oprasional/casbon/$id'})
     const {data} = useQuery({
         queryKey: ['tagihan-list'],
         queryFn: () => useCasbonService.items(id),
         select: (res) => res.data
+    })
+
+    const total = useMemo(() => {        
+        return data?.reduce((a, b) => a + Number(b.nilai_tagihan), 0)
+    })
+
+    const pph = useMemo(() => {
+        return Math.ceil(total * casbon.pph_rate)
     })
 
 
@@ -49,11 +59,11 @@ const ListTagihan = ({canEdit=false}) => {
                                 }
                                 <Table.Row>
                                     <Table.Cell colSpan={2} className={'text-right italic'}>Potongan PPh</Table.Cell>
-                                    <Table.Cell colSpan={2} className={'italic'}>(0)</Table.Cell>
+                                    <Table.Cell colSpan={2} className={'italic'}>({formatRupiah(pph)})</Table.Cell>
                                 </Table.Row>
                                 <Table.Row>
                                     <Table.Cell colSpan={2} className={'text-right font-semibold italic'}>Total</Table.Cell>
-                                    <Table.Cell colSpan={2} className={'font-semibold italic'}>0</Table.Cell>
+                                    <Table.Cell colSpan={2} className={'font-semibold italic'}>{formatRupiah(total)}</Table.Cell>
                                 </Table.Row>
                             </Table.Body>
                         </Table.Content>

@@ -47,7 +47,7 @@ function RouteComponent() {
         return <div className="">Loading</div>
     }
 
-
+    
   return (
     <div className="">
         <HeaderPage
