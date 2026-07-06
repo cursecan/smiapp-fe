@@ -1,7 +1,7 @@
 import { useAuth } from "../auth/AuthProvider"
 
 export const useSchema = (schema) => {
-    const approval  = schema?.approvals.at(0)
+    const approval  = schema?.approvals?.at(0)
     const userApprovals = approval?.approval_by
 
 

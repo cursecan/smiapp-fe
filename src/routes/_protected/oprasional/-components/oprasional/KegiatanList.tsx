@@ -5,7 +5,7 @@ import ItemKegiatan from "./ItemKegiatan"
 import UploadDocProgressModal from "./progressCatatan/UploadDocProgressModal"
 import { useOprasionalService } from "../../../../../services/oprasional/oprasionalService"
 
-const KegiatanList = ({data}) => {
+const KegiatanList = ({data, canEdit=false}) => {
     const { data:kegiatan, isLoading:loadingKegiatan } = useQuery({
         queryKey: ['kegiatatan-list'],
         queryFn: async () => {
@@ -44,7 +44,11 @@ const KegiatanList = ({data}) => {
   return (
     <div className="">
         <div className="mb-4 flex justify-end">
-            <UploadDocProgressModal ops={data?.id} data={kegiatan} />
+            {
+                canEdit && (
+                    <UploadDocProgressModal ops={data?.id} data={kegiatan} />
+                )
+            }
 
         </div>
         <Table className="font-mono">

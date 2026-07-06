@@ -6,8 +6,10 @@ import { Breadcrumbs, Button, Card, CloseButton, Description, Label, Surface, Ta
 import KegiatanList from '../-components/oprasional/KegiatanList'
 import { formatRupiah } from '../../../../utils/formatCurrency'
 import { ArrowChevronRight, ArrowRightToSquare, Plus } from '@gravity-ui/icons'
-import { formatSimpleDate } from '../../../../utils/dateFormat'
+import { formatSimpleDate, formatSimpleDate2 } from '../../../../utils/dateFormat'
 import StatusChiper from '../../../../components/StatusChiper'
+import BARequestModal from '../-components/BARequestModal'
+import { useSchema } from '../../../../components/useSchema'
 
 export const Route = createFileRoute('/_protected/oprasional/oprasional/$id')({
   component: RouteComponent,
@@ -17,6 +19,7 @@ function RouteComponent() {
     const { id } = useParams({from: '/_protected/oprasional/oprasional/$id'})
     const navigate = useNavigate()
 
+    
     const { data, isLoading } = useQuery({
         queryKey: ['oprasional', id],
         queryFn: async () => {
@@ -24,7 +27,7 @@ function RouteComponent() {
         },
         select: (data) => data.data
     })
-
+    
     const {data: casbon, isLoading: casbonLoading} = useQuery({
         queryKey: ['casbon-item-list-ref'],
         queryFn: () => useOprasionalService.casbon(id),
@@ -38,10 +41,12 @@ function RouteComponent() {
 
     const dokumen_penugasan = data?.penawaran?.dok_penawaran?.filter(i => i.doc_type !== 'UN') ?? []
 
+    const {canEdit} = useSchema(data)
 
     if (isLoading || casbonLoading) {
         return <div className="">Loading</div>
     }
+
 
   return (
     <div className="">
@@ -76,7 +81,7 @@ function RouteComponent() {
                             
                             <div className="flex flex-col space-y-2">
                                 <Description>Tanggal Surat</Description>
-                                <Label>{data?.penawaran.tgl_surat}</Label>
+                                <Label>{formatSimpleDate2(data?.penawaran.tgl_surat)}</Label>
                             </div>
                         </div>
                         <div className="flex flex-col space-y-2">
@@ -206,13 +211,18 @@ function RouteComponent() {
                                 </Tabs.List>
                             </Tabs.ListContainer>
                             <Tabs.Panel id={'pekerjaan'}>
-                                <KegiatanList data={data} />
+                                <KegiatanList data={data} canEdit={canEdit} />
                             </Tabs.Panel>
                             <Tabs.Panel id={'casbon'}>
                                 <div className="">
-                                    <div className="flex justify-end mb-5">
-                                        <Button onPress={() => navigate({to: `/oprasional/casbon/create?ref=${data.id}`})} variant='primary' className={'bg-success'}><Plus /> Casbon</Button>
-                                    </div>
+                                    {
+                                        canEdit && (
+                                            <div className="flex justify-end mb-5">
+                                                <Button  onPress={() => navigate({to: `/oprasional/casbon/create?ref=${data.id}`})} variant='primary' className={'bg-success'}><Plus /> Casbon</Button>
+                                            </div>
+
+                                        )
+                                    }
                                     <Table className='font-mono'>
                                         <Table.ScrollContainer>
                                             <Table.Content>
@@ -294,9 +304,14 @@ function RouteComponent() {
                         </Tabs>
                     </Card.Content>
                 </Card>
-                {/* <div className="mt-4">
-                    <Button isDisabled>Submit Approval</Button>
-                </div> */}
+                <div className="mt-4 flex items-center gap-3">
+                    {
+                        !data?.is_close && (
+                            <BARequestModal oprs={data} />
+                        )
+                    }
+                    
+                </div>
             </div>
         </div>
     </div>

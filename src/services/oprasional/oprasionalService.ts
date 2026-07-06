@@ -24,5 +24,8 @@ export const useOprasionalService = {
     },
     casbon: (id) => {
         return api.get(`/oprasional/opr/${id}/casbon/`)
+    },
+    barequest: (id, payload) => {
+        return api.post(`/oprasional/opr/${id}/barequest/`, payload)
     }
 }
