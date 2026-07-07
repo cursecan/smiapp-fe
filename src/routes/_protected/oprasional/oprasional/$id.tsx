@@ -266,7 +266,7 @@ function RouteComponent() {
                                                                     <Table.Cell className={'truncate'}>
                                                                         <div className="flex items-center justify-end gap-1">
                                                                             {
-                                                                                i.hutang > 0 && (
+                                                                                (i.hutang > 0 || i.total_hpp === 0) && (
                                                                                      <Tooltip>
                                                                                         <Tooltip.Trigger>
                                                                                             <CloseButton onPress={() => mutatePelunasan.mutate(i.id)} className={'bg-amber-600 text-white'}>

@@ -23,8 +23,9 @@ const ListTagihan = ({casbon, canEdit=false}) => {
     })
 
     const pph = useMemo(() => {
-        if (casbon.nilai_invoice === 0 || casbon.nilai_invoice === total) {
-            return Math.ceil(total * casbon.pph_rate)
+        
+        if (casbon.nilai_invoice === 0 || Number(casbon.nilai_invoice) === total + Number(casbon.terbayar)) {
+            return Math.ceil((total + Number(casbon.terbayar)) * casbon.pph_rate)
         }
         return 0
     })
@@ -34,6 +35,10 @@ const ListTagihan = ({casbon, canEdit=false}) => {
             return casbon.nilai_invoice
         }
         return total
+    })
+
+    const total_after_pph = useMemo(() => {
+        return total - pph
     })
 
     
@@ -76,7 +81,7 @@ const ListTagihan = ({casbon, canEdit=false}) => {
                                 </Table.Row>
                                 <Table.Row>
                                     <Table.Cell colSpan={2} className={'text-right font-semibold italic'}>Total Pembayaran</Table.Cell>
-                                    <Table.Cell colSpan={2} className={'font-semibold italic'}>{formatRupiah(total)}</Table.Cell>
+                                    <Table.Cell colSpan={2} className={'font-semibold italic'}>{formatRupiah(total_after_pph)}</Table.Cell>
                                 </Table.Row>
                                 <Table.Row>
                                     <Table.Cell colSpan={2} className={'text-right font-semibold italic'}>Total Invoice</Table.Cell>
