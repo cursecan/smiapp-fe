@@ -48,7 +48,7 @@ const ItemTagihan = ({item, canEdit=false}) => {
             </Table.Cell>
             <Table.Cell className={'truncate w-0'}>
                 <div className="flex items-center gap-2">
-                    <UpdateTagihanModal item={item} />
+                    <UpdateTagihanModal canEdit={canEdit} item={item} />
                     <CloseButton isDisabled={!canEdit} onPress={() => onDropHandle(item.id)} />
                 </div>
             </Table.Cell>
