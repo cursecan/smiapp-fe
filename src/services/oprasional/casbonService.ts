@@ -29,5 +29,11 @@ export const useCasbonService = {
     },
     expenses: (id) => {
         return api.get(`oprasional/casbon/${id}/expenses/`)
-    }
+    },
+    change_invoice: (id, payload) => {
+        return  api.post(`oprasional/casbon/${id}/change_invoice/`, payload)
+    },
+    pelunasan: (id) => {
+        return  api.post(`oprasional/casbon/${id}/pelunasan/`)
+    },
 }

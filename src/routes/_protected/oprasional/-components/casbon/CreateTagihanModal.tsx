@@ -55,6 +55,7 @@ const CreateTagihanModal = ({casbonId, canEdit=false}) => {
         },
         onSuccess: () => {
             setProgress(0)
+            qc.invalidateQueries({queryKey: ['casbon-detail', casbonId]})
             qc.invalidateQueries({queryKey: ['tagihan-list']})
             setForm({...form,
                 nomor_tagihan: '',

@@ -1,11 +1,14 @@
-import { Card, Description, Surface, Table } from "@heroui/react"
+import { Card, Description, Surface, Table, useOverlayState } from "@heroui/react"
 import CreateTagihanModal from "./CreateTagihanModal"
-import { useParams } from "@tanstack/react-router"
+import { retainSearchParams, useParams } from "@tanstack/react-router"
 import { useQuery } from "@tanstack/react-query"
 import { useCasbonService } from "../../../../../services/oprasional/casbonService"
 import ItemTagihan from "./ItemTagihan"
-import { useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { formatRupiah } from "../../../../../utils/formatCurrency"
+import CurrencyInput from "../../../../../components/input/CurrencyInput"
+import ModalComponent from "../../../../../components/modals/ModalComponent"
+import ChangeTotalInvModal from "./ChangeTotalInvModal"
 
 const ListTagihan = ({casbon, canEdit=false}) => {
     const { id } = useParams({from: '/_protected/oprasional/casbon/$id'})
@@ -20,23 +23,33 @@ const ListTagihan = ({casbon, canEdit=false}) => {
     })
 
     const pph = useMemo(() => {
-        return Math.ceil(total * casbon.pph_rate)
+        if (casbon.nilai_invoice === 0 || casbon.nilai_invoice === total) {
+            return Math.ceil(total * casbon.pph_rate)
+        }
+        return 0
     })
 
+    const inv = useMemo(() => {
+        if (casbon?.nilai_invoice > 0) {
+            return casbon.nilai_invoice
+        }
+        return total
+    })
 
     
     
   return (
     <Card variant="secondary">
-        <Card.Header>
-            <div className="flex justify-end">
-                <CreateTagihanModal canEdit={canEdit} casbonId={id} />
-            </div>
-            <div className="text-right">
-                <Description>Lorem ipsum dolor sit amet consectetur adipisicing elit. At, saepe.</Description>
-            </div>
-        </Card.Header>
+        
         <Card.Content className="flex flex-col space-y-3">
+            <div className="">
+                <div className="flex justify-end">
+                    <CreateTagihanModal canEdit={canEdit} casbonId={id} />
+                </div>
+                <div className="text-right">
+                    <Description>Lorem ipsum dolor sit amet consectetur adipisicing elit. At, saepe.</Description>
+                </div>
+            </div>
             <Surface className="rounded-2xl p-3">
                 <Table>
                     <Table.ScrollContainer>
@@ -46,7 +59,7 @@ const ListTagihan = ({casbon, canEdit=false}) => {
                                     Invoice / Tagihan
                                 </Table.Column>
                                 <Table.Column>Tanggal Invoice</Table.Column>
-                                <Table.Column>Nominal</Table.Column>
+                                <Table.Column className={'w-32'}>Nominal</Table.Column>
                                 <Table.Column className={'truncate w-0'}></Table.Column>
                             </Table.Header>
                             <Table.Body>
@@ -62,8 +75,19 @@ const ListTagihan = ({casbon, canEdit=false}) => {
                                     <Table.Cell colSpan={2} className={'italic'}>({formatRupiah(pph)})</Table.Cell>
                                 </Table.Row>
                                 <Table.Row>
-                                    <Table.Cell colSpan={2} className={'text-right font-semibold italic'}>Total</Table.Cell>
+                                    <Table.Cell colSpan={2} className={'text-right font-semibold italic'}>Total Pembayaran</Table.Cell>
                                     <Table.Cell colSpan={2} className={'font-semibold italic'}>{formatRupiah(total)}</Table.Cell>
+                                </Table.Row>
+                                <Table.Row>
+                                    <Table.Cell colSpan={2} className={'text-right font-semibold italic'}>Total Invoice</Table.Cell>
+                                    <Table.Cell colSpan={2} className={'font-semibold italic'}>
+                                        <div className="flex items-center">
+                                            <div className="flex-1">{formatRupiah(inv)}</div>
+                                            <div className="">
+                                                <ChangeTotalInvModal casbon={casbon} invInit={inv} />
+                                            </div>
+                                        </div>
+                                    </Table.Cell>
                                 </Table.Row>
                             </Table.Body>
                         </Table.Content>

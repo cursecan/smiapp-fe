@@ -1,15 +1,16 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
 import { useOprasionalService } from '../../../../services/oprasional/oprasionalService'
 import HeaderPage from '../../../../components/HeaderPage'
-import { Breadcrumbs, Button, Card, CloseButton, Description, Label, Surface, Table, Tabs, useOverlayState } from '@heroui/react'
+import { Breadcrumbs, Button, Card, CloseButton, Description, Label, Surface, Table, Tabs, Tooltip, useOverlayState } from '@heroui/react'
 import KegiatanList from '../-components/oprasional/KegiatanList'
 import { formatRupiah } from '../../../../utils/formatCurrency'
-import { ArrowChevronRight, ArrowRightToSquare, Plus } from '@gravity-ui/icons'
+import { AlmostEqual, ArrowChevronRight, ArrowRightToSquare, Plus } from '@gravity-ui/icons'
 import { formatSimpleDate, formatSimpleDate2 } from '../../../../utils/dateFormat'
 import StatusChiper from '../../../../components/StatusChiper'
 import BARequestModal from '../-components/BARequestModal'
 import { useSchema } from '../../../../components/useSchema'
+import { useCasbonService } from '../../../../services/oprasional/casbonService'
 
 export const Route = createFileRoute('/_protected/oprasional/oprasional/$id')({
   component: RouteComponent,
@@ -42,6 +43,16 @@ function RouteComponent() {
     const dokumen_penugasan = data?.penawaran?.dok_penawaran?.filter(i => i.doc_type !== 'UN') ?? []
 
     const {canEdit} = useSchema(data)
+
+    const mutatePelunasan = useMutation({
+        mutationFn: (id) => useCasbonService.pelunasan(id),
+        onSuccess: (res) => {
+            navigate({to: `/oprasional/casbon/${res.data.id}`})
+        }
+    })
+
+
+
 
     if (isLoading || casbonLoading) {
         return <div className="">Loading</div>
@@ -253,7 +264,23 @@ function RouteComponent() {
                                                                         <StatusChiper status={i.status} />
                                                                     </Table.Cell>
                                                                     <Table.Cell className={'truncate'}>
-                                                                        <div className="flex items-center gap-2">
+                                                                        <div className="flex items-center justify-end gap-1">
+                                                                            {
+                                                                                i.hutang > 0 && (
+                                                                                     <Tooltip>
+                                                                                        <Tooltip.Trigger>
+                                                                                            <CloseButton onPress={() => mutatePelunasan.mutate(i.id)} className={'bg-amber-600 text-white'}>
+                                                                                                <AlmostEqual />
+                                                                                            </CloseButton>
+                                                                                        </Tooltip.Trigger>
+                                                                                        <Tooltip.Content>
+                                                                                        <Tooltip.Arrow />
+                                                                                            Penyelesaian hutang
+                                                                                        </Tooltip.Content>
+                                                                                    </Tooltip>
+                                                                                    
+                                                                                )
+                                                                            }
                                                                             <CloseButton onPress={() => navigate({to: `/oprasional/casbon/${i.id}`})} className={'bg-accent text-accent-foreground'}>
                                                                                 <ArrowChevronRight />
                                                                             </CloseButton>

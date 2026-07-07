@@ -24,7 +24,9 @@ const UpdateTagihanModal = ({item, canEdit=false}) => {
     const saveMutation = useMutation({
         mutationFn: (payload) => useTagihanCabonService.update(item.id, payload),
         onSuccess: () => {
+            qc.invalidateQueries({queryKey: ['casbon-detail']})
             qc.invalidateQueries({queryKey: ['tagihan-list']})
+            
             state.close()
         }
     })
