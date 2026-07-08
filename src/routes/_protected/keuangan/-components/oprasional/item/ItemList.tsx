@@ -5,6 +5,13 @@ import { File } from '@gravity-ui/icons'
 import { useMemo } from 'react'
 
 const ItemList = ({casbon, data=[]}) => {
+    const inv = useMemo(() => {
+        if (casbon?.nilai_invoice > 0) {
+            return casbon.nilai_invoice
+        }
+        return casbon.total_hpp + casbon.ppn
+    })
+
     
   return (
     <Table className='font-mono'>
@@ -47,28 +54,49 @@ const ItemList = ({casbon, data=[]}) => {
                     }
                     <Table.Row>
                         <Table.Cell className={'text-left font-semibold'} colSpan={2}>
-                            Total
+                            Tagihan Sebelum PPN
                         </Table.Cell>
                         <Table.Cell className={'font-semibold'}>{formatRupiah(casbon.total_hpp)}</Table.Cell>
                     </Table.Row>
                     <Table.Row>
                         <Table.Cell className={'text-left font-semibold'} colSpan={2}>
-                            PPn 11%
+                            PPN
                         </Table.Cell>
                         <Table.Cell className={'font-semibold'}>{formatRupiah(casbon.ppn)}</Table.Cell>
                     </Table.Row>
                     <Table.Row>
                         <Table.Cell className={'text-left font-semibold'} colSpan={2}>
-                            Potongan PPh {casbon.pph_rate * 100}%
+                            Tagihan Setelah PPN
+                        </Table.Cell>
+                        <Table.Cell className={'font-semibold'}>{formatRupiah(casbon.total_hpp + casbon.ppn)}</Table.Cell>
+                    </Table.Row>
+                    <Table.Row>
+                        <Table.Cell className={'text-left font-semibold'} colSpan={2}>
+                            <div className="flex justify-end">
+                                <div className="flex flex-col">
+                                    <Label>* Invoice</Label>
+                                    <Description>Nilai Invoice Yang Diterbitkan</Description>
+                                </div>
+                            </div>
+                        </Table.Cell>
+                        <Table.Cell className={'font-semibold'}>{formatRupiah(inv)}</Table.Cell>
+                    </Table.Row>
+
+                    <Table.Row>
+                        <Table.Cell className={'text-left font-semibold'} colSpan={2}>
+                            Potongan PPh
                         </Table.Cell>
                         <Table.Cell className={'font-semibold'}>({formatRupiah(casbon.pph)})</Table.Cell>
                     </Table.Row>
                     <Table.Row>
+                        <Table.Cell className={'text-left font-semibold'} colSpan={2}>
+                            Sudah Dibayarkan
+                        </Table.Cell>
+                        <Table.Cell className={'font-semibold'}>({formatRupiah(casbon.terbayar)})</Table.Cell>
+                    </Table.Row>
+                    <Table.Row>
                         <Table.Cell className={'text-left'} colSpan={2}>
-                            <div className="flex flex-col">
-                                <Label>Grand Total</Label>
-                                <Description>Total yang harus ditransfer.</Description>
-                            </div>
+                            * Total Tagihan Harus Dibayar
                         </Table.Cell>
                         <Table.Cell className={'font-semibold'}>{formatRupiah(casbon.grand_total)}</Table.Cell>
                     </Table.Row>
@@ -76,7 +104,7 @@ const ItemList = ({casbon, data=[]}) => {
                         casbon.total_expense.total > 0  && (
                             <Table.Row>
                                 <Table.Cell className={'text-left text-success'} colSpan={2}>
-                                    Sudah Ditransfer
+                                    Progress Transfer
                                 </Table.Cell>
                                 <Table.Cell className={' text-success'}>{formatRupiah(casbon.total_expense.total)}</Table.Cell>
                             </Table.Row>
