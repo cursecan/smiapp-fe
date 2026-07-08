@@ -12,6 +12,10 @@ const ItemList = ({casbon, data=[]}) => {
         return casbon.total_hpp + casbon.ppn
     })
 
+    const tag_after_ppn = useMemo(() => {
+        return Number(casbon.total_hpp) + Number(casbon.ppn)
+    })
+
     
   return (
     <Table className='font-mono'>
@@ -68,7 +72,7 @@ const ItemList = ({casbon, data=[]}) => {
                         <Table.Cell className={'text-left font-semibold'} colSpan={2}>
                             Tagihan Setelah PPN
                         </Table.Cell>
-                        <Table.Cell className={'font-semibold'}>{formatRupiah(casbon.total_hpp + casbon.ppn)}</Table.Cell>
+                        <Table.Cell className={'font-semibold'}>{formatRupiah(tag_after_ppn)}</Table.Cell>
                     </Table.Row>
                     <Table.Row>
                         <Table.Cell className={'text-left font-semibold'} colSpan={2}>
