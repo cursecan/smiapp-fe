@@ -9,6 +9,7 @@ import { Plus } from "@gravity-ui/icons"
 
 import {api} from '../../../../../lib/api'
 import { format } from "date-fns"
+import SelectComponent from "../../../../../components/input/SelectComponent"
 
 const CreateTagihanModal = ({casbonId, canEdit=false}) => {
     const today = new Date()
@@ -22,7 +23,10 @@ const CreateTagihanModal = ({casbonId, canEdit=false}) => {
         tgl_tagihan: format(today, 'yyyy-MM-dd'),
         nomor_tagihan: '',
         catatan: '',
-        nilai_tagihan: 0
+        nilai_tagihan: 0,
+        nilai_dasar_pajak: 0,
+        pph_rate: 0,
+        ppn_rate: 0,
     })
 
     const qc = useQueryClient()
@@ -35,6 +39,9 @@ const CreateTagihanModal = ({casbonId, canEdit=false}) => {
         formData.append('nomor_tagihan', form.nomor_tagihan)
         formData.append('catatan', form.catatan)
         formData.append('nilai_tagihan', form.nilai_tagihan)
+        formData.append('nilai_dasar_pajak', form.nilai_dasar_pajak)
+        formData.append('pph_rate', form.pph_rate)
+        formData.append('ppn_rate', form.ppn_rate)
 
         const res = await api.post('oprasional/tagihan/', formData, {
             headers: {
@@ -60,7 +67,10 @@ const CreateTagihanModal = ({casbonId, canEdit=false}) => {
             setForm({...form,
                 nomor_tagihan: '',
                 catatan: '',
-                nilai_tagihan: 0
+                nilai_tagihan: 0,
+                nilai_dasar_pajak: 0,
+                pph_rate: 0,
+                ppn_rate: 0
             })
             state.close()
         }
@@ -90,8 +100,15 @@ const CreateTagihanModal = ({casbonId, canEdit=false}) => {
                 <div className="">
                     <TextArea value={form.catatan} onChange={(e) => setForm({...form, catatan: e.target.value})} placeholder="* Catatan (opsional)" fullWidth />
                 </div>
+                <div>
+                    <CurrencyInput value={form.nilai_tagihan} onChange={(e) => setForm({...form, nilai_tagihan: e})} label={'Total Tagihan (Rp)'} />
+                </div>
                 <div className="flex">
-                    <CurrencyInput value={form.nilai_tagihan} onChange={(e) => setForm({...form, nilai_tagihan: e})} label={'Nilai Invoice (Rp)'} />
+                    <CurrencyInput variant='secondary' value={form.nilai_dasar_pajak} onChange={(e) => setForm({...form, nilai_dasar_pajak: e})} label={'* Nilai Dasar Kena Pajak'} />
+                </div>
+                <div className="flex items-center gap-3">
+                    <SelectComponent label={'* PPn'} value={form.ppn_rate} onChange={(e) => setForm({...form, ppn_rate: e})} data={[{id: 0, label: 'Non PPn'}, {id: 0.11, label: 'PPn 11%'}]} />
+                    <SelectComponent label={'Potongan PPh'} value={form.pph_rate} onChange={(e) => setForm({...form, pph_rate: e})} data={[{id: 0, label: 'Non PPh'}, {id: 0.025, label: 'PPh Perorangan (2.5%)'}, {id: 0.020, label: 'PPh Badan (2.0%)'}]} />
                 </div>
                 <div className="relative">
                     <div className="mb-3">Upload Dok. Tagihan / Invoice</div>

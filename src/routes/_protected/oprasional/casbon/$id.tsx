@@ -127,7 +127,7 @@ function RouteComponent() {
                   </CheckboxGroup>
                 )}
               />
-              <Controller
+              {/* <Controller
                 name='is_ppn'
                 control={control}
                 render={({field}) => (
@@ -140,7 +140,7 @@ function RouteComponent() {
                     </Checkbox.Content>
                   </Checkbox>
                 )}
-              />
+              /> */}
               <div className="flex items-center gap-3">
                 <Controller
                   name='type_pembayaran'
@@ -149,13 +149,13 @@ function RouteComponent() {
                     <SelectComponent isDisabled={!canEdit || data.petty_cash} className={'w-40'} value={field.value ?? ''} onChange={e => field.onChange(e)} label={'Metode Bayar'} placeholder="Pilih" data={[{id: 'CA', label: 'Tunai'}, {id: 'TF', label: 'Transfer'}]} />
                   )}
                 />
-                <Controller
+                {/* <Controller
                   name='pph_rate'
                   control={control}
                   render={({field}) => (
                     <SelectComponent isDisabled={!canEdit || data.petty_cash} className={'w-40'} value={field.value ?? ''} onChange={e => field.onChange(e)} label={'Potongan PPh'} placeholder="Pilih" data={[{id: 0, label: 'Non PPH'}, {id: 0.025, label: 'Perorangan 2,5%'}, {id: 0.02, label: 'Korporasi 2%'}]} />
                   )}
-                />
+                /> */}
               </div>
               <div className="">
                 <Controller
@@ -202,7 +202,7 @@ function RouteComponent() {
                     <Alert.Content>
                       <Alert.Title>Perhatian</Alert.Title>
                       <Alert.Description>
-                        Unutk pengajuan Petty Cash harap sertakan <u>Nomor Billing</u> atau <u>Virtual Account</u> untuk setiap item permohonan.
+                        Untuk pengajuan Petty Cash harap sertakan <u>Nomor Billing</u> atau <u>Virtual Account</u> untuk setiap item permohonan.
                       </Alert.Description>
                     </Alert.Content>
                   </Alert>

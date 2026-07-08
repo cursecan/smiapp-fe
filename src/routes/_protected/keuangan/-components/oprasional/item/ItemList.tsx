@@ -5,13 +5,6 @@ import { File } from '@gravity-ui/icons'
 import { useMemo } from 'react'
 
 const ItemList = ({casbon, data=[]}) => {
-    console.log(casbon);
-    const ppn = useMemo(() => {
-      if (casbon?.is_ppn) {
-        return Math.ceil(casbon.total_hpp * 1.1/11.1)
-      }  
-      return 0
-    })
     
   return (
     <Table className='font-mono'>
@@ -54,15 +47,15 @@ const ItemList = ({casbon, data=[]}) => {
                     }
                     <Table.Row>
                         <Table.Cell className={'text-left font-semibold'} colSpan={2}>
-                            PPn 11%
+                            Total
                         </Table.Cell>
-                        <Table.Cell className={'font-semibold'}>{formatRupiah(ppn)}</Table.Cell>
+                        <Table.Cell className={'font-semibold'}>{formatRupiah(casbon.total_hpp)}</Table.Cell>
                     </Table.Row>
                     <Table.Row>
                         <Table.Cell className={'text-left font-semibold'} colSpan={2}>
-                            Total Tagihan
+                            PPn 11%
                         </Table.Cell>
-                        <Table.Cell className={'font-semibold'}>{formatRupiah(casbon.total_hpp)}</Table.Cell>
+                        <Table.Cell className={'font-semibold'}>{formatRupiah(casbon.ppn)}</Table.Cell>
                     </Table.Row>
                     <Table.Row>
                         <Table.Cell className={'text-left font-semibold'} colSpan={2}>

@@ -19,26 +19,37 @@ const ListTagihan = ({casbon, canEdit=false}) => {
     })
 
     const total = useMemo(() => {        
-        return data?.reduce((a, b) => a + Number(b.nilai_tagihan), 0)
+        return data?.reduce((a, b) => a + (Number(b.nilai_tagihan) ), 0)
     })
 
     const pph = useMemo(() => {
-        
-        if (casbon.nilai_invoice === 0 || Number(casbon.nilai_invoice) === total + Number(casbon.terbayar)) {
-            return Math.ceil((total + Number(casbon.terbayar)) * casbon.pph_rate)
-        }
-        return 0
+        return data?.reduce((a, b) => a + (Number(b.nilai_dasar_pajak)*b.pph_rate), 0)
+        // if (casbon.nilai_invoice === 0 || Number(casbon.nilai_invoice) === total + Number(casbon.terbayar)) {
+        //     return Math.ceil((total + Number(casbon.terbayar)) * casbon.pph_rate)
+        // }
+        // return 0
+
+
+    })
+    const ppn = useMemo(() => {
+        return data?.reduce((a, b) => a + (Number(b.nilai_dasar_pajak)*b.ppn_rate), 0)
+        // if (casbon.nilai_invoice === 0 || Number(casbon.nilai_invoice) === total + Number(casbon.terbayar)) {
+        //     return Math.ceil((total + Number(casbon.terbayar)) * casbon.pph_rate)
+        // }
+        // return 0
+
+
     })
 
     const inv = useMemo(() => {
         if (casbon?.nilai_invoice > 0) {
             return casbon.nilai_invoice
         }
-        return total
+        return total + ppn
     })
 
     const total_after_pph = useMemo(() => {
-        return total - pph
+        return total - pph + ppn
     })
 
     
@@ -76,7 +87,19 @@ const ListTagihan = ({casbon, canEdit=false}) => {
                                     })
                                 }
                                 <Table.Row>
-                                    <Table.Cell colSpan={2} className={'text-right italic'}>Potongan PPh</Table.Cell>
+                                    <Table.Cell colSpan={2} className={'text-right italic'}>Total Sebelum</Table.Cell>
+                                    <Table.Cell colSpan={2} className={'italic'}>{formatRupiah(total)}</Table.Cell>
+                                </Table.Row>
+                                <Table.Row>
+                                    <Table.Cell colSpan={2} className={'text-right italic'}>PPn</Table.Cell>
+                                    <Table.Cell colSpan={2} className={'italic'}>{formatRupiah(ppn)}</Table.Cell>
+                                </Table.Row>
+                                <Table.Row>
+                                    <Table.Cell colSpan={2} className={'text-right italic'}>Total Setelah PPn</Table.Cell>
+                                    <Table.Cell colSpan={2} className={'italic'}>{formatRupiah(total + ppn)}</Table.Cell>
+                                </Table.Row>
+                                <Table.Row>
+                                    <Table.Cell colSpan={2} className={'text-right italic'}>Potongan PPH</Table.Cell>
                                     <Table.Cell colSpan={2} className={'italic'}>({formatRupiah(pph)})</Table.Cell>
                                 </Table.Row>
                                 <Table.Row>
@@ -88,9 +111,14 @@ const ListTagihan = ({casbon, canEdit=false}) => {
                                     <Table.Cell colSpan={2} className={'font-semibold italic'}>
                                         <div className="flex items-center">
                                             <div className="flex-1">{formatRupiah(inv)}</div>
-                                            <div className="">
-                                                <ChangeTotalInvModal casbon={casbon} invInit={inv} />
-                                            </div>
+                                            {
+                                                canEdit && (
+                                                    <div className="">
+                                                        <ChangeTotalInvModal casbon={casbon} invInit={inv} />
+                                                    </div>
+
+                                                )
+                                            }
                                         </div>
                                     </Table.Cell>
                                 </Table.Row>
