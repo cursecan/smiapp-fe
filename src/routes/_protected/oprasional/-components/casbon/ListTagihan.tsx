@@ -1,4 +1,4 @@
-import { Card, Description, Surface, Table, useOverlayState } from "@heroui/react"
+import { Card, Description, Label, Surface, Table, useOverlayState } from "@heroui/react"
 import CreateTagihanModal from "./CreateTagihanModal"
 import { retainSearchParams, useParams } from "@tanstack/react-router"
 import { useQuery } from "@tanstack/react-query"
@@ -87,15 +87,15 @@ const ListTagihan = ({casbon, canEdit=false}) => {
                                     })
                                 }
                                 <Table.Row>
-                                    <Table.Cell colSpan={2} className={'text-right italic'}>Total Sebelum</Table.Cell>
+                                    <Table.Cell colSpan={2} className={'text-right italic'}>Tagihan Sebelum PPN</Table.Cell>
                                     <Table.Cell colSpan={2} className={'italic'}>{formatRupiah(total)}</Table.Cell>
                                 </Table.Row>
                                 <Table.Row>
-                                    <Table.Cell colSpan={2} className={'text-right italic'}>PPn</Table.Cell>
+                                    <Table.Cell colSpan={2} className={'text-right italic'}>PPN</Table.Cell>
                                     <Table.Cell colSpan={2} className={'italic'}>{formatRupiah(ppn)}</Table.Cell>
                                 </Table.Row>
                                 <Table.Row>
-                                    <Table.Cell colSpan={2} className={'text-right italic'}>Total Setelah PPn</Table.Cell>
+                                    <Table.Cell colSpan={2} className={'text-right italic'}>Tagihan Setelah PPn</Table.Cell>
                                     <Table.Cell colSpan={2} className={'italic'}>{formatRupiah(total + ppn)}</Table.Cell>
                                 </Table.Row>
                                 <Table.Row>
@@ -103,11 +103,14 @@ const ListTagihan = ({casbon, canEdit=false}) => {
                                     <Table.Cell colSpan={2} className={'italic'}>({formatRupiah(pph)})</Table.Cell>
                                 </Table.Row>
                                 <Table.Row>
-                                    <Table.Cell colSpan={2} className={'text-right font-semibold italic'}>Total Pembayaran</Table.Cell>
-                                    <Table.Cell colSpan={2} className={'font-semibold italic'}>{formatRupiah(total_after_pph)}</Table.Cell>
-                                </Table.Row>
-                                <Table.Row>
-                                    <Table.Cell colSpan={2} className={'text-right font-semibold italic'}>Total Invoice</Table.Cell>
+                                    <Table.Cell colSpan={2} className={'text-right font-semibold italic'}>
+                                        <div className="flex justify-end">
+                                            <div className="flex flex-col">
+                                                <Label>* Invoice</Label>
+                                                <Description>Nilai Invoice Yang Diterbitkan</Description>
+                                            </div>
+                                        </div>
+                                    </Table.Cell>
                                     <Table.Cell colSpan={2} className={'font-semibold italic'}>
                                         <div className="flex items-center">
                                             <div className="flex-1">{formatRupiah(inv)}</div>
@@ -122,6 +125,15 @@ const ListTagihan = ({casbon, canEdit=false}) => {
                                         </div>
                                     </Table.Cell>
                                 </Table.Row>
+                                <Table.Row>
+                                    <Table.Cell colSpan={2} className={'text-right font-semibold italic'}>Sudah Dibayarkan</Table.Cell>
+                                    <Table.Cell colSpan={2} className={'font-semibold italic'}>{formatRupiah(casbon.terbayar)}</Table.Cell>
+                                </Table.Row>
+                                <Table.Row>
+                                    <Table.Cell colSpan={2} className={'text-right font-semibold italic'}>Total Tagihan Harus Dibayar</Table.Cell>
+                                    <Table.Cell colSpan={2} className={'font-semibold italic'}>{formatRupiah(total_after_pph)}</Table.Cell>
+                                </Table.Row>
+
                             </Table.Body>
                         </Table.Content>
                     </Table.ScrollContainer>
