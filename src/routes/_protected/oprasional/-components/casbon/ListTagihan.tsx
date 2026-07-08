@@ -99,10 +99,6 @@ const ListTagihan = ({casbon, canEdit=false}) => {
                                     <Table.Cell colSpan={2} className={'italic'}>{formatRupiah(total + ppn)}</Table.Cell>
                                 </Table.Row>
                                 <Table.Row>
-                                    <Table.Cell colSpan={2} className={'text-right italic'}>Potongan PPH</Table.Cell>
-                                    <Table.Cell colSpan={2} className={'italic'}>({formatRupiah(pph)})</Table.Cell>
-                                </Table.Row>
-                                <Table.Row>
                                     <Table.Cell colSpan={2} className={'text-right font-semibold italic'}>
                                         <div className="flex justify-end">
                                             <div className="flex flex-col">
@@ -124,6 +120,10 @@ const ListTagihan = ({casbon, canEdit=false}) => {
                                             }
                                         </div>
                                     </Table.Cell>
+                                </Table.Row>
+                                <Table.Row>
+                                    <Table.Cell colSpan={2} className={'text-right italic'}>Potongan PPH</Table.Cell>
+                                    <Table.Cell colSpan={2} className={'italic'}>({formatRupiah(pph)})</Table.Cell>
                                 </Table.Row>
                                 <Table.Row>
                                     <Table.Cell colSpan={2} className={'text-right font-semibold italic'}>Sudah Dibayarkan</Table.Cell>
