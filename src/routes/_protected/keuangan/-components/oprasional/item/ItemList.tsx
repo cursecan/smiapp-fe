@@ -9,7 +9,7 @@ const ItemList = ({casbon, data=[]}) => {
         if (casbon?.nilai_invoice > 0) {
             return casbon.nilai_invoice
         }
-        return casbon.total_hpp + casbon.ppn
+        return Number(casbon.total_hpp) + Number(casbon.ppn)
     })
 
     const tag_after_ppn = useMemo(() => {
