@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
+import { createFileRoute, Link, useNavigate, useParams } from '@tanstack/react-router'
 import { usePenawaranService } from '../../../../services/penawaran.service'
 import {  Breadcrumbs, Button, Card, CloseButton, Description,  Disclosure,  Label,  Surface, Table, TextArea  } from '@heroui/react'
-import { ArrowUpRightFromSquare,  Eye, LogoDocker } from '@gravity-ui/icons'
+import { ArrowUpRight, ArrowUpRightFromSquare,  Eye, LogoDocker } from '@gravity-ui/icons'
 
 import { formatDate } from '../../../../utils/dateFormat'
 import KapalComboBox from '../../../../components/input/KapalComboBox'
@@ -352,10 +352,31 @@ function RouteComponent() {
                   )
                 }
               </div>
-
+            </Surface>
+            <Surface>
+              {
+                data.relation_ref.length > 0 && (
+                  <div className="mt-6">
+                    {
+                      data?.relation_ref.map((i, index) => {
+                        return (
+                          <Link className='button button--secondary' key={i.id} to={`/komersial/penawaran/${i.id}`}>
+                            <div className="flex items-center gap-3">
+                              { i.nomor }
+                              <ArrowUpRightFromSquare />
+                            </div>
+                          </Link>
+                        )
+                      })
+                    }
+                  </div>
+                )
+              }
             </Surface>
           </Card.Content>
         </Card>
+
+
 
       </div>
       
