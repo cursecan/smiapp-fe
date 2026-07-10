@@ -25,6 +25,9 @@ const ItemKegiatan = ({item}) => {
         <Table.Cell>{item.progress} %</Table.Cell>
         <Table.Cell>
             <div className="flex flex-col gap-1">
+                {
+                    item.parent && <Description>{item.parent.barang_jasa}</Description>
+                }
                 <Label>{item.barang_jasa}</Label>
                 {
                     item.ketarangan && <Description>{item.keterangan}</Description>
