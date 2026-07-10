@@ -99,7 +99,19 @@ const UploadDocProgressModal = ({data=[], ops}) => {
                                     </Checkbox.Control>
                                     <Checkbox.Content>
                                         <div className="flex flex-col gap-1">
-                                            <Label>{i.barang_jasa}</Label> 
+                                            <Label>
+                                                <div className="flex gap-1 items-center">
+                                                    {
+                                                        i.parent && (
+                                                            <span>[{i.parent.barang_jasa}]</span>
+                                                        )
+                                                    }
+                                                    <span>
+                                                        {i.barang_jasa}
+                                                    </span>
+                                                </div>
+                                            </Label> 
+                                            
                                             {
                                                 i.keterangan && (
                                                     <Description>{i.keterangan}</Description>
