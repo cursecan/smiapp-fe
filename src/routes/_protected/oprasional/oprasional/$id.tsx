@@ -2,7 +2,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
 import { useOprasionalService } from '../../../../services/oprasional/oprasionalService'
 import HeaderPage from '../../../../components/HeaderPage'
-import { Breadcrumbs, Button, Card, CloseButton, Description, Label, Surface, Table, Tabs, Tooltip, useOverlayState } from '@heroui/react'
+import { Breadcrumbs, Button, Card, CloseButton, Description, Label, Surface, Table, Tabs, TextArea, Tooltip, useOverlayState } from '@heroui/react'
 import KegiatanList from '../-components/oprasional/KegiatanList'
 import { formatRupiah } from '../../../../utils/formatCurrency'
 import { AlmostEqual, ArrowChevronRight, ArrowRightToSquare, Plus } from '@gravity-ui/icons'
@@ -11,6 +11,9 @@ import StatusChiper from '../../../../components/StatusChiper'
 import BARequestModal from '../-components/BARequestModal'
 import { useSchema } from '../../../../components/useSchema'
 import { useCasbonService } from '../../../../services/oprasional/casbonService'
+import InputText from '../../../../components/input/InputText'
+import DownloadBAST from '../-components/DownloadBAST'
+import TabBast from '../-components/bast/TabBast'
 
 export const Route = createFileRoute('/_protected/oprasional/oprasional/$id')({
   component: RouteComponent,
@@ -217,8 +220,16 @@ function RouteComponent() {
                                     </Tabs.Tab>
                                     <Tabs.Tab id={'casbon'}>
                                         Casbon
-                                        <Tabs.Indicator className='bg-accent' />
+                                        <Tabs.Indicator className='bg-warning' />
                                     </Tabs.Tab>
+                                    {
+                                        data?.is_close && (
+                                            <Tabs.Tab id={'ba'}>
+                                                <span className='truncate'>Dokumen Berita Acara (BA)</span>
+                                                <Tabs.Indicator className='bg-danger' />
+                                            </Tabs.Tab>
+                                        )
+                                    }
                                 </Tabs.List>
                             </Tabs.ListContainer>
                             <Tabs.Panel id={'pekerjaan'}>
@@ -323,6 +334,11 @@ function RouteComponent() {
                                     </Table>
                                 </div>
                             </Tabs.Panel>
+                            {
+                                data?.is_close && data?.bast && (
+                                    <TabBast opr={data} canEdit={canEdit}  />
+                                )
+                            }
                         </Tabs>
                     </Card.Content>
                 </Card>

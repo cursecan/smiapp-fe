@@ -1,11 +1,12 @@
-import { Collection, ComboBox, EmptyState, Input, Label, ListBox, ListBoxLoadMoreItem, Spinner } from "@heroui/react"
+import { Collection, ComboBox, Description, EmptyState, Input, Label, ListBox, ListBoxLoadMoreItem, Spinner } from "@heroui/react"
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { useDebounce } from "use-debounce";
 
 
 interface Character {
-  name: string;
+  name: string
+  description: string
   id: string
 }
 
@@ -109,7 +110,10 @@ const SimpleComboBox = ({label, fetchUrl, fetchDetailUrl, value=null, query=[], 
                 id={item?.id}
                 textValue={item?.name}
               >
-                {item?.name}
+                <div className="flex flex-col">
+                  <Label>{item?.name}</Label>
+                  { item?.description && <Description>{item?.description}</Description>}
+                </div>
                 <ListBox.ItemIndicator />
               </ListBox.Item>
             )}
