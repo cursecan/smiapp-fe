@@ -97,7 +97,7 @@ const TabBast = ({opr, canEdit=false}) => {
                     // isDisabled={!canEdit}
                 />
                 <SimpleComboBox
-                    label={'Direktur'}
+                    label={'Manager'}
                     fetchUrl={({pageParam, queryKey}) => usePegawayService.list({pageParam, queryKey})}
                     filter={(i) => ({...i, name: i.user.full_name, description: i.jabatan.nama_jabatan ?? ''})}
                     fetchDetailUrl={({queryKey}) => usePegawayService.detai(queryKey.at(1))}
