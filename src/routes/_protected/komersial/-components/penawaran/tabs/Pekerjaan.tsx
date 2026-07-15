@@ -94,9 +94,9 @@ const Pekerjaan = ({penawaran, canEdit}) => {
     const total_ppn = items?.filter(i => i.is_ppn && !i.is_header).reduce((a, b) => a + (Number(b.harga_satuan)*b.qty*0.11)*100, 0)/100 || 0
 
     const marginHarga = useMemo(() => {
-        const hBeli = items?.filter(i => !i.is_aggency_fee && !i.is_header).reduce((a,b) => a + Number(b.harga_hpp)*b.qty, 0)
-        if (total_hpp && total_hpp > 0)
-            return ((total_hpp - hBeli) * 100 /total_hpp).toFixed(1)
+        const hBeli = items?.filter(i => !i.is_aggency_fee && !i.is_header).reduce((a,b) => a + Number(b.harga_hpp)*b.qty, 0) || 0
+        if (hBeli && hBeli > 0)
+            return ((total_hpp - hBeli) * 100 /hBeli).toFixed(1)
         return 0
     })
     
@@ -217,7 +217,7 @@ const Pekerjaan = ({penawaran, canEdit}) => {
                                 <Table.Row>
                                     <Table.Cell colSpan={4}><strong>TOTAL</strong></Table.Cell>
                                     <Table.Cell><strong>{formatRupiah(total_hpp)}</strong></Table.Cell>
-                                    <Table.Cell><strong>%</strong></Table.Cell>
+                                    <Table.Cell><strong>{marginHarga}%</strong></Table.Cell>
                                     {
                                         canEdit && <Table.Cell></Table.Cell>
                                     }
