@@ -10,7 +10,6 @@ const ItemPenawaranPekerjaan = ({ item, canEdit}) => {
     const marginHarga = useMemo(() => {
         if (item?.harga_hpp > 0 ) {
             return ((item?.harga_satuan - item?.harga_hpp) * 100 / item?.harga_hpp).toFixed(1)
-            // return 1
         }
         return 0
     })
