@@ -89,9 +89,22 @@ const Pekerjaan = ({penawaran, canEdit}) => {
         return <div className="">Loading...</div>
     }
     
-    const total_hpp = items?.filter(i => !i.is_aggency_fee && !i.is_header).reduce((a, b) => a + Number(b.harga_satuan)*b.qty, 0)
-    const total_aggency = items?.filter(i => i.is_aggency_fee && !i.is_header).reduce((a, b) => a + Number(b.harga_satuan)*b.qty, 0)
-    const total_ppn = items?.filter(i => i.is_ppn && !i.is_header).reduce((a, b) => a + (Number(b.harga_satuan)*b.qty*0.11)*100, 0)/100
+    const total_hpp = useMemo(() => {
+        return items?.filter(i => !i.is_aggency_fee && !i.is_header).reduce((a, b) => a + Number(b.harga_satuan)*b.qty, 0) || 0
+    })
+    const total_aggency = useMemo(() => {
+        return items?.filter(i => i.is_aggency_fee && !i.is_header).reduce((a, b) => a + Number(b.harga_satuan)*b.qty, 0) || 0
+    })
+    const total_ppn = useMemo(() => {
+        return items?.filter(i => i.is_ppn && !i.is_header).reduce((a, b) => a + (Number(b.harga_satuan)*b.qty*0.11)*100, 0)/100 || 0
+    })
+
+    const marginHarga = useMemo(() => {
+        const hBeli = items?.filter(i => !i.is_aggency_fee && !i.is_header).reduce((a,b) => a + Number(b.harga_hpp)*b.qty, 0)
+        if (total_hpp && total_hpp > 0)
+            return ((total_hpp - hBeli) * 100 /total_hpp).toFixed(1)
+        return 0
+    })
     
     
     
@@ -179,6 +192,9 @@ const Pekerjaan = ({penawaran, canEdit}) => {
                         <Table.Column className={'w-32'}>
                             Total
                         </Table.Column>
+                        <Table.Column className={'w-20'}>
+                            Margin
+                        </Table.Column>
                         {
                             canEdit && (
                                 <Table.Column>
@@ -207,6 +223,7 @@ const Pekerjaan = ({penawaran, canEdit}) => {
                                 <Table.Row>
                                     <Table.Cell colSpan={4}><strong>TOTAL</strong></Table.Cell>
                                     <Table.Cell><strong>{formatRupiah(total_hpp)}</strong></Table.Cell>
+                                    <Table.Cell><strong>{marginHarga}%</strong></Table.Cell>
                                     {
                                         canEdit && <Table.Cell></Table.Cell>
                                     }
@@ -226,6 +243,7 @@ const Pekerjaan = ({penawaran, canEdit}) => {
                                     <Table.Row>
                                         <Table.Cell colSpan={4}><strong>TOTAL AGENCY FEE</strong></Table.Cell>
                                         <Table.Cell><strong>{formatRupiah(total_aggency)}</strong></Table.Cell>
+                                        <Table.Cell></Table.Cell>
                                         {
                                             canEdit && <Table.Cell></Table.Cell>
                                         }
@@ -233,6 +251,7 @@ const Pekerjaan = ({penawaran, canEdit}) => {
                                     <Table.Row>
                                         <Table.Cell colSpan={4}><strong>PPN 11%</strong></Table.Cell>
                                         <Table.Cell><strong>{formatRupiah(total_ppn)}</strong></Table.Cell>
+                                        <Table.Cell></Table.Cell>
                                         {
                                             canEdit && <Table.Cell></Table.Cell>
                                         }
@@ -240,6 +259,7 @@ const Pekerjaan = ({penawaran, canEdit}) => {
                                     <Table.Row>
                                         <Table.Cell colSpan={4}><strong>GRAND TOTAL</strong> (TOTAL + AGENCY + PPN)</Table.Cell>
                                         <Table.Cell><strong>{formatRupiah(total_hpp + total_aggency + total_ppn)}</strong></Table.Cell>
+                                        <Table.Cell></Table.Cell>
                                         {
                                             canEdit && <Table.Cell></Table.Cell>
                                         }

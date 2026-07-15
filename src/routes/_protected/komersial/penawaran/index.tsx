@@ -91,7 +91,10 @@ function RouteComponent() {
                     Wilayah
                   </Table.Column>
                   <Table.Column className={'truncate'}>
-                    Nilai Penawaran
+                    Amount
+                  </Table.Column>
+                  <Table.Column className={'truncate'}>
+                    Margin
                   </Table.Column>
                   <Table.Column>Status</Table.Column>
                   <Table.Column></Table.Column>
@@ -132,6 +135,9 @@ function RouteComponent() {
                           </Table.Cell>
                           <Table.Cell>
                             { formatRupiah(i.progress.budget || '0') }
+                          </Table.Cell>
+                          <Table.Cell>
+                            { formatRupiah(i?.margin || '0') }%
                           </Table.Cell>
                           <Table.Cell className={'truncate'}>
                             <StatusChiper status={i.status} />

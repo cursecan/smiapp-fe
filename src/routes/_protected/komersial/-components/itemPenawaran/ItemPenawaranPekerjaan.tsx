@@ -2,9 +2,17 @@ import { Description, Label, Table } from '@heroui/react'
 import UpdateItemModal from './UpdateItemModal'
 import DeleteItemModal from './DeleteItemModal'
 import { formatRupiah } from '../../../../../utils/formatCurrency'
+import { useMemo } from 'react'
 
 const ItemPenawaranPekerjaan = ({ item, canEdit}) => {
     // console.log(canEdit, 'canedit');
+
+    const marginHarga = useMemo(() => {
+        if (item.harga_hpp > 0 ) {
+            return ((item.harga_satuan - item.harga_hpp) * 100 / item.harga_hpp).toFixed(1)
+        }
+        return 0
+    })
     
   return (
     <Table.Row>
@@ -61,6 +69,7 @@ const ItemPenawaranPekerjaan = ({ item, canEdit}) => {
                 !item.is_header && (
                     <div className="">
                         { formatRupiah(item.harga_satuan)}
+                        {/* <Description>{ formatRupiah(item.harga_satuan)}</Description> */}
                     </div>
                 )
             }
@@ -69,6 +78,13 @@ const ItemPenawaranPekerjaan = ({ item, canEdit}) => {
             {
                 !item.is_header && (
                     <div className="">{ formatRupiah(item.harga_satuan * item.qty)}</div>
+                )
+            }
+        </Table.Cell>
+        <Table.Cell className={'w-0 truncate'}>
+            {
+                !item.is_header && !item.is_aggency_fee && (
+                    <div className="">{marginHarga}%</div>
                 )
             }
         </Table.Cell>
