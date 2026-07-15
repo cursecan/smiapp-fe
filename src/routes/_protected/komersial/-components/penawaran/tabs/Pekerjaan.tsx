@@ -89,15 +89,9 @@ const Pekerjaan = ({penawaran, canEdit}) => {
         return <div className="">Loading...</div>
     }
     
-    const total_hpp = useMemo(() => {
-        return items?.filter(i => !i.is_aggency_fee && !i.is_header).reduce((a, b) => a + Number(b.harga_satuan)*b.qty, 0) || 0
-    })
-    const total_aggency = useMemo(() => {
-        return items?.filter(i => i.is_aggency_fee && !i.is_header).reduce((a, b) => a + Number(b.harga_satuan)*b.qty, 0) || 0
-    })
-    const total_ppn = useMemo(() => {
-        return items?.filter(i => i.is_ppn && !i.is_header).reduce((a, b) => a + (Number(b.harga_satuan)*b.qty*0.11)*100, 0)/100 || 0
-    })
+    const total_hpp = items?.filter(i => !i.is_aggency_fee && !i.is_header).reduce((a, b) => a + Number(b.harga_satuan)*b.qty, 0) || 0
+    const total_aggency = items?.filter(i => i.is_aggency_fee && !i.is_header).reduce((a, b) => a + Number(b.harga_satuan)*b.qty, 0) || 0
+    const total_ppn = items?.filter(i => i.is_ppn && !i.is_header).reduce((a, b) => a + (Number(b.harga_satuan)*b.qty*0.11)*100, 0)/100 || 0
 
     const marginHarga = useMemo(() => {
         const hBeli = items?.filter(i => !i.is_aggency_fee && !i.is_header).reduce((a,b) => a + Number(b.harga_hpp)*b.qty, 0)
@@ -223,7 +217,7 @@ const Pekerjaan = ({penawaran, canEdit}) => {
                                 <Table.Row>
                                     <Table.Cell colSpan={4}><strong>TOTAL</strong></Table.Cell>
                                     <Table.Cell><strong>{formatRupiah(total_hpp)}</strong></Table.Cell>
-                                    <Table.Cell><strong>{marginHarga}%</strong></Table.Cell>
+                                    <Table.Cell><strong>%</strong></Table.Cell>
                                     {
                                         canEdit && <Table.Cell></Table.Cell>
                                     }
