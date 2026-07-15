@@ -14,6 +14,7 @@ const SimpleComboBox = ({label, fetchUrl, fetchDetailUrl, value=null, query=[], 
     const [search, setSearch] = useState("");
     const [selectedKey, setSelectedKey] = useState("")
     const [searchBounce] = useDebounce(search, 600)
+    const [isFocused, setIsFocused] = useState(false)
 
     const {data: selectedData} = useQuery({
         queryKey: ['combox-detail3', value],
@@ -40,9 +41,9 @@ const SimpleComboBox = ({label, fetchUrl, fetchDetailUrl, value=null, query=[], 
     queryKey: [...query, searchBounce],
     initialPageParam: null,
     queryFn: fetchUrl,
+    enabled: isFocused,
     getNextPageParam: (lastPage) => {
         if (!lastPage.data.next) return undefined
-
             const url = new URL(lastPage.data.next)
             return Number(url.searchParams.get('page'))
     },
@@ -50,7 +51,6 @@ const SimpleComboBox = ({label, fetchUrl, fetchDetailUrl, value=null, query=[], 
 
   useEffect(() => {
     if (!selectedData) return 
-    
     setSearch(selectedData.name)
     setSelectedKey(selectedData.id)
     
@@ -85,7 +85,7 @@ const SimpleComboBox = ({label, fetchUrl, fetchDetailUrl, value=null, query=[], 
         { label && <Label>{label}</Label>}
       
       <ComboBox.InputGroup>
-        <Input placeholder={props.placeholder || 'Search...'} />
+        <Input onFocus={() => setIsFocused(true)} onBlur={() => setIsFocused(false)} placeholder={props.placeholder || 'Search...'} />
         <ComboBox.Trigger />
       </ComboBox.InputGroup>
 

@@ -1,8 +1,8 @@
 import ModalComponent from '../../../../../components/modals/ModalComponent'
-import { Button, CloseButton, Description, Input, Label, TextArea, TextField, useOverlayState } from '@heroui/react'
-import { Pencil } from '@gravity-ui/icons'
-import { useState } from 'react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Button, CloseButton, Description, Input, Label, Surface, TextArea, TextField, useOverlayState } from '@heroui/react'
+import { Pencil, PencilToSquare } from '@gravity-ui/icons'
+import { useEffect, useState } from 'react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useItemPenawaranService } from '../../../../../services/penawaran.service'
 import CurrencyInput from '../../../../../components/input/CurrencyInput'
 import SimpleComboBox from '../../../../../components/input/SimpleComboBox'
@@ -10,9 +10,16 @@ import { useSatuanService } from '../../../../../services/masterdata/satuanServi
 
 const UpdateItemModal = ({item}) => {
     const state = useOverlayState()
-    const [dataForm, setDataForm] = useState({...item, satuan: item.satuan?.id || '',  parent: item.parent ? item.parent.id : ''})
+    const [dataForm, setDataForm] = useState()
 
     const qc = useQueryClient()
+    const {data} = useQuery({
+        queryKey: ['item-penawaran-detail', item?.id],
+        queryFn: () => useItemPenawaranService.detail(item?.id),
+        select: (res) => res.data,
+        enabled: !!item.id && !!state.isOpen
+    })
+
     const mutation = useMutation({
         mutationFn: async ({id, payload}) => {
             return await useItemPenawaranService.edit(id, payload)
@@ -27,29 +34,36 @@ const UpdateItemModal = ({item}) => {
         mutation.mutate({id: item.id, payload: dataForm})
     }
 
+    useEffect(() => {
+        if (data) {
+            setDataForm({...data, satuan: data.satuan?.id || '',  parent: data.parent ? data.parent.id : ''})
+        }
+    }, [data])
+
   return (
     <ModalComponent
         state={state}
         size={'lg'}
         hideFooter
-        iconComponent={<Pencil className='size-5' />}
+        hideHeader
+        iconComponent={<PencilToSquare className='size-5 text-blue-500' />}
         heading={'Update Item'}
         buttonTrigger={<CloseButton className={'bg-accent text-accent-foreground'} onPress={state.setOpen} isIconOnly size='sm'><Pencil /></CloseButton>}
     >
-        <div className="p-1 mt-6 space-y-6">
+        <Surface className="p-3 mt-6 space-y-3 rounded-2xl" variant='secondary'>
             <TextField>
-                <Label>{ dataForm.is_header ? 'Header' : 'Pekerjaan'}</Label>
-                <Input value={dataForm.barang_jasa} onChange={(e) => setDataForm({...dataForm, barang_jasa:e.target.value})} />
+                <Label>{ dataForm?.is_header ? 'Header' : 'Pekerjaan'}</Label>
+                <Input value={dataForm?.barang_jasa} onChange={(e) => setDataForm({...dataForm, barang_jasa:e.target.value})} />
             </TextField>
-            <TextArea className={'h-24'} value={dataForm.sub_content} onChange={(e) => setDataForm({...dataForm, sub_content: e.target.value})} fullWidth placeholder='Detail sub content...' />
+            <TextArea className={'h-24'} value={dataForm?.sub_content} onChange={(e) => setDataForm({...dataForm, sub_content: e.target.value})} fullWidth placeholder='Detail sub content...' />
             
             {
-                !dataForm.is_header && (
+                !dataForm?.is_header && (
                     <>
                         <div className="flex gap-5">
                             <TextField>
                                 <Label>Volume</Label>
-                                <Input type='number' value={dataForm.qty} onChange={(e) => setDataForm({...dataForm, qty:e.target.value})} />
+                                <Input type='number' value={dataForm?.qty} onChange={(e) => setDataForm({...dataForm, qty:e.target.value})} />
                             </TextField>
 
                             {/* <TextField>
@@ -62,37 +76,37 @@ const UpdateItemModal = ({item}) => {
                                 filter={(i) => ({...i, name: i.nama_satuan})}
                                 fetchUrl={() => useSatuanService.list()}
                                 fetchDetailUrl={({queryKey}) => useSatuanService.detail(queryKey.at(1))}
-                                value={dataForm.satuan}
+                                value={dataForm?.satuan}
                                 onChange={(e) => setDataForm({...dataForm, satuan: e})}
                             />
                         </div>
                         <div className="flex items-center gap-5">
                             <TextField>
-                                <Label>Biaya HPP</Label>
-                                <CurrencyInput value={dataForm.harga_hpp} onChange={(e) => setDataForm({...dataForm, harga_hpp: e})}  />
-                                {/* <Input type='number' value={dataForm.harga_hpp} onChange={(e) => setDataForm({...dataForm, harga_hpp:e.target.value})} /> */}
-                                <Description>Biaya dapat disesuaikan dengan harga vendor.</Description>
+                                <Label>Harga Dasar</Label>
+                                <CurrencyInput value={dataForm?.harga_hpp} onChange={(e) => setDataForm({...dataForm, harga_hpp: e})}  />
+                                {/* <Input type='number' value={dataForm?.harga_hpp} onChange={(e) => setDataForm({...dataForm, harga_hpp:e.target.value})} /> */}
+                                {/* <Description>Harga dapat disesuaikan dengan harga vendor.</Description> */}
                             </TextField>
                             <TextField>
-                                <Label>Biaya Satuan</Label>
-                                <CurrencyInput value={dataForm.harga_satuan} onChange={(e) => setDataForm({...dataForm, harga_satuan: e})} />
-                                {/* <Input type='number' value={dataForm.harga_satuan} onChange={(e) => setDataForm({...dataForm, harga_satuan:e.target.value})} /> */}
-                                <Description>Estimasi biaya sesuai invoice.</Description>
+                                <Label>Harga Satuan</Label>
+                                <CurrencyInput value={dataForm?.harga_satuan} onChange={(e) => setDataForm({...dataForm, harga_satuan: e})} />
+                                {/* <Input type='number' value={dataForm?.harga_satuan} onChange={(e) => setDataForm({...dataForm, harga_satuan:e.target.value})} /> */}
+                                {/* <Description>Estimasi biaya sesuai invoice.</Description> */}
                             </TextField>
 
                         </div>
                         <TextField>
                             <Label>Keterangan</Label>
-                            <Input value={dataForm.keterangan} onChange={(e) => setDataForm({...dataForm, keterangan: e.target.value})}/>
+                            <Input value={dataForm?.keterangan} onChange={(e) => setDataForm({...dataForm, keterangan: e.target.value})}/>
                         </TextField>
                     </>
 
                 )
             }
-            <div className="flex justify-end gap-3">
-                <Button slot={'close'} variant='tertiary'>Batal</Button>
-                <Button onPress={handleSave}>Simpan</Button>
-            </div>
+        </Surface>
+        <div className="flex justify-end gap-3 mt-4">
+            <Button size='sm' slot={'close'} variant='tertiary'>Batal</Button>
+            <Button size='sm' onPress={handleSave}>Simpan Perubahan</Button>
         </div>
     </ModalComponent>
   )

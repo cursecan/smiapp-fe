@@ -35,8 +35,8 @@ const Pekerjaan = ({penawaran, canEdit}) => {
     
 
     const {data: items, isLoading} = useQuery({
-        queryKey: ['item-penawaran'],
-        queryFn: async () => await usePenawaranService.items(penawaran.id),
+        queryKey: ['item-penawaran', penawaran?.id],
+        queryFn: async () => await usePenawaranService.items(penawaran?.id),
         select: (data) => data.data,
         enabled: !!penawaran.id
     })
@@ -72,11 +72,11 @@ const Pekerjaan = ({penawaran, canEdit}) => {
         const headers = non_agency_items?.filter(i => i.is_header)
         headers?.forEach(h => {
             sortered.push(h)
-            const contents = items?.filter(i => i.parent?.id === h.id)
+            const contents = non_agency_items?.filter(i => i.parent?.id === h.id)
             sortered = [...sortered, ...contents]
         });
         
-        const no_header_items = items?.filter(i => !i.is_header && !i.parent) || []
+        const no_header_items = non_agency_items?.filter(i => !i.is_header && !i.parent) || []
         return [...sortered, ...no_header_items]
     })
 
@@ -224,6 +224,13 @@ const Pekerjaan = ({penawaran, canEdit}) => {
                             items?.length > 0 && (
                                 <>
                                     <Table.Row>
+                                        <Table.Cell colSpan={4}><strong>TOTAL AGENCY FEE</strong></Table.Cell>
+                                        <Table.Cell><strong>{formatRupiah(total_aggency)}</strong></Table.Cell>
+                                        {
+                                            canEdit && <Table.Cell></Table.Cell>
+                                        }
+                                    </Table.Row>
+                                    <Table.Row>
                                         <Table.Cell colSpan={4}><strong>PPN 11%</strong></Table.Cell>
                                         <Table.Cell><strong>{formatRupiah(total_ppn)}</strong></Table.Cell>
                                         {
@@ -231,7 +238,7 @@ const Pekerjaan = ({penawaran, canEdit}) => {
                                         }
                                     </Table.Row>
                                     <Table.Row>
-                                        <Table.Cell colSpan={4}><strong>GRAND TOTAL</strong></Table.Cell>
+                                        <Table.Cell colSpan={4}><strong>GRAND TOTAL</strong> (TOTAL + AGENCY + PPN)</Table.Cell>
                                         <Table.Cell><strong>{formatRupiah(total_hpp + total_aggency + total_ppn)}</strong></Table.Cell>
                                         {
                                             canEdit && <Table.Cell></Table.Cell>
