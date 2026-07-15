@@ -10,7 +10,9 @@ const StatusChiper = ({status}) => {
         progress_operasional: {color: 'success', variant: 'soft'},
         selesai: {color: 'success', variant: 'primary'},
         proses_transfer: {color: 'warning', variant: 'soft'},
-        sudah_transfer: {color: 'success', variant: 'soft'}
+        sudah_transfer: {color: 'success', variant: 'soft'},
+        proses_ba: {color: 'danger', variant: 'soft'},
+        approval_direktur: {color: 'danger', variant: 'soft'}
     }
 
     const result = status.replace(/_/g, " ")
