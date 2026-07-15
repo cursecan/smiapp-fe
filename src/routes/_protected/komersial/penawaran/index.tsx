@@ -137,7 +137,7 @@ function RouteComponent() {
                             { formatRupiah(i.progress.budget || '0') }
                           </Table.Cell>
                           <Table.Cell>
-                            { formatRupiah(i?.margin || '0') }%
+                            { (i?.margin ?? 0).toFixed(1) }%
                           </Table.Cell>
                           <Table.Cell className={'truncate'}>
                             <StatusChiper status={i.status} />
