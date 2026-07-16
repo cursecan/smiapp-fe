@@ -133,39 +133,51 @@ const TabBast = ({opr, canEdit=false}) => {
                             items?.map(i => {
                                 return (
                                 <Table.Row key={i.id} id={i.id}>
-                                    <Table.Cell>{i.rincian_pekerjaan}</Table.Cell>
-                                    <Table.Cell>{i.qty}</Table.Cell>
-                                    <Table.Cell>{i.satuan_name}</Table.Cell>
-                                    <Table.Cell>
-                                        <div className="flex justify-between">
-                                            Rp <span>{formatRupiah(i.harga_satuan)}</span>
-                                        </div>
-                                    </Table.Cell>
-                                    <Table.Cell>
-                                        <div className="flex justify-between">
-                                            Rp <span>{formatRupiah(i.total)}</span>
-                                        </div>
-                                    </Table.Cell>
-                                    <Table.Cell className="pr-0">
-                                        <Checkbox
-                                        aria-label={`Select ${i.id}`}
-                                        slot="selection"
-                                        variant="secondary"
-                                        >
-                                            <Checkbox.Content>
-                                                <Checkbox.Control>
-                                                <Checkbox.Indicator />
-                                                </Checkbox.Control>
-                                            </Checkbox.Content>
-                                        </Checkbox>
-                                    </Table.Cell>
-                                    <Table.Cell>{i.catatan}</Table.Cell>
-                                    <Table.Cell>
-                                        <div className="flex gap-1">
-                                           <UpdateItemBastModal item={i} />
-                                            <CloseButton />
-                                        </div>
-                                    </Table.Cell>
+                                    {
+                                        i.is_header ? (
+                                            <Table.Cell colSpan={8}>
+                                                <strong>{i.rincian_pekerjaan}</strong>
+                                            </Table.Cell>
+                                        ) : (
+                                            <>
+                                                <Table.Cell>
+                                                    <div className={i.code.slice(2,4)!=='00' && 'pl-4 font-light'}>{i.rincian_pekerjaan}</div>
+                                                </Table.Cell>
+                                                <Table.Cell>{i.qty}</Table.Cell>
+                                                <Table.Cell>{i.satuan_name}</Table.Cell>
+                                                <Table.Cell>
+                                                    <div className="flex justify-between">
+                                                        Rp <span>{formatRupiah(i.harga_satuan)}</span>
+                                                    </div>
+                                                </Table.Cell>
+                                                <Table.Cell>
+                                                    <div className="flex justify-between">
+                                                        Rp <span>{formatRupiah(i.total)}</span>
+                                                    </div>
+                                                </Table.Cell>
+                                                <Table.Cell className="pr-0">
+                                                    <Checkbox
+                                                    aria-label={`Select ${i.id}`}
+                                                    slot="selection"
+                                                    variant="secondary"
+                                                    >
+                                                        <Checkbox.Content>
+                                                            <Checkbox.Control>
+                                                            <Checkbox.Indicator />
+                                                            </Checkbox.Control>
+                                                        </Checkbox.Content>
+                                                    </Checkbox>
+                                                </Table.Cell>
+                                                <Table.Cell>{i.catatan}</Table.Cell>
+                                                <Table.Cell>
+                                                    <div className="flex gap-1">
+                                                    <UpdateItemBastModal item={i} />
+                                                        <CloseButton />
+                                                    </div>
+                                                </Table.Cell>
+                                            </>
+                                        )
+                                    }
                                 </Table.Row>
                                 )
                             })
