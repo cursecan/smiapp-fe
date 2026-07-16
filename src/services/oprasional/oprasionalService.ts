@@ -6,8 +6,8 @@ export const useOprasionalService = {
         return api.post('/oprasional/opr/', payload)
     },
     list: ({queryKey}) => {
-        const [, page, q, pic] = queryKey
-        return api.get('/oprasional/opr/', {params: {page, q, pic}})
+        const [, page, q, pic, status] = queryKey
+        return api.get('/oprasional/opr/', {params: {page, q, pic, status}})
     },
     active_list: ({pageParam, queryKey}) => {
         const [, q] = queryKey

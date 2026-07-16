@@ -37,6 +37,9 @@ const StatusApprovalFilter = ({data, value, onChange}) => {
                         )
                     })
                 }
+                <ListBox.Item key={'revisi'} id={'revisi'} textValue={'revisi'}>
+                    Revisi
+                </ListBox.Item>
             </ListBox>
         </Select.Popover>
     </Select>

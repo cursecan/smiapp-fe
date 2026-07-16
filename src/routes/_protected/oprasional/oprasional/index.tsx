@@ -12,20 +12,24 @@ import { usePegawayService } from '../../../../services/masterdata/pegawayServic
 import { use, useEffect, useMemo } from 'react'
 import SelectComponent from '../../../../components/input/SelectComponent'
 import { useAuth } from '../../../../auth/AuthProvider'
+import StatusApprovalFilter from '../../../../components/StatusApprovalFilter'
+import { getApprovalStatus } from '../../../../components/useSchema'
 
 export const Route = createFileRoute('/_protected/oprasional/oprasional/')({
   component: RouteComponent,
   validateSearch: (search) => ({
     page: Number(search.page ?? 1),
     q: String(search.q ?? ''),
-    pic: String(search.pic ?? '')
+    pic: String(search.pic ?? ''),
+    status: String(search.status ?? '')
   })
 })
 
 function RouteComponent() {
     const navigate = useNavigate()
     const { user } = useAuth()
-    const {page, q, pic} = Route.useSearch()
+    const {page, q, pic, status} = Route.useSearch()
+    const approval_status = getApprovalStatus('Oprasional')
     
     const {data: resAgen} = useQuery({
         queryKey: ['agens-list'],
@@ -34,7 +38,7 @@ function RouteComponent() {
     })
     
     const {data}= useQuery({
-        queryKey: ['oprasional_list', page, q, pic],
+        queryKey: ['oprasional_list', page, q, pic, status],
         queryFn: ({queryKey}) => useOprasionalService.list({queryKey}),
         select: (data) => data.data,
         enabled: !!user
@@ -83,7 +87,8 @@ function RouteComponent() {
                         <div className="w-64">
                             <SelectComponent placeholder={'Pilih User Agen'} value={pic} data={transformAgen} onChange={(e) => navigate({search: (prev) => ({...prev, page: 1, pic: e})})} />
                         </div>
-                        <div className="flex-1 flex justify-end">
+                        <div className="flex-1 flex gap-5 justify-end">
+                            <StatusApprovalFilter data={approval_status} onChange={(e) => navigate({search: (prev) => ({...prev, status:e})})}/>
                             <SearchField className={'w-100'}>
                                 <SearchField.Group>
                                     <SearchField.SearchIcon />
