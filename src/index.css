@@ -11,3 +11,8 @@
 body {
     @apply bg-white text-gray-700 font-nuni
 }
+
+
+.pagination__link[data-active="true"] {
+    @apply bg-amber-400;
+  }
