@@ -6,6 +6,7 @@ import { useExpOprasionalService } from '../../../../services/keuangan/op_expens
 import { formatRupiah } from '../../../../utils/formatCurrency'
 import StatusChiper from '../../../../components/StatusChiper'
 import { ArrowChevronRight, ArrowLeft, Tray } from '@gravity-ui/icons'
+import PaginationTable from '../../../../components/PaginationTable'
 
 export const Route = createFileRoute('/_protected/keuangan/expense/')({
   component: RouteComponent,
@@ -25,6 +26,8 @@ function RouteComponent() {
         queryFn: ({queryKey}) => useExpOprasionalService.list({queryKey}),
         select: (res) => res.data
     })
+
+    const totalPages = Math.ceil(data?.count/10)
     
 
     const changeSearch =(e) => {
@@ -142,6 +145,14 @@ function RouteComponent() {
                         </Table.Body>
                     </Table.Content>
                 </Table.ScrollContainer>
+                {
+                    data?.count > 0 && (
+                        <Table.Footer>
+                        <PaginationTable totalPage={totalPages} page={page}  />
+                        </Table.Footer>
+
+                    )
+                }
             </Table>
            </Card.Content>
         </Card>
