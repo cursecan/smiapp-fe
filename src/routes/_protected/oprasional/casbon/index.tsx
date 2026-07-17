@@ -8,6 +8,7 @@ import StatusChiper from '../../../../components/StatusChiper'
 import { ArrowChevronRight,Tray } from '@gravity-ui/icons'
 import StatusApprovalFilter from '../../../../components/StatusApprovalFilter'
 import { getApprovalStatus } from '../../../../components/useSchema'
+import PaginationTable from '../../../../components/PaginationTable'
 
 export const Route = createFileRoute('/_protected/oprasional/casbon/')({
   component: RouteComponent,
@@ -27,6 +28,8 @@ function RouteComponent() {
     queryFn: async ({queryKey}) => useCasbonService.list({queryKey}),
     select: (res) => res.data
   })
+
+   const totalPages = Math.ceil(data?.count/10)
 
   const changeSearch =(e) => {
         setTimeout(() => {
@@ -131,6 +134,14 @@ function RouteComponent() {
 
               </Table.Content>
             </Table.ScrollContainer>
+            {
+              data?.count > 0 && (
+                <Table.Footer>
+                  <PaginationTable totalPage={totalPages} page={page}  />
+                </Table.Footer>
+
+              )
+            }
           </Table>
         </Card.Content>
       </Card>
