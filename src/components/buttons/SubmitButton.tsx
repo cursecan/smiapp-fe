@@ -1,31 +1,27 @@
-import { Button, useOverlayState } from "@heroui/react"
-import ModalComponent from "../modals/ModalComponent"
+import { Button, Spinner } from "@heroui/react"
 
 
 const SubmitButton = ({
     icon,
-    label,
-    heading,
-    children,
-    handleSubmit
+    label='Submit',
+    isLoading=false,
+    isDisabled=false,
+    onPress=()=>{},
+    ...props
 }) => {
-    const state = useOverlayState()
 
   return (
-    <ModalComponent
-        state={state}
-        buttonTrigger={<Button onPress={state.setOpen} className="bg-orange-500">{icon && icon}<span>{label || 'Submit'}</span></Button>}
-        heading={heading}
-        hideFooter
-    >
-        <div className="">
-            {children}
-            <div className="flex justify-end gap-2 mt-6">
-                <Button variant="tertiary" slot={'close'}>Batal</Button>
-                <Button onPress={handleSubmit}>Ajukan</Button>
-            </div>
-        </div>
-    </ModalComponent>
+    <Button onPress={onPress} isDisabled={isLoading || isDisabled} {...props}>
+        { icon && icon}
+        {
+            isLoading && (
+                <div className="flex items-center  gap-2">
+                    <Spinner color="current" /> Loading
+                </div>
+            )
+        }
+        { !isLoading && label }
+    </Button>
   )
 }
 

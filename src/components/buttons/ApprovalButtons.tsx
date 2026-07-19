@@ -1,8 +1,9 @@
-import { AlertDialog, Button, Description, Label, Surface, Switch, useOverlayState } from "@heroui/react"
+import { AlertDialog, Button, Description, Label, Spinner, Surface, Switch, useOverlayState } from "@heroui/react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useToast } from "../../lib/useToast"
 import { useEffect, useState } from "react"
 import InputText from "../input/InputText"
+import SubmitButton from "./SubmitButton"
 
 
 const ApprovalButtons = ({
@@ -10,9 +11,12 @@ const ApprovalButtons = ({
     saveFn,
     form,
     queryKey,
+    postOnly=false,
+    saveOnly=false,
     isCanEdit=false,
     isCanApprove=false,
     noValidationSave=false,
+    approvalLabel='Ajukan',
     onError=()=>{}
 }) => {
     const save_state = useOverlayState()
@@ -113,33 +117,37 @@ const ApprovalButtons = ({
         {
             isCanEdit && (
                 <>
-                    <AlertDialog>
-                        <Button isDisabled={false} onPress={save_state.setOpen}>Simpan</Button>
-                        <AlertDialog.Backdrop isOpen={save_state.isOpen} onOpenChange={save_state.setOpen}>
-                            <AlertDialog.Container>
-                                <AlertDialog.Dialog>
-                                    <AlertDialog.CloseTrigger />
-                                    <AlertDialog.Header>
-                                        <AlertDialog.Icon status="warning" />
-                                        <AlertDialog.Heading>Simpan</AlertDialog.Heading>
-                                    </AlertDialog.Header>
-                                    <AlertDialog.Body>
-                                        <div className="">
-                                            Apakah Anda yakin menyimpan perubahan data ini?
-                                        </div>
-                                    </AlertDialog.Body>
-                                    <AlertDialog.Footer>
-                                        <Button slot={'close'} variant="tertiary">Close</Button>
-                                        <Button isDisabled={save_mutation.isPending} onPress={form.handleSubmit(handleSaveForm, errorSave)}>Ya, Simpan</Button>
-                                    </AlertDialog.Footer>
-                                </AlertDialog.Dialog>
-                            </AlertDialog.Container>
-                        </AlertDialog.Backdrop>
-                    </AlertDialog>
                     {
-                        !isCanApprove && (
+                    !postOnly && (
+                        <AlertDialog>
+                            <Button isDisabled={false} onPress={save_state.setOpen}>Simpan</Button>
+                            <AlertDialog.Backdrop isOpen={save_state.isOpen} onOpenChange={save_state.setOpen}>
+                                <AlertDialog.Container>
+                                    <AlertDialog.Dialog>
+                                        <AlertDialog.CloseTrigger />
+                                        <AlertDialog.Header>
+                                            <AlertDialog.Icon status="warning" />
+                                            <AlertDialog.Heading>Simpan</AlertDialog.Heading>
+                                        </AlertDialog.Header>
+                                        <AlertDialog.Body>
+                                            <div className="">
+                                                Apakah Anda yakin menyimpan perubahan data ini?
+                                            </div>
+                                        </AlertDialog.Body>
+                                        <AlertDialog.Footer>
+                                            <Button slot={'close'} variant="tertiary">Close</Button>
+                                            <SubmitButton isLoading={save_mutation.isPending} label={'Simpan'} onPress={form.handleSubmit(handleSaveForm, errorSave)} />
+                                        </AlertDialog.Footer>
+                                    </AlertDialog.Dialog>
+                                </AlertDialog.Container>
+                            </AlertDialog.Backdrop>
+                        </AlertDialog>
+                    )
+                    }
+                    {
+                        (!isCanApprove && !saveOnly) && (
                             <AlertDialog>
-                                <Button isDisabled={false} className={'bg-orange-500'} onPress={req_state.setOpen}>Ajukan</Button>
+                                <Button isDisabled={false} className={'bg-orange-500'} onPress={req_state.setOpen}>{approvalLabel}</Button>
                                 <AlertDialog.Backdrop isOpen={req_state.isOpen} onOpenChange={req_state.setOpen}>
                                     <AlertDialog.Container>
                                         <AlertDialog.Dialog>
@@ -155,7 +163,8 @@ const ApprovalButtons = ({
                                             </AlertDialog.Body>
                                             <AlertDialog.Footer>
                                                 <Button slot={'close'} variant="tertiary">Close</Button>
-                                                <Button isDisabled={submit_mutation.isPending} onPress={form.handleSubmit(handleSubmitForm, errorSubmit)}>Ya, Lanjutkan</Button>
+                                                {/* <Button isDisabled={submit_mutation.isPending} onPress={form.handleSubmit(handleSubmitForm, errorSubmit)}>Ya, Lanjutkan</Button> */}
+                                                <SubmitButton isLoading={submit_mutation.isPending} onPress={form.handleSubmit(handleSubmitForm, errorSubmit)} />
                                             </AlertDialog.Footer>
                                         </AlertDialog.Dialog>
                                     </AlertDialog.Container>

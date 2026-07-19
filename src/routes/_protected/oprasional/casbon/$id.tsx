@@ -2,12 +2,12 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
 import { useCasbonService } from '../../../../services/oprasional/casbonService'
 import HeaderPage from '../../../../components/HeaderPage'
-import { Alert, Breadcrumbs, Button, Card, Checkbox, CheckboxGroup, Label, Table, TextArea, TextField } from '@heroui/react'
+import { Alert, Breadcrumbs, Button, Card, Checkbox, CheckboxGroup, Description, Label, Surface, Table, TextArea, TextField } from '@heroui/react'
 import OperasionalComboBox from '../../../../components/input/OperasionalComboBox'
 import SelectComponent from '../../../../components/input/SelectComponent'
 import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { Link as LinkIcon } from '@gravity-ui/icons'
+import { Link as LinkIcon, PencilToSquare, Plus } from '@gravity-ui/icons'
 import CardStepper from '../../../../components/CardStepper'
 import ApprovalButtons from '../../../../components/buttons/ApprovalButtons'
 import { useSchema } from '../../../../components/useSchema'
@@ -85,16 +85,22 @@ function RouteComponent() {
           <Breadcrumbs.Item>{data?.nomor}</Breadcrumbs.Item>
         </Breadcrumbs>}
       />
-    <div className="flex gap-10 mt-6">
+    <div className="flex gap-6 mt-6">
       <div className="flex-1 flex-col space-y-4">
         <Card variant='secondary'>
           <Card.Header>
-            <Card.Title>#{data?.nomor}</Card.Title>
+            <div className="flex justify-between">
+              <Card.Title>#{data?.nama_project}</Card.Title>
+              <Button className={'bg-warning rounded-xl'} onPress={() => navigate({to: `/oprasional/oprasional/${data.opr}`})}><LinkIcon />Lihat Pekerjaan</Button>
+
+            </div>
           </Card.Header>
           <Card.Content>
             <div className="flex flex-col gap-4">
-              <InputText label={'No. PO/SPK'} value={data?.spk} isReadOnly />
-              <OperasionalComboBox isReadOnly value={data.opr} />
+              <div className="flex items-center gap-4">
+                <InputText label={'ID Casbon'} value={data?.nomor} />
+                <InputText label={'No. PO/SPK'} value={data?.spk} isReadOnly />
+              </div>
               <Controller
                 name='pcp'
                 control={control}
@@ -127,20 +133,6 @@ function RouteComponent() {
                   </CheckboxGroup>
                 )}
               />
-              {/* <Controller
-                name='is_ppn'
-                control={control}
-                render={({field}) => (
-                  <Checkbox isReadOnly={!canEdit || data.petty_cash} isSelected={field.value} onChange={(e) => field.onChange(e)}>
-                    <Checkbox.Control>
-                      <Checkbox.Indicator />
-                    </Checkbox.Control>
-                    <Checkbox.Content>
-                      <Label>PPN 11%</Label>
-                    </Checkbox.Content>
-                  </Checkbox>
-                )}
-              /> */}
               <div className="flex items-center gap-3">
                 <Controller
                   name='type_pembayaran'
@@ -149,13 +141,6 @@ function RouteComponent() {
                     <SelectComponent isDisabled={!canEdit || data.petty_cash} className={'w-40'} value={field.value ?? ''} onChange={e => field.onChange(e)} label={'Metode Bayar'} placeholder="Pilih" data={[{id: 'CA', label: 'Tunai'}, {id: 'TF', label: 'Transfer'}]} />
                   )}
                 />
-                {/* <Controller
-                  name='pph_rate'
-                  control={control}
-                  render={({field}) => (
-                    <SelectComponent isDisabled={!canEdit || data.petty_cash} className={'w-40'} value={field.value ?? ''} onChange={e => field.onChange(e)} label={'Potongan PPh'} placeholder="Pilih" data={[{id: 0, label: 'Non PPH'}, {id: 0.025, label: 'Perorangan 2,5%'}, {id: 0.02, label: 'Korporasi 2%'}]} />
-                  )}
-                /> */}
               </div>
               <div className="">
                 <Controller
@@ -171,29 +156,46 @@ function RouteComponent() {
               </div>
               {
                 !data.petty_cash ? (
-                  <>
-                  
-                    <Controller 
-                      name='supplier'
-                      control={control}
-                      render={({field}) => (
-                        <SimpleComboBox
-                          label={'Supplier / Pemohon'}
-                          fetchUrl={({pageParam, queryKey}) => useCustomerService.supplier({pageParam, queryKey})}
-                          filter={(i) => ({...i, name: i.full_name})}
-                          fetchDetailUrl={({queryKey}) => useCustomerService.detail(queryKey.at(1))}
-                          query={['supplier-combox']}
-                          value={field.value}
-                          onChange={(e) => {handleChangeSupply(e)}}
-                          isDisabled={!canEdit}
+                  <>   
+                    <div className="flex items-end gap-3">
+                      <div className="flex-1">
+                        <Controller 
+                          name='supplier'
+                          control={control}
+                          render={({field}) => (
+                            <SimpleComboBox
+                              label={'Supplier'}
+                              fetchUrl={({pageParam, queryKey}) => useCustomerService.supplier({pageParam, queryKey})}
+                              filter={(i) => ({...i, name: i.full_name})}
+                              fetchDetailUrl={({queryKey}) => useCustomerService.detail(queryKey.at(1))}
+                              query={['supplier-combox']}
+                              value={field.value}
+                              onChange={(e) => {handleChangeSupply(e)}}
+                              isDisabled={!canEdit}
+                            />
+                          )}
                         />
-                        // <CustomerComboBox isReadOnly={!canEdit} supplier label={'Supplier'} value={field.value ?? ''} onChange={(e) => field.onChange(e)}  className="max-w-sm w-full" />
-                      )}
-                    />
-
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Button isDisabled isIconOnly className={'bg-warning'}>
+                          <PencilToSquare />
+                        </Button>
+                        <Button isDisabled isIconOnly>
+                          <Plus />
+                        </Button>
+                      </div>
+                    </div>
                     <div className="flex items-center gap-4">
-                      <InputText label={'No. Rekening'} value={data.bank_rekening} isReadOnly />
-                      <InputText label={'Nama Rekening'} value={data.nama_rekening} isReadOnly />
+                      <Surface className="flex flex-col px-4 py-2 rounded-xl max-w-xs w-full">
+                        <Description>No. NPWP</Description>
+                        <Label>{data?.npwp || '-'}</Label>
+                      </Surface>
+                      <Surface className="flex flex-col px-4 py-2 rounded-xl max-w-xs w-full">
+                        <Description>Rekening</Description>
+                        <Label>{data.bank_rekening}</Label>
+                      </Surface>
+                      {/* <InputText label={'No. Rekening'} value={data.bank_rekening} isReadOnly />
+                      <InputText label={'Nama Rekening'} value={data.nama_rekening} isReadOnly /> */}
                     </div>
                   </>
                 ) : (
@@ -209,14 +211,19 @@ function RouteComponent() {
                 )
               }
 
-              <div className="flex items-center gap-3">
-                <div className="flex-1 flex items-center gap-3">
-                  {/* <DownloadButton filename={'fofin.pdf'} fetch={async () => await api.get(`oprasional/casbon/${id}/preview/`,  {responseType: 'blob'})} /> */}
-                </div>
-                <div className="flex items-center gap-3">
-                  <Button onPress={() => navigate({to: `/oprasional/oprasional/${data.opr}`})}><LinkIcon /> Operasional</Button>
-
-                </div>
+              <div className="flex justify-end">
+                <ApprovalButtons
+                    noValidationSave
+                    saveOnly
+                    approvalLabel='Pengajuan Casbon'
+                    isCanApprove={canApprove}
+                    isCanEdit={canEdit}
+                    form={{handleSubmit, getValues, isValid}}
+                    saveFn={(payload) => useCasbonService.update(data.id, payload)}
+                    submitFn={() => useCasbonService.submit(data.id)}
+                    queryKey={['casbon-detail', id]}
+                    // onError={setErrors}
+                />
               </div>
             </div>
           </Card.Content>
@@ -225,9 +232,11 @@ function RouteComponent() {
         <ListTagihan casbon={data} canEdit={canEdit} />
 
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 justify-end">
           <ApprovalButtons
               noValidationSave
+              postOnly
+              approvalLabel='Pengajuan Casbon'
               isCanApprove={canApprove}
               isCanEdit={canEdit}
               form={{handleSubmit, getValues, isValid}}
@@ -240,7 +249,7 @@ function RouteComponent() {
           
         </div>
       </div>
-      <div className="w-100">
+      <div className="max-w-xs w-full">
         <CardStepper stepper={data?.stepper} />
         
         {

@@ -28,6 +28,7 @@ import { usePelabuhanService } from '../../../../services/masterdata/pelabuhanSe
 import { useJenisPekerjaanService } from '../../../../services/masterdata/jenisPekerjaanService'
 import ReviseComponent from '../-components/penawaran/ReviseComponent'
 import DateInput from '../../../../components/input/DateInput'
+import { useCustomerService } from '../../../../services/customer/customerService'
 
 export const Route = createFileRoute('/_protected/komersial/penawaran/$id')({
   component: RouteComponent,
@@ -206,6 +207,31 @@ function RouteComponent() {
                   )}
                 />
               </div>
+
+              <div className="">
+                <Controller
+                  name='catatan'
+                  control={control}
+                  render={({field}) => (
+                    <TextArea disabled={!canEdit} fullWidth placeholder='Catatan...' value={field.value} onChange={(e) => field.onChange(e.target.value)} />
+                  )}
+                />
+              </div>
+
+              <div className="flex">
+                <ApprovalButtons
+                  noValidationSave
+                  saveOnly
+                  isCanApprove={canApprove}
+                  isCanEdit={canEdit}
+                  form={{handleSubmit, getValues, isValid}}
+                  saveFn={(payload) => usePenawaranService.edit(data.id, payload)}
+                  submitFn={(payload) => usePenawaranService.submit(data.id, payload)}
+                  queryKey={['detail-penawarans', id]}
+                  approvalLabel='Req. Approval Penawaran'
+                  onError={setErrors}
+                />
+              </div>
               
               <Surface className='rounded-xl p-3'>
                   { canEdit && (
@@ -294,35 +320,29 @@ function RouteComponent() {
                 )
               }
 
-              {/* <Controller
-                name='customer'
-                control={control}
-                render={({field}) => (
-                  <CustomerComboBox isDisabled={!!data?.customer} label={'Pemberi Kerja'} {...field} value={field.value || ''} onChange={(e) => field.onChange(e)} />
-                )}
-              /> */}
-
-              <div className="">
-                <Controller
-                  name='catatan'
-                  control={control}
-                  render={({field}) => (
-                    <TextArea disabled={!canEdit} fullWidth placeholder='Catatan...' value={field.value} onChange={(e) => field.onChange(e.target.value)} />
-                  )}
-                />
-              </div>
-
-              <CustomerComboBox isReadOnly={!canEdit} isDisabled={!!data?.sumber_penugasan} label={'Pemberi Kerja'} value={data?.customer?.id} onChange={onChangeCustomer} />
-
-              <div className="flex items-center gap-3">
+              <SimpleComboBox
+                label={'Pemberi Kerja'}
+                query={['customer-comboxsd']}
+                fetchUrl={({pageParams, queryKey}) => useCustomerService.list({pageParams, queryKey})}
+                fetchDetailUrl={({queryKey}) => useCustomerService.detail(queryKey.at(1))}
+                query={['satuan-combox-list']}
+                filter={(i) => ({...i, name: `${i.full_name} (${i.email})`, description: i.company?.company_name})}
+                value={data?.customer?.id}
+                onChange={onChangeCustomer}
+                isDisabled={!canEdit}
+              
+              />
+              <div className="flex justify-end items-center gap-3">
                 <ApprovalButtons
                   noValidationSave
+                  postOnly
                   isCanApprove={canApprove}
                   isCanEdit={canEdit}
                   form={{handleSubmit, getValues, isValid}}
                   saveFn={(payload) => usePenawaranService.edit(data.id, payload)}
                   submitFn={(payload) => usePenawaranService.submit(data.id, payload)}
                   queryKey={['detail-penawaran', id]}
+                  approvalLabel='Req. Approval Penawaran'
                   onError={setErrors}
                 />
                 {
