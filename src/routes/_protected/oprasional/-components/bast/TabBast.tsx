@@ -1,4 +1,4 @@
-import { Button, Checkbox, CloseButton, Label, Surface, Table, Tabs, TextArea } from "@heroui/react"
+import { Button, Card, Checkbox, CloseButton, Label, Surface, Table, Tabs, TextArea } from "@heroui/react"
 import { useEffect, useState } from "react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useBastService } from "../../../../../services/oprasional/bastService"
@@ -10,6 +10,7 @@ import { usePegawayService } from "../../../../../services/masterdata/pegawaySer
 import DownloadBAST from "../DownloadBAST"
 import UpdateItemBastModal from "./UpdateItemBastModal"
 import { useToast } from "../../../../../lib/useToast"
+import UploadInput from "../../../../../components/input/UploadInput"
 
 const TabBast = ({opr, canEdit=false}) => {
     const [form, setForm] = useState()
@@ -187,10 +188,12 @@ const TabBast = ({opr, canEdit=false}) => {
                 </Table.Content>
             </Table.ScrollContainer>
         </Table>
-        <div className="flex justify-between">
+        <div className="flex justify-end gap-3">
             <Button onPress={submitSave}>Simpan Update</Button>
             <DownloadBAST data={opr?.bast} />
         </div>
+        
+        <UploadInput />
     </Tabs.Panel>
   )
 }

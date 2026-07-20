@@ -145,7 +145,7 @@ function RouteComponent() {
                             )
                         }
 
-                        <Surface className='p-3 rounded-2xl'>
+                        <Surface className='p-3 rounded-2xl space-y-4'>
                             <Table>
                                 <Table.ScrollContainer>
                                     <Table.Content>
@@ -196,6 +196,25 @@ function RouteComponent() {
                                                     )
                                                 })
                                             }
+                                        </Table.Body>
+                                    </Table.Content>
+                                </Table.ScrollContainer>
+                            </Table>
+
+                            <Table>
+                                <Table.ScrollContainer>
+                                    <Table.Content>
+                                        <Table.Header>
+                                            <Table.Column isRowHeader>
+                                                Progress Dokumen
+                                            </Table.Column>
+                                        </Table.Header>
+                                        <Table.Body>
+                                            <Table.Cell>
+                                                <a href={data?.drives.progress} target="_blank" rel="noopener noreferrer">
+                                                    {data?.drives.progress}
+                                                </a>
+                                            </Table.Cell>
                                         </Table.Body>
                                     </Table.Content>
                                 </Table.ScrollContainer>
