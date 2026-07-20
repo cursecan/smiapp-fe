@@ -346,7 +346,7 @@ function RouteComponent() {
                   onError={setErrors}
                 />
                 {
-                  data?.approvals[0]?.step === 3 && hasAuth && (
+                  data?.approvals[0]?.step === 4 && hasAuth && (
                     <>
                       <ReplyEmailModal payload={data} isDisabled={data?.has_email_reply || !data?.customer} fnQuery={(payload) => usePenawaranService.reply_email(data?.id, payload)} queryKey={['detail-penawaran', id]} />
                       <DisposisiOperasionalModal isDisabled={!data?.has_email_reply} penawaran={data} />
@@ -354,7 +354,7 @@ function RouteComponent() {
                   )
                 }
                 {
-                  data?.approvals[ 0]?.step >= 2 && (
+                  data?.approvals[ 0]?.step >= 3 && (
                     <DownloadPenawaran data={data} />
                   )
                 }
