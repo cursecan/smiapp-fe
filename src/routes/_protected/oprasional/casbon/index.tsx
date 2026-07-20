@@ -83,7 +83,7 @@ function RouteComponent() {
                       data?.results.map(i => {
                         return (
                           <Table.Row>
-                            <Table.Cell className={'truncate'}>
+                            <Table.Cell>
                               <div className="flex flex-col gap-1">
                                 <Label>{ i.nomor }</Label>
                                 <p className="">{i.nama_project}</p>
