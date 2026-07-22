@@ -227,7 +227,7 @@ function RouteComponent() {
                   form={{handleSubmit, getValues, isValid}}
                   saveFn={(payload) => usePenawaranService.edit(data.id, payload)}
                   submitFn={(payload) => usePenawaranService.submit(data.id, payload)}
-                  queryKey={['detail-penawarans', id]}
+                  queryKey={['detail-penawaran', id]}
                   approvalLabel='Req. Approval Penawaran'
                   onError={setErrors}
                 />

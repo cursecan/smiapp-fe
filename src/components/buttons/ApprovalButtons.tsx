@@ -176,7 +176,7 @@ const ApprovalButtons = ({
             )
         }
         {
-            isCanApprove && (
+            (isCanApprove && !saveOnly) && (
                 <AlertDialog>
                     <Button isDisabled={false} className={'bg-orange-500'} onPress={req_state.setOpen}>Approval</Button>
                     <AlertDialog.Backdrop isOpen={req_state.isOpen} onOpenChange={req_state.setOpen}>
