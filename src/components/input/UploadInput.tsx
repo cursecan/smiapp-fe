@@ -1,11 +1,11 @@
-import { CloudArrowUpIn } from "@gravity-ui/icons"
+import { ArrowDownToSquare, CloudArrowUpIn, File } from "@gravity-ui/icons"
 import { Label, Spinner, Surface } from "@heroui/react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useRef, useState } from "react"
 import { useToast } from "../../lib/useToast"
 import {api} from '../../lib/api'
 
-const UploadInput = ({value, pathUrl}) => {
+const UploadInput = ({value, queryKey, pathUrl, name='Download Signed BA'}) => {
     const fileRef = useRef(null)
     const [progress, setProgress] = useState(0)
 
@@ -35,7 +35,9 @@ const UploadInput = ({value, pathUrl}) => {
         },
         onSuccess: () => {
             setProgress(0)
-            qc.invalidateQueries({queryKey: ['progress-list']})
+            if (queryKey) {
+                qc.invalidateQueries({queryKey: [...queryKey]})
+            }
         }
     })
 
@@ -63,7 +65,14 @@ const UploadInput = ({value, pathUrl}) => {
   return (
     <>
         { value ? (
-            <div className=""></div>
+            <div className="">
+                <Surface className="h-32 flex items-center justify-center bg-warning-soft/20 border-2 rounded-xl border-dashed">
+                    <a href={value} className="flex gap-1 text-sm items-center" target="_blank">
+                        <ArrowDownToSquare className="size-5 text-blue-400" />
+                        <span>{name}</span>
+                    </a>
+                </Surface>
+            </div>
         ) : (
             <label>
                 <input ref={fileRef} type="file" name="" id="" style={{display: 'none'}} onChange={handleUpload} />

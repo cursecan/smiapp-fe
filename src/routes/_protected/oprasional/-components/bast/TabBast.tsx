@@ -158,9 +158,9 @@ const TabBast = ({opr, canEdit=false}) => {
                                                 </Table.Cell>
                                                 <Table.Cell className="pr-0">
                                                     <Checkbox
-                                                    aria-label={`Select ${i.id}`}
-                                                    slot="selection"
-                                                    variant="secondary"
+                                                        aria-label={`Select ${i.id}`}
+                                                        slot="selection"
+                                                        variant="secondary"
                                                     >
                                                         <Checkbox.Content>
                                                             <Checkbox.Control>
@@ -188,12 +188,22 @@ const TabBast = ({opr, canEdit=false}) => {
                 </Table.Content>
             </Table.ScrollContainer>
         </Table>
-        <div className="flex justify-end gap-3">
-            <Button onPress={submitSave}>Simpan Update</Button>
-            <DownloadBAST data={opr?.bast} />
-        </div>
+
+        {
+            !bast?.dok && (
+                <div className="flex justify-end gap-3">
+                    <Button onPress={submitSave}>Simpan Update</Button>
+                    <DownloadBAST data={opr?.bast} />
+                </div>
+
+            )
+        }
         
-        <UploadInput />
+        <UploadInput
+            pathUrl={`oprasional/bast/${opr?.bast}/upload_bast/`} 
+            value={bast?.dok} 
+            queryKey={['bast-detail', opr?.bast]}
+         />
     </Tabs.Panel>
   )
 }
