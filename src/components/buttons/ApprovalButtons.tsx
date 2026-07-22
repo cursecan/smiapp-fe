@@ -214,7 +214,8 @@ const ApprovalButtons = ({
                                 <AlertDialog.Footer>
                                     {/* <Button slot={'close'} variant="tertiary">Close</Button> */}
                                     <Button variant="tertiary" slot={'close'}>Close</Button>
-                                    <Button variant={appform.is_decline ? 'danger' : 'primary'} onPress={form.handleSubmit(handleSubmitForm, errorSubmit)}>Submit</Button>
+                                    {/* <Button variant={appform.is_decline ? 'danger' : 'primary'} onPress={form.handleSubmit(handleSubmitForm, errorSubmit)}>Submit</Button> */}
+                                    <SubmitButton variant={appform.is_decline ? 'danger' : 'primary'} onPress={form.handleSubmit(handleSubmitForm, errorSubmit)} isLoading={submit_mutation.isPending}/>
                                 </AlertDialog.Footer>
                             </AlertDialog.Dialog>
                         </AlertDialog.Container>
