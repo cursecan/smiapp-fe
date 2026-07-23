@@ -2,10 +2,11 @@ import { Button, Spinner } from "@heroui/react"
 
 
 const SubmitButton = ({
-    icon,
+    icon=null,
     label='Submit',
     isLoading=false,
     isDisabled=false,
+    loadingText='Loading',
     onPress=()=>{},
     ...props
 }) => {
@@ -16,7 +17,7 @@ const SubmitButton = ({
         {
             isLoading && (
                 <div className="flex items-center  gap-2">
-                    <Spinner color="current" /> Loading
+                    <Spinner color="current" /> {loadingText}
                 </div>
             )
         }

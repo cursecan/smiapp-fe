@@ -4,6 +4,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useToast } from "../../../../../lib/useToast"
 import InputText from "../../../../../components/input/InputText"
 import { useState } from "react"
+import SubmitButton from "../../../../../components/buttons/SubmitButton"
+import { LogoTelegram } from "@gravity-ui/icons"
 
 const ReplyEmailModal = ({payload, fnQuery, queryKey, isDisabled=false}) => {
     const state = useOverlayState()
@@ -69,7 +71,8 @@ const ReplyEmailModal = ({payload, fnQuery, queryKey, isDisabled=false}) => {
                 </div>
                 <div className="flex justify-end gap-2">
                     <Button onPress={state.close} variant="tertiary">Batal</Button>
-                    <Button isDisabled={mutation.isPending} onPress={handleSubmit}>Kirim</Button>
+                    {/* <Button isDisabled={mutation.isPending} onPress={handleSubmit}>Kirim</Button> */}
+                    <SubmitButton label="Kirim" isLoading={mutation.isPending} onPress={handleSubmit} loadingText="Mengirim..." icon={<LogoTelegram className="size-5" />} />
                 </div>
             </div>
         </Surface>
