@@ -13,6 +13,9 @@ export const useBastService = {
     },
     items: (id) => {
         return api.get(`oprasional/bast/${id}/items/`)
+    },
+    userapproval: (id) => {
+         return api.get(`oprasional/bast/${id}/userapproval/`)
     }
 }
 
@@ -26,5 +29,12 @@ export const useItemBastService = {
     },
     drop: (id) => {
         return api.post(`oprasional/item-bast/${id}/drop/`)
+    }
+}
+
+
+export const usePenanggungBastService = {
+    create: (payload) => {
+        return api.post('/oprasional/bast-sign/', payload)
     }
 }

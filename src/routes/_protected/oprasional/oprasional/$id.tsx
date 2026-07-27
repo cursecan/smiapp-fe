@@ -14,6 +14,7 @@ import { useCasbonService } from '../../../../services/oprasional/casbonService'
 import InputText from '../../../../components/input/InputText'
 import DownloadBAST from '../-components/DownloadBAST'
 import TabBast from '../-components/bast/TabBast'
+import TabInvoice from '../-components/TabInvoice'
 
 export const Route = createFileRoute('/_protected/oprasional/oprasional/$id')({
   component: RouteComponent,
@@ -249,6 +250,14 @@ function RouteComponent() {
                                             </Tabs.Tab>
                                         )
                                     }
+                                    {
+                                        data?.is_close && data?.invoice && (
+                                            <Tabs.Tab id={'invoice'}>
+                                                <span className='truncate'>Invoice & Faktur Pajak</span>
+                                                <Tabs.Indicator className='bg-warning' />
+                                            </Tabs.Tab>
+                                        )
+                                    }
                                 </Tabs.List>
                             </Tabs.ListContainer>
                             <Tabs.Panel id={'pekerjaan'}>
@@ -356,6 +365,12 @@ function RouteComponent() {
                             {
                                 data?.is_close && data?.bast && (
                                     <TabBast opr={data} canEdit={canEdit}  />
+                                )
+                            }
+
+                            {
+                                data?.is_close && data?.invoice && (
+                                    <TabInvoice opr={data} canEdit={canEdit}  />
                                 )
                             }
                         </Tabs>

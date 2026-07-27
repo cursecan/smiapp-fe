@@ -11,11 +11,14 @@ import DownloadBAST from "../DownloadBAST"
 import UpdateItemBastModal from "./UpdateItemBastModal"
 import { useToast } from "../../../../../lib/useToast"
 import UploadInput from "../../../../../components/input/UploadInput"
+import GenerateInvoiceModal from "../GenerateInvoiceModal"
+
 
 const TabBast = ({opr, canEdit=false}) => {
     const [form, setForm] = useState()
     const [selectedKeys, setSelectedKeys] = useState();
     const toast = useToast()
+    const [approvals, setApprobals] = useState([null, null, null])
 
     const {data:  bast} = useQuery({
         queryKey: ['bast-detail', opr?.bast],
@@ -31,7 +34,9 @@ const TabBast = ({opr, canEdit=false}) => {
         enabled: !!opr?.bast
     })
 
+
     const qc = useQueryClient()
+
     const save_mutation = useMutation({
         mutationFn: (payload) => useBastService.update(opr?.bast, payload),
         onSuccess: () => {
@@ -46,7 +51,7 @@ const TabBast = ({opr, canEdit=false}) => {
 
 
     const submitSave = () => {
-        save_mutation.mutate({...form, selected: [...selectedKeys]})
+        save_mutation.mutate({...form, selected: [...selectedKeys], penanggung_jawab:[...approvals.filter(i => !!i)]})
     }
 
 
@@ -54,6 +59,7 @@ const TabBast = ({opr, canEdit=false}) => {
     useEffect(() => {
         if (bast) {
             setForm(bast)
+            setApprobals(bast?.penanggung_jawab)
         }
     }, [bast])
 
@@ -64,6 +70,12 @@ const TabBast = ({opr, canEdit=false}) => {
             )
         }
     }, [items])
+
+    // useEffect(() => {
+    //     if (userappovals) {
+    //         setApprobals(userappovals)
+    //     }
+    // }, [userappovals])
     
 
 
@@ -83,31 +95,31 @@ const TabBast = ({opr, canEdit=false}) => {
                 query={['customer-combox']}
                 value={form?.customer}
                 onChange={(e) => setForm({...form, customer: e})}
-                // isDisabled={!canEdit}
             />
-            <div className="flex gap-4">
-
-                <SimpleComboBox
-                    label={'Direktur'}
-                    fetchUrl={({pageParam, queryKey}) => usePegawayService.list({pageParam, queryKey})}
-                    filter={(i) => ({...i, name: i.user.full_name, description: i.jabatan.nama_jabatan ?? ''})}
-                    fetchDetailUrl={({queryKey}) => usePegawayService.detai(queryKey.at(1))}
-                    query={['direksi-combox']}
-                    value={form?.direksi}
-                    onChange={(e) => setForm({...form, direksi: e})}
-                    // isDisabled={!canEdit}
-                />
-                <SimpleComboBox
-                    label={'Manager'}
-                    fetchUrl={({pageParam, queryKey}) => usePegawayService.list({pageParam, queryKey})}
-                    filter={(i) => ({...i, name: i.user.full_name, description: i.jabatan.nama_jabatan ?? ''})}
-                    fetchDetailUrl={({queryKey}) => usePegawayService.detai(queryKey.at(1))}
-                    query={['direksi-combox2']}
-                    value={form?.direksi_2}
-                    onChange={(e) => setForm({...form, direksi_2: e})}
-                    // isDisabled={!canEdit}
-                />
-            </div>
+            <Surface className="rounded-xl">
+                {
+                    approvals.map((value, index) => {
+                        return (
+                            <div key={index} className="p-3">
+                                <SimpleComboBox
+                                    label={`Pemimipin ${index+1}`}
+                                    fetchUrl={({pageParam, queryKey}) => usePegawayService.list({pageParam, queryKey})}
+                                    filter={(i) => ({...i, name: i.user.full_name, description: i.jabatan.nama_jabatan ?? ''})}
+                                    fetchDetailUrl={({queryKey}) => usePegawayService.detai(queryKey.at(1))}
+                                    query={['direksi-combox']}
+                                    value={value}
+                                    onChange={(e) => setApprobals((prev) => {
+                                        const next = [...prev]
+                                        next[index] = e
+                                        return next
+                                    })}
+                                    isDisabled={!canEdit}
+                                />
+                            </div>
+                        )
+                    })
+                }
+            </Surface>
         </Surface>
 
         <Table>
@@ -204,6 +216,13 @@ const TabBast = ({opr, canEdit=false}) => {
             value={bast?.dok} 
             queryKey={['bast-detail', opr?.bast]}
          />
+
+        
+        {
+            bast?.dok && !opr?.invoice && (
+                <GenerateInvoiceModal opr={opr} />
+            )
+        }
     </Tabs.Panel>
   )
 }
