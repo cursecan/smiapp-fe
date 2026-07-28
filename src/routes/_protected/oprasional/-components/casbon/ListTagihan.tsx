@@ -23,7 +23,8 @@ const ListTagihan = ({casbon, canEdit=false}) => {
     })
 
     const pph = useMemo(() => {
-        return data?.reduce((a, b) => a + (Number(b.nilai_dasar_pajak)*b.pph_rate), 0)
+        const pph = data?.reduce((a, b) => a + (Number(b.nilai_dasar_pajak)*b.pph_rate), 0)
+        return Math.round(pph)
         // if (casbon.nilai_invoice === 0 || Number(casbon.nilai_invoice) === total + Number(casbon.terbayar)) {
         //     return Math.ceil((total + Number(casbon.terbayar)) * casbon.pph_rate)
         // }
@@ -32,7 +33,8 @@ const ListTagihan = ({casbon, canEdit=false}) => {
 
     })
     const ppn = useMemo(() => {
-        return data?.reduce((a, b) => a + (Number(b.nilai_dasar_pajak)*b.ppn_rate), 0)
+        const ppn = data?.reduce((a, b) => a + (Number(b.nilai_dasar_pajak)*b.ppn_rate), 0)
+        return Math.round(ppn)
         // if (casbon.nilai_invoice === 0 || Number(casbon.nilai_invoice) === total + Number(casbon.terbayar)) {
         //     return Math.ceil((total + Number(casbon.terbayar)) * casbon.pph_rate)
         // }
