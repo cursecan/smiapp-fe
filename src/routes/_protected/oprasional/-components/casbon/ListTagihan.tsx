@@ -127,7 +127,7 @@ const ListTagihan = ({casbon, canEdit=false}) => {
                                 </Table.Row>
                                 <Table.Row>
                                     <Table.Cell colSpan={2} className={'text-right font-semibold italic'}>Sudah Dibayarkan</Table.Cell>
-                                    <Table.Cell colSpan={2} className={'font-semibold italic'}>{formatRupiah(casbon.terbayar)}</Table.Cell>
+                                    <Table.Cell colSpan={2} className={'font-semibold italic'}>{formatRupiah(casbon?.terbayar)}</Table.Cell>
                                 </Table.Row>
                                 <Table.Row>
                                     <Table.Cell colSpan={2} className={'text-right font-semibold italic'}>Total Tagihan Harus Dibayar</Table.Cell>

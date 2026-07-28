@@ -155,7 +155,7 @@ function RouteComponent() {
                 />
               </div>
               {
-                !data.petty_cash ? (
+                !data?.petty_cash ? (
                   <>   
                     <div className="flex items-end gap-3">
                       <div className="flex-1">
@@ -192,7 +192,7 @@ function RouteComponent() {
                       </Surface>
                       <Surface className="flex flex-col px-4 py-2 rounded-xl max-w-xs w-full">
                         <Description>Rekening</Description>
-                        <Label>{data.bank_rekening}</Label>
+                        <Label>{data?.bank_rekening}</Label>
                       </Surface>
                       {/* <InputText label={'No. Rekening'} value={data.bank_rekening} isReadOnly />
                       <InputText label={'Nama Rekening'} value={data.nama_rekening} isReadOnly /> */}
