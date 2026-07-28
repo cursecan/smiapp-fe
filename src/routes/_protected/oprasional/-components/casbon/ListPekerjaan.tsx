@@ -69,8 +69,8 @@ const ListPekerjaan = ({casbon, canEdit=false}) => {
     }
     
     const total_bef_ppn = casbon_items?.reduce((a, b) => a + Number(b.harga) * b.qty, 0)
-    const total_ppn = !casbon.is_ppn ? 0 : Math.ceil(casbon_items.reduce((a, b) => a + Number(b.harga) * b.qty * (b.is_ppn ? 0.11 : 0), 0))
-    const total_pph = Math.ceil(casbon.nilai_invoice * casbon.pph_rate)
+    const total_ppn = !casbon.is_ppn ? 0 : Math.round(casbon_items.reduce((a, b) => a + Number(b.harga) * b.qty * (b.is_ppn ? 0.11 : 0), 0))
+    const total_pph = Math.round(casbon.nilai_invoice * casbon.pph_rate)
     const total_after_ppn = total_bef_ppn + total_ppn - total_pph
     
 
