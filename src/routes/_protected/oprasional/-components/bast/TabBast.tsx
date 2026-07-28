@@ -59,7 +59,9 @@ const TabBast = ({opr, canEdit=false}) => {
     useEffect(() => {
         if (bast) {
             setForm(bast)
-            setApprobals(bast?.penanggung_jawab)
+            if (bast?.penanggung_jawab.length > 0) {
+                setApprobals(bast?.penanggung_jawab)
+            }
         }
     }, [bast])
 
