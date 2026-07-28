@@ -66,7 +66,7 @@ function RouteComponent() {
         yaxis: {
           labels: {
             formatter: (v) => {
-              return `${(v/10**6).toFixed(2)} JT`
+              return `${(v/10**9).toFixed(2)} M`
             }
           }
         },
