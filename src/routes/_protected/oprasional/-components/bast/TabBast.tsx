@@ -18,7 +18,6 @@ const TabBast = ({opr, canEdit=false}) => {
     const [form, setForm] = useState()
     const [selectedKeys, setSelectedKeys] = useState();
     const toast = useToast()
-    const [approvals, setApprobals] = useState([null, null, null])
 
     const {data:  bast} = useQuery({
         queryKey: ['bast-detail', opr?.bast],
@@ -51,7 +50,7 @@ const TabBast = ({opr, canEdit=false}) => {
 
 
     const submitSave = () => {
-        save_mutation.mutate({...form, selected: [...selectedKeys], penanggung_jawab:[...approvals.filter(i => !!i)]})
+        save_mutation.mutate({...form, selected: [...selectedKeys]})
     }
 
 
@@ -59,9 +58,6 @@ const TabBast = ({opr, canEdit=false}) => {
     useEffect(() => {
         if (bast) {
             setForm(bast)
-            if (bast?.penanggung_jawab.length > 0) {
-                setApprobals(bast?.penanggung_jawab)
-            }
         }
     }, [bast])
 
@@ -100,7 +96,7 @@ const TabBast = ({opr, canEdit=false}) => {
             />
             <Surface className="rounded-xl">
                 {
-                    approvals.map((value, index) => {
+                    bast?.penanggung_jawab.map((value, index) => {
                         return (
                             <div key={index} className="p-3">
                                 <SimpleComboBox
@@ -110,12 +106,7 @@ const TabBast = ({opr, canEdit=false}) => {
                                     fetchDetailUrl={({queryKey}) => usePegawayService.detai(queryKey.at(1))}
                                     query={['direksi-combox']}
                                     value={value}
-                                    onChange={(e) => setApprobals((prev) => {
-                                        const next = [...prev]
-                                        next[index] = e
-                                        return next
-                                    })}
-                                    isDisabled={!canEdit}
+                                    isDisabled
                                 />
                             </div>
                         )
