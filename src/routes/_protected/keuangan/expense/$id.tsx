@@ -2,9 +2,10 @@ import { createFileRoute, useParams } from '@tanstack/react-router'
 import HeaderPage from '../../../../components/HeaderPage'
 import { useQuery } from '@tanstack/react-query'
 import { useExpOprasionalService } from '../../../../services/keuangan/op_expense'
-import { Breadcrumbs, Card, Description, Label, Table } from '@heroui/react'
+import { Breadcrumbs, Button, Card, CloseButton, Description, Label, Link, Table } from '@heroui/react'
 import { formatRupiah } from '../../../../utils/formatCurrency'
 import CasbonList from '../-components/oprasional/CasbonList'
+import { File } from '@gravity-ui/icons'
 
 export const Route = createFileRoute('/_protected/keuangan/expense/$id')({
   component: RouteComponent,
@@ -40,7 +41,7 @@ function RouteComponent() {
                 <div className="w-100">
                     <Card variant='secondary'>
                         <Card.Header>
-                            <Card.Title>Penawaran # {data?.opr?.penawaran?.nomor}</Card.Title>
+                            <Card.Title>{data?.opr?.penawaran?.nomor}</Card.Title>
                         </Card.Header>
                         <Card.Content>
                             <div className="flex flex-col gap-3">
@@ -104,6 +105,15 @@ function RouteComponent() {
                                         </Table.Content>
                                     </Table.ScrollContainer>
                                 </Table>
+                                {
+                                    data?.opr?.penawaran?.dok_pesanan && (
+                                    <div className="mt-4">
+                                        <Link href={data?.opr?.penawaran?.dok_pesanan} target='_blank' className={'flex items-center gap-1 text-accent'}>
+                                            <File /> Dok. Penawaran
+                                        </Link>
+                                    </div>
+                                    )
+                                }
                             </div>
                         </Card.Content>
                     </Card>
