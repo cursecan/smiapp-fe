@@ -106,9 +106,9 @@ function RouteComponent() {
                                     </Table.ScrollContainer>
                                 </Table>
                                 {
-                                    data?.opr?.penawaran?.dok_pesanan && (
+                                    data?.opr?.penawaran?.doc_pesanan && (
                                     <div className="mt-4">
-                                        <Link href={data?.opr?.penawaran?.dok_pesanan} target='_blank' className={'flex items-center gap-1 text-accent'}>
+                                        <Link href={data?.opr?.penawaran?.doc_pesanan} target='_blank' className={'flex items-center gap-1 text-accent'}>
                                             <File /> Dok. Penawaran
                                         </Link>
                                     </div>
