@@ -325,7 +325,6 @@ function RouteComponent() {
                 query={['customer-comboxsd']}
                 fetchUrl={({pageParams, queryKey}) => useCustomerService.list({pageParams, queryKey})}
                 fetchDetailUrl={({queryKey}) => useCustomerService.detail(queryKey.at(1))}
-                query={['satuan-combox-list']}
                 filter={(i) => ({...i, name: `${i.full_name} (${i.email})`, description: i.company?.company_name})}
                 value={data?.customer?.id}
                 onChange={onChangeCustomer}
