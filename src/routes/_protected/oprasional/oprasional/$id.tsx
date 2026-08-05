@@ -253,7 +253,7 @@ function RouteComponent() {
                                     {
                                         data?.is_close && data?.invoice && (
                                             <Tabs.Tab id={'invoice'}>
-                                                <span className='truncate'>Invoice & Faktur Pajak</span>
+                                                <span className='truncate'>Invoice & Kwitansi</span>
                                                 <Tabs.Indicator className='bg-warning' />
                                             </Tabs.Tab>
                                         )

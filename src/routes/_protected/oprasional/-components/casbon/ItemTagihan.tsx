@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useTagihanCabonService } from "../../../../../services/oprasional/tagihanCasbonService"
 import { useToast } from "../../../../../lib/useToast"
 import UpdateTagihanModal from "./UpdateTagihanModal"
+import UploadDokumen from "./UploadDokumen"
 
 const ItemTagihan = ({item, canEdit=false}) => {
     const qc = useQueryClient()
@@ -21,6 +22,21 @@ const ItemTagihan = ({item, canEdit=false}) => {
         }
     })
 
+    const dropAttachmentMutation = useMutation({
+        mutationFn: (id) => useTagihanCabonService.drop_attachment(id),
+        onSuccess: () => {
+            qc.invalidateQueries({queryKey: ['tagihan-list']})
+        },
+        onError: (err) => {
+            toast.danger({message: 'Failed', description: err.message})
+        }
+    })
+
+
+    const onDropAttachmenHandle = (id) => {
+        dropAttachmentMutation.mutate(id)
+    }
+
     const onDropHandle = (id) => {
         dropMutatio.mutate(id)
     }
@@ -31,13 +47,13 @@ const ItemTagihan = ({item, canEdit=false}) => {
                 <div className="flex flex-col">
                     <Label>{item.catatan || 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur, officia.'}</Label>
                     <Description>NO INV. {item.nomor_tagihan}</Description>
-                    <div className="flex mt-3">
-                        <a title={item.file_name} href={item.file_path} target="_blank">
-                            <CloseButton className={' bg-amber-400 text-white'}>
-                                <File />
-                            </CloseButton>
-                        </a>
-                    </div>
+                    <UploadDokumen 
+                        value={item.file_path} 
+                        queryKey={['tagihan-list']} 
+                        patUrl={`/oprasional/tagihan/${item.id}/upload/`}
+                        onDelete={() => onDropAttachmenHandle(item.id)}
+                        canEdit={canEdit}
+                    />
                 </div>
             </Table.Cell>
             <Table.Cell>

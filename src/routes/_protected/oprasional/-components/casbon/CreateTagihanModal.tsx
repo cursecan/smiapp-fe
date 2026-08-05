@@ -33,7 +33,9 @@ const CreateTagihanModal = ({casbonId, canEdit=false}) => {
 
     const uploadFile = async (file, onProgress) => {
         const formData = new FormData()
-        formData.append('file', file)
+        if (file) {
+            formData.append('file', file)
+        }
         formData.append('casbon',   form.casbon)
         formData.append('tgl_tagihan', form.tgl_tagihan)
         formData.append('nomor_tagihan', form.nomor_tagihan)

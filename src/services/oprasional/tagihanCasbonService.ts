@@ -13,5 +13,8 @@ export const useTagihanCabonService = {
     },
     drop: (id) => {
         return api.post(`/oprasional/tagihan/${id}/drop/`)
+    },
+    drop_attachment: (id) => {
+        return api.post(`/oprasional/tagihan/${id}/drop_attachment/`)
     }
 }
