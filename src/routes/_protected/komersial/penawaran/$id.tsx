@@ -331,6 +331,11 @@ function RouteComponent() {
                 isDisabled={!canEdit}
               
               />
+
+              {
+                data?.response_answer && <TextArea value={data?.response_answer} fullWidth readOnly />
+              }
+
               <div className="flex justify-end items-center gap-3">
                 <ApprovalButtons
                   noValidationSave

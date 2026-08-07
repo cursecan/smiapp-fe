@@ -7,11 +7,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useToast } from "../../../../../../lib/useToast"
 import { CloudArrowUpIn } from "@gravity-ui/icons"
 
-const UploadDocProgressModal = ({data=[], ops}) => {
+const UploadDocProgressModal = ({item, ops, data=[]}) => {
     const state = useOverlayState()
     const [form, setForm] = useState({
         keterangan: '',
-        item_penawaran: [],
+        item_penawaran: [item.id],
         is_done: false
     })
     const [progress, setProgress] = useState(0)
@@ -85,47 +85,9 @@ const UploadDocProgressModal = ({data=[], ops}) => {
     >
         <Surface className="space-y-6 mt-2 relative">
             <Surface variant="secondary" className="rounded-xl p-3">
-                <CheckboxGroup
-                    value={form.item_penawaran}
-                    onChange={(e) => setForm({...form, item_penawaran: e})}
-                >
-                    <Label>Pilih pekerjaan:</Label>
-                    {
-                        clean_data.map(i => {
-                            return (
-                                <Checkbox isDisabled={i.progress === 100} key={i.id} value={i.id}>
-                                    <Checkbox.Control>
-                                        <Checkbox.Indicator />
-                                    </Checkbox.Control>
-                                    <Checkbox.Content>
-                                        <div className="flex flex-col gap-1">
-                                            <Label>
-                                                <div className="flex gap-1 items-center">
-                                                    {
-                                                        i.parent && (
-                                                            <span>[{i.parent.barang_jasa}]</span>
-                                                        )
-                                                    }
-                                                    <span>
-                                                        {i.barang_jasa}
-                                                    </span>
-                                                </div>
-                                            </Label> 
-                                            
-                                            {
-                                                i.keterangan && (
-                                                    <Description>{i.keterangan}</Description>
-                                                )
-                                            }
-                                        </div>
-
-                                    </Checkbox.Content>
-                                </Checkbox>
-
-                            )
-                        })
-                    }
-                </CheckboxGroup>
+                {
+                    item.barang_jasa
+                }
             </Surface>
             <div className="mb-1">
                 <Label>Accepted document only .pdf & image</Label>
@@ -153,7 +115,7 @@ const UploadDocProgressModal = ({data=[], ops}) => {
                     </ProgressBar.Track>
                 </ProgressBar>
                 <div className="">
-                    <Checkbox value={form.is_done} onChange={(e) => setForm({...form, is_done:e})} >
+                    <Checkbox defaultSelected={form.is_done} value={form.is_done} onChange={(e) => setForm({...form, is_done:e})} >
                         <Checkbox.Control>
                             <Checkbox.Indicator />
                         </Checkbox.Control>

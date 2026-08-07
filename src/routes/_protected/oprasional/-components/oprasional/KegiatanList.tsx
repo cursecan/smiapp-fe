@@ -34,7 +34,7 @@ const KegiatanList = ({data, canEdit=false}) => {
         const item = {...k, docs: []}
         progress.forEach(p => {
             if (p.item_penawaran.includes(k.id)) {
-                item.docs.push({filename: p.filename, filepath: p.filepath, ket: p.keterangan})
+                item.docs.push({filename: p.filename, filepath: p.filepath, ket: p.keterangan, id: p.id})
             }
         }) 
 
@@ -43,14 +43,6 @@ const KegiatanList = ({data, canEdit=false}) => {
 
   return (
     <div className="">
-        <div className="mb-4 flex justify-end">
-            {
-                canEdit && (
-                    <UploadDocProgressModal ops={data?.id} data={kegiatan} />
-                )
-            }
-
-        </div>
         <Table className="font-mono">
             <Table.ScrollContainer>
                 <Table.Content>
@@ -61,13 +53,13 @@ const KegiatanList = ({data, canEdit=false}) => {
                         <Table.Column>Pekerjaan</Table.Column>
                         <Table.Column>Qty</Table.Column>
                         <Table.Column>Amount</Table.Column>
-                        <Table.Column>More</Table.Column>
+                        <Table.Column></Table.Column>
                     </Table.Header>
                     <Table.Body>
                         {
                             progress_kegiatan?.map((i, index) => {
                                 return (
-                                    <ItemKegiatan key={index} item={{...i, index:index}} />
+                                    <ItemKegiatan key={index} item={{...i, index:index, ops: data?.id}} />
                                 )
                             })
                         }
