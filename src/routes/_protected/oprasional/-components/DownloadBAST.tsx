@@ -1,10 +1,11 @@
-import { Button } from "@heroui/react"
 import { api } from "../../../../lib/api"
 import { useState } from "react"
 import SubmitButton from "../../../../components/buttons/SubmitButton"
+import { useToast } from "../../../../lib/useToast"
 
 const DownloadBAST = ({data}) => {
     const [isLoading, setIsLoading] = useState(false)
+    const toast = useToast()
     
     const handleDownload = async () => {
         try {
@@ -24,7 +25,13 @@ const DownloadBAST = ({data}) => {
             document.body.appendChild(link)
     
             link.click()
-        } finally {
+        } catch (err) {
+            console.log(err.message);
+            toast.danger({message: 'Failed Generate  Dok BA', description: err.message})
+
+            
+        }
+        finally {
             setIsLoading(false)
         }
     }

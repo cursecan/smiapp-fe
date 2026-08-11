@@ -12,11 +12,12 @@ import UpdateItemBastModal from "./UpdateItemBastModal"
 import { useToast } from "../../../../../lib/useToast"
 import UploadInput from "../../../../../components/input/UploadInput"
 import GenerateInvoiceModal from "../GenerateInvoiceModal"
+import { Check } from "@gravity-ui/icons"
 
 
 const TabBast = ({opr, canEdit=false}) => {
     const [form, setForm] = useState()
-    const [selectedKeys, setSelectedKeys] = useState();
+    const [selectedKeys, setSelectedKeys] = useState(new Set());
     const toast = useToast()
 
     const {data:  bast} = useQuery({
@@ -80,12 +81,13 @@ const TabBast = ({opr, canEdit=false}) => {
   return (
     <Tabs.Panel id={'ba'} className='space-y-4'>
         <Surface className="p-3 rounded-2xl space-y-3" variant='secondary'>
-            <TextArea fullWidth isReadOnly={!canEdit} value={form?.pekerjaan} onChange={(e) => setForm({...form, pekerjaan: e.target.value})} />
+            <TextArea fullWidth readOnly={!canEdit} value={form?.pekerjaan} onChange={(e) => setForm({...form, pekerjaan: e.target.value})} />
             <div className="flex gap-3">
                 <DateInput isReadOnly={!canEdit} label={'Mulai'} value={form?.tgl_mulai} onChange={(e) => setForm({...form, tgl_mulai: e})} />
                 <DateInput isReadOnly={!canEdit} label={'Selesai'} value={form?.tgl_selesai} onChange={(e) => setForm({...form, tgl_selesai: e})} />
             </div>
             <SimpleComboBox
+                isDisabled={!canEdit}
                 label={'Customer / Pemohon Pekerjaan'}
                 fetchUrl={({pageParam, queryKey}) => useCustomerService.list({pageParam, queryKey})}
                 filter={(i) => ({...i, name: i.full_name, description: i.company?.company_name ?? ''})}
@@ -162,24 +164,38 @@ const TabBast = ({opr, canEdit=false}) => {
                                                     </div>
                                                 </Table.Cell>
                                                 <Table.Cell className="pr-0">
-                                                    <Checkbox
-                                                        aria-label={`Select ${i.id}`}
-                                                        slot="selection"
-                                                        variant="secondary"
-                                                    >
-                                                        <Checkbox.Content>
-                                                            <Checkbox.Control>
-                                                            <Checkbox.Indicator />
-                                                            </Checkbox.Control>
-                                                        </Checkbox.Content>
-                                                    </Checkbox>
+                                                    {
+                                                        canEdit ? (
+                                                            <Checkbox
+                                                                aria-label={`Select ${i.id}`}
+                                                                slot="selection"
+                                                                variant="secondary"
+                                                            >
+                                                                <Checkbox.Content>
+                                                                    <Checkbox.Control>
+                                                                    <Checkbox.Indicator />
+                                                                    </Checkbox.Control>
+                                                                </Checkbox.Content>
+                                                            </Checkbox>
+                                                        ) : (
+                                                            <div className="flex items-center">
+                                                                {
+                                                                    selectedKeys.has(i.id) && <Check className="text-blue-500" />
+                                                                }
+                                                            </div>
+                                                        )
+                                                    }
                                                 </Table.Cell>
                                                 <Table.Cell>{i.catatan}</Table.Cell>
                                                 <Table.Cell>
-                                                    <div className="flex gap-1">
-                                                    <UpdateItemBastModal item={i} />
-                                                        <CloseButton />
-                                                    </div>
+                                                    {
+                                                        canEdit && (
+                                                            <div className="flex gap-1">
+                                                                <UpdateItemBastModal item={i} />
+                                                                <CloseButton />
+                                                            </div>
+                                                        )
+                                                    }
                                                 </Table.Cell>
                                             </>
                                         )
@@ -195,7 +211,7 @@ const TabBast = ({opr, canEdit=false}) => {
         </Table>
 
         {
-            !bast?.dok && (
+            canEdit && (
                 <div className="flex justify-end gap-3">
                     <Button onPress={submitSave}>Simpan Update</Button>
                     <DownloadBAST data={opr?.bast} />
