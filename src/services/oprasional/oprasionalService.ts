@@ -27,5 +27,8 @@ export const useOprasionalService = {
     },
     barequest: (id, payload) => {
         return api.post(`/oprasional/opr/${id}/barequest/`, payload)
-    }
+    },
+    submit: (id, payload) => {
+        return api.post(`/oprasional/opr/${id}/submit/`, payload)
+    },
 }

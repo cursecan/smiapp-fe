@@ -15,6 +15,13 @@ import InputText from '../../../../components/input/InputText'
 import DownloadBAST from '../-components/DownloadBAST'
 import TabBast from '../-components/bast/TabBast'
 import TabInvoice from '../-components/TabInvoice'
+import ApprovalButtons from '../../../../components/buttons/ApprovalButtons'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useOperasionalSchema, usePenawaranSchema } from '../../../../schemas/penawaranSchema'
+import { useState } from 'react'
+import GenerateInvoiceModal from '../-components/GenerateInvoiceModal'
+import CardStepper from '../../../../components/CardStepper'
 
 export const Route = createFileRoute('/_protected/oprasional/oprasional/$id')({
   component: RouteComponent,
@@ -23,7 +30,7 @@ export const Route = createFileRoute('/_protected/oprasional/oprasional/$id')({
 function RouteComponent() {
     const { id } = useParams({from: '/_protected/oprasional/oprasional/$id'})
     const navigate = useNavigate()
-
+    const [errors, setErrors] = useState(null)
     
     const { data, isLoading } = useQuery({
         queryKey: ['oprasional', id],
@@ -32,6 +39,10 @@ function RouteComponent() {
         },
         select: (data) => data.data
     })
+
+    const {control, handleSubmit, reset, getValues, formState: {isValid}} = useForm({resolver: zodResolver(useOperasionalSchema), mode: "onChange", defaultValues: data || {}})
+      
+      
     
     const {data: casbon, isLoading: casbonLoading} = useQuery({
         queryKey: ['casbon-item-list-ref'],
@@ -46,7 +57,7 @@ function RouteComponent() {
 
     const dokumen_penugasan = data?.penawaran?.dok_penawaran?.filter(i => i.doc_type !== 'UN') ?? []
 
-    const {canEdit} = useSchema(data)
+    const {canEdit, canApprove, hasAuth} = useSchema(data)
 
     const mutatePelunasan = useMutation({
         mutationFn: (id) => useCasbonService.pelunasan(id),
@@ -77,116 +88,99 @@ function RouteComponent() {
             </Breadcrumbs>}
         />
 
-        <div className="mt-6 flex gap-10">
-            <Card className='w-100'>
-                <Card.Header>
-                    <Card.Title>{data?.penawaran.nomor}</Card.Title>
-                </Card.Header>
-                <Card.Content>
-                    <Surface variant='secondary' className='p-3 rounded-2xl  space-y-6'>
-                        <div className="flex flex-1 flex-col space-y-2">
-                            <Description>Nama Project</Description>
-                            <Label>{data?.penawaran.nama_project}</Label>
-                        </div>
-                        <div className="flex gap-6">
-                            <div className="flex flex-col space-y-2">
-                                <Description>Nomor PO/SPK</Description>
-                                <Label>{data?.penawaran.nomor_penugasan}</Label>
+        <div className="my-6 flex gap-6">
+            <div className="flex-1 space-y-6">
+                <Card>
+                    <Card.Header>
+                        <Card.Title>{data?.penawaran.nomor}</Card.Title>
+                    </Card.Header>
+                    <Card.Content>
+                        <Surface variant='secondary' className='p-3 rounded-2xl  space-y-6'>
+                            <div className="flex flex-1 flex-col space-y-2">
+                                <Description>Nama Project</Description>
+                                <Label>{data?.penawaran.nama_project}</Label>
                             </div>
-                            
-                            <div className="flex flex-col space-y-2">
-                                <Description>Tanggal Surat</Description>
-                                <Label>{formatSimpleDate2(data?.penawaran.tgl_surat)}</Label>
+                            <div className="flex gap-6">
+                                <div className="flex flex-col space-y-2">
+                                    <Description>Nomor PO/SPK</Description>
+                                    <Label>{data?.penawaran.nomor_penugasan}</Label>
+                                </div>
+                                
+                                <div className="flex flex-col space-y-2">
+                                    <Description>Tanggal Surat</Description>
+                                    <Label>{formatSimpleDate2(data?.penawaran.tgl_surat)}</Label>
+                                </div>
                             </div>
-                        </div>
-                        <div className="flex flex-col space-y-2">
-                            <Description>Wilayah / Pelabuhan</Description>
-                            <Label>{data?.penawaran.pelabuhan.nama_pelabuhan}</Label>
-                        </div>
-                        <div className="flex flex-col space-y-2">
-                            <Description>PIC Penganggungjawab</Description>
+                            <div className="flex gap-6">
+                                <div className="flex flex-col space-y-2">
+                                    <Description>Wilayah / Pelabuhan</Description>
+                                    <Label>{data?.penawaran.pelabuhan.nama_pelabuhan}</Label>
+                                </div>
+                                <div className="flex flex-col space-y-2">
+                                    <Description>PIC Penganggungjawab</Description>
+                                    {
+                                    data?.assign_to?.full_name ? (
+                                            <Label>{data?.assign_to?.full_name} { data?.assign_to?.pegawai?.cabang && <span>{data?.assign_to?.pegawai?.cabang}</span>}</Label>
+                                        ) : (
+                                            <div className="flex items-center justify-between">N/A</div>
+                                        )
+                                    }
+                                </div>
+                                <div className="flex flex-col space-y-2">
+                                    <Description>Jenis Pekerjaan</Description>
+                                    <Label>{data?.penawaran.jenis_pekerjaan.jenis_pekerjaan}</Label>
+                                </div>
+                            </div>
                             {
-                               data?.assign_to?.full_name ? (
-                                    <Label>{data?.assign_to?.full_name} { data?.assign_to?.pegawai?.cabang && <span>{data?.assign_to?.pegawai?.cabang}</span>}</Label>
-                                ) : (
-                                    <div className="flex items-center justify-between">N/A</div>
+                                data?.penawaran.kapal.length > 0 && (
+                                    <Surface className='p-3 rounded-2xl'>
+                                        <Table>
+                                            <Table.ScrollContainer>
+                                                <Table.Content>
+                                                    <Table.Header >
+                                                        <Table.Column isRowHeader>
+                                                            Kapal
+                                                        </Table.Column>
+                                                    </Table.Header>
+                                                    <Table.Body>
+                                                        {
+                                                            data?.penawaran.kapal.map(i => {
+                                                                return (
+                                                                    <Table.Row key={i.id}>
+                                                                        <Table.Cell>{i.nama_kapal}</Table.Cell>
+                                                                    </Table.Row>
+                                                                )
+                                                            })
+                                                        }
+                                                    </Table.Body>
+                                                </Table.Content>
+                                            </Table.ScrollContainer>
+                                        </Table>
+                                    </Surface>
                                 )
                             }
-                        </div>
-                        <div className="flex flex-col space-y-2">
-                            <Description>Jenis Pekerjaan</Description>
-                            <Label>{data?.penawaran.jenis_pekerjaan.jenis_pekerjaan}</Label>
-                        </div>
-                        {
-                            data?.penawaran.kapal.length > 0 && (
-                                <Surface className='p-3 rounded-2xl'>
-                                    <Table>
-                                        <Table.ScrollContainer>
-                                            <Table.Content>
-                                                <Table.Header >
-                                                    <Table.Column isRowHeader>
-                                                        Kapal
-                                                    </Table.Column>
-                                                </Table.Header>
-                                                <Table.Body>
-                                                    {
-                                                        data?.penawaran.kapal.map(i => {
-                                                            return (
-                                                                <Table.Row key={i.id}>
-                                                                    <Table.Cell>{i.nama_kapal}</Table.Cell>
-                                                                </Table.Row>
-                                                            )
-                                                        })
-                                                    }
-                                                </Table.Body>
-                                            </Table.Content>
-                                        </Table.ScrollContainer>
-                                    </Table>
-                                </Surface>
-                            )
-                        }
 
-                        <Surface className='p-3 rounded-2xl space-y-4'>
-                            <Table>
-                                <Table.ScrollContainer>
-                                    <Table.Content>
-                                        <Table.Header>
-                                            <Table.Column isRowHeader>
-                                                Dok. Dasar Pekerjaan
-                                            </Table.Column>
-                                            <Table.Column></Table.Column>
-                                        </Table.Header>
-                                        <Table.Body>
-                                            {
-                                                data?.penawaran.doc_pesanan && (
-                                                    <Table.Row>
-                                                        <Table.Cell>
-                                                            <Label>
-                                                                {data?.penawaran?.nomor}
-                                                            </Label>
-                                                        </Table.Cell>
-                                                        <Table.Cell>
-                                                            <a className='text-accent' target='_blank' href={data?.penawaran.doc_pesanan}>
-                                                                <div className="flex items-center gap-1">
-                                                                    Download
-                                                                    <ArrowRightToSquare />
-                                                                </div>
-                                                            </a>
-                                                        </Table.Cell>
-                                                    </Table.Row>
-                                                )
-                                            }
-                                            {
-                                                dokumen_penugasan.map(i => {
-                                                    return (
-                                                        <Table.Row key={i.id}>
+                            <Surface className='p-3 rounded-2xl space-y-4'>
+                                <Table>
+                                    <Table.ScrollContainer>
+                                        <Table.Content>
+                                            <Table.Header>
+                                                <Table.Column isRowHeader>
+                                                    Dok. Dasar Pekerjaan
+                                                </Table.Column>
+                                                <Table.Column></Table.Column>
+                                            </Table.Header>
+                                            <Table.Body>
+                                                {
+                                                    data?.penawaran.doc_pesanan && (
+                                                        <Table.Row>
                                                             <Table.Cell>
                                                                 <Label>
-                                                                    { i.doc_type == 'ND' ? 'Nota Dinas' : 'Surat Pesanan'}
+                                                                    {data?.penawaran?.nomor}
                                                                 </Label>
                                                             </Table.Cell>
                                                             <Table.Cell className={'w-0 truncate'}>
-                                                                <a className='text-accent' target='_blank' href={i.filepath}>
+                                                                <a className='text-accent' target='_blank' href={data?.penawaran.doc_pesanan}>
                                                                     <div className="flex items-center gap-1">
                                                                         Download
                                                                         <ArrowRightToSquare />
@@ -195,36 +189,55 @@ function RouteComponent() {
                                                             </Table.Cell>
                                                         </Table.Row>
                                                     )
-                                                })
-                                            }
-                                        </Table.Body>
-                                    </Table.Content>
-                                </Table.ScrollContainer>
-                            </Table>
+                                                }
+                                                {
+                                                    dokumen_penugasan.map(i => {
+                                                        return (
+                                                            <Table.Row key={i.id}>
+                                                                <Table.Cell>
+                                                                    <Label>
+                                                                        { i.doc_type == 'ND' ? 'Nota Dinas' : 'Surat Pesanan'}
+                                                                    </Label>
+                                                                </Table.Cell>
+                                                                <Table.Cell className={'w-0 truncate'}>
+                                                                    <a className='text-accent' target='_blank' href={i.filepath}>
+                                                                        <div className="flex items-center gap-1">
+                                                                            Download
+                                                                            <ArrowRightToSquare />
+                                                                        </div>
+                                                                    </a>
+                                                                </Table.Cell>
+                                                            </Table.Row>
+                                                        )
+                                                    })
+                                                }
+                                            </Table.Body>
+                                        </Table.Content>
+                                    </Table.ScrollContainer>
+                                </Table>
 
-                            <Table>
-                                <Table.ScrollContainer>
-                                    <Table.Content>
-                                        <Table.Header>
-                                            <Table.Column isRowHeader>
-                                                Progress Dokumen
-                                            </Table.Column>
-                                        </Table.Header>
-                                        <Table.Body>
-                                            <Table.Cell>
-                                                <a href={data?.drives.progress} target="_blank" rel="noopener noreferrer">
-                                                    {data?.drives.progress}
-                                                </a>
-                                            </Table.Cell>
-                                        </Table.Body>
-                                    </Table.Content>
-                                </Table.ScrollContainer>
-                            </Table>
+                                <Table>
+                                    <Table.ScrollContainer>
+                                        <Table.Content>
+                                            <Table.Header>
+                                                <Table.Column isRowHeader>
+                                                    Progress Dokumen
+                                                </Table.Column>
+                                            </Table.Header>
+                                            <Table.Body>
+                                                <Table.Cell>
+                                                    <a href={data?.drives.progress} target="_blank" rel="noopener noreferrer">
+                                                        {data?.drives.progress}
+                                                    </a>
+                                                </Table.Cell>
+                                            </Table.Body>
+                                        </Table.Content>
+                                    </Table.ScrollContainer>
+                                </Table>
+                            </Surface>
                         </Surface>
-                    </Surface>
-                </Card.Content>
-            </Card>
-            <div className="flex-1">
+                    </Card.Content>
+                </Card>
                 <Card>
                     <Card.Header>
                         <Card.Title>Operasional Activity</Card.Title>
@@ -261,12 +274,12 @@ function RouteComponent() {
                                 </Tabs.List>
                             </Tabs.ListContainer>
                             <Tabs.Panel id={'pekerjaan'}>
-                                <KegiatanList data={data} canEdit={canEdit} />
+                                <KegiatanList data={data} canEdit={canEdit && hasAuth} />
                             </Tabs.Panel>
                             <Tabs.Panel id={'casbon'}>
                                 <div className="">
                                     <div className="flex justify-end mb-5">
-                                        <Button  onPress={() => navigate({to: `/oprasional/casbon/create?ref=${data.id}`})} variant='primary' className={'bg-success'}><Plus /> Casbon</Button>
+                                        <Button isDisabled={!hasAuth} onPress={() => navigate({to: `/oprasional/casbon/create?ref=${data.id}`})} variant='primary' className={'bg-success'}><Plus /> Casbon</Button>
                                     </div>
                                     <Table className='font-mono'>
                                         <Table.ScrollContainer>
@@ -374,16 +387,52 @@ function RouteComponent() {
                                 )
                             }
                         </Tabs>
+                        {
+                            (data?.approvals[0]?.step > 2 && data?.approvals[0]?.step !== 6) && (
+                                <div className="flex gap-3 justify-between">
+                                    <div className="">
+                                        <ApprovalButtons
+                                            noValidationSave
+                                            postOnly
+                                            isCanApprove={canApprove}
+                                            isCanEdit={canEdit}
+                                            form={{handleSubmit, getValues, isValid}}
+                                            saveFn={() => {} }
+                                            submitFn={(payload) => useOprasionalService.submit(id, payload)}
+                                            queryKey={['oprasional', id]}
+                                            postLabel='Request Approval'
+                                            approvalLabel={`Proses ${data?.approvals[0]?.name}`}
+                                            onError={setErrors}
+                                        />
+                                        {
+                                            data?.approvals[0]?.step === 5 && <Description className='italic'>* Pastikan download BA sebelum klick Processing BA!</Description>
+                                        }
+                                    </div>
+                                    {
+                                        (canApprove && data?.approvals[0]?.step < 6) && <DownloadBAST label={data?.approvals[0]?.step === 5 ? 'Download Singed BA' : 'Preview Berita Acara (BA)'} data={data?.bast} />
+                                    }
+                                    
+                                </div>
+                            )
+                        }
                     </Card.Content>
                 </Card>
                 <div className="mt-4 flex items-center gap-3">
                     {
-                        !data?.is_close && (
+                        (!data?.is_close && hasAuth) && (
                             <BARequestModal oprs={data} />
+                        )
+                    }
+                    {
+                        data?.approvals[0]?.step == 7 && !data?.invoice && hasAuth && (
+                            <GenerateInvoiceModal opr={data} />
                         )
                     }
                     
                 </div>
+            </div>
+            <div className="w-90">
+                <CardStepper stepper={data?.stepper} />
             </div>
         </div>
     </div>

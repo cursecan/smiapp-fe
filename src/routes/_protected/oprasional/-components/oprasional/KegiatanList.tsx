@@ -59,7 +59,7 @@ const KegiatanList = ({data, canEdit=false}) => {
                         {
                             progress_kegiatan?.map((i, index) => {
                                 return (
-                                    <ItemKegiatan key={index} item={{...i, index:index, ops: data?.id}} />
+                                    <ItemKegiatan canEdit={canEdit} key={index} item={{...i, index:index, ops: data?.id}} />
                                 )
                             })
                         }

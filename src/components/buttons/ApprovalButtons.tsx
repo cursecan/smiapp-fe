@@ -16,7 +16,8 @@ const ApprovalButtons = ({
     isCanEdit=false,
     isCanApprove=false,
     noValidationSave=false,
-    approvalLabel='Ajukan',
+    approvalLabel='Approve',
+    postLabel='Ajukan',
     onError=()=>{}
 }) => {
     const save_state = useOverlayState()
@@ -59,7 +60,6 @@ const ApprovalButtons = ({
     const submit_mutation = useMutation({
         mutationFn: submitFn,
         onSuccess: () => {
-            // toast.success()
             setAppForm({is_decline: false, message: ''})
             if (queryKey) {
                 qc.invalidateQueries({
@@ -118,36 +118,36 @@ const ApprovalButtons = ({
             isCanEdit && (
                 <>
                     {
-                    !postOnly && (
-                        <AlertDialog>
-                            <Button isDisabled={false} onPress={save_state.setOpen}>Simpan</Button>
-                            <AlertDialog.Backdrop isOpen={save_state.isOpen} onOpenChange={save_state.setOpen}>
-                                <AlertDialog.Container>
-                                    <AlertDialog.Dialog>
-                                        <AlertDialog.CloseTrigger />
-                                        <AlertDialog.Header>
-                                            <AlertDialog.Icon status="warning" />
-                                            <AlertDialog.Heading>Simpan</AlertDialog.Heading>
-                                        </AlertDialog.Header>
-                                        <AlertDialog.Body>
-                                            <div className="">
-                                                Apakah Anda yakin menyimpan perubahan data ini?
-                                            </div>
-                                        </AlertDialog.Body>
-                                        <AlertDialog.Footer>
-                                            <Button slot={'close'} variant="tertiary">Close</Button>
-                                            <SubmitButton isLoading={save_mutation.isPending} label={'Simpan'} onPress={form.handleSubmit(handleSaveForm, errorSave)} />
-                                        </AlertDialog.Footer>
-                                    </AlertDialog.Dialog>
-                                </AlertDialog.Container>
-                            </AlertDialog.Backdrop>
-                        </AlertDialog>
-                    )
+                        !postOnly && (
+                            <AlertDialog>
+                                <Button isDisabled={false} onPress={save_state.setOpen}>Simpan</Button>
+                                <AlertDialog.Backdrop isOpen={save_state.isOpen} onOpenChange={save_state.setOpen}>
+                                    <AlertDialog.Container>
+                                        <AlertDialog.Dialog>
+                                            <AlertDialog.CloseTrigger />
+                                            <AlertDialog.Header>
+                                                <AlertDialog.Icon status="warning" />
+                                                <AlertDialog.Heading>Simpan</AlertDialog.Heading>
+                                            </AlertDialog.Header>
+                                            <AlertDialog.Body>
+                                                <div className="">
+                                                    Apakah Anda yakin menyimpan perubahan data ini?
+                                                </div>
+                                            </AlertDialog.Body>
+                                            <AlertDialog.Footer>
+                                                <Button slot={'close'} variant="tertiary">Close</Button>
+                                                <SubmitButton isLoading={save_mutation.isPending} label={'Simpan'} onPress={form.handleSubmit(handleSaveForm, errorSave)} />
+                                            </AlertDialog.Footer>
+                                        </AlertDialog.Dialog>
+                                    </AlertDialog.Container>
+                                </AlertDialog.Backdrop>
+                            </AlertDialog>
+                        )
                     }
                     {
-                        (!isCanApprove && !saveOnly) && (
+                        (!saveOnly && !isCanApprove) && (
                             <AlertDialog>
-                                <Button isDisabled={false} className={'bg-orange-500'} onPress={req_state.setOpen}>{approvalLabel}</Button>
+                                <Button isDisabled={false} className={'bg-orange-500'} onPress={req_state.setOpen}>{postLabel}</Button>
                                 <AlertDialog.Backdrop isOpen={req_state.isOpen} onOpenChange={req_state.setOpen}>
                                     <AlertDialog.Container>
                                         <AlertDialog.Dialog>
@@ -178,7 +178,7 @@ const ApprovalButtons = ({
         {
             (isCanApprove && !saveOnly) && (
                 <AlertDialog>
-                    <Button isDisabled={false} className={'bg-orange-500'} onPress={req_state.setOpen}>Approval</Button>
+                    <Button isDisabled={false} className={'bg-orange-500'} onPress={req_state.setOpen}>{approvalLabel}</Button>
                     <AlertDialog.Backdrop isOpen={req_state.isOpen} onOpenChange={req_state.setOpen}>
                         <AlertDialog.Container>
                             <AlertDialog.Dialog>

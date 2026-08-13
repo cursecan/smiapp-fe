@@ -1,11 +1,11 @@
-import { ArrowDownToSquare, CloudArrowUpIn, File } from "@gravity-ui/icons"
+import { ArrowDownToSquare, CloudArrowUpIn, FaceSad, File } from "@gravity-ui/icons"
 import { Label, Spinner, Surface } from "@heroui/react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useRef, useState } from "react"
 import { useToast } from "../../lib/useToast"
 import {api} from '../../lib/api'
 
-const UploadInput = ({value, queryKey, pathUrl, name='Download Signed BA'}) => {
+const UploadInput = ({value, queryKey=[], queryKey2=[], pathUrl=null, name='Download Signed BA', disableInput=false}) => {
     const fileRef = useRef(null)
     const [progress, setProgress] = useState(0)
 
@@ -13,6 +13,9 @@ const UploadInput = ({value, queryKey, pathUrl, name='Download Signed BA'}) => {
         const formData = new FormData()
         formData.append('file', file)
 
+        if (!pathUrl) {
+            return 0
+        }
 
         const res = await api.post(pathUrl, formData, {
             headers: {
@@ -38,13 +41,15 @@ const UploadInput = ({value, queryKey, pathUrl, name='Download Signed BA'}) => {
             if (queryKey) {
                 qc.invalidateQueries({queryKey: [...queryKey]})
             }
+            if (queryKey2) {
+                qc.invalidateQueries({queryKey: [...queryKey2]})
+            }
         }
     })
 
     const toast = useToast()
 
-    const handleUpload = () => {      
-        console.log(fileRef);
+    const handleUpload = () => {
         
         const files = fileRef.current.files
         if (!files || files.length === 0) {
@@ -69,13 +74,13 @@ const UploadInput = ({value, queryKey, pathUrl, name='Download Signed BA'}) => {
                 <Surface className="h-32 flex items-center justify-center bg-warning-soft/20 border-2 rounded-xl border-dashed">
                     <a href={value} className="flex gap-1 text-sm items-center" target="_blank">
                         <ArrowDownToSquare className="size-5 text-blue-400" />
-                        <span>{name}</span>
+                        <span>Download {name}</span>
                     </a>
                 </Surface>
             </div>
         ) : (
             <label>
-                <input ref={fileRef} type="file" name="" id="" style={{display: 'none'}} onChange={handleUpload} />
+                <input disabled={disableInput} ref={fileRef} type="file" name="" id="" style={{display: 'none'}} onChange={handleUpload} />
                 <Surface className="bg-warning-soft/50 border-2 border-dashed rounded-xl h-32 flex items-center justify-center">
                     <div className="">
                         <div className="flex justify-center">
@@ -92,7 +97,7 @@ const UploadInput = ({value, queryKey, pathUrl, name='Download Signed BA'}) => {
                                 mutation.isPending ? (
                                     <Label>Uploading...</Label>
                                 ) : (
-                                    <Label>Import Dokumen BA</Label>
+                                    <Label>Upload {name}</Label>
                                 )
                             }
                         </div>

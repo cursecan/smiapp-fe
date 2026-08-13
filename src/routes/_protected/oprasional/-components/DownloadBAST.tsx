@@ -3,7 +3,7 @@ import { useState } from "react"
 import SubmitButton from "../../../../components/buttons/SubmitButton"
 import { useToast } from "../../../../lib/useToast"
 
-const DownloadBAST = ({data}) => {
+const DownloadBAST = ({data, label}) => {
     const [isLoading, setIsLoading] = useState(false)
     const toast = useToast()
     
@@ -35,11 +35,11 @@ const DownloadBAST = ({data}) => {
             setIsLoading(false)
         }
     }
-
+    label
 
     return (
         // <Button variant="danger" onPress={handleDownload}>Generate BA</Button>
-        <SubmitButton isLoading={isLoading} label="Generate BA" variant="danger"  onPress={handleDownload}/>
+        <SubmitButton isLoading={isLoading} label={label} variant="primary"  onPress={handleDownload}/>
     )
 }
 

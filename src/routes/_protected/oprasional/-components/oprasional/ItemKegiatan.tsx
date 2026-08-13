@@ -10,7 +10,7 @@ import UploadDocProgressModal from "./progressCatatan/UploadDocProgressModal"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useProgressService } from "../../../../../services/oprasional/progressService"
 
-const ItemKegiatan = ({item}) => {
+const ItemKegiatan = ({item, canEdit=false}) => {
     const {reset} = useForm({defaultValues: item || {}})
     const state = useOverlayState()
 
@@ -32,9 +32,6 @@ const ItemKegiatan = ({item}) => {
     const prostDropHandle = (id) => {
         dropmutation.mutate(id)
     }
-
-
-    console.log(item, 'itemssssssssssss');
     
 
     useEffect(() => {
@@ -67,8 +64,10 @@ const ItemKegiatan = ({item}) => {
         <Table.Cell>{item.qty}</Table.Cell>
         <Table.Cell>{ formatRupiah(item.harga_satuan)}</Table.Cell>
         <Table.Cell className={'truncate w-0'}>
-            <div className="flex items-center gap-4">
-                <UploadDocProgressModal item={item} ops={item.ops} data={[]} />
+            <div className="flex items-center gap-4 justify-end">
+                {
+                    canEdit && <UploadDocProgressModal item={item} ops={item.ops} data={[]} />
+                }
                 <ModalComponent
                     size={'lg'}
                     state={state}

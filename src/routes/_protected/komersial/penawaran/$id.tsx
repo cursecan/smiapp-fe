@@ -346,7 +346,7 @@ function RouteComponent() {
                   saveFn={(payload) => usePenawaranService.edit(data.id, payload)}
                   submitFn={(payload) => usePenawaranService.submit(data.id, payload)}
                   queryKey={['detail-penawaran', id]}
-                  approvalLabel='Req. Approval Penawaran'
+                  postLabel='Req. Approval Penawaran'
                   onError={setErrors}
                 />
                 {

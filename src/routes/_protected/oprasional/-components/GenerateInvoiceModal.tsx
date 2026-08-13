@@ -37,7 +37,7 @@ const GenerateInvoiceModal = ({opr}) => {
                 <form action="">
                     <div className="flex justify-end gap-1">
                         <Button variant="tertiary" onPress={state.close}>Close</Button>
-                        <SubmitButton onPress={handleSubmit} />
+                        <SubmitButton isLoading={mutation.isPending} onPress={handleSubmit} />
                     </div>
                 </form>
             </Surface>

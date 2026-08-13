@@ -13,12 +13,21 @@ import { useToast } from "../../../../../lib/useToast"
 import UploadInput from "../../../../../components/input/UploadInput"
 import GenerateInvoiceModal from "../GenerateInvoiceModal"
 import { Check } from "@gravity-ui/icons"
+import ApprovalButtons from "../../../../../components/buttons/ApprovalButtons"
+import { useOprasionalService } from "../../../../../services/oprasional/oprasionalService"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useOperasionalSchema } from "../../../../../schemas/penawaranSchema"
+import SubmitButton from "../../../../../components/buttons/SubmitButton"
 
 
 const TabBast = ({opr, canEdit=false}) => {
     const [form, setForm] = useState()
     const [selectedKeys, setSelectedKeys] = useState(new Set());
     const toast = useToast()
+    const {control, handleSubmit, reset, getValues, formState: {isValid}} = useForm({resolver: zodResolver(useOperasionalSchema), mode: "onChange", defaultValues: opr || {}})
+
+    
 
     const {data:  bast} = useQuery({
         queryKey: ['bast-detail', opr?.bast],
@@ -211,25 +220,35 @@ const TabBast = ({opr, canEdit=false}) => {
         </Table>
 
         {
-            canEdit && (
-                <div className="flex justify-end gap-3">
-                    <Button onPress={submitSave}>Simpan Update</Button>
-                    <DownloadBAST data={opr?.bast} />
+            (canEdit && opr?.approvals[0].step === 2) && (
+                <div className="flex gap-3">
+                    <div className="flex-1 flex items-center gap-3">
+                        <ApprovalButtons
+                            noValidationSave
+                            postOnly
+                            isCanApprove={false}
+                            isCanEdit={true}
+                            form={{handleSubmit, getValues, isValid}}
+                            saveFn={() => {} }
+                            submitFn={(payload) => useOprasionalService.submit(opr?.id, payload)}
+                            queryKey={['oprasional', opr?.id]}
+                            postLabel='Request Approval BA'
+                        />
+                        <SubmitButton label="Simpan" isLoading={save_mutation.isPending} onPress={submitSave} />
+                    </div>
+                    {/* <DownloadBAST data={opr?.bast} /> */}
                 </div>
 
             )
         }
-        
-        <UploadInput
-            pathUrl={`oprasional/bast/${opr?.bast}/upload_bast/`} 
-            value={bast?.dok} 
-            queryKey={['bast-detail', opr?.bast]}
-         />
-
-        
         {
-            bast?.dok && !opr?.invoice && (
-                <GenerateInvoiceModal opr={opr} />
+            opr?.approvals[0]?.step > 5 && (
+                <UploadInput
+                    pathUrl={`oprasional/bast/${opr?.bast}/upload_bast/`} 
+                    value={bast?.dok} 
+                    queryKey={['bast-detail', opr?.bast]}
+                    queryKey2={['oprasional', opr?.id]}
+                 />
             )
         }
     </Tabs.Panel>

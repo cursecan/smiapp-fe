@@ -11,3 +11,5 @@ export const usePenawaranSchema = z.object({
     tgl_surat: z.string(),
     // kapal: z.array().min(1, 'Kapal harus dipilih.')
 })
+
+export const useOperasionalSchema = z.object()

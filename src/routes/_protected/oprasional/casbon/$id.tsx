@@ -236,7 +236,7 @@ function RouteComponent() {
           <ApprovalButtons
               noValidationSave
               postOnly
-              approvalLabel='Pengajuan Casbon'
+              postLabel='Pengajuan Casbon'
               isCanApprove={canApprove}
               isCanEdit={canEdit}
               form={{handleSubmit, getValues, isValid}}

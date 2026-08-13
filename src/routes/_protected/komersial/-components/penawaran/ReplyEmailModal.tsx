@@ -43,11 +43,11 @@ const ReplyEmailModal = ({payload, fnQuery, queryKey, isDisabled=false}) => {
 
   return (
     <ModalComponent
-        buttonTrigger={<Button isDisabled={isDisabled} onPress={state.setOpen} variant='secondary'>Re. Email Penawaran</Button>}
+        buttonTrigger={<Button isDisabled={isDisabled} onPress={state.setOpen} variant='secondary'>Reply Email & Generate Penawaran</Button>}
         state={state}
         size={'lg'}
         hideFooter
-        heading={'Reply Email Penawaran'}
+        heading={'Reply Email & Generate Pdf'}
     >
 
         <Surface>
@@ -65,14 +65,14 @@ const ReplyEmailModal = ({payload, fnQuery, queryKey, isDisabled=false}) => {
                             <Checkbox.Indicator />
                         </Checkbox.Control>
                         <Checkbox.Content>
-                            <Label>Email Send</Label>
+                            <Label>Reply Email?</Label>
                         </Checkbox.Content>
                     </Checkbox>
                 </div>
                 <div className="flex justify-end gap-2">
                     <Button onPress={state.close} variant="tertiary">Batal</Button>
                     {/* <Button isDisabled={mutation.isPending} onPress={handleSubmit}>Kirim</Button> */}
-                    <SubmitButton label="Kirim" isLoading={mutation.isPending} onPress={handleSubmit} loadingText="Mengirim..." icon={<LogoTelegram className="size-5" />} />
+                    <SubmitButton className={!data.save_send && 'bg-danger'} label={data.save_send ? 'Reply Email' : 'Generate Pdf Only'} isLoading={mutation.isPending} onPress={handleSubmit} loadingText={data.save_send ? 'Mengirim...' : 'Generate Pdf...'} icon={data.save_send && <LogoTelegram className="size-5" />} />
                 </div>
             </div>
         </Surface>

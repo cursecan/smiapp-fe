@@ -2,6 +2,7 @@ import { CheckDouble, Clock, Xmark } from '@gravity-ui/icons'
 import { Card, Description, Label, Surface } from '@heroui/react'
 import { formatDate } from '../utils/dateFormat'
 const CardStepper = ({stepper=[]}) => {
+    
     const clean_stepper = stepper.map((i, index) => {
         let name = i.name
         if (index > 0 && i.is_approve) {
@@ -10,6 +11,7 @@ const CardStepper = ({stepper=[]}) => {
             }
         }
 
+        
         return {...i, name: name}
     })
 
