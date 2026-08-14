@@ -279,7 +279,7 @@ function RouteComponent() {
                             <Tabs.Panel id={'casbon'}>
                                 <div className="">
                                     <div className="flex justify-end mb-5">
-                                        <Button isDisabled={!hasAuth} onPress={() => navigate({to: `/oprasional/casbon/create?ref=${data.id}`})} variant='primary' className={'bg-success'}><Plus /> Casbon</Button>
+                                        <Button onPress={() => navigate({to: `/oprasional/casbon/create?ref=${data.id}`})} variant='primary' className={'bg-success'}><Plus /> Casbon</Button>
                                     </div>
                                     <Table className='font-mono'>
                                         <Table.ScrollContainer>
