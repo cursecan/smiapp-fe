@@ -1,16 +1,24 @@
 import {Link, Table } from "@heroui/react"
 import SelectComponent from "../../../../../components/input/SelectComponent"
 import { useTypeFilePenawaran } from "../../../../../constans"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useDokumenPenawaranService } from "../../../../../services/komersial/dokumenPenawaranService"
 import { ArrowUpRightFromSquare } from "@gravity-ui/icons"
+import { useState } from "react"
 
 
-const DokumenFileItem = ({item, canEdit}) => {
+const DokumenFileItem = ({item:item0, canEdit}) => {
+    // const qc = useQueryClient()
+    const [item, setItem] = useState({...item0})
+
     const update_mutate = useMutation({
         mutationFn: async (payload) => {
             return await useDokumenPenawaranService.update(item.id, payload)
         },
+        onSuccess: (res) => {
+            // qc.invalidateQueries({queryKey: ['doks-list-penawaran']})
+            setItem({...item, doc_type:res.data.doc_type})
+        }
     })
 
     const handleChange = (e) => {
@@ -20,11 +28,11 @@ const DokumenFileItem = ({item, canEdit}) => {
 
   return (
     <Table.Row>
-        <Table.Cell>{item.index+1}</Table.Cell>
-        <Table.Cell>
-        {item.filename}
+        <Table.Cell className={item.doc_type !== 'UN' && 'bg-success/10'}>{item.index+1}</Table.Cell>
+        <Table.Cell className={item.doc_type !== 'UN' && 'bg-success/10'}>
+            {item.filename}
         </Table.Cell>
-        <Table.Cell>
+        <Table.Cell className={item.doc_type !== 'UN' && 'bg-success/10'}>
             <div className="">
                 <SelectComponent isDisabled={!canEdit} value={item.doc_type} data={useTypeFilePenawaran} onChange={handleChange} />
             </div>
