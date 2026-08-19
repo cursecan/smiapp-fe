@@ -29,7 +29,7 @@ function RouteComponent() {
     const navigate = useNavigate()
     const { user } = useAuth()
     const {page, q, pic, status} = Route.useSearch()
-    const approval_status = getApprovalStatus('Oprasional')
+    const approval_status = getApprovalStatus('Oprasional Service')
     
     const {data: resAgen} = useQuery({
         queryKey: ['agens-list'],
@@ -84,11 +84,7 @@ function RouteComponent() {
             <Card.Header>
                 <div className="flex items-center">
                     <div className="flex-1 flex gap-4 items-center">
-                        <div className="w-64">
-                            <SelectComponent placeholder={'Pilih User Agen'} value={pic} data={transformAgen} onChange={(e) => navigate({search: (prev) => ({...prev, page: 1, pic: e})})} />
-                        </div>
-                        <div className="flex-1 flex gap-5 justify-end">
-                            <StatusApprovalFilter data={approval_status} onChange={(e) => navigate({search: (prev) => ({...prev, status:e})})}/>
+                        <div className="flex-1 flex gap-5">
                             <SearchField className={'w-100'}>
                                 <SearchField.Group>
                                     <SearchField.SearchIcon />
@@ -96,6 +92,10 @@ function RouteComponent() {
                                     <SearchField.ClearButton onPress={() => setSearch('')} />
                                 </SearchField.Group>
                             </SearchField>
+                            <div className="w-64">
+                                <SelectComponent placeholder={'Pilih User Agen'} value={pic} data={transformAgen} onChange={(e) => navigate({search: (prev) => ({...prev, page: 1, pic: e})})} />
+                            </div>
+                            <StatusApprovalFilter data={approval_status} onChange={(e) => navigate({search: (prev) => ({...prev, status:e})})}/>
 
                         </div>
                         {/* <Checkbox isSelected={pic} onChange={(e) => navigate({search: (prev) => ({...prev, page: 1, only: e, q: ''})})}>

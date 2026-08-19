@@ -40,7 +40,7 @@ function RouteComponent() {
   }
 
   const totalPages = Math.ceil(penawaran?.count/10)
-  const approval_status = getApprovalStatus('Penawaran')
+  const approval_status = getApprovalStatus('Penawaran Service')
   const filter_pekerjaan = getJenisPekerjaan()
 
   // if (isLoading) {
