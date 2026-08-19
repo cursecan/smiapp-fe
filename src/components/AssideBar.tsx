@@ -1,7 +1,8 @@
 import {  Envelope, Persons, House, MapPin, Bell, Circles5Random, Rocket, Flask, LogoDocker, Megaphone, Mug, ArrowRightFromSquare, CircleDollar } from "@gravity-ui/icons"
 import { useAuth } from "../auth/AuthProvider"
-import { Avatar, Button, Description, Label, Surface } from "@heroui/react"
+import { Avatar, Badge, Button, Description, Label, Popover, Surface } from "@heroui/react"
 import { useLocation, useNavigate } from "@tanstack/react-router"
+import NotoficationBadge from "./NotoficationBadge"
 
 
 const NavButton = ({icon, name, active=false, onPress=()=>{}}) => {
@@ -30,7 +31,7 @@ const AssideBar = () => {
                             <Description>Digital Marine Ecosystem</Description>
                             {/* Sea Management Integrated Lifecycle Environment */}
                         </div>
-                        <Bell />
+                        <NotoficationBadge />
                     </div>
                 </div>
                 <div className="flex-1 overflow-auto">
@@ -51,7 +52,7 @@ const AssideBar = () => {
                                 <NavButton active={location.pathname.includes('/keuangan/expense')} onPress={() => navigate({to: '/keuangan/expense'})} icon={<CircleDollar />} name={'Expense'} />
                             </div>
                         </li>
-                        <li>
+                        {/* <li>
                             <div className="text-xs mb-2">Master Data</div>
                             <div className="space-y-1">
                                 <NavButton icon={<LogoDocker />} name={'Kapal'} />
@@ -66,7 +67,7 @@ const AssideBar = () => {
                             <div className="space-y-1">
                                 <NavButton icon={<LogoDocker />} name={'Approval'} />
                             </div>
-                        </li>
+                        </li> */}
                     </ul>
                 </div>
                 <div className="p-4">
