@@ -55,8 +55,8 @@ const NotoficationBadge = () => {
             <Popover.Dialog>
                 <Popover.Arrow />
                 <div className="flex flex-col gap-4">
-                    {
-                        Object.entries(notifData).map(([group, items]) => {
+                    { 
+                        notifData && Object.entries(notifData).map(([group, items]) => {
                             return (
                                 <div className="" key={group}>
                                     <Popover.Heading>{group} ({items.length})</Popover.Heading>
