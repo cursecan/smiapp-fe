@@ -18,7 +18,7 @@ const NotoficationBadge = () => {
     console.log(data);
 
     const notifData = useMemo(() => {
-        const grouped = data.reduce((result, item) => {
+        const grouped = data?.reduce((result, item) => {
             const key = item.title
 
             if (!result[key]) {
