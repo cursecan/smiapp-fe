@@ -29,7 +29,7 @@ const GenerateInvoiceModal = ({opr}) => {
     return (
         <ModalComponent
             state={state}
-            buttonTrigger={<Button onPress={state.setOpen}>Generate Invoice</Button>}
+            buttonTrigger={<Button onPress={state.setOpen}>Request Proses Invoice</Button>}
             heading={'Generate Invoice'}
             hideFooter
         >

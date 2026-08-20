@@ -11,7 +11,7 @@ const NotoficationBadge = () => {
         queryKey: ['notification'],
         queryFn: ()  => useNotificationService.list(),
         select: (res) => res.data.results,
-        refetchInterval: 5000,
+        refetchInterval: 10000,
         refetchIntervalInBackground: true,
     })
 

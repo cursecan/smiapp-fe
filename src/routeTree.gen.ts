@@ -21,12 +21,14 @@ import { Route as ProtectedOprasionalOprasionalIndexRouteImport } from './routes
 import { Route as ProtectedOprasionalCasbonIndexRouteImport } from './routes/_protected/oprasional/casbon/index'
 import { Route as ProtectedKomersialPenawaranIndexRouteImport } from './routes/_protected/komersial/penawaran/index'
 import { Route as ProtectedKeuanganExpenseIndexRouteImport } from './routes/_protected/keuangan/expense/index'
+import { Route as ProtectedInvoiceInvoiceIndexRouteImport } from './routes/_protected/invoice/invoice/index'
 import { Route as ProtectedOprasionalPembayaranIdRouteImport } from './routes/_protected/oprasional/pembayaran/$id'
 import { Route as ProtectedOprasionalOprasionalIdRouteImport } from './routes/_protected/oprasional/oprasional/$id'
 import { Route as ProtectedOprasionalCasbonCreateRouteImport } from './routes/_protected/oprasional/casbon/create'
 import { Route as ProtectedOprasionalCasbonIdRouteImport } from './routes/_protected/oprasional/casbon/$id'
 import { Route as ProtectedKomersialPenawaranIdRouteImport } from './routes/_protected/komersial/penawaran/$id'
 import { Route as ProtectedKeuanganExpenseIdRouteImport } from './routes/_protected/keuangan/expense/$id'
+import { Route as ProtectedInvoiceInvoiceIdRouteImport } from './routes/_protected/invoice/invoice/$id'
 import { Route as ProtectedKeuanganExpenseTransferIdRouteImport } from './routes/_protected/keuangan/expense/transfer/$id'
 
 const LoginRoute = LoginRouteImport.update({
@@ -93,6 +95,12 @@ const ProtectedKeuanganExpenseIndexRoute =
     path: '/keuangan/expense/',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
+const ProtectedInvoiceInvoiceIndexRoute =
+  ProtectedInvoiceInvoiceIndexRouteImport.update({
+    id: '/invoice/invoice/',
+    path: '/invoice/invoice/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 const ProtectedOprasionalPembayaranIdRoute =
   ProtectedOprasionalPembayaranIdRouteImport.update({
     id: '/oprasional/pembayaran/$id',
@@ -129,6 +137,12 @@ const ProtectedKeuanganExpenseIdRoute =
     path: '/keuangan/expense/$id',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
+const ProtectedInvoiceInvoiceIdRoute =
+  ProtectedInvoiceInvoiceIdRouteImport.update({
+    id: '/invoice/invoice/$id',
+    path: '/invoice/invoice/$id',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 const ProtectedKeuanganExpenseTransferIdRoute =
   ProtectedKeuanganExpenseTransferIdRouteImport.update({
     id: '/keuangan/expense/transfer/$id',
@@ -143,12 +157,14 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/dashboard': typeof ProtectedDashboardRoute
   '/komersial/email': typeof ProtectedKomersialEmailRoute
+  '/invoice/invoice/$id': typeof ProtectedInvoiceInvoiceIdRoute
   '/keuangan/expense/$id': typeof ProtectedKeuanganExpenseIdRoute
   '/komersial/penawaran/$id': typeof ProtectedKomersialPenawaranIdRoute
   '/oprasional/casbon/$id': typeof ProtectedOprasionalCasbonIdRoute
   '/oprasional/casbon/create': typeof ProtectedOprasionalCasbonCreateRoute
   '/oprasional/oprasional/$id': typeof ProtectedOprasionalOprasionalIdRoute
   '/oprasional/pembayaran/$id': typeof ProtectedOprasionalPembayaranIdRoute
+  '/invoice/invoice/': typeof ProtectedInvoiceInvoiceIndexRoute
   '/keuangan/expense/': typeof ProtectedKeuanganExpenseIndexRoute
   '/komersial/penawaran/': typeof ProtectedKomersialPenawaranIndexRoute
   '/oprasional/casbon/': typeof ProtectedOprasionalCasbonIndexRoute
@@ -163,12 +179,14 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/dashboard': typeof ProtectedDashboardRoute
   '/komersial/email': typeof ProtectedKomersialEmailRoute
+  '/invoice/invoice/$id': typeof ProtectedInvoiceInvoiceIdRoute
   '/keuangan/expense/$id': typeof ProtectedKeuanganExpenseIdRoute
   '/komersial/penawaran/$id': typeof ProtectedKomersialPenawaranIdRoute
   '/oprasional/casbon/$id': typeof ProtectedOprasionalCasbonIdRoute
   '/oprasional/casbon/create': typeof ProtectedOprasionalCasbonCreateRoute
   '/oprasional/oprasional/$id': typeof ProtectedOprasionalOprasionalIdRoute
   '/oprasional/pembayaran/$id': typeof ProtectedOprasionalPembayaranIdRoute
+  '/invoice/invoice': typeof ProtectedInvoiceInvoiceIndexRoute
   '/keuangan/expense': typeof ProtectedKeuanganExpenseIndexRoute
   '/komersial/penawaran': typeof ProtectedKomersialPenawaranIndexRoute
   '/oprasional/casbon': typeof ProtectedOprasionalCasbonIndexRoute
@@ -185,12 +203,14 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/_protected/dashboard': typeof ProtectedDashboardRoute
   '/_protected/komersial/email': typeof ProtectedKomersialEmailRoute
+  '/_protected/invoice/invoice/$id': typeof ProtectedInvoiceInvoiceIdRoute
   '/_protected/keuangan/expense/$id': typeof ProtectedKeuanganExpenseIdRoute
   '/_protected/komersial/penawaran/$id': typeof ProtectedKomersialPenawaranIdRoute
   '/_protected/oprasional/casbon/$id': typeof ProtectedOprasionalCasbonIdRoute
   '/_protected/oprasional/casbon/create': typeof ProtectedOprasionalCasbonCreateRoute
   '/_protected/oprasional/oprasional/$id': typeof ProtectedOprasionalOprasionalIdRoute
   '/_protected/oprasional/pembayaran/$id': typeof ProtectedOprasionalPembayaranIdRoute
+  '/_protected/invoice/invoice/': typeof ProtectedInvoiceInvoiceIndexRoute
   '/_protected/keuangan/expense/': typeof ProtectedKeuanganExpenseIndexRoute
   '/_protected/komersial/penawaran/': typeof ProtectedKomersialPenawaranIndexRoute
   '/_protected/oprasional/casbon/': typeof ProtectedOprasionalCasbonIndexRoute
@@ -207,12 +227,14 @@ export interface FileRouteTypes {
     | '/login'
     | '/dashboard'
     | '/komersial/email'
+    | '/invoice/invoice/$id'
     | '/keuangan/expense/$id'
     | '/komersial/penawaran/$id'
     | '/oprasional/casbon/$id'
     | '/oprasional/casbon/create'
     | '/oprasional/oprasional/$id'
     | '/oprasional/pembayaran/$id'
+    | '/invoice/invoice/'
     | '/keuangan/expense/'
     | '/komersial/penawaran/'
     | '/oprasional/casbon/'
@@ -227,12 +249,14 @@ export interface FileRouteTypes {
     | '/login'
     | '/dashboard'
     | '/komersial/email'
+    | '/invoice/invoice/$id'
     | '/keuangan/expense/$id'
     | '/komersial/penawaran/$id'
     | '/oprasional/casbon/$id'
     | '/oprasional/casbon/create'
     | '/oprasional/oprasional/$id'
     | '/oprasional/pembayaran/$id'
+    | '/invoice/invoice'
     | '/keuangan/expense'
     | '/komersial/penawaran'
     | '/oprasional/casbon'
@@ -248,12 +272,14 @@ export interface FileRouteTypes {
     | '/login'
     | '/_protected/dashboard'
     | '/_protected/komersial/email'
+    | '/_protected/invoice/invoice/$id'
     | '/_protected/keuangan/expense/$id'
     | '/_protected/komersial/penawaran/$id'
     | '/_protected/oprasional/casbon/$id'
     | '/_protected/oprasional/casbon/create'
     | '/_protected/oprasional/oprasional/$id'
     | '/_protected/oprasional/pembayaran/$id'
+    | '/_protected/invoice/invoice/'
     | '/_protected/keuangan/expense/'
     | '/_protected/komersial/penawaran/'
     | '/_protected/oprasional/casbon/'
@@ -356,6 +382,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedKeuanganExpenseIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
+    '/_protected/invoice/invoice/': {
+      id: '/_protected/invoice/invoice/'
+      path: '/invoice/invoice'
+      fullPath: '/invoice/invoice/'
+      preLoaderRoute: typeof ProtectedInvoiceInvoiceIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
     '/_protected/oprasional/pembayaran/$id': {
       id: '/_protected/oprasional/pembayaran/$id'
       path: '/oprasional/pembayaran/$id'
@@ -398,6 +431,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedKeuanganExpenseIdRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
+    '/_protected/invoice/invoice/$id': {
+      id: '/_protected/invoice/invoice/$id'
+      path: '/invoice/invoice/$id'
+      fullPath: '/invoice/invoice/$id'
+      preLoaderRoute: typeof ProtectedInvoiceInvoiceIdRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
     '/_protected/keuangan/expense/transfer/$id': {
       id: '/_protected/keuangan/expense/transfer/$id'
       path: '/keuangan/expense/transfer/$id'
@@ -411,12 +451,14 @@ declare module '@tanstack/react-router' {
 interface ProtectedRouteRouteChildren {
   ProtectedDashboardRoute: typeof ProtectedDashboardRoute
   ProtectedKomersialEmailRoute: typeof ProtectedKomersialEmailRoute
+  ProtectedInvoiceInvoiceIdRoute: typeof ProtectedInvoiceInvoiceIdRoute
   ProtectedKeuanganExpenseIdRoute: typeof ProtectedKeuanganExpenseIdRoute
   ProtectedKomersialPenawaranIdRoute: typeof ProtectedKomersialPenawaranIdRoute
   ProtectedOprasionalCasbonIdRoute: typeof ProtectedOprasionalCasbonIdRoute
   ProtectedOprasionalCasbonCreateRoute: typeof ProtectedOprasionalCasbonCreateRoute
   ProtectedOprasionalOprasionalIdRoute: typeof ProtectedOprasionalOprasionalIdRoute
   ProtectedOprasionalPembayaranIdRoute: typeof ProtectedOprasionalPembayaranIdRoute
+  ProtectedInvoiceInvoiceIndexRoute: typeof ProtectedInvoiceInvoiceIndexRoute
   ProtectedKeuanganExpenseIndexRoute: typeof ProtectedKeuanganExpenseIndexRoute
   ProtectedKomersialPenawaranIndexRoute: typeof ProtectedKomersialPenawaranIndexRoute
   ProtectedOprasionalCasbonIndexRoute: typeof ProtectedOprasionalCasbonIndexRoute
@@ -428,12 +470,14 @@ interface ProtectedRouteRouteChildren {
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedDashboardRoute: ProtectedDashboardRoute,
   ProtectedKomersialEmailRoute: ProtectedKomersialEmailRoute,
+  ProtectedInvoiceInvoiceIdRoute: ProtectedInvoiceInvoiceIdRoute,
   ProtectedKeuanganExpenseIdRoute: ProtectedKeuanganExpenseIdRoute,
   ProtectedKomersialPenawaranIdRoute: ProtectedKomersialPenawaranIdRoute,
   ProtectedOprasionalCasbonIdRoute: ProtectedOprasionalCasbonIdRoute,
   ProtectedOprasionalCasbonCreateRoute: ProtectedOprasionalCasbonCreateRoute,
   ProtectedOprasionalOprasionalIdRoute: ProtectedOprasionalOprasionalIdRoute,
   ProtectedOprasionalPembayaranIdRoute: ProtectedOprasionalPembayaranIdRoute,
+  ProtectedInvoiceInvoiceIndexRoute: ProtectedInvoiceInvoiceIndexRoute,
   ProtectedKeuanganExpenseIndexRoute: ProtectedKeuanganExpenseIndexRoute,
   ProtectedKomersialPenawaranIndexRoute: ProtectedKomersialPenawaranIndexRoute,
   ProtectedOprasionalCasbonIndexRoute: ProtectedOprasionalCasbonIndexRoute,

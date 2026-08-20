@@ -5,18 +5,24 @@ import { Chip } from "@heroui/react"
 const StatusChiper = ({status}) => {
     const master = {
         '': {color: 'default', variant: 'primary'},
+        inisiasi: {color: 'default', variant: 'primary'},
         approval_manager: {color: 'accent', variant: 'soft'},
+        approval_supervisor: {color: 'danger', variant: 'soft'},
         disposisi_operasional: {color: 'accent', variant: 'primary'},
         progress_operasional: {color: 'success', variant: 'soft'},
         selesai: {color: 'success', variant: 'primary'},
         proses_transfer: {color: 'warning', variant: 'soft'},
         sudah_transfer: {color: 'success', variant: 'soft'},
         proses_ba: {color: 'danger', variant: 'soft'},
-        approval_direktur: {color: 'danger', variant: 'soft'}
+        approval_direktur: {color: 'danger', variant: 'soft'},
+        invoice_delivery: {color: 'success', variant: 'primary'},
+        request_proses_invoice: {color: 'danger', variant: 'soft'},
+        approval_manager_ba: {color: 'danger', variant: 'soft'},
+        approval_direktur_ba: {color: 'danger', variant: 'soft'},
     }
 
-    const result = status.replace(/_/g, " ")
-        .replace(/\b\w/g, c => c.toUpperCase());
+    const result = status?.replace(/_/g, " ").replace(/[()]/g, "")
+        ?.replace(/\b\w/g, c => c.toUpperCase());
 
     const selected = master[status]
   

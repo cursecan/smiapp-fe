@@ -14,6 +14,7 @@ import SelectComponent from '../../../../components/input/SelectComponent'
 import { useAuth } from '../../../../auth/AuthProvider'
 import StatusApprovalFilter from '../../../../components/StatusApprovalFilter'
 import { getApprovalStatus } from '../../../../components/useSchema'
+import StatusChiper from '../../../../components/StatusChiper'
 
 export const Route = createFileRoute('/_protected/oprasional/oprasional/')({
   component: RouteComponent,
@@ -135,18 +136,24 @@ function RouteComponent() {
                                                 <Table.Cell className={'truncate'}>
                                                     <div className="flex gap-2 items-center">
                                                         <Avatar>
-                                                            <Avatar.Fallback className='bg-black text-white'>{fallbackName(i.assign_to?.full_name || 'NA')}</Avatar.Fallback>
+                                                            <Avatar.Fallback className='bg-accent/50 text-white'>{fallbackName(i.assign_to?.full_name || 'NA')}</Avatar.Fallback>
                                                         </Avatar>
                                                         <div className="flex-1">
                                                             <div className="">{i.assign_to?.full_name || 'Unmaped'}</div>
-                                                            <Description>{i.assign_to?.pegawai?.cabang || '-'}</Description>
+                                                            <Description>{i.assign_to?.pegawai?.jabatan} {i.assign_to?.pegawai?.cabang || ''}</Description>
                                                         </div>
                                                     </div>
                                                 </Table.Cell>
                                                 <Table.Cell>
-                                                    <Description>{i.penawaran.nomor} / <span className=''>{i.penawaran.nomor_penugasan}</span></Description>
+                                                    <Description>
+                                                        <Link to={'$id'} params={{id: i.id}}>{i.penawaran.nomor} / <span className=''>{i.penawaran.nomor_penugasan}</span></Link>
+                                                    </Description>
                                                     <div className="">
-                                                        <Link to={`${i.id}`}>{i.penawaran.nama_project}</Link>
+                                                        <Link to={`${i.id}`}>
+                                                            <div className="link">
+                                                                <p>{i.penawaran.nama_project}</p>
+                                                            </div>
+                                                        </Link>
                                                     </div>
                                                 </Table.Cell>
                                                 <Table.Cell>
@@ -164,7 +171,7 @@ function RouteComponent() {
                                                     </div>
                                                 </Table.Cell>
                                                 <Table.Cell className={'truncate'}>
-                                                    <Chip>{i.status[0]?.name}</Chip>
+                                                    <StatusChiper status={i.status} />
                                                 </Table.Cell>
                                             </Table.Row>
                                         )

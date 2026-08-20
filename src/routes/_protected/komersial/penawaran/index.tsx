@@ -1,9 +1,9 @@
-import { Button, Card, Description, EmptyState, Label, SearchField, Table } from '@heroui/react'
+import { Card, Description, EmptyState, SearchField, Table } from '@heroui/react'
 import { useQuery } from '@tanstack/react-query'
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { usePenawaranService } from '../../../../services/penawaran.service'
 import ModalPenawaran from '../-components/penawaran/ModalPenawaran'
-import { Route as RouteIcon, ArrowShapeTurnUpRight, Tray } from '@gravity-ui/icons'
+import { Route as RouteIcon, Tray } from '@gravity-ui/icons'
 import HeaderPage from '../../../../components/HeaderPage'
 import { formatRupiah } from '../../../../utils/formatCurrency'
 import PaginationTable from '../../../../components/PaginationTable'
@@ -11,7 +11,7 @@ import StatusChiper from '../../../../components/StatusChiper'
 import { getApprovalStatus, getJenisPekerjaan } from '../../../../components/useSchema'
 import StatusApprovalFilter from '../../../../components/StatusApprovalFilter'
 import JenisPekerjaanFilter from '../../../../components/JenisPekerjaanFilter'
-import { formatDate, formatSimpleDate, formatSimpleDate2 } from '../../../../utils/dateFormat'
+import { formatSimpleDate2 } from '../../../../utils/dateFormat'
 
 
 export const Route = createFileRoute('/_protected/komersial/penawaran/')({
@@ -97,7 +97,7 @@ function RouteComponent() {
                     Margin
                   </Table.Column>
                   <Table.Column>Status</Table.Column>
-                  <Table.Column></Table.Column>
+                  {/* <Table.Column></Table.Column> */}
                 </Table.Header>
                 <Table.Body
                   renderEmptyState={() => (
@@ -117,10 +117,15 @@ function RouteComponent() {
                                 <RouteIcon className='text-orange-500 size-4' />
                               {/* </Surface> */}
                               <div className="flex flex-col gap-2 flex-1">
-                                <Description>{i.nomor}</Description>
-                                <Label>
-                                  {i.nama_project}
-                                </Label>
+                                
+                                <Description>
+                                  <Link to='$id' params={{id: i.id}}>{i.nomor}</Link>
+                                </Description>
+                                <Link to='$id' params={{id: i.id}}>
+                                  <div className="link">
+                                    <p>{i.nama_project}</p>
+                                  </div>
+                                </Link>
                               </div>
                             </div>
                           </Table.Cell>
@@ -142,11 +147,11 @@ function RouteComponent() {
                           <Table.Cell className={'truncate'}>
                             <StatusChiper status={i.status} />
                           </Table.Cell>
-                          <Table.Cell>
+                          {/* <Table.Cell>
                             <Button onPress={() => navigate({to: `/komersial/penawaran/${i.id}`})} isIconOnly size='sm'>
                               <ArrowShapeTurnUpRight />
                             </Button>
-                          </Table.Cell>
+                          </Table.Cell> */}
                         </Table.Row>
                       )
                     })

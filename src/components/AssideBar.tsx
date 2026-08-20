@@ -1,4 +1,4 @@
-import {  Envelope, Persons, House, MapPin, Bell, Circles5Random, Rocket, Flask, LogoDocker, Megaphone, Mug, ArrowRightFromSquare, CircleDollar } from "@gravity-ui/icons"
+import {  Envelope, Persons, House, MapPin, Bell, Circles5Random, Rocket, Flask, LogoDocker, Megaphone, Mug, ArrowRightFromSquare, CircleDollar, Layers3Diagonal } from "@gravity-ui/icons"
 import { useAuth } from "../auth/AuthProvider"
 import { Avatar, Badge, Button, Description, Label, Popover, Surface } from "@heroui/react"
 import { useLocation, useNavigate } from "@tanstack/react-router"
@@ -49,10 +49,12 @@ const AssideBar = () => {
                         <li>
                             <div className="text-xs mb-2">Keuangan</div>
                             <div className="space-y-1">
-                                <NavButton active={location.pathname.includes('/keuangan/expense')} onPress={() => navigate({to: '/keuangan/expense'})} icon={<CircleDollar />} name={'Expense'} />
+                                <NavButton active={location.pathname.includes('/keuangan/expense')} onPress={() => navigate({to: '/keuangan/expense'})} icon={<Layers3Diagonal />} name={'Expense'} />
+                                <NavButton active={location.pathname.includes('/invoice/invoice')} onPress={() => navigate({to: '/invoice/invoice'})} icon={<CircleDollar />} name={'Invoice Delivery'} />
                             </div>
                         </li>
-                        {/* <li>
+                        
+                        <li>
                             <div className="text-xs mb-2">Master Data</div>
                             <div className="space-y-1">
                                 <NavButton icon={<LogoDocker />} name={'Kapal'} />
@@ -67,7 +69,7 @@ const AssideBar = () => {
                             <div className="space-y-1">
                                 <NavButton icon={<LogoDocker />} name={'Approval'} />
                             </div>
-                        </li> */}
+                        </li>
                     </ul>
                 </div>
                 <div className="p-4">

@@ -7,10 +7,10 @@ import SubmitButton from "./SubmitButton"
 
 
 const ApprovalButtons = ({
-    submitFn,
-    saveFn,
     form,
     queryKey,
+    submitFn = () => {},
+    saveFn = () => {},
     postOnly=false,
     saveOnly=false,
     isCanEdit=false,
