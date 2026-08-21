@@ -5,18 +5,21 @@ import { usePenawaranService } from "../../../../../services/penawaran.service"
 import { useNavigate } from "@tanstack/react-router"
 import InputText from "../../../../../components/input/InputText"
 import { useState } from "react"
+import { useToast } from "../../../../../lib/useToast"
 
 const ReviseComponent = ({penawaran}) => {
     const navigate = useNavigate()
     const [form, setForm] = useState({...penawaran})
+    const toast = useToast()
 
     const state = useOverlayState()
     const mutation = useMutation({
         mutationFn: (payload) => usePenawaranService.revise(payload),
         onSuccess: (res) => {
-            console.log(res);
-            
             navigate({to: `/komersial/penawaran/${res.data.id}`})
+        },
+        onError: (err) => {
+            toast.danger({message: 'Failed', description: err.message})
         }
     })
 
