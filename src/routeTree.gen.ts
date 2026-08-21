@@ -14,6 +14,7 @@ import { Route as HomeRouteImport } from './routes/home'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProtectedMaintenanceRouteImport } from './routes/_protected/maintenance'
 import { Route as ProtectedDashboardRouteImport } from './routes/_protected/dashboard'
 import { Route as ProtectedKomersialEmailRouteImport } from './routes/_protected/komersial/email'
 import { Route as ProtectedOprasionalPembayaranIndexRouteImport } from './routes/_protected/oprasional/pembayaran/index'
@@ -54,6 +55,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ProtectedMaintenanceRoute = ProtectedMaintenanceRouteImport.update({
+  id: '/maintenance',
+  path: '/maintenance',
+  getParentRoute: () => ProtectedRouteRoute,
 } as any)
 const ProtectedDashboardRoute = ProtectedDashboardRouteImport.update({
   id: '/dashboard',
@@ -156,6 +162,7 @@ export interface FileRoutesByFullPath {
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/dashboard': typeof ProtectedDashboardRoute
+  '/maintenance': typeof ProtectedMaintenanceRoute
   '/komersial/email': typeof ProtectedKomersialEmailRoute
   '/invoice/invoice/$id': typeof ProtectedInvoiceInvoiceIdRoute
   '/keuangan/expense/$id': typeof ProtectedKeuanganExpenseIdRoute
@@ -178,6 +185,7 @@ export interface FileRoutesByTo {
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/dashboard': typeof ProtectedDashboardRoute
+  '/maintenance': typeof ProtectedMaintenanceRoute
   '/komersial/email': typeof ProtectedKomersialEmailRoute
   '/invoice/invoice/$id': typeof ProtectedInvoiceInvoiceIdRoute
   '/keuangan/expense/$id': typeof ProtectedKeuanganExpenseIdRoute
@@ -202,6 +210,7 @@ export interface FileRoutesById {
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/_protected/dashboard': typeof ProtectedDashboardRoute
+  '/_protected/maintenance': typeof ProtectedMaintenanceRoute
   '/_protected/komersial/email': typeof ProtectedKomersialEmailRoute
   '/_protected/invoice/invoice/$id': typeof ProtectedInvoiceInvoiceIdRoute
   '/_protected/keuangan/expense/$id': typeof ProtectedKeuanganExpenseIdRoute
@@ -226,6 +235,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/login'
     | '/dashboard'
+    | '/maintenance'
     | '/komersial/email'
     | '/invoice/invoice/$id'
     | '/keuangan/expense/$id'
@@ -248,6 +258,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/login'
     | '/dashboard'
+    | '/maintenance'
     | '/komersial/email'
     | '/invoice/invoice/$id'
     | '/keuangan/expense/$id'
@@ -271,6 +282,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/login'
     | '/_protected/dashboard'
+    | '/_protected/maintenance'
     | '/_protected/komersial/email'
     | '/_protected/invoice/invoice/$id'
     | '/_protected/keuangan/expense/$id'
@@ -332,6 +344,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_protected/maintenance': {
+      id: '/_protected/maintenance'
+      path: '/maintenance'
+      fullPath: '/maintenance'
+      preLoaderRoute: typeof ProtectedMaintenanceRouteImport
+      parentRoute: typeof ProtectedRouteRoute
     }
     '/_protected/dashboard': {
       id: '/_protected/dashboard'
@@ -450,6 +469,7 @@ declare module '@tanstack/react-router' {
 
 interface ProtectedRouteRouteChildren {
   ProtectedDashboardRoute: typeof ProtectedDashboardRoute
+  ProtectedMaintenanceRoute: typeof ProtectedMaintenanceRoute
   ProtectedKomersialEmailRoute: typeof ProtectedKomersialEmailRoute
   ProtectedInvoiceInvoiceIdRoute: typeof ProtectedInvoiceInvoiceIdRoute
   ProtectedKeuanganExpenseIdRoute: typeof ProtectedKeuanganExpenseIdRoute
@@ -469,6 +489,7 @@ interface ProtectedRouteRouteChildren {
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedDashboardRoute: ProtectedDashboardRoute,
+  ProtectedMaintenanceRoute: ProtectedMaintenanceRoute,
   ProtectedKomersialEmailRoute: ProtectedKomersialEmailRoute,
   ProtectedInvoiceInvoiceIdRoute: ProtectedInvoiceInvoiceIdRoute,
   ProtectedKeuanganExpenseIdRoute: ProtectedKeuanganExpenseIdRoute,

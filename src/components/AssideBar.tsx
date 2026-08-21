@@ -57,17 +57,17 @@ const AssideBar = () => {
                         <li>
                             <div className="text-xs mb-2">Master Data</div>
                             <div className="space-y-1">
-                                <NavButton icon={<LogoDocker />} name={'Kapal'} />
-                                <NavButton icon={<MapPin />} name={'Pelabuhan'} />
-                                <NavButton icon={<Persons />} name={'Pegawai'} />
-                                <NavButton icon={<Megaphone />} name={'Pekerjaan'} />
-                                <NavButton icon={<Mug />} name={'Jenis Pekerjaan'} />
+                                <NavButton active={location.pathname.includes('/maintenance0')} onPress={() => navigate({to: '/maintenance'})} icon={<LogoDocker />} name={'Kapal'} />
+                                <NavButton active={location.pathname.includes('/maintenance1')} onPress={() => navigate({to: '/maintenance'})} icon={<MapPin />} name={'Pelabuhan'} />
+                                <NavButton active={location.pathname.includes('/maintenance2')} onPress={() => navigate({to: '/maintenance'})} icon={<Persons />} name={'Pegawai'} />
+                                <NavButton active={location.pathname.includes('/maintenance3')} onPress={() => navigate({to: '/maintenance'})} icon={<Megaphone />} name={'Pekerjaan'} />
+                                <NavButton active={location.pathname.includes('/maintenance4')} onPress={() => navigate({to: '/maintenance'})} icon={<Mug />} name={'Jenis Pekerjaan'} />
                             </div>
                         </li>
                         <li>
                             <div className="text-xs mb-2">Settings</div>
                             <div className="space-y-1">
-                                <NavButton icon={<LogoDocker />} name={'Approval'} />
+                                <NavButton active={location.pathname.includes('/maintenance5')} onPress={() => navigate({to: '/maintenance'})} icon={<LogoDocker />} name={'Approval'} />
                             </div>
                         </li>
                     </ul>
