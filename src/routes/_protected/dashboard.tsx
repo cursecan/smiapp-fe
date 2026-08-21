@@ -1,13 +1,13 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import HeaderPage from '../../components/HeaderPage'
 import Chart from 'react-apexcharts'
 import { useQuery } from '@tanstack/react-query';
 import { useDashboardService } from '../../services/dashboad/dashboardService';
 import { useMemo } from 'react';
-import { Card, Description, Table } from '@heroui/react';
+import { Card, Description, Label, Surface, Table } from '@heroui/react';
 import { addMonths, format } from 'date-fns';
 import { formatRupiah } from '../../utils/formatCurrency';
-import { Label } from 'react-aria-components';
+import { Link as LinkHero } from '@heroui/react';
 
 
 export const Route = createFileRoute('/_protected/dashboard')({
@@ -23,6 +23,15 @@ function RouteComponent() {
     queryFn: () => useDashboardService.resume_penawaran(),
     select: (res) => res.data
   })
+
+  const {data: monitoring} = useQuery({
+    queryKey: ['dashboard-monitoring'],
+    queryFn: () => useDashboardService.monitoring(),
+    select: (res) => res.data
+  })
+
+  console.log(monitoring);
+  
 
   const {data: dataOprs} = useQuery({
     queryKey: ['dashboard-oprs'],
@@ -100,11 +109,79 @@ function RouteComponent() {
             <Card.Title>Realisasi Operasional vs Penawaran</Card.Title>
           </Card.Header>
           <Card.Content>
-            <div className="">
+            <div className="w-1/2">
               <Chart height={260} type='line' series={chartData.series} options={chartData.options} />
             </div>
           </Card.Content>
         </Card>
+        
+
+        <div className="">
+          <Card>
+            <Card.Header>
+              <Card.Title>Monitoring</Card.Title>
+            </Card.Header>
+            <Card.Content>
+              <div className="grid grid-cols-5 gap-3">
+                <Surface variant='secondary' className='rounded-2xl p-3'>
+                  <Description className="">Penawaran</Description>
+                  <div className="">
+                    <Link to={'/komersial/penawaran'}>
+                      <div className="link gap-2">
+                        <p>{monitoring?.penawaran.un_close}</p>
+                        <LinkHero.Icon className='text-accent' />
+                      </div>
+                    </Link>
+                  </div>
+                </Surface>
+                <Surface variant='secondary' className='rounded-2xl p-3'>
+                  <Description className="">Tidak Ada SPK</Description>
+                  <div className="">
+                    <Link to={'/komersial/penawaran'}>
+                      <div className="link gap-2">
+                        <p>{monitoring?.penawaran.no_spk_count}</p>
+                        <LinkHero.Icon className='text-accent' />
+                      </div>
+                    </Link>
+                  </div>
+                </Surface>
+                <Surface variant='secondary' className='rounded-2xl p-3'>
+                  <Description className="">Progress Oprasional</Description>
+                  <div className="">
+                    <Link to={'/komersial/penawaran'}>
+                      <div className="link gap-2">
+                        <p>{monitoring?.oprasional.un_close}</p>
+                        <LinkHero.Icon className='text-accent' />
+                      </div>
+                    </Link>
+                  </div>
+                </Surface>
+                <Surface variant='secondary' className='rounded-2xl p-3'>
+                  <Description className="">Blm Invoice</Description>
+                  <div className="">
+                    <Link to={'/komersial/penawaran'}>
+                      <div className="link gap-2">
+                        <p>{monitoring?.oprasional.un_invoice}</p>
+                        <LinkHero.Icon className='text-accent' />
+                      </div>
+                    </Link>
+                  </div>
+                </Surface>
+                <Surface variant='secondary' className='rounded-2xl p-3'>
+                  <Description className="">Blm Release Tagihan</Description>
+                  <div className="">
+                    <Link to={'/komersial/penawaran'}>
+                      <div className="link gap-2">
+                        <p>{monitoring?.oprasional.no_casbon}</p>
+                        <LinkHero.Icon className='text-accent' />
+                      </div>
+                    </Link>
+                  </div>
+                </Surface>
+              </div>
+            </Card.Content>
+          </Card>
+        </div>
         
         <Card>
           <Card.Header>

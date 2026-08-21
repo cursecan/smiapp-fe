@@ -10,5 +10,8 @@ export const useDashboardService = {
     },
     resume_agens: () => {
         return api.get('dashboard/resume-agens/')
+    },
+    monitoring: () => {
+        return api.get('dashboard/monitoring/')
     }
 }
