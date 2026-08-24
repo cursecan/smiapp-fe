@@ -13,5 +13,8 @@ export const useDashboardService = {
     },
     monitoring: () => {
         return api.get('dashboard/monitoring/')
+    },
+    divisi_report: ({jobtype=''}) => {
+        return api.get('dashboard/report-divisi/', {params: {jobtype}})
     }
 }

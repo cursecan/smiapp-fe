@@ -20,15 +20,16 @@ export const Route = createFileRoute('/_protected/komersial/penawaran/')({
     page: Number(search.page ?? 1),
     q: String(search.q ?? ''),
     filter: String(search.filter ?? ''),
-    pekerjaan: String(search.pekerjaan ?? '')
+    pekerjaan: String(search.pekerjaan ?? ''),
+    nospk: String(search.nospk ?? '')
   })
 })
 
 function RouteComponent() {
   const navigate = useNavigate()
-  const {page, q, filter, pekerjaan} = Route.useSearch()
+  const {page, q, filter, pekerjaan, nospk} = Route.useSearch()
   const {data: penawaran} = useQuery({
-    queryKey: ['penawaran-list', page, q, filter, pekerjaan],
+    queryKey: ['penawaran-list', page, q, filter, pekerjaan, nospk],
     queryFn: async ({queryKey}) => usePenawaranService.getList({queryKey}),
     select: (data) => data.data
   })

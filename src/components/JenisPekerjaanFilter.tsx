@@ -25,7 +25,7 @@ const JenisPekerjaanFilter = ({data, value, onChange}) => {
           <Select.Popover>
               <ListBox>
                   <ListBox.Item key={'all'} id='' textValue={''}>
-                      Semua Pekerjaan
+                      --Semua Pekerjaan--
                   </ListBox.Item>
                   {
                       data.map(i => {
