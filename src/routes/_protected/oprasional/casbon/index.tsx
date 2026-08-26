@@ -37,7 +37,7 @@ function RouteComponent() {
         }, 800);
     }
 
-  const approval_status = getApprovalStatus('Casbon')
+  const approval_status = getApprovalStatus('Casbon Service')
 
 
   return (
