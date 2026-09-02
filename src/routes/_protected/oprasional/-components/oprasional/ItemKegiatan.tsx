@@ -65,9 +65,7 @@ const ItemKegiatan = ({item, canEdit=false}) => {
         <Table.Cell>{ formatRupiah(item.harga_satuan)}</Table.Cell>
         <Table.Cell className={'truncate w-0'}>
             <div className="flex items-center gap-4 justify-end">
-                {
-                    canEdit && <UploadDocProgressModal item={item} ops={item.ops} data={[]} />
-                }
+                <UploadDocProgressModal item={item} ops={item.ops} data={[]} />
                 <ModalComponent
                     size={'lg'}
                     state={state}
