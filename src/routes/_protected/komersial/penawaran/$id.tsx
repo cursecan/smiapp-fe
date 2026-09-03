@@ -50,7 +50,7 @@ function RouteComponent() {
   const [errors, setErrors] = useState(null)
   const [pelabuhan, setPelabuhan] = useState(null)
 
-  const {canEdit, canApprove, hasAuth, canRevise} = useSchema(data)
+  const {canEdit, canApprove, hasAuth, canRevise, stepApprovals} = useSchema(data)
   const {control, handleSubmit, reset, getValues, formState: {isValid}} = useForm({resolver: zodResolver(usePenawaranSchema), mode: "onChange", defaultValues: data || {}})
   
   
@@ -405,7 +405,7 @@ function RouteComponent() {
       </div>
       
       <div className="w-72">
-        <CardStepper stepper={data?.stepper} />
+        <CardStepper stepper={data?.stepper} stepApprovals={stepApprovals} />
       </div>
     </div>
   </div>

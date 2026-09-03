@@ -1,7 +1,7 @@
-import { CheckDouble, Clock, Xmark } from '@gravity-ui/icons'
+import { CheckDouble, Clock, Play, StarFill, Xmark } from '@gravity-ui/icons'
 import { Card, Description, Label, Surface } from '@heroui/react'
 import { formatDate } from '../utils/dateFormat'
-const CardStepper = ({stepper=[]}) => {
+const CardStepper = ({stepper=[], stepApprovals}) => {
     
     const clean_stepper = stepper.map((i, index) => {
         let name = i.name
@@ -26,35 +26,49 @@ const CardStepper = ({stepper=[]}) => {
         <Card.Content>
             <div className="flex flex-col gap-6">
                 {
-                clean_stepper.map((s, index) => {
+                stepApprovals?.map((s, index) => {
                     return (
-                    <Surface key={index} className='flex items-center gap-6'>
-                        <Surface className={`p-2 rounded-xl ${s.approved_at ? (s.is_approve ? 'bg-success' : 'bg-danger-soft text-danger') : 'bg-amber-100'}`}>
+                        <>
                         {
-                            s.approved_at ? (s.is_approve ? <CheckDouble /> : <Xmark />) : <Clock />
-                        }
-                        </Surface>
-                        <Surface className='flex flex-col flex-1'>
-                        <Label>{s.name}</Label>
-                        {
-                            s.approved_at && (
-                            <>
-                                {
-                                    s.is_approve ? (
+                            s.active ? (
+                                <Surface key={index} className='flex items-center gap-6 bg-success-soft py-2 rounded-xl'>
+                                    <div className={`p-2 rounded-xl` }>
+                                        <Play />
+                                    </div>
+                                    <div className='flex flex-col flex-1'>
+                                        <Label>{s.name}</Label>
+                                    </div>
+                                </Surface>
+                            ) : (
+                                <Surface key={index} className='flex items-center gap-6'>
+                                    <Surface className={`p-2 rounded-xl ${s.approved_at ? (s.is_approve ? 'bg-success text-white' : 'bg-danger-soft text-danger') : 'bg-default'}`}>
+                                    {
+                                        s.approved_at ? (s.is_approve ? <CheckDouble /> : <Xmark />) : <Clock />
+                                    }
+                                    </Surface>
+                                    <Surface className='flex flex-col flex-1'>
+                                    <Label>{s.name}</Label>
+                                    {
+                                        s.approved_at && (
                                         <>
-                                            <Description>{s.step > 1 ? 'Approved' : 'Created'} by {s.approval_by?.full_name}</Description>
-                                            <Description>{formatDate(s.approved_at)}</Description>
+                                            {
+                                                s.is_approve ? (
+                                                    <>
+                                                        <Description>{s.step > 1 ? 'Approved' : 'Created'} by {s.approval_by?.full_name}</Description>
+                                                        <Description>{formatDate(s.approved_at)}</Description>
+                                                    </>
+                                                ) : (
+                                                    <Description>{s.message}</Description>
+                                                )
+                                            }
                                         </>
-                                    ) : (
-                                        <Description>{s.message}</Description>
-                                    )
-                                }
-                            </>
+                                        )
+                                    }
+                                    </Surface>
+                                </Surface>
                             )
                         }
-                        </Surface>
-                    </Surface>
-
+                        </>
                     )
                 })
                 }

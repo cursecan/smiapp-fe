@@ -46,7 +46,7 @@ function RouteComponent() {
 
   const {control, reset, handleSubmit, getValues, formState:{isValid}} = useForm({resolver: zodResolver(useCasbonSchema), mode:'onChange', defaultValues: data || {}})
 
-  const { canApprove, canEdit } = useSchema(data)
+  const { canApprove, canEdit, stepApprovals } = useSchema(data)
   
   const qc = useQueryClient()
   const change_suppli_mutation = useMutation({
@@ -250,7 +250,7 @@ function RouteComponent() {
         </div>
       </div>
       <div className="max-w-xs w-full">
-        <CardStepper stepper={data?.stepper} />
+        <CardStepper stepper={data?.stepper} stepApprovals={stepApprovals} />
         
         {
           expenses?.length > 0 && (

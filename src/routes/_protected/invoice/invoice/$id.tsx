@@ -24,7 +24,7 @@ function RouteComponent() {
     enabled: !!id
   })
   
-  const {canApprove} = useSchema(data)
+  const {canApprove, stepApprovals} = useSchema(data)
   const {control, handleSubmit, reset, getValues, formState: {isValid}} = useForm({mode: "onChange", defaultValues: data || {}})
 
   if (isLoading) {
@@ -85,7 +85,7 @@ function RouteComponent() {
 
         </div>
         <div className="w-90">
-          <CardStepper stepper={data?.stepper} />
+          <CardStepper stepper={data?.stepper} stepApprovals={stepApprovals} />
         </div>
       </div>
     </div>

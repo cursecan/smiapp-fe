@@ -57,7 +57,7 @@ function RouteComponent() {
 
     const dokumen_penugasan = data?.penawaran?.dok_penawaran?.filter(i => i.doc_type !== 'UN') ?? []
 
-    const {canEdit, canApprove, hasAuth} = useSchema(data)
+    const {canEdit, canApprove, hasAuth, stepApprovals} = useSchema(data)
 
     const mutatePelunasan = useMutation({
         mutationFn: (id) => useCasbonService.pelunasan(id),
@@ -432,7 +432,7 @@ function RouteComponent() {
                 </div>
             </div>
             <div className="w-90">
-                <CardStepper stepper={data?.stepper} />
+                <CardStepper stepper={data?.stepper} stepApprovals={stepApprovals} />
             </div>
         </div>
     </div>
