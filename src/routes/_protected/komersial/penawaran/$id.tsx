@@ -29,6 +29,7 @@ import { useJenisPekerjaanService } from '../../../../services/masterdata/jenisP
 import ReviseComponent from '../-components/penawaran/ReviseComponent'
 import DateInput from '../../../../components/input/DateInput'
 import { useCustomerService } from '../../../../services/customer/customerService'
+import LinkButton from '../../../../components/buttons/LinkButton'
 
 export const Route = createFileRoute('/_protected/komersial/penawaran/$id')({
   component: RouteComponent,
@@ -50,7 +51,7 @@ function RouteComponent() {
   const [errors, setErrors] = useState(null)
   const [pelabuhan, setPelabuhan] = useState(null)
 
-  const {canEdit, canApprove, hasAuth, canRevise, stepApprovals} = useSchema(data)
+  const {canEdit, canApprove, hasAuth, canRevise, stepApprovals, currentStep} = useSchema(data)
   const {control, handleSubmit, reset, getValues, formState: {isValid}} = useForm({resolver: zodResolver(usePenawaranSchema), mode: "onChange", defaultValues: data || {}})
   
   
@@ -365,16 +366,6 @@ function RouteComponent() {
                 {
                   canRevise && <ReviseComponent penawaran={data} />
                 }
-                {
-                  data?.oprasional && (
-                    <div className="flex-1 flex justify-end">
-                      <Button onPress={() => navigate({to: `/oprasional/oprasional/${data.oprasional}`})} variant='tertiary'>
-                        <ArrowUpRightFromSquare />
-                        Lihat Operasional
-                      </Button>
-                    </div>
-                  )
-                }
               </div>
             </Surface>
             <Surface>
@@ -406,6 +397,24 @@ function RouteComponent() {
       
       <div className="w-72">
         <CardStepper stepper={data?.stepper} stepApprovals={stepApprovals} />
+
+        {
+          data?.oprasional && currentStep?.step === 5 && (
+            // <div className="flex-1 flex justify-end">
+            //   <Button onPress={() => navigate({to: `/oprasional/oprasional/${data.oprasional}`})} variant='tertiary'>
+            //     <ArrowUpRightFromSquare />
+            //     Lihat Operasional
+            //   </Button>
+            // </div>
+
+            <LinkButton 
+              label={'Check Operasional'}
+              to={'/oprasional/oprasional/$id'}
+              params={{id: data.oprasional}}
+              className={'button--primary button--full-width mt-6'}
+            />
+          )
+        }
       </div>
     </div>
   </div>

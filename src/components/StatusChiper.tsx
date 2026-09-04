@@ -10,6 +10,7 @@ const StatusChiper = ({status}) => {
         approval_supervisor: {color: 'danger', variant: 'soft'},
         disposisi_operasional: {color: 'accent', variant: 'primary'},
         progress_operasional: {color: 'success', variant: 'soft'},
+        on_operasional: {color: 'success', variant: 'soft'},
         selesai: {color: 'success', variant: 'primary'},
         proses_transfer: {color: 'warning', variant: 'soft'},
         sudah_transfer: {color: 'success', variant: 'soft'},

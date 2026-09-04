@@ -255,8 +255,8 @@ function RouteComponent() {
           <Card.Content>
             <JenisPekerjaanFilter data={filter_pekerjaan} onChange={(e) => navigate({search: (prev) => ({...prev, jobtype: e})})} />
             <div className="grid grid-cols-2 gap-3">
-              <Chart height={260} series={chartData2.series} options={chartData2.options} />
-              <Chart height={260} series={chartData3.series} options={chartData3.options} />
+              <Chart height={300} series={chartData2.series} options={chartData2.options} />
+              <Chart height={300} series={chartData3.series} options={chartData3.options} />
             </div>
           </Card.Content>
         </Card>

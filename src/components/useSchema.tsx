@@ -44,10 +44,12 @@ export const useSchema = (schema) => {
     const stepApprovals = [
       ...record, ...idleStep
     ]
+
+    const currentStep = schema?.approvals?.at(0)
     
 
   return {
-    canEdit, canApprove, hasAuth, canRevise, stepApprovals
+    canEdit, canApprove, hasAuth, canRevise, stepApprovals, currentStep
   }
 }
 
