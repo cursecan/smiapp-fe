@@ -70,7 +70,7 @@ const NotoficationBadge = () => {
   return (
     <Popover>
         <Badge.Anchor>
-            <Button isIconOnly variant={data?.length === 0 ? 'ghost' : 'secondary'}>
+            <Button isDisabled={data?.length === 0} isIconOnly variant={data?.length === 0 ? 'ghost' : 'primary'}>
                 <Bell />
             </Button>
             {

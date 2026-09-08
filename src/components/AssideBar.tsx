@@ -1,18 +1,18 @@
 import {  Envelope, Persons, House, MapPin, Bell, Circles5Random, Rocket, Flask, LogoDocker, Megaphone, Mug, ArrowRightFromSquare, CircleDollar, Layers3Diagonal } from "@gravity-ui/icons"
 import { useAuth } from "../auth/AuthProvider"
 import { Avatar, Badge, Button, Description, Label, Popover, Surface } from "@heroui/react"
-import { useLocation, useNavigate } from "@tanstack/react-router"
+import { Link, useLocation, useNavigate } from "@tanstack/react-router"
 import NotoficationBadge from "./NotoficationBadge"
 
 
-const NavButton = ({icon, name, active=false, onPress=()=>{}}) => {
+const NavButton = ({icon, name, to, active=false}) => {
     return (
-        <Button onPress={onPress} fullWidth className={'rounded-lg flex justify-start'} variant={active ? 'tertiary' : 'ghost'}>
+        <Link to={to} className={`button button--full-width flex rounded-xl justify-start ${active ? 'bg-black text-white' : 'bg-accent/0'}`}>
             {
                 icon && icon
             }
             <div className="flex-1 text-left">{name}</div>
-        </Button>
+        </Link>
     )
 }
 
@@ -23,11 +23,11 @@ const AssideBar = () => {
     const { logout, user } = useAuth()
     return (
         <div className="fixed left-0 top-0 w-72 h-screen p-2 flex flex-col">
-            <Surface className="flex-1 flex text-sm flex-col h-full bg-gray-50 shadow rounded-xl">
+            <Surface className="flex-1 overflow-hidden flex text-sm flex-col h-full shadow-xl rounded-xl">
                 <div className="">
                     <div className="p-4 flex items-center">
                         <div className="flex-1">
-                            <div className="">SMILE</div>
+                            <div className="font-bold text-xl">SMILE</div>
                             <Description>Digital Marine Ecosystem</Description>
                             {/* Sea Management Integrated Lifecycle Environment */}
                         </div>
@@ -38,25 +38,25 @@ const AssideBar = () => {
                     <ul className="px-4 space-y-6">
                         <li>
                             <div className="text-xs mb-2">Home</div>
-                            <div className="space-y-1">
-                                <NavButton active={location.pathname.includes('/dashboard')} onPress={() => navigate({to: '/dashboard'})} icon={<House />} name={'Home'} />
-                                <NavButton active={location.pathname.includes('/komersial/email')} onPress={() => navigate({to: '/komersial/email'})}  icon={<Envelope />} name={'Email'} />
-                                <NavButton active={location.pathname.includes('/komersial/penawaran')} onPress={() => navigate({to: '/komersial/penawaran'})} icon={<Circles5Random />} name={'Penawaran'} />
-                                <NavButton active={location.pathname.includes('/oprasional/oprasional')} onPress={() => navigate({to: '/oprasional/oprasional'})} icon={<Circles5Random />} icon={<Rocket />} name={'Operasional'} />
-                                <NavButton active={location.pathname.includes('/oprasional/casbon')}  onPress={() => navigate({to: '/oprasional/casbon'})} icon={<Flask />} name={'Casbon'} />
+                            <div className="space-y-0">
+                                <NavButton active={location.pathname.includes('/dashboard')} to={'/dashboard'} onPress={() => navigate({to: '/dashboard'})} icon={<House />} name={'Home'} />
+                                <NavButton active={location.pathname.includes('/komersial/email')} to={'/komersial/email'} onPress={() => navigate({to: '/komersial/email'})}  icon={<Envelope />} name={'Email'} />
+                                <NavButton active={location.pathname.includes('/komersial/penawaran')} to={'/komersial/penawaran'} onPress={() => navigate({to: '/komersial/penawaran'})} icon={<Circles5Random />} name={'Penawaran'} />
+                                <NavButton active={location.pathname.includes('/oprasional/oprasional')} to={'/oprasional/oprasional'} onPress={() => navigate({to: '/oprasional/oprasional'})} icon={<Circles5Random />} icon={<Rocket />} name={'Operasional'} />
+                                <NavButton active={location.pathname.includes('/oprasional/casbon')}  to={'/oprasional/casbon'} onPress={() => navigate({to: '/oprasional/casbon'})} icon={<Flask />} name={'Casbon'} />
                             </div>
                         </li>
                         <li>
                             <div className="text-xs mb-2">Keuangan</div>
-                            <div className="space-y-1">
-                                <NavButton active={location.pathname.includes('/keuangan/expense')} onPress={() => navigate({to: '/keuangan/expense'})} icon={<Layers3Diagonal />} name={'Expense'} />
-                                <NavButton active={location.pathname.includes('/invoice/invoice')} onPress={() => navigate({to: '/invoice/invoice'})} icon={<CircleDollar />} name={'Invoice Delivery'} />
+                            <div className="space-y-0">
+                                <NavButton active={location.pathname.includes('/keuangan/expense')} to={'/keuangan/expense'} onPress={() => navigate({to: '/keuangan/expense'})} icon={<Layers3Diagonal />} name={'Expense'} />
+                                <NavButton active={location.pathname.includes('/invoice/invoice')} to={'/invoice/invoice'} onPress={() => navigate({to: '/invoice/invoice'})} icon={<CircleDollar />} name={'Invoice Delivery'} />
                             </div>
                         </li>
                         
                         <li>
                             <div className="text-xs mb-2">Master Data</div>
-                            <div className="space-y-1">
+                            <div className="space-y-0">
                                 <NavButton active={location.pathname.includes('/maintenance0')} onPress={() => navigate({to: '/maintenance'})} icon={<LogoDocker />} name={'Kapal'} />
                                 <NavButton active={location.pathname.includes('/maintenance1')} onPress={() => navigate({to: '/maintenance'})} icon={<MapPin />} name={'Pelabuhan'} />
                                 <NavButton active={location.pathname.includes('/maintenance2')} onPress={() => navigate({to: '/maintenance'})} icon={<Persons />} name={'Pegawai'} />
@@ -84,7 +84,7 @@ const AssideBar = () => {
                                 <Description>{user.pegawai?.jabatan || '-'}</Description>
                             </div>
                         </div>
-                        <Button onPress={logout} variant="danger" size="sm" isIconOnly>
+                        <Button onPress={logout} variant="danger" isIconOnly>
                             <ArrowRightFromSquare className="white" />
                         </Button>
                     </div>
