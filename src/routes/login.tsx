@@ -8,7 +8,7 @@ import { useJenisPekerjaanService } from '../services/masterdata/jenisPekerjaanS
 import InputText from '../components/input/InputText'
 import { useToast } from '../lib/useToast'
 
-import imageBg from '../../public/bg01.webp'
+import imageBg from '../../public/bg02.webp'
 
 export const Route = createFileRoute('/login')({
   component: RouteComponent,
