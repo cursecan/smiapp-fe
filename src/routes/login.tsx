@@ -8,6 +8,8 @@ import { useJenisPekerjaanService } from '../services/masterdata/jenisPekerjaanS
 import InputText from '../components/input/InputText'
 import { useToast } from '../lib/useToast'
 
+import imageBg from '../../public/bg01.webp'
+
 export const Route = createFileRoute('/login')({
   component: RouteComponent,
   beforeLoad: ({ context }) => {
@@ -71,12 +73,55 @@ function RouteComponent() {
 
 
   return (
-    <div className="h-screen flex justify-center items-center">
-      <Card variant='secondary' className='max-w-sm w-full'>
+    <div className="" style={{backgroundImage: `url("${imageBg}")`, backgroundSize: 'cover'}}>
+      <div className="flex h-screen">
+        <div className="flex-1 p-12">
+          <div className="text-3xl font-bold">SMILE</div>
+          <div className="">Solusi Marine Digital Ecosystem</div>
+        </div>
+        <div className="w-150 bg-white/50 flex items-center justify-center">
+          {/* <Card className='max-w-sm w-full' variant='secondary'>
+            <Card.Content>
+            </Card.Content>
+          </Card> */}
+              <form action={handleLogin} className='max-w-sm w-full flex flex-col gap-4'>
+                <InputText 
+                  label={'Username'}
+                  value={form.username}
+                  onChange={(e) => setForm({...form, username: e.target.value})}
+                  placeholder="User / ID"
+                />
+                <InputText 
+                  label={'Password'} 
+                  value={form.password}
+                  onChange={(e) => setForm({...form, password: e.target.value})}
+                  placeholder="***"
+                  type="password"
+                />
+                <div className="">
+                  <Checkbox>
+                    <Checkbox.Control>
+                      <Checkbox.Indicator />
+                    </Checkbox.Control>
+                    <Checkbox.Content>
+                      <Label>Remember me</Label>
+                    </Checkbox.Content>
+                  </Checkbox>
+                </div>
+                <Button isDisabled={loading} type='submit' fullWidth>LOGIN</Button>
+                <div className="flex justify-end">
+                  <div className="text-right flex flex-col">
+                    <Label>Lupa password?</Label>
+                    {/* <Description>Contact your administrator.</Description> */}
+                  </div>
+              </div>
+              </form>
+        </div>
+      </div>
+      {/* <Card variant='secondary' className='max-w-sm w-full'>
         <Card.Header>
           <div className="">
             <div className="text-lg">Sign In</div>
-            {/* <LogoAndroid /> */}
             <Label>Please login with your active account.</Label>
           </div>
         </Card.Header>
@@ -105,24 +150,7 @@ function RouteComponent() {
             </div>
           </form>
         </Card.Content>
-      </Card>
-      {/* <div className="max-w-xs w-full">
-          <div className="flex items-center justify-center">
-            <Surface className='p-2 rounded-full bg-amber-400'>
-              <FaceRobotSmile className='size-10' />
-            </Surface>
-          </div>
-          <div className="text-2xl text-center mb-10">Login Smile</div>
-          <div className="space-y-6">
-            <TextField>
-              <Input placeholder='Username' value={form.username} onChange={(e) => setForm({...form, username: e.target.value})} />
-            </TextField>
-            <TextField>
-              <Input type='password' placeholder='Password' value={form.password} onChange={(e) => setForm({...form, password: e.target.value})} />
-            </TextField>
-            <Button onPress={handleLogin} className={'w-full'}>Login</Button>
-          </div>
-      </div> */}
+      </Card> */}
     </div>
   )
 }
