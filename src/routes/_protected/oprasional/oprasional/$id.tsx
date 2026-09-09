@@ -22,6 +22,7 @@ import { useOperasionalSchema, usePenawaranSchema } from '../../../../schemas/pe
 import { useState } from 'react'
 import GenerateInvoiceModal from '../-components/GenerateInvoiceModal'
 import CardStepper from '../../../../components/CardStepper'
+import GenerateTandaTerimaModal from '../-components/GenerateTandaTerimaModal'
 
 export const Route = createFileRoute('/_protected/oprasional/oprasional/$id')({
   component: RouteComponent,
@@ -389,8 +390,8 @@ function RouteComponent() {
                         </Tabs>
                         {
                             (data?.approvals[0]?.step > 2 && data?.approvals[0]?.step !== 6) && (
-                                <div className="flex gap-3 justify-between">
-                                    <div className="">
+                                <div className="flex gap-3 items-baseline">
+                                    <div className="flex-1">
                                         <ApprovalButtons
                                             noValidationSave
                                             postOnly
@@ -408,9 +409,13 @@ function RouteComponent() {
                                             data?.approvals[0]?.step === 5 && <Description className='italic'>* Pastikan download BA sebelum klick Processing BA!</Description>
                                         }
                                     </div>
-                                    {
-                                        (canApprove && data?.approvals[0]?.step < 6) && <DownloadBAST label={data?.approvals[0]?.step === 5 ? 'Download Singed BA' : 'Preview Berita Acara (BA)'} data={data?.bast} />
-                                    }
+                                    <div className="flex items-center gap-2">
+                                        <GenerateTandaTerimaModal opr={data} />
+                                        {
+                                            (canApprove && data?.approvals[0]?.step < 6) && <DownloadBAST label={data?.approvals[0]?.step === 5 ? 'Download Singed BA' : 'Preview Berita Acara (BA)'} data={data?.bast} />
+                                        }
+
+                                    </div>
                                     
                                 </div>
                             )

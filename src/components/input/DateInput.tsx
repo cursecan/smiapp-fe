@@ -2,7 +2,7 @@ import { Button, Calendar, DateField, DatePicker, Label } from '@heroui/react'
 import { parseDate, today, getLocalTimeZone } from '@internationalized/date'
 import { useEffect, useState } from 'react'
 
-const DateInput = ({label, value, onChange=()=>{}, ...props}) => {
+const DateInput = ({label, value, showReset=true, onChange=()=>{}, ...props}) => {
     const [dateValue, setDateValue] = useState(today(getLocalTimeZone()))
 
     const changeDateVal = (e) => {
@@ -53,7 +53,7 @@ const DateInput = ({label, value, onChange=()=>{}, ...props}) => {
           </Calendar>
         </DatePicker.Popover>
         {
-          !props.isReadOnly && (
+          (!props.isReadOnly && showReset) && (
             <div className="flex justify-end items-center gap-2 mt-1">
                 {/* <Button size='sm' variant='secondary' onPress={() => setDateValue(today(getLocalTimeZone()))}>Set Today</Button> */}
                 <Button size='sm' variant='secondary' onPress={() => setDateValue(null)}>Clear</Button>
