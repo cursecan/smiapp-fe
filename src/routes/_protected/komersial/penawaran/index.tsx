@@ -1,4 +1,4 @@
-import { Card, Description, EmptyState, SearchField, Table } from '@heroui/react'
+import { Card, Chip, Description, EmptyState, Label, SearchField, Table, Tag, TagGroup } from '@heroui/react'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { usePenawaranService } from '../../../../services/penawaran.service'
@@ -12,6 +12,7 @@ import { getApprovalStatus, getJenisPekerjaan } from '../../../../components/use
 import StatusApprovalFilter from '../../../../components/StatusApprovalFilter'
 import JenisPekerjaanFilter from '../../../../components/JenisPekerjaanFilter'
 import { formatSimpleDate2 } from '../../../../utils/dateFormat'
+import { Link as HeroLink } from '@heroui/react'
 
 
 export const Route = createFileRoute('/_protected/komersial/penawaran/')({
@@ -21,15 +22,16 @@ export const Route = createFileRoute('/_protected/komersial/penawaran/')({
     q: String(search.q ?? ''),
     filter: String(search.filter ?? ''),
     pekerjaan: String(search.pekerjaan ?? ''),
-    nospk: String(search.nospk ?? '')
+    nospk: String(search.nospk ?? ''),
+    noinv: String(search.noinv ?? '')
   })
 })
 
 function RouteComponent() {
   const navigate = useNavigate()
-  const {page, q, filter, pekerjaan, nospk} = Route.useSearch()
+  const {page, q, filter, pekerjaan, nospk, noinv} = Route.useSearch()
   const {data: penawaran} = useQuery({
-    queryKey: ['penawaran-list', page, q, filter, pekerjaan, nospk],
+    queryKey: ['penawaran-list', page, q, filter, pekerjaan, nospk, noinv],
     queryFn: async ({queryKey}) => usePenawaranService.getList({queryKey}),
     select: (data) => data.data
   })
@@ -82,20 +84,23 @@ function RouteComponent() {
                   <Table.Column isRowHeader>
                     Penawaran
                   </Table.Column>
-                  <Table.Column>
+                  {/* <Table.Column>
                     SPK/PO
-                  </Table.Column>
-                  <Table.Column className={'truncate'}>
+                  </Table.Column> */}
+                  {/* <Table.Column className={'truncate'}>
                     Tanggal SPK/PO
-                  </Table.Column>
+                  </Table.Column> */}
                   <Table.Column>
                     Wilayah
                   </Table.Column>
                   <Table.Column className={'truncate'}>
-                    Amount
+                    Nilai Penawaran (Rp)
                   </Table.Column>
                   <Table.Column className={'truncate'}>
-                    Margin
+                    Invoice
+                  </Table.Column>
+                  <Table.Column className={'truncate'}>
+                    Nilai Pembayaran
                   </Table.Column>
                   <Table.Column>Status</Table.Column>
                   {/* <Table.Column></Table.Column> */}
@@ -127,23 +132,47 @@ function RouteComponent() {
                                     <p>{i.nama_project}</p>
                                   </div>
                                 </Link>
+                                <div className="flex">
+                                  <Chip className={`${['0', ''].includes(i.nomor_penugasan) ? 'bg-danger' : 'bg-accent'} text-white`}>
+                                    { ['0', ''].includes(i.nomor_penugasan) ? 'Belum ada PO/SPK' : i.nomor_penugasan  }
+                                  </Chip>
+
+                                </div>
                               </div>
                             </div>
                           </Table.Cell>
-                          <Table.Cell className={'truncate'}>
+                          {/* <Table.Cell className={'truncate'}>
                             { i.nomor_penugasan || '-'}
-                          </Table.Cell>
-                          <Table.Cell className={'truncate'}>
+                          </Table.Cell> */}
+                          {/* <Table.Cell className={'truncate'}>
                             { i.tgl_surat ? formatSimpleDate2(i.tgl_surat) : '-'}
-                          </Table.Cell>
+                          </Table.Cell> */}
                           <Table.Cell>
                             { i.pelabuhan?.nama_pelabuhan || '-'}
                           </Table.Cell>
                           <Table.Cell>
-                            { formatRupiah(i.progress.budget || '0') }
+                            <Label className=''>{ formatRupiah(i.progress.budget || '0') }</Label><br />
+                            <Description className={`text-sm ${i.margin > 0 ? 'text-success' : 'text-danger'}`}>{ (i?.margin ?? 0).toFixed(1) }%</Description>
                           </Table.Cell>
                           <Table.Cell>
-                            { (i?.margin ?? 0).toFixed(1) }%
+                            <div className="truncate">
+                              {
+                                i.invoices.length  === 0 ? '-' : (
+                                  i?.invoices.map(v => {
+                                    return (
+                                      <Link to={'/invoice/invoice/$id'} params={{id: v.id}} className='link text-accent'>
+                                        { formatRupiah(v.nominal) }
+                                        <HeroLink.Icon />
+                                      </Link>
+                                    )
+                                  })
+                                )
+                              }
+                              
+                            </div>
+                          </Table.Cell>
+                          <Table.Cell className={'truncate'}>
+                            0
                           </Table.Cell>
                           <Table.Cell className={'truncate'}>
                             <StatusChiper status={i.status} />

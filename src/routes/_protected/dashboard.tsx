@@ -316,7 +316,7 @@ function RouteComponent() {
                 <Surface variant='secondary' className='rounded-2xl p-3'>
                   <Description className="">Blm Invoice</Description>
                   <div className="">
-                    <Link to={'/komersial/penawaran'}>
+                    <Link to={'/komersial/penawaran?noinv=1'}>
                       <div className="link gap-2">
                         <p>{monitoring?.oprasional.un_invoice}</p>
                         <LinkHero.Icon className='text-accent' />
