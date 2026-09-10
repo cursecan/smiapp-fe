@@ -54,7 +54,7 @@ const AssideBar = () => {
                             </div>
                         </li>
                         
-                        <li>
+                        <li className="text-gray-400">
                             <div className="text-xs mb-2">Master Data</div>
                             <div className="space-y-0">
                                 <NavButton active={location.pathname.includes('/maintenance0')} onPress={() => navigate({to: '/maintenance'})} icon={<LogoDocker />} name={'Kapal'} />
@@ -64,7 +64,7 @@ const AssideBar = () => {
                                 <NavButton active={location.pathname.includes('/maintenance4')} onPress={() => navigate({to: '/maintenance'})} icon={<Mug />} name={'Jenis Pekerjaan'} />
                             </div>
                         </li>
-                        <li>
+                        <li className="text-gray-400">
                             <div className="text-xs mb-2">Settings</div>
                             <div className="space-y-1">
                                 <NavButton active={location.pathname.includes('/maintenance5')} onPress={() => navigate({to: '/maintenance'})} icon={<LogoDocker />} name={'Approval'} />
