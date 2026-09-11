@@ -110,8 +110,8 @@ function RouteComponent() {
                                                 </Table.Cell>
                                                 <Table.Cell>
                                                     <div className="">
-                                                        <p>{i.customer.full_name}</p>
-                                                        <Description>{i.customer.company?.company_name}</Description>
+                                                        <p>{i.customer?.full_name}</p>
+                                                        <Description>{i.customer?.company?.company_name}</Description>
                                                     </div>
                                                 </Table.Cell>
                                                 <Table.Cell>{formatDate(i.create_at)}</Table.Cell>

@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, useParams } from '@tanstack/react-router'
 import { useInvoiceService } from '../../../../services/invoice/invoiceService'
 import HeaderPage from '../../../../components/HeaderPage'
@@ -8,8 +8,11 @@ import UploadInput from '../../../../components/input/UploadInput'
 import InputText from '../../../../components/input/InputText'
 import CurrencyInput from '../../../../components/input/CurrencyInput'
 import ApprovalButtons from '../../../../components/buttons/ApprovalButtons'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { useSchema } from '../../../../components/useSchema'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useInvoiceSchema } from '../../../../schemas/invoiceSchema'
+import SubmitButton from '../../../../components/buttons/SubmitButton'
 export const Route = createFileRoute('/_protected/invoice/invoice/$id')({
   component: RouteComponent,
 })
@@ -24,8 +27,19 @@ function RouteComponent() {
     enabled: !!id
   })
   
-  const {canApprove, stepApprovals} = useSchema(data)
-  const {control, handleSubmit, reset, getValues, formState: {isValid}} = useForm({mode: "onChange", defaultValues: data || {}})
+  const {canApprove, canEdit, stepApprovals} = useSchema(data)
+  const {control, handleSubmit, reset, getValues, formState: {isValid}} = useForm({resolver: zodResolver(useInvoiceSchema), mode: "onChange", defaultValues: data || {}})
+
+  const qc = useQueryClient()
+
+  const generateMutation = useMutation({
+    mutationFn: () => useInvoiceService.generate(id),
+    onSuccess: () => {
+      qc.invalidateQueries({queryKey: ['invoice-detail', id]})
+    }
+  })
+
+
 
   if (isLoading) {
     return <div className="">Loading...</div>
@@ -50,7 +64,13 @@ function RouteComponent() {
           <Card>
             <Card.Content>
               <Surface className='space-y-4'>
-                <InputText readOnly value={data?.nomor_invoice} label={'No. Invoice'} />
+                <Controller
+                  name='nomor_invoice'
+                  control={control}
+                  render={({field}) => (
+                    <InputText readOnly={!canEdit} value={field.value} onChange={(e) => field.onChange(e.target.value)} {...field} label={'No. Invoice'} />
+                  )}
+                />
                 <InputText readOnly value={data?.opr.penawaran.nama_project} label={'Pekerjaan'} />
                 <div className="grid grid-cols-2 gap-3">
                   <InputText readOnly value={data?.customer.full_name} label={'Penerima'} />
@@ -68,16 +88,36 @@ function RouteComponent() {
               </Surface>
 
               <div className="mt-6 flex">
-                <ApprovalButtons
-                  noValidationSave
-                  postOnly
-                  isCanApprove={canApprove}
-                  form={{handleSubmit, getValues, isValid}}
-                  submitFn={(payload) => useInvoiceService.submit(data?.id, payload)}
-                  queryKey={['invoice-detail', id]}
-                  approvalLabel='Delivery Invoice'
-                  // onError={setErrors}
-                />
+                <div className="flex flex-1 items-center gap-2">
+                  <ApprovalButtons
+                    noValidationSave
+                    saveOnly
+                    isCanApprove={false}
+                    isCanEdit={canEdit}
+                    form={{handleSubmit, getValues, isValid}}
+                    saveFn={(payload) => useInvoiceService.update(data?.id, payload)}
+                    // submitFn={(payload) => usePenawaranService.submit(data.id, payload)}
+                    queryKey={['invoice-detail', id]}
+                    approvalLabel='Req. Approval Penawaran'
+                    // onError={setErrors}
+                  />
+                  <SubmitButton className={'bg-danger'} isLoading={generateMutation.isPending} label='Generate' onPress={() => generateMutation.mutate()} />
+                </div>
+
+                {
+                  data?.dok_1  && (
+                    <ApprovalButtons
+                      noValidationSave
+                      postOnly
+                      isCanApprove={canApprove}
+                      form={{handleSubmit, getValues, isValid}}
+                      submitFn={(payload) => useInvoiceService.submit(data?.id, payload)}
+                      queryKey={['invoice-detail', id]}
+                      approvalLabel='Delivery Invoice'
+                      // onError={setErrors}
+                    />
+                  )
+                }
               </div>
             </Card.Content>
           </Card>
