@@ -350,7 +350,7 @@ function RouteComponent() {
                 </Surface> */}
                 <Surface variant='secondary' className='rounded-2xl p-3 space-y-3'>
                   <div className="flex gap-2 items-center">
-                    <Description className="">Undeliver Invoice</Description>
+                    <Description className="">Ready To Delivery Inv</Description>
                     <Chip className='bg-success'>{monitoring?.oprasional.undeliver_inv}</Chip>
                   </div>
                   <div className="flex flex-col">
