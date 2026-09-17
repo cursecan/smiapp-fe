@@ -13,6 +13,7 @@ import { useSchema } from '../../../../components/useSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useInvoiceSchema } from '../../../../schemas/invoiceSchema'
 import SubmitButton from '../../../../components/buttons/SubmitButton'
+import { useEffect } from 'react'
 export const Route = createFileRoute('/_protected/invoice/invoice/$id')({
   component: RouteComponent,
 })
@@ -38,6 +39,12 @@ function RouteComponent() {
       qc.invalidateQueries({queryKey: ['invoice-detail', id]})
     }
   })
+
+  useEffect(() => {
+    if (data) {
+      reset({...data})
+    }
+  }, [data, reset])
 
 
 
@@ -68,7 +75,7 @@ function RouteComponent() {
                   name='nomor_invoice'
                   control={control}
                   render={({field}) => (
-                    <InputText readOnly={!canEdit} value={field.value} onChange={(e) => field.onChange(e.target.value)} {...field} label={'No. Invoice'} />
+                    <InputText readOnly={!canEdit} value={field.value||''} onChange={(e) => field.onChange(e.target.value)} {...field} label={'No. Invoice'} />
                   )}
                 />
                 <InputText readOnly value={data?.opr.penawaran.nama_project} label={'Pekerjaan'} />
