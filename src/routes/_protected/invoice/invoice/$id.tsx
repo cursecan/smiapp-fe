@@ -13,7 +13,13 @@ import { useSchema } from '../../../../components/useSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useInvoiceSchema } from '../../../../schemas/invoiceSchema'
 import SubmitButton from '../../../../components/buttons/SubmitButton'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import DocEditor from '../../../../components/input/DocEditor'
+import RichTextEditor from '../../../../components/input/RichTextEditor'
+import BaKesepakatanModal from '../-components/BaKesepakatanModal'
+import InvoiceModalPreview from '../-components/InvoiceModalPreview'
+import KwitansiModal from '../-components/KwitansiModal'
+import DownloadButton from '../../../../components/buttons/DownloadButton'
 export const Route = createFileRoute('/_protected/invoice/invoice/$id')({
   component: RouteComponent,
 })
@@ -27,6 +33,7 @@ function RouteComponent() {
     select: (res) => res.data,
     enabled: !!id
   })
+
   
   const {canApprove, canEdit, stepApprovals} = useSchema(data)
   const {control, handleSubmit, reset, getValues, formState: {isValid}} = useForm({resolver: zodResolver(useInvoiceSchema), mode: "onChange", defaultValues: data || {}})
@@ -40,11 +47,11 @@ function RouteComponent() {
     }
   })
 
-  useEffect(() => {
-    if (data) {
-      reset({...data})
-    }
-  }, [data, reset])
+  // useEffect(() => {
+  //   if (data) {
+  //     reset({...data})
+  //   }
+  // }, [data, reset])
 
 
 
@@ -70,12 +77,12 @@ function RouteComponent() {
         <div className="flex-1">
           <Card>
             <Card.Content>
-              <Surface className='space-y-4'>
+              {/* <Surface className='space-y-4'>
                 <Controller
                   name='nomor_invoice'
                   control={control}
                   render={({field}) => (
-                    <InputText readOnly={!canEdit} value={field.value||''} onChange={(e) => field.onChange(e.target.value)} {...field} label={'No. Invoice'} />
+                    <InputText readOnly value={field.value||''} onChange={(e) => field.onChange(e.target.value)} {...field} label={'No. Invoice'} />
                   )}
                 />
                 <InputText readOnly value={data?.opr.penawaran.nama_project} label={'Pekerjaan'} />
@@ -86,16 +93,22 @@ function RouteComponent() {
                 <div className="flex">
                   <CurrencyInput readOnly label={'Nominal'} value={data?.nominal} />
                 </div>
-              </Surface>
+              </Surface> */}
+              <DownloadButton label='Download Invoice' filename={`invoice-${id}.pdf`} urlFetch={`invoice/invoice/${id}/download/`} />
+              <RichTextEditor editable={canEdit} content={data?.invoice_html} />
+              <DownloadButton label='Download Kwitansi' filename={`kwitansi-${id}.pdf`} urlFetch={`invoice/invoice/${id}/kwitansi/`} />
+              <RichTextEditor editable={canEdit} content={data?.kwitansi_html} />
+              <DownloadButton label='Download BA Kesepakatan Harga' filename={`ba-kesepakatan-${id}.pdf`} urlFetch={`invoice/invoice/${id}/ba/`} />
+              <RichTextEditor editable={canEdit} content={data?.ba_html} />
 
-              <Surface className='grid grid-cols-3 gap-3 mt-6'>
+              {/* <Surface className='grid grid-cols-3 gap-3 mt-6'>
                 <UploadInput name='Invoice' disableInput value={data?.dok_1} />
                 <UploadInput name='Kwitansi' disableInput value={data?.dok_2} />
                 <UploadInput name='BA Kesepakatan Harga' disableInput value={data?.dok_3} />
-              </Surface>
+              </Surface> */}
 
               <div className="mt-6 flex">
-                <div className="flex flex-1 items-center gap-2">
+                {/* <div className="flex flex-1 items-center gap-2">
                   <ApprovalButtons
                     noValidationSave
                     saveOnly
@@ -103,16 +116,15 @@ function RouteComponent() {
                     isCanEdit={canEdit}
                     form={{handleSubmit, getValues, isValid}}
                     saveFn={(payload) => useInvoiceService.update(data?.id, payload)}
-                    // submitFn={(payload) => usePenawaranService.submit(data.id, payload)}
                     queryKey={['invoice-detail', id]}
                     approvalLabel='Req. Approval Penawaran'
-                    // onError={setErrors}
                   />
                   <SubmitButton className={'bg-danger'} isLoading={generateMutation.isPending} label='Generate' onPress={() => generateMutation.mutate()} />
-                </div>
+                  
+                </div> */}
 
                 {
-                  data?.dok_1  && (
+                  canEdit && (
                     <ApprovalButtons
                       noValidationSave
                       postOnly
@@ -128,11 +140,20 @@ function RouteComponent() {
               </div>
             </Card.Content>
           </Card>
-
-
+          {/* <RichTextEditor content={data?.ba_html || ''} /> */}
         </div>
-        <div className="w-90">
+        <div className="w-90 px-5">
           <CardStepper stepper={data?.stepper} stepApprovals={stepApprovals} />
+          <div className="mt-6 flex flex-col gap-2">
+            {/* <InvoiceModalPreview data={data} />
+            <KwitansiModal data={data}/>
+            <BaKesepakatanModal data={data} /> */}
+            {
+              canEdit && (
+                <SubmitButton fullWidth className={'bg-danger'} isLoading={generateMutation.isPending} label='Re-Generate Invoice' onPress={() => generateMutation.mutate()} />
+              )
+            }
+          </div>
         </div>
       </div>
     </div>

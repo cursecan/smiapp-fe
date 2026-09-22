@@ -1,0 +1,113 @@
+/* src/components/TiptapEditor/TiptapEditor.css */
+/* body {
+    font-size: 10px;
+    font-family: 'Arial Narrow', Arial, sans-serif;
+    line-height: 1.2;
+} */
+
+.tiptap {
+    font-size: 10px;
+    font-family: 'Arial Narrow', Arial, sans-serif;
+    line-height: 1.2;
+}
+
+@page {
+    size: A4;
+    margin: 0;
+}
+
+@media print {
+    body {
+        margin: 0;
+    }
+
+    .a4-page {
+        width: 210mm;
+        min-height: 297mm;
+        box-shadow: none;
+    }
+}
+
+.tiptap table.bordered {
+    table-layout: auto;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.tiptap table.bordered > tbody > tr > td, .tiptap table.bordered > tbody > tr > th {
+    border: 1px solid #000;
+    padding: 0px 4px;
+}
+
+.tiptap table.bordered > tbody > tr > th {
+    text-align: center;
+}
+
+.tiptap .prose {
+    margin-left: 10px;
+}
+
+.tiptap .prose ul {
+    margin: 0;
+    padding: 0;
+}
+
+.tiptap .prose ol {
+    margin: 0;
+    padding: 0;
+}
+
+.tiptap img {
+    display: inline-block;
+    max-width: 100%;
+    height: auto;
+}
+
+.tiptap td.price {
+    position: relative;
+}
+
+.tiptap td.price p {
+    text-align: right;
+    margin: 0;
+}
+
+.tiptap td.price p::before {
+    content: "Rp";
+    float: left;
+}
+
+.two-column {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.column {
+  display: table-cell;
+  width: 50%;
+  vertical-align: top;
+}
+
+
+/* .tiptap table.table-bordered {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.tiptap table.table-bordered th,
+.tiptap table.table-bordered td {
+  border: 1px solid #000;
+  padding: 8px;
+}
+
+.tiptap table.table-borderless {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.tiptap table.table-borderless th,
+.tiptap table.table-borderless td {
+  border: none;
+  padding: 8px;
+} */

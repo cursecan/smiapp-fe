@@ -4,7 +4,7 @@ import { useState } from "react"
 import SubmitButton from "./SubmitButton"
 import { CloudArrowUpIn } from "@gravity-ui/icons"
 
-const DownloadButton = ({filename, urlFetch, label="Review Button",}) => {
+const DownloadButton = ({filename, urlFetch, label="Review Button", ...props}) => {
     const [isLoading, setIsLoading] = useState(false)
 
     const handleDownload = async () => {
@@ -33,7 +33,7 @@ const DownloadButton = ({filename, urlFetch, label="Review Button",}) => {
  
      return (
         //  <Button  variant="danger-soft" onPress={handleDownload}>{label}</Button>
-        <SubmitButton icon={<CloudArrowUpIn />} label={label} onPress={handleDownload} isLoading={isLoading} />
+        <SubmitButton {...props} icon={<CloudArrowUpIn />} label={label} onPress={handleDownload} isLoading={isLoading} />
      )
  }
 
