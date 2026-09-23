@@ -13,6 +13,7 @@ const StatusChiper = ({status}) => {
         on_operasional: {color: 'success', variant: 'soft'},
         selesai: {color: 'success', variant: 'primary'},
         proses_transfer: {color: 'warning', variant: 'soft'},
+        transfer_sebagian: {color: 'warning', variant: 'soft'},
         sudah_transfer: {color: 'success', variant: 'soft'},
         proses_ba: {color: 'danger', variant: 'soft'},
         approval_direktur: {color: 'danger', variant: 'soft'},
