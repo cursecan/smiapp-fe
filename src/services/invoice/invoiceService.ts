@@ -21,4 +21,7 @@ export const useInvoiceService = {
     generate: (id) => {
         return api.post(`/invoice/invoice/${id}/generate/`)
     },
+    update_html: (id, payload) => {
+        return api.put(`/invoice/invoice/${id}/update_html/`, payload)
+    },
 }

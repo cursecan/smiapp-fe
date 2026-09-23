@@ -241,7 +241,7 @@ const Column = Node.create({
   },
 })
 
-export default function RichTextEditor({content, editable=false}) {
+export default function RichTextEditor({content, editable=false, onUpdate=(e)=>{}}) {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -294,6 +294,7 @@ export default function RichTextEditor({content, editable=false}) {
 
     onUpdate: ({ editor }) => {
       console.log('=== TIPTAP UPDATE ===')
+      onUpdate(editor.getHTML())
       // console.log(editor.getHTML())
       // console.log(editor.getJSON())
     },

@@ -13,7 +13,7 @@ import { useSchema } from '../../../../components/useSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useInvoiceSchema } from '../../../../schemas/invoiceSchema'
 import SubmitButton from '../../../../components/buttons/SubmitButton'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import DocEditor from '../../../../components/input/DocEditor'
 import RichTextEditor from '../../../../components/input/RichTextEditor'
 import BaKesepakatanModal from '../-components/BaKesepakatanModal'
@@ -39,6 +39,8 @@ function RouteComponent() {
   const {control, handleSubmit, reset, getValues, formState: {isValid}} = useForm({resolver: zodResolver(useInvoiceSchema), mode: "onChange", defaultValues: data || {}})
 
   const qc = useQueryClient()
+  const updateTimer = useRef(null)
+
 
   const generateMutation = useMutation({
     mutationFn: () => useInvoiceService.generate(id),
@@ -46,6 +48,43 @@ function RouteComponent() {
       qc.invalidateQueries({queryKey: ['invoice-detail', id]})
     }
   })
+
+  const updateHtmlMutation = useMutation({
+      mutationFn: (payload) => useInvoiceService.update_html(id, payload)
+  })
+
+
+  const onHandleUpdateInvoice = (e) => {
+    if (updateTimer.current) {
+      clearTimeout(updateTimer.current)
+    }
+
+    updateTimer.current = setTimeout(() => {
+      updateHtmlMutation.mutate({invoice_html:e})
+    }, 600);
+  }
+
+  const onHandleUpdateKwitansi = (e) => {
+    if (updateTimer.current) {
+      clearTimeout(updateTimer.current)
+    }
+
+    updateTimer.current = setTimeout(() => {
+      updateHtmlMutation.mutate({kwitansi_html:e})
+    }, 600);
+  }
+
+  const onHandleUpdateBa = (e) => {
+    if (updateTimer.current) {
+      clearTimeout(updateTimer.current)
+    }
+
+    updateTimer.current = setTimeout(() => {
+      updateHtmlMutation.mutate({ba_html:e})
+    }, 600);
+  }
+
+
 
   // useEffect(() => {
   //   if (data) {
@@ -73,7 +112,7 @@ function RouteComponent() {
       </HeaderPage>
 
 
-      <div className="flex gap-2">
+      <div className="flex gap-6 px-6">
         <div className="flex-1">
           <Card>
             <Card.Content>
@@ -94,12 +133,21 @@ function RouteComponent() {
                   <CurrencyInput readOnly label={'Nominal'} value={data?.nominal} />
                 </div>
               </Surface> */}
-              <DownloadButton label='Download Invoice' filename={`invoice-${id}.pdf`} urlFetch={`invoice/invoice/${id}/download/`} />
-              <RichTextEditor editable={canEdit} content={data?.invoice_html} />
-              <DownloadButton label='Download Kwitansi' filename={`kwitansi-${id}.pdf`} urlFetch={`invoice/invoice/${id}/kwitansi/`} />
-              <RichTextEditor editable={canEdit} content={data?.kwitansi_html} />
-              <DownloadButton label='Download BA Kesepakatan Harga' filename={`ba-kesepakatan-${id}.pdf`} urlFetch={`invoice/invoice/${id}/ba/`} />
-              <RichTextEditor editable={canEdit} content={data?.ba_html} />
+              <div className="flex justify-center">
+                <div className="">
+                  <RichTextEditor editable={canEdit} content={data?.invoice_html} onUpdate={onHandleUpdateInvoice} />
+                </div>
+              </div>
+              <div className="flex justify-center">
+                <div className="">
+                  <RichTextEditor editable={canEdit} content={data?.kwitansi_html} onUpdate={onHandleUpdateKwitansi} />
+                </div>
+              </div>
+              <div className="flex justify-center">
+                <div className="">
+                  <RichTextEditor editable={canEdit} content={data?.ba_html} onUpdate={onHandleUpdateBa} />
+                </div>
+              </div>
 
               {/* <Surface className='grid grid-cols-3 gap-3 mt-6'>
                 <UploadInput name='Invoice' disableInput value={data?.dok_1} />
@@ -142,7 +190,7 @@ function RouteComponent() {
           </Card>
           {/* <RichTextEditor content={data?.ba_html || ''} /> */}
         </div>
-        <div className="w-90 px-5">
+        <div className="w-90">
           <CardStepper stepper={data?.stepper} stepApprovals={stepApprovals} />
           <div className="mt-6 flex flex-col gap-2">
             {/* <InvoiceModalPreview data={data} />
@@ -153,6 +201,9 @@ function RouteComponent() {
                 <SubmitButton fullWidth className={'bg-danger'} isLoading={generateMutation.isPending} label='Re-Generate Invoice' onPress={() => generateMutation.mutate()} />
               )
             }
+            <DownloadButton fullWidth className={'bg-success'} label='Download Invoice' filename={`invoice-${id}.pdf`} urlFetch={`invoice/invoice/${id}/download/`} />
+            <DownloadButton fullWidth label='Download Kwitansi' filename={`kwitansi-${id}.pdf`} urlFetch={`invoice/invoice/${id}/kwitansi/`} />
+            <DownloadButton fullWidth className={'bg-warning'} label='Download BA Kesepakatan Harga' filename={`ba-kesepakatan-${id}.pdf`} urlFetch={`invoice/invoice/${id}/ba/`} />
           </div>
         </div>
       </div>
