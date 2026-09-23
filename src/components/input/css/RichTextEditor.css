@@ -28,6 +28,12 @@
     }
 }
 
+.tiptap table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+}
+
 .tiptap table.bordered {
     table-layout: auto;
     border-collapse: collapse;

@@ -30,6 +30,7 @@ import ReviseComponent from '../-components/penawaran/ReviseComponent'
 import DateInput from '../../../../components/input/DateInput'
 import { useCustomerService } from '../../../../services/customer/customerService'
 import LinkButton from '../../../../components/buttons/LinkButton'
+import RichTextEditor from '../../../../components/input/RichTextEditor'
 
 export const Route = createFileRoute('/_protected/komersial/penawaran/$id')({
   component: RouteComponent,
@@ -283,8 +284,14 @@ function RouteComponent() {
               </Surface>
               
               <DokumenPenawaran canEdit={canEdit} data={data} />
-              
               <Pekerjaan penawaran={data} canEdit={canEdit} />
+              {
+                (currentStep.step > 1 && data?.body_html) && (
+                  <div className="flex justify-center">
+                    <RichTextEditor content={data?.body_html} editable={false} />
+                  </div>
+                )
+              }
 
 
               {
