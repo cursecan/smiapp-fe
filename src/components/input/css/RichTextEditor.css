@@ -13,10 +13,10 @@
 
 @page {
     size: A4;
-    margin: 0;
+    margin: 10mm;
 }
 
-@media print {
+/* @media print {
     body {
         margin: 0;
     }
@@ -26,7 +26,7 @@
         min-height: 297mm;
         box-shadow: none;
     }
-}
+} */
 
 .tiptap table {
     width: 100%;
