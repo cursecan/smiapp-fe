@@ -1,76 +1,113 @@
-/* src/components/TiptapEditor/TiptapEditor.css */
-/* body {
-    font-size: 10px;
-    font-family: 'Arial Narrow', Arial, sans-serif;
-    line-height: 1.2;
-} */
+.a4-page {
+  box-sizing: border-box;
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  padding: 10mm;
+  background: white;
+}
 
 .tiptap {
-    font-size: 10px;
-    font-family: 'Arial Narrow', Arial, sans-serif;
-    line-height: 1.2;
+  width: 100%;
+  min-height: 400px;
+  outline: none;
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  line-height: 1.25;
 }
 
-@page {
-    size: A4;
-    margin: 10mm;
+.tiptap p,
+.tiptap h1,
+.tiptap h2,
+.tiptap h3,
+.tiptap h4,
+.tiptap h5,
+.tiptap h6 {
+  margin: 0;
+  padding: 0;
 }
 
-/* @media print {
-    body {
-        margin: 0;
-    }
+.tiptap .two-column {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  width: 100%;
+}
 
-    .a4-page {
-        width: 210mm;
-        min-height: 297mm;
-        box-shadow: none;
-    }
-} */
+.tiptap .column {
+  min-width: 0;
+  width: 100%;
+}
 
 .tiptap table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: auto;
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  table-layout: auto;
+}
+
+.tiptap td,
+.tiptap th {
+  vertical-align: top;
+}
+
+.tiptap td p,
+.tiptap th p {
+  margin: 0;
+  padding: 0;
 }
 
 .tiptap table.bordered {
-    table-layout: auto;
-    border-collapse: collapse;
-    width: 100%;
+  border-collapse: collapse;
 }
 
-.tiptap table.bordered > tbody > tr > td, .tiptap table.bordered > tbody > tr > th {
-    border: 1px solid #000;
-    padding: 0px 4px;
+.tiptap table.bordered td,
+.tiptap table.bordered th {
+  border: 1px solid #000;
+  padding: 2px 4px;
 }
 
-.tiptap table.bordered > tbody > tr > th {
-    text-align: center;
-}
-
-.tiptap .prose {
-    margin-left: 10px;
-}
-
-.tiptap .prose ul {
-    margin: 0;
-    padding: 0;
-}
-
-.tiptap .prose ol {
-    margin: 0;
-    padding: 0;
+.tiptap table.borderless td,
+.tiptap table.borderless th {
+  border: none;
 }
 
 .tiptap img {
-    display: inline-block;
-    max-width: 100%;
-    height: auto;
+  max-width: 100%;
+  height: auto;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.tiptap .page-break {
+  display: block;
+  width: 100%;
+  height: 1px;
+  margin: 12px 0;
+  break-before: page;
+  page-break-before: always;
+}
+
+.tiptap.ProseMirror[contenteditable="true"] .page-break {
+  height: 0;
+  margin: 20px 0;
+  border-top: 2px dashed #999;
+}
+
+.tiptap.ProseMirror[contenteditable="true"] .page-break::after {
+  content: "PAGE BREAK";
+  display: block;
+  position: relative;
+  top: -10px;
+  width: max-content;
+  margin: auto;
+  padding: 0 6px;
+  background: white;
+  font-size: 8px;
 }
 
 .tiptap td.price {
-    position: relative;
+            position: relative;
 }
 
 .tiptap td.price p {
@@ -82,38 +119,3 @@
     content: "Rp";
     float: left;
 }
-
-.two-column {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
-}
-
-.column {
-  display: table-cell;
-  width: 50%;
-  vertical-align: top;
-}
-
-
-/* .tiptap table.table-bordered {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-.tiptap table.table-bordered th,
-.tiptap table.table-bordered td {
-  border: 1px solid #000;
-  padding: 8px;
-}
-
-.tiptap table.table-borderless {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-.tiptap table.table-borderless th,
-.tiptap table.table-borderless td {
-  border: none;
-  padding: 8px;
-} */

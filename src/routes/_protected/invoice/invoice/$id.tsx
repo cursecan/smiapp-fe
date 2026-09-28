@@ -133,6 +133,7 @@ function RouteComponent() {
                   <CurrencyInput readOnly label={'Nominal'} value={data?.nominal} />
                 </div>
               </Surface> */}
+              
               <div className="flex justify-center">
                 <div className="">
                   <RichTextEditor editable={canEdit} content={data?.invoice_html} onUpdate={onHandleUpdateInvoice} />
