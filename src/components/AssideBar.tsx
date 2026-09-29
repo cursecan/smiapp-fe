@@ -22,7 +22,7 @@ const AssideBar = () => {
     const navigate = useNavigate()
     const { logout, user } = useAuth()
     return (
-        <div className="fixed left-0 top-0 w-72 h-screen p-2 flex flex-col">
+        <div className="fixed left-0 top-0 w-90 h-screen p-2 flex flex-col">
             <Surface className="flex-1 overflow-hidden flex text-sm flex-col h-full shadow-xl rounded-xl">
                 <div className="">
                     <div className="p-4 flex items-center">

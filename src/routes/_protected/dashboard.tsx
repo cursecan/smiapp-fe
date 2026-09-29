@@ -277,7 +277,7 @@ function RouteComponent() {
                   <div className="flex flex-col">
                     <Link to={'/komersial/penawaran?filter=inisiasi'}>
                       <div className="link gap-2">
-                        <p className='text-xl'>{formatRupiah(monitoring?.penawaran.un_close_amount)}</p>
+                        <p className='text-lg'>{formatRupiah(monitoring?.penawaran.un_close_amount)}</p>
                         <LinkHero.Icon className='text-accent' />
                       </div>
                     </Link>
@@ -291,7 +291,7 @@ function RouteComponent() {
                   <div className="flex flex-col">
                     <Link to={'/komersial/penawaran?nospk=1'}>
                       <div className="link gap-2">
-                        <p className='text-xl'>{formatRupiah(monitoring?.penawaran.no_spk_amount)}</p>
+                        <p className='text-lg'>{formatRupiah(monitoring?.penawaran.no_spk_amount)}</p>
                         <LinkHero.Icon className='text-accent' />
                       </div>
                     </Link>
@@ -305,24 +305,12 @@ function RouteComponent() {
                   <div className="flex flex-col">
                     <Link to={'/komersial/penawaran'}>
                       <div className="link gap-2">
-                        <p className='text-xl'>{formatRupiah(monitoring?.oprasional.un_close_amount)}</p>
+                        <p className='text-lg'>{formatRupiah(monitoring?.oprasional.un_close_amount)}</p>
                         <LinkHero.Icon className='text-accent' />
                       </div>
                     </Link>
                   </div>
                 </Surface>
-                
-                {/* <Surface variant='secondary' className='rounded-2xl p-3'>
-                  <Description className="">Blm Create Casbon</Description>
-                  <div className="">
-                    <Link to={'/komersial/penawaran'}>
-                      <div className="link gap-2">
-                        <p>{monitoring?.oprasional.no_casbon}</p>
-                        <LinkHero.Icon className='text-accent' />
-                      </div>
-                    </Link>
-                  </div>
-                </Surface> */}
                 <Surface variant='secondary' className='rounded-2xl p-3 space-y-3'>
                   <div className="flex gap-2 items-center">
                     <Description className="">BA Belum Invoice</Description>
@@ -331,23 +319,12 @@ function RouteComponent() {
                   <div className="flex flex-col">
                     <Link to={'/komersial/penawaran?noinv=1'}>
                       <div className="link gap-2">
-                        <p className='text-xl'>{formatRupiah(monitoring?.oprasional.un_invoice_amount)}</p>
+                        <p className='text-lg'>{formatRupiah(monitoring?.oprasional.un_invoice_amount)}</p>
                         <LinkHero.Icon className='text-accent' />
                       </div>
                     </Link>
                   </div>
                 </Surface>
-                {/* <Surface variant='secondary' className='rounded-2xl p-3'>
-                  <Description className="">Blm Invoice</Description>
-                  <div className="">
-                    <Link to={'/komersial/penawaran?noinv=1'}>
-                      <div className="link gap-2">
-                        <p>{monitoring?.oprasional.un_invoice}</p>
-                        <LinkHero.Icon className='text-accent' />
-                      </div>
-                    </Link>
-                  </div>
-                </Surface> */}
                 <Surface variant='secondary' className='rounded-2xl p-3 space-y-3'>
                   <div className="flex gap-2 items-center">
                     <Description className="">Ready To Delivery Inv</Description>
@@ -356,7 +333,7 @@ function RouteComponent() {
                   <div className="flex flex-col">
                     <Link to={'/komersial/penawaran?noinv=1'}>
                       <div className="link gap-2">
-                        <p className='text-xl'>{formatRupiah(monitoring?.oprasional.undeliver_inv_amount)}</p>
+                        <p className='text-lg'>{formatRupiah(monitoring?.oprasional.undeliver_inv_amount)}</p>
                         <LinkHero.Icon className='text-accent' />
                       </div>
                     </Link>
@@ -372,7 +349,7 @@ function RouteComponent() {
             <Card.Title>Realisasi Operasional</Card.Title>
           </Card.Header>
           <Card.Content>
-            <Table className=''>
+            <Table className='' variant='secondary'>
               <Table.ScrollContainer>
                 <Table.Content>
                   <Table.Header>
@@ -380,19 +357,19 @@ function RouteComponent() {
                       Jenis Pekerjaan
                     </Table.Column>
                     <Table.Column className={'text-center'}>
-                      Bulan Berjalan
+                      Current Month
                     </Table.Column>
                     <Table.Column className={'text-center'}>
-                      { format(addMonths(today, -1), 'MMM yyyy') } - Sekarang (2 Bulan)
+                      Month Ago
                     </Table.Column>
                     <Table.Column className={'text-center'}>
-                      { format(addMonths(today, -2), 'MMM yyyy') } - Sekarang (3 Bulan)
+                      3 Month Ago
                     </Table.Column>
                     <Table.Column className={'text-center'}>
-                      { format(addMonths(today, -5), 'MMM yyyy') } - Sekarang (6 Bulan)
+                      6 Month Ago
                     </Table.Column>
                     <Table.Column className={'text-center'}>
-                      { format(addMonths(today, -11), 'MMM yyyy') } - Sekarang (12 Bulan)
+                      Current Year
                     </Table.Column>
                   </Table.Header>
                   <Table.Body>
@@ -429,7 +406,7 @@ function RouteComponent() {
 
             <div className="mt-6 flex flex-col gap-3">
               <Label className='text-sm font-bold'>Progress Operasional</Label>
-              <Table className=''>
+              <Table className='' variant='secondary'>
                 <Table.ScrollContainer>
                   <Table.Content>
                     <Table.Header>

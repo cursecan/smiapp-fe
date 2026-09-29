@@ -41,12 +41,14 @@ const ItemEmailList = ({item}) => {
                 <div className="flex-1">
                     <Label>{item.subject}</Label>
                     <div className="">
-                        <Description>
-                            {
-                                showContent ? <span>{item.body}</span> : (item.body.length > 250 ? item.body.slice(0, 250) + '...' : item.body)
-                            }
-                        </Description>
-                        <div className="flex items-center gap-4 text-xs">
+                        {
+                            showContent && (
+                                <Description>
+                                    <span>{item.body}</span>
+                                </Description>
+                            )
+                        }
+                        <div className="flex items-center gap-4 text-xs mt-4">
                             <button onClick={() => setShowContent((prev) => !prev)} className='text-red-900 flex items-center gap-1'>
                                 {!showContent ? <EyeClosed /> : <Eye />}
                             </button>

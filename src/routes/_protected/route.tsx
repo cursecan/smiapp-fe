@@ -17,7 +17,7 @@ function RouteComponent() {
   return (
     <div className="min-h-screen">
       <AssideBar />
-      <div className="ml-72">
+      <div className="ml-90">
         <Outlet />
       </div>
         
