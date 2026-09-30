@@ -1,5 +1,5 @@
 import { Tray } from '@gravity-ui/icons'
-import {Button, EmptyState, Label, Radio, RadioGroup, Surface, Table, useOverlayState } from '@heroui/react'
+import {Button, Checkbox, EmptyState, Label, Radio, RadioGroup, Surface, Table, useOverlayState } from '@heroui/react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useItemPenawaranService, usePenawaranService } from '../../../../../../services/penawaran.service'
 import ItemPenawaranPekerjaan from '../../itemPenawaran/ItemPenawaranPekerjaan'
@@ -15,6 +15,7 @@ import SelectComponent from '../../../../../../components/input/SelectComponent'
 
 const Pekerjaan = ({penawaran, canEdit}) => {
     const state = useOverlayState()
+    const [selectecKeys, setSelectedKeys] = useState(new Set())
     const [form, setForm] = useState({
         penawaran: penawaran.id,
         reference_item: '',
@@ -164,8 +165,21 @@ const Pekerjaan = ({penawaran, canEdit}) => {
 
         <Table className='font-mono'>
             <Table.ScrollContainer>
-                <Table.Content>
+                <Table.Content 
+                    selectedKeys={selectecKeys}
+                    selectionMode="multiple"
+                    onSelectionChange={setSelectedKeys}
+                >
                     <Table.Header>
+                        <Table.Column className="pe-0">
+                            <Checkbox aria-label="Select all" slot="selection">
+                            <Checkbox.Content>
+                                <Checkbox.Control>
+                                <Checkbox.Indicator />
+                                </Checkbox.Control>
+                            </Checkbox.Content>
+                            </Checkbox>
+                        </Table.Column>
                         <Table.Column isRowHeader>
                             Barang / Jasa
                         </Table.Column>
@@ -210,7 +224,7 @@ const Pekerjaan = ({penawaran, canEdit}) => {
                         {
                             items?.length > 0 && (
                                 <Table.Row>
-                                    <Table.Cell colSpan={4}><strong>TOTAL</strong></Table.Cell>
+                                    <Table.Cell colSpan={5}><strong>TOTAL</strong></Table.Cell>
                                     <Table.Cell><strong>{formatRupiah(total_hpp)}</strong></Table.Cell>
                                     <Table.Cell><strong>{marginHarga.toFixed(1)}%</strong></Table.Cell>
                                     {
@@ -230,7 +244,7 @@ const Pekerjaan = ({penawaran, canEdit}) => {
                             items?.length > 0 && (
                                 <>
                                     <Table.Row>
-                                        <Table.Cell colSpan={4}><strong>TOTAL AGENCY FEE</strong></Table.Cell>
+                                        <Table.Cell colSpan={5}><strong>TOTAL AGENCY FEE</strong></Table.Cell>
                                         <Table.Cell><strong>{formatRupiah(total_aggency)}</strong></Table.Cell>
                                         <Table.Cell></Table.Cell>
                                         {
@@ -238,7 +252,7 @@ const Pekerjaan = ({penawaran, canEdit}) => {
                                         }
                                     </Table.Row>
                                     <Table.Row>
-                                        <Table.Cell colSpan={4}><strong>PPN 11%</strong></Table.Cell>
+                                        <Table.Cell colSpan={5}><strong>PPN 11%</strong></Table.Cell>
                                         <Table.Cell><strong>{formatRupiah(total_ppn)}</strong></Table.Cell>
                                         <Table.Cell></Table.Cell>
                                         {
@@ -246,7 +260,7 @@ const Pekerjaan = ({penawaran, canEdit}) => {
                                         }
                                     </Table.Row>
                                     <Table.Row>
-                                        <Table.Cell colSpan={4}><strong>GRAND TOTAL</strong> (TOTAL + AGENCY + PPN)</Table.Cell>
+                                        <Table.Cell colSpan={5}><strong>GRAND TOTAL</strong> (TOTAL + AGENCY + PPN)</Table.Cell>
                                         <Table.Cell><strong>{formatRupiah(total_hpp + total_aggency + total_ppn)}</strong></Table.Cell>
                                         <Table.Cell></Table.Cell>
                                         {

@@ -1,4 +1,4 @@
-import { Description, Label, Table } from '@heroui/react'
+import { Checkbox, Description, Label, Table } from '@heroui/react'
 import UpdateItemModal from './UpdateItemModal'
 import DeleteItemModal from './DeleteItemModal'
 import { formatRupiah } from '../../../../../utils/formatCurrency'
@@ -15,7 +15,20 @@ const ItemPenawaranPekerjaan = ({ item, canEdit}) => {
     })
     
   return (
-    <Table.Row>
+    <Table.Row id={item.id}>
+        <Table.Cell className="pe-0">
+            <Checkbox
+                aria-label={`Select ${item.id}`}
+                slot="selection"
+                variant="secondary"
+            >
+                <Checkbox.Content>
+                    <Checkbox.Control>
+                        <Checkbox.Indicator />
+                    </Checkbox.Control>
+                </Checkbox.Content>
+            </Checkbox>
+            </Table.Cell>
         <Table.Cell>
             {
                 item.is_header ? (
