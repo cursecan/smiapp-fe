@@ -119,7 +119,7 @@ function RouteComponent() {
     if (data) {
       // console.log(data);
       reset({...data, 
-        jenis_pekerjaan: data?.jenis_pekerjaan?.id, 
+        jenis_pekerjaan: data?.jenis_pekerjaan, 
         customer: data?.customer?.id || '', 
         sumber_penugasan: data?.sumber_penugasan?.id || '', 
         multi_pelabuhan: data?.multi_pelabuhan}
