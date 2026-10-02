@@ -108,7 +108,12 @@ const NewApprovalButton = ({
   };
 
   const errorSubmit = (errors) => {
-    alert("Harap lengkapi data dengan benar.");
+    if (noValidationSave) {
+      const data = form.getValues();
+      const payload = normalizePayload(data);
+      submit_mutation.mutate(payload);
+      return;
+    }
     onError(errors);
   };
 
@@ -120,6 +125,7 @@ const NewApprovalButton = ({
       ...appform,
       is_approve: !appform.is_decline,
     };
+    
     submit_mutation.mutate(payload);
   };
 

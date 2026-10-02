@@ -119,7 +119,7 @@ function RouteComponent() {
     if (data) {
       // console.log(data);
       reset({...data, 
-        jenis_pekerjaan: data?.jenis_pekerjaan, 
+        jenis_pekerjaan: data?.jenis_pekerjaan?.id, 
         customer: data?.customer?.id || '', 
         sumber_penugasan: data?.sumber_penugasan?.id || '', 
         multi_pelabuhan: data?.multi_pelabuhan}
@@ -336,15 +336,15 @@ function RouteComponent() {
                 value={data?.customer?.id}
                 onChange={onChangeCustomer}
                 isDisabled={!canEdit}
-              
               />
+              
 
               {
                 data?.response_answer && <TextArea value={data?.response_answer} fullWidth readOnly />
               }
 
               <div className="flex justify-end items-center gap-3">
-                <ApprovalButtons
+                {/* <ApprovalButtons
                   noValidationSave
                   postOnly
                   isCanApprove={canApprove}
@@ -355,6 +355,20 @@ function RouteComponent() {
                   queryKey={['detail-penawaran', id]}
                   postLabel='Req. Approval Penawaran'
                   onError={setErrors}
+                /> */}
+                <NewApprovalButton
+                  form={form} // 👈 Oper seluruh object form ke ApprovalButtons
+                  noValidationSave={true} // Boleh simpan draft tanpa validasi ketat
+                  postOnly
+                  isCanApprove={canApprove}
+                  isCanEdit={canEdit}
+                  queryKey={["detail-penawaran", id]}
+                  approvalLabel="Approve"
+                  // Service API untuk update/edit draft
+                  saveFn={(payload) => usePenawaranService.edit(id, payload)}
+                  // Service API untuk submit approval
+                  submitFn={(payload) => usePenawaranService.submit(id, payload)}
+                  onError={(errs) => console.log("Form Validation Errors:", errs)}   
                 />
                 {
                   data?.approvals[0]?.step === 4 && hasAuth && (

@@ -6,7 +6,7 @@ export const usePenawaranSchema = z.object({
     nama_project: z.string().min(1, 'Nama project tidak bolek kosong.'),
     nomor_penugasan: z.string().min(1, 'Nomor SPK/PO tidak boleh kosong.'),
     jenis_pekerjaan: z.string().min(1, 'Tidak memilih jenis pekerjaan.'),
-    pelabuhan: z.string().min(1, 'Wilayah pelabuhan harus diisi.'),
+    // pelabuhan: z.string().min(1, 'Wilayah pelabuhan harus diisi.'),
    // FIXED: Ditambahkan z.string() di dalam z.array()
     multi_pelabuhan: z
         .array(z.string())
