@@ -31,6 +31,18 @@ import DateInput from '../../../../components/input/DateInput'
 import { useCustomerService } from '../../../../services/customer/customerService'
 import LinkButton from '../../../../components/buttons/LinkButton'
 import RichTextEditor from '../../../../components/input/RichTextEditor'
+import { DynamicComboBoxMultiple } from '../../../../components/input/DynamicComboBox'
+import { DynamicComboBoxSingle } from '../../../../components/input/SimpleSingleComboBox'
+import NewApprovalButton from '../../../../components/buttons/NewApprovalButtons'
+import TabsPekerjaan from '../-components/penawaran/TabsPekerjaan'
+// import MultiComboBox from '../../../../components/input/MultiComboBox'
+
+interface Pelabuhan {
+  id: string;
+  code_pelabuhan: string;
+  nama_pelabuhan: string;
+  kota: string;
+}
 
 export const Route = createFileRoute('/_protected/komersial/penawaran/$id')({
   component: RouteComponent,
@@ -53,7 +65,8 @@ function RouteComponent() {
   const [pelabuhan, setPelabuhan] = useState(null)
 
   const {canEdit, canApprove, hasAuth, canRevise, stepApprovals, currentStep} = useSchema(data)
-  const {control, handleSubmit, reset, getValues, formState: {isValid}} = useForm({resolver: zodResolver(usePenawaranSchema), mode: "onChange", defaultValues: data || {}})
+  const form = useForm({resolver: zodResolver(usePenawaranSchema), mode: "onChange", defaultValues: data || {}})
+  const {control, handleSubmit, reset, getValues, formState: {isValid}} = form
   
   
   
@@ -106,10 +119,10 @@ function RouteComponent() {
     if (data) {
       // console.log(data);
       reset({...data, 
-        jenis_pekerjaan: data?.jenis_pekerjaan?.id ||'', 
+        jenis_pekerjaan: data?.jenis_pekerjaan, 
         customer: data?.customer?.id || '', 
         sumber_penugasan: data?.sumber_penugasan?.id || '', 
-        pelabuhan: data?.pelabuhan?.id || ''}
+        multi_pelabuhan: data?.multi_pelabuhan}
       )
     }
   }, [data, reset])
@@ -170,42 +183,70 @@ function RouteComponent() {
                   )}              
                 />
 
-                
-              </div>
-
-              <div className="flex gap-6">
                 <Controller
                   name="jenis_pekerjaan"
                   control={control}
                   render={({field}) => (
-                    <SimpleComboBox
-                      label={'Jenis Pekerjaan'}
-                      filter={(i) => ({...i, name: i.jenis_pekerjaan})}
-                      fetchUrl={() => useJenisPekerjaanService.list()}
-                      fetchDetailUrl={({queryKey}) => useJenisPekerjaanService.detail(queryKey.at(1))}
-                      query={['jenis-pek-combox-list']}
-                      value={field?.value ?? ''}
-                      onChange={(e) => field.onChange(e)}
-                      isReadOnly={!canEdit}
+                    <DynamicComboBoxSingle
+                      label="Jenis Pekerjaan"
+                      urlList="/master/jenis-pekerjaan/"
+                      itemKey="id"
+                      itemLabel="jenis_pekerjaan"
+                      // Langsung masukkan objek default di sini
+                      value={field?.value} 
+                      onChange={field.onChange}
                     />
                   
                   )}
                 />
 
+                
+              </div>
+
+              <div className="flex gap-6">
                 <Controller
-                  name='pelabuhan'
+                  name='multi_pelabuhan'
                   control={control}
                   render={({field}) => (
-                    <SimpleComboBox 
-                      label={'Pelabuhan'}
-                      filter={(i) => ({...i, name: i.nama_pelabuhan})}
-                      fetchUrl={({ pageParam, queryKey }) => usePelabuhanService.list({pageParam, queryKey})}
-                      fetchDetailUrl={({queryKey}) => usePelabuhanService.detail(queryKey.at(1))}
-                      query={['pelabuhan-combox']}
-                      value={field?.value ?? ''}
-                      onChange={(e) => field.onChange(e)}
-                      isReadOnly={!canEdit}
-                     />
+                    <DynamicComboBoxMultiple<Pelabuhan>
+                      label="Wilayah / Pelabuhan"
+                      placeholder="Cari nama wilayah atau pelabuhan.."
+                      urlList="/master/pelabuhan/"
+                      itemKey="id"
+                      itemLabel={(item) => `${item.nama_pelabuhan}`}
+                      initialValue={field.value || []}
+                      onChange={(e) => {
+                        const flatvalue = e.map(i => i.id)
+                        console.log(flatvalue);
+                        
+                        field.onChange(flatvalue)
+                      }}
+                      className='w-full'
+                    />
+                  )}
+                />
+              </div>
+
+              <div className="">
+                <Controller
+                  name='kapal'
+                  control={control}
+                  render={({field}) => (
+                    <DynamicComboBoxMultiple
+                      label="Pilih Kapal"
+                      placeholder="Cari nama kapal.."
+                      urlList="/master/kapal/"
+                      itemKey="id"
+                      itemLabel={(item) => `${item.nama_kapal}`}
+                      initialValue={field.value || []}
+                      onChange={(e) => {
+                        const flatvalue = e.map(i => i.id)
+                        console.log(flatvalue);
+                        
+                        field.onChange(flatvalue)
+                      }}
+                      className='w-full'
+                    />
                   )}
                 />
               </div>
@@ -221,70 +262,28 @@ function RouteComponent() {
               </div>
 
               <div className="flex">
-                <ApprovalButtons
-                  noValidationSave
+                <NewApprovalButton
+                  form={form} // 👈 Oper seluruh object form ke ApprovalButtons
+                  noValidationSave={true} // Boleh simpan draft tanpa validasi ketat
                   saveOnly
                   isCanApprove={canApprove}
                   isCanEdit={canEdit}
-                  form={{handleSubmit, getValues, isValid}}
-                  saveFn={(payload) => usePenawaranService.edit(data.id, payload)}
-                  submitFn={(payload) => usePenawaranService.submit(data.id, payload)}
-                  queryKey={['detail-penawaran', id]}
-                  approvalLabel='Req. Approval Penawaran'
-                  onError={setErrors}
+                  queryKey={["detail-penawaran", id]}
+                  approvalLabel="Req. Approval Penawaran"
+                  // Service API untuk update/edit draft
+                  saveFn={(payload) => usePenawaranService.edit(id, payload)}
+                  // Service API untuk submit approval
+                  submitFn={(payload) => usePenawaranService.submit(id, payload)}
+                  onError={(errs) => console.log("Form Validation Errors:", errs)}   
                 />
               </div>
               
-              <Surface className='rounded-xl p-3'>
-                  { canEdit && (
-                    <div className="flex items-center gap-3 mb-3">
-                      <Label> Pilih Kapal : </Label>
-                      <KapalComboBox readOnly={!canEdit} value={kapal} onChange={handleAppendKapal} />
-                      <div className="flex-1 flex justify-end">
-                        <Label className="text-gray-700">{data?.kapal.length} Kapal</Label>
-                      </div>
-                      {/* <Button onPress={handleAppendKapal} variant='secondary'>Add Kapal</Button> */}
-                    </div>
-                  )}
-                  <Table>
-                    <Table.ScrollContainer>
-                      <Table.Content>
-                        <Table.Header>
-                          <Table.Column isRowHeader></Table.Column>
-                          <Table.Column>Nama Kapal</Table.Column>
-                          <Table.Column></Table.Column>
-                        </Table.Header>
-                        <Table.Body >
-                          {
-                            data?.kapal.map(k => {
-                              return (
-                                <Table.Row>
-                                  <Table.Cell className={'truncate w-0'}>
-                                    <LogoDocker />
-                                  </Table.Cell>
-                                  <Table.Cell>
-                                    {k.nama_kapal}
-                                  </Table.Cell>
-                                  <Table.Cell className={'w-0 truncate'}>
-                                    <CloseButton className={canEdit && 'bg-danger-soft text-danger'} isDisabled={!canEdit} onPress={() => handleRemoveKapal(k.id)} />
-                                  </Table.Cell>
-                                </Table.Row>
-                              )
-                            })
-                          }
-                        </Table.Body>
-                      </Table.Content>
-                    </Table.ScrollContainer>
-                  </Table>
-                  {
-                    !!errors?.kapal && (
-                      <div className="text-sm text-red-500 mt-2">* {errors.kapal.message}</div>
-                    )
-                  }
-              </Surface>
               
               <DokumenPenawaran canEdit={canEdit} data={data} />
+              
               <Pekerjaan penawaran={data} canEdit={canEdit} />
+              
+
               {
                 (currentStep.step > 1 && data?.body_html) && (
                   <div className="flex justify-center">

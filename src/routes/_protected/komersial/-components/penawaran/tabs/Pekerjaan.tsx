@@ -1,4 +1,4 @@
-import { Tray } from '@gravity-ui/icons'
+import { Plus, Tray } from '@gravity-ui/icons'
 import {Button, Checkbox, EmptyState, Label, Radio, RadioGroup, Surface, Table, useOverlayState } from '@heroui/react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useItemPenawaranService, usePenawaranService } from '../../../../../../services/penawaran.service'
@@ -12,6 +12,8 @@ import { formatRupiah } from '../../../../../../utils/formatCurrency'
 import SimpleComboBox from '../../../../../../components/input/SimpleComboBox'
 import { useSatuanService } from '../../../../../../services/masterdata/satuanService'
 import SelectComponent from '../../../../../../components/input/SelectComponent'
+import { DynamicComboBoxMultiple } from '../../../../../../components/input/DynamicComboBox'
+import { DynamicComboBoxSingle } from '../../../../../../components/input/SimpleSingleComboBox'
 
 const Pekerjaan = ({penawaran, canEdit}) => {
     const state = useOverlayState()
@@ -31,7 +33,13 @@ const Pekerjaan = ({penawaran, canEdit}) => {
         is_header: false
     })
 
-    const pelabuhan = penawaran.pelabuhan?.id ?? ''
+    const [detailPlex, setDetailPlex] = useState(null)
+
+    const pelabuhan = useMemo(() => {
+        const pelabuan = penawaran.multi_pelabuhan.map(i => i.id).join(',')
+        return pelabuan
+
+    })
     const jenis = penawaran.jenis_pekerjaan?.id ?? ''
     
 
@@ -60,6 +68,20 @@ const Pekerjaan = ({penawaran, canEdit}) => {
         }
     })
 
+    const create_header_motion = useMutation({
+        mutationFn: (payload) => useItemPenawaranService.generate_header(payload),
+        onSuccess: () => {
+            qc.invalidateQueries({queryKey:['item-penawaran']})
+            // setForm({...form, barang_jasa: '', harga_satuan: '0', qty: 1})
+            state.close()
+        }
+    })
+
+
+    const handlecreate_header = () => {
+        create_header_motion.mutate({selectecKeys: Array.from(selectecKeys)})
+    }
+
     const header_contensts = useMemo(() => {
         const filtered_items = items?.filter(i => i.level===0).map(i => ({id: i.id, label: i.barang_jasa}))
         
@@ -81,8 +103,8 @@ const Pekerjaan = ({penawaran, canEdit}) => {
         return [...sortered, ...no_header_items]
     })
 
-    const handleCreateItem = (e) => {
-        mutation.mutate({...form, reference_item: e})
+    const handleCreateItem = () => {
+        mutation.mutate({...form, reference_item: detailPlex})
     }
 
 
@@ -105,64 +127,37 @@ const Pekerjaan = ({penawaran, canEdit}) => {
             canEdit && (
                 <div className="mb-3 space-y-3">
                     <div className="flex flex-col space-y-3">
-                        <div className="">
+                        {/* <div className="">
                             <SelectComponent label={'Title Header'} value={form.parent} onChange={(e) => setForm({...form, parent: e})} data={header_contensts} />
-                        </div>
+                        </div> */}
 
-                        <div className="flex gap-3">
-                            <div className="flex-1">
-                                <InputText placeholder="Masukan nama barang atau jasa." label={'Nama Barang & Jasa'} value={form.barang_jasa} onChange={(e) => setForm({...form, barang_jasa: e.target.value})} />
+                        <div className="flex items-end gap-2 justify-between">
+                            <div className="flex items-end gap-2">
+                                <DynamicComboBoxSingle
+                                    label="Deskripsi Pekerjaan"
+                                    urlList={`/master/pekerjaan/?j_pekerjaan=${jenis}&pelabuhan=${pelabuhan}`}
+                                    itemKey="id"
+                                    itemLabel="nama_pekerjaan"
+                                    itemDescription={(item) => item.pelabuhan?.nama_pelabuhan}
+                                    // Langsung masukkan objek default di sini
+                                    // value={} 
+                                    onChange={setDetailPlex}
+                                />
+                                <Button isIconOnly onPress={handleCreateItem}>
+                                    <Plus />
+                                </Button>
                             </div>
-                            <div className="w-16">
-                                <InputText label={'Qty'} value={form.qty} onChange={(e) => setForm({...form, qty: e.target.value})} />
-                            </div>
-                            <SimpleComboBox
-                                label={'Satuan'}
-                                query={['satuan-combox-list']}
-                                fetchUrl={() => useSatuanService.list()}
-                                fetchDetailUrl={({queryKey}) => useSatuanService.detail(queryKey.at(1))}
-                                filter={(i) => ({...i, name: i.nama_satuan})}
-                                value={form.satuan}
-                                onChange={(e) => setForm({...form, satuan: e})}
-                            />
-                            <div className="w-32">
-                                <CurrencyInput label={'Harga'} value={form.harga_satuan} onChange={(e) => setForm({...form, harga_satuan: e})} />
-                            </div>
-                            <div className="flex flex-col justify-end">
-                                <ModalComponent 
-                                    buttonTrigger={<Button isDisabled={!form.barang_jasa} variant='secondary' onPress={state.setOpen} size='sm'>Simpan</Button>}
-                                    state={state}
-                                    heading={'Pilih'}
-                                    hideFooter
-                                >
-                                    <Surface className='mt-6'>
-                                        <RadioGroup onChange={handleCreateItem}>
-                                            <Label>Reference Master Pekerjaan</Label>
-                                            {
-                                                master_data?.results.map(m => {
-                                                    return (
-                                                        <Radio key={m.id} value={m.id}>
-                                                            <Radio.Control>
-                                                                <Radio.Indicator />
-                                                            </Radio.Control>
-                                                            <Radio.Content>
-                                                                <Label>{m.nama_pekerjaan} ({m.pelabuhan?.nama_pelabuhan|| '-'}) - {formatRupiah(m.hpp)}</Label>
-                                                            </Radio.Content>
-                                                        </Radio>
-                                                    )
-                                                })
-                                            }
-                                        </RadioGroup>
-                                    </Surface>
-                                </ModalComponent>
-                            </div>
+                            {
+                                Array.from(selectecKeys).length > 0 && (
+                                    <Button onPress={handlecreate_header}>Sub</Button>
+                                )
+                            }
                         </div>
 
                     </div>
                 </div>
             )
         }
-
         <Table className='font-mono'>
             <Table.ScrollContainer>
                 <Table.Content 
@@ -172,13 +167,13 @@ const Pekerjaan = ({penawaran, canEdit}) => {
                 >
                     <Table.Header>
                         <Table.Column className="pe-0">
-                            <Checkbox aria-label="Select all" slot="selection">
+                            {/* <Checkbox aria-label="Select all" slot="selection">
                             <Checkbox.Content>
                                 <Checkbox.Control>
                                 <Checkbox.Indicator />
                                 </Checkbox.Control>
                             </Checkbox.Content>
-                            </Checkbox>
+                            </Checkbox> */}
                         </Table.Column>
                         <Table.Column isRowHeader>
                             Barang / Jasa
@@ -215,9 +210,9 @@ const Pekerjaan = ({penawaran, canEdit}) => {
                             )}
                     >
                         {
-                            sorted_content.map((i, index) => {
+                            sorted_content.map((i, index0) => {
                                 return (
-                                    <ItemPenawaranPekerjaan pelabuhan={penawaran.pelabuhan?.id}  canEdit={canEdit} id={penawaran.id} item={i} key={index} />
+                                    <ItemPenawaranPekerjaan canEdit={canEdit} item={{...i, penawaran_id:penawaran.id}} key={index0} />
                                 )
                             })
                         }
@@ -234,9 +229,9 @@ const Pekerjaan = ({penawaran, canEdit}) => {
                             )
                         }
                         {
-                            items?.filter((t) => t.is_aggency_fee).map((i, index) => {
+                            items?.filter((t) => t.is_aggency_fee).map((i, index1) => {
                                 return (
-                                    <ItemPenawaranPekerjaan  canEdit={canEdit} id={penawaran.id} item={i} key={index} />
+                                    <ItemPenawaranPekerjaan  canEdit={canEdit} item={i} key={index1} />
                                 )
                             })
                         }

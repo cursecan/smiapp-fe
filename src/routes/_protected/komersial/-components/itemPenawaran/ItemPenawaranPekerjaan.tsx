@@ -15,7 +15,7 @@ const ItemPenawaranPekerjaan = ({ item, canEdit}) => {
     })
     
   return (
-    <Table.Row id={item.id}>
+    <Table.Row id={item.id} key={item.id}>
         <Table.Cell className="pe-0">
             <Checkbox
                 aria-label={`Select ${item.id}`}

@@ -58,4 +58,7 @@ export const useItemPenawaranService = {
     progress: (id, payload) => {
         return api.post(`/komersial/item/${id}/progress/`, payload)
     },
+    generate_header: (payload) => {
+        return api.post(`/komersial/item/generate_header/`, payload)
+    },
 }
