@@ -220,8 +220,9 @@ export function DynamicComboBoxMultiple<T extends Record<string, any>>({
               return (
                 <Chip
                   key={String(id)}
-                  size="lg"
+                  size="sm"
                   variant="flat"
+                  className="bg-danger text-white"
                   onClose={() => handleRemove(id)}
                 >
                   {text}
