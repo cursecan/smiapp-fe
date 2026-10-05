@@ -143,13 +143,13 @@ const Pekerjaan = ({penawaran, canEdit}) => {
                                     // value={} 
                                     onChange={setDetailPlex}
                                 />
-                                <Button isIconOnly onPress={handleCreateItem}>
-                                    <Plus />
+                                <Button onPress={handleCreateItem}>
+                                    Entry Jobs
                                 </Button>
                             </div>
                             {
                                 Array.from(selectecKeys).length > 0 && (
-                                    <Button onPress={handlecreate_header}>Sub</Button>
+                                    <Button className={'bg-violet-600 text-white'} onPress={handlecreate_header}>Create Group</Button>
                                 )
                             }
                         </div>
