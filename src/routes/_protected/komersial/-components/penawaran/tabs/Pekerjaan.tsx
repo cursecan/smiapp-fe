@@ -231,7 +231,7 @@ const Pekerjaan = ({penawaran, canEdit}) => {
                         {
                             items?.filter((t) => t.is_aggency_fee).map((i, index1) => {
                                 return (
-                                    <ItemPenawaranPekerjaan  canEdit={canEdit} item={i} key={index1} />
+                                    <ItemPenawaranPekerjaan  canEdit={canEdit} item={i} key={index1} checkHide />
                                 )
                             })
                         }

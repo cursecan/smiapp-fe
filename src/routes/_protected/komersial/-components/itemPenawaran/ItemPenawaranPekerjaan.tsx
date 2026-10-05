@@ -4,7 +4,7 @@ import DeleteItemModal from './DeleteItemModal'
 import { formatRupiah } from '../../../../../utils/formatCurrency'
 import { useMemo } from 'react'
 
-const ItemPenawaranPekerjaan = ({ item, canEdit}) => {
+const ItemPenawaranPekerjaan = ({ item, canEdit, checkHide=false}) => {
     // console.log(canEdit, 'canedit');
 
     const marginHarga = useMemo(() => {
@@ -17,18 +17,22 @@ const ItemPenawaranPekerjaan = ({ item, canEdit}) => {
   return (
     <Table.Row id={item.id} key={item.id}>
         <Table.Cell className="pe-0">
-            <Checkbox
-                aria-label={`Select ${item.id}`}
-                slot="selection"
-                variant="secondary"
-            >
-                <Checkbox.Content>
-                    <Checkbox.Control>
-                        <Checkbox.Indicator />
-                    </Checkbox.Control>
-                </Checkbox.Content>
-            </Checkbox>
-            </Table.Cell>
+            {
+                !checkHide && (
+                    <Checkbox
+                        aria-label={`Select ${item.id}`}
+                        slot="selection"
+                        variant="secondary"
+                    >
+                        <Checkbox.Content>
+                            <Checkbox.Control>
+                                <Checkbox.Indicator />
+                            </Checkbox.Control>
+                        </Checkbox.Content>
+                    </Checkbox>
+                )
+            }
+        </Table.Cell>
         <Table.Cell>
             {
                 item.is_header ? (
