@@ -13,6 +13,7 @@ import StatusApprovalFilter from '../../../../components/StatusApprovalFilter'
 import JenisPekerjaanFilter from '../../../../components/JenisPekerjaanFilter'
 import { formatSimpleDate2 } from '../../../../utils/dateFormat'
 import { Link as HeroLink } from '@heroui/react'
+import ExportModalPenawaran from '../-components/penawaran/ExportModalPenawaran'
 
 
 export const Route = createFileRoute('/_protected/komersial/penawaran/')({
@@ -71,8 +72,9 @@ function RouteComponent() {
               <StatusApprovalFilter data={approval_status} onChange={(e) => navigate({search: (prev) => ({...prev, filter: e})})} />
             </div>
 
-            <div className="">
+            <div className="flex items-center gap-2">
               <ModalPenawaran />
+              <ExportModalPenawaran />
             </div>
           </div>
         </Card.Header>

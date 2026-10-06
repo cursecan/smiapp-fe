@@ -1,6 +1,7 @@
 import { Button, Calendar, DateField, DatePicker, Label } from '@heroui/react'
 import { parseDate, today, getLocalTimeZone } from '@internationalized/date'
 import { useEffect, useState } from 'react'
+import { object } from 'zod'
 
 const DateInput = ({label, value, showReset=true, onChange=()=>{}, ...props}) => {
     const [dateValue, setDateValue] = useState(today(getLocalTimeZone()))
@@ -12,7 +13,12 @@ const DateInput = ({label, value, showReset=true, onChange=()=>{}, ...props}) =>
 
     useEffect(() => {
       if (value) {
-        setDateValue(parseDate(value))
+        // console.log(type());
+        if (typeof value === 'object') {
+          setDateValue(value)
+        } else {
+          setDateValue(parseDate(value))
+        }
       }
     }, [value])
 
