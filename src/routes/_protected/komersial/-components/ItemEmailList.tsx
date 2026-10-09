@@ -52,16 +52,20 @@ const ItemEmailList = ({item}) => {
                             <button onClick={() => setShowContent((prev) => !prev)} className='text-red-900 flex items-center gap-1'>
                                 {!showContent ? <EyeClosed /> : <Eye />}
                             </button>
-                            <div className="">
-                                <Checkbox isSelected={isHide} onChange={handleChange}>
-                                    <Checkbox.Control>
-                                        <Checkbox.Indicator />
-                                    </Checkbox.Control>
-                                    <Checkbox.Content>
-                                        <Label>Hide</Label>
-                                    </Checkbox.Content>
-                                </Checkbox>
-                            </div>
+                            {
+                                !item.penawaran && (
+                                    <div className="">
+                                        <Checkbox isSelected={isHide} onChange={handleChange}>
+                                            <Checkbox.Content>
+                                                <Checkbox.Control>
+                                                    <Checkbox.Indicator />
+                                                </Checkbox.Control>
+                                                Hide
+                                            </Checkbox.Content>
+                                        </Checkbox>
+                                    </div>
+                                )
+                            }
                             
                         </div>
                     </div>
