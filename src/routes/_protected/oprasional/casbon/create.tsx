@@ -9,6 +9,7 @@ import { useToast } from '../../../../lib/useToast'
 import SimpleComboBox from '../../../../components/input/SimpleComboBox'
 import { useCustomerService } from '../../../../services/customer/customerService'
 import { useOprasionalService } from '../../../../services/oprasional/oprasionalService'
+import CheckboxInput from '../../../../components/input/CheckboxInput'
 
 export const Route = createFileRoute('/_protected/oprasional/casbon/create')({
   component: RouteComponent,
@@ -79,30 +80,23 @@ function RouteComponent() {
                   isReadOnly
                 />
 
-                <Checkbox value={form.pembayaran} onChange={(e) => setForm({...form, pembayaran: e})}>
-                  <Checkbox.Control>
-                    <Checkbox.Indicator />
-                  </Checkbox.Control>
-                  <Checkbox.Content>
-                    <Label>Pembayaran</Label>
-                  </Checkbox.Content>
-                </Checkbox>
+                <CheckboxInput value={form.pembayaran} onChange={(e) => setForm({...form, pembayaran: e})} />
                 <RadioGroup orientation='horizontal' value={form.tkp} onChange={(e) => setForm({...form, tkp: e})}>
                   <Radio value='petty_cash'>
-                      <Radio.Control>
-                        <Radio.Indicator />
-                      </Radio.Control>
                       <Radio.Content>
-                        <Label>Petty Cash</Label>
+                        <Radio.Control>
+                          <Radio.Indicator />
+                        </Radio.Control>
                       </Radio.Content>
+                      Petty Cash
                   </Radio>
                   <Radio value='casbon'>
+                    <Radio.Content>
                       <Radio.Control>
                         <Radio.Indicator />
                       </Radio.Control>
-                      <Radio.Content>
-                        <Label>Casbon</Label>
-                      </Radio.Content>
+                    </Radio.Content>
+                    Casbon
                   </Radio>
                 </RadioGroup>
                 <TextField>
