@@ -7,8 +7,8 @@ const CheckboxInput = ({label, value=false, onChange=()=>{}, ...props}) => {
           <Checkbox.Control>
               <Checkbox.Indicator />
           </Checkbox.Control>
+          {label}
         </Checkbox.Content>
-        {label}
     </Checkbox>
   )
 }

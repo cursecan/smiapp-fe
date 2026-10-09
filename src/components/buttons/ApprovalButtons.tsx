@@ -194,13 +194,13 @@ const ApprovalButtons = ({
                                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, quidem?</p>
                                         <div className="">
                                             <Switch isSelected={appform.is_decline} onChange={(e) => setAppForm({...appform, is_decline: e})}>
-                                                <Switch.Control className={appform.is_decline ? 'bg-danger' : ''} >
-                                                    <Switch.Thumb />
-                                                </Switch.Control>
                                                 <Switch.Content>
-                                                    <Label>Decline Approval</Label>
-                                                    <Description>Lorem ipsum dolor sit amet.</Description>
+                                                    <Switch.Control className={appform.is_decline ? 'bg-danger' : ''} >
+                                                        <Switch.Thumb />
+                                                    </Switch.Control>
+                                                    Decline Approval
                                                 </Switch.Content>
+                                                <Description>Lorem ipsum dolor sit amet.</Description>
                                             </Switch>
                                         </div>
                                         {

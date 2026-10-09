@@ -87,16 +87,16 @@ function RouteComponent() {
                         <Radio.Control>
                           <Radio.Indicator />
                         </Radio.Control>
+                        Petty Cash
                       </Radio.Content>
-                      Petty Cash
                   </Radio>
                   <Radio value='casbon'>
                     <Radio.Content>
                       <Radio.Control>
                         <Radio.Indicator />
                       </Radio.Control>
+                      Casbon
                     </Radio.Content>
-                    Casbon
                   </Radio>
                 </RadioGroup>
                 <TextField>

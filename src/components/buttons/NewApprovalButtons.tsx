@@ -228,13 +228,13 @@ const NewApprovalButton = ({
                         isSelected={appform.is_decline}
                         onChange={(e) => setAppForm((prev) => ({ ...prev, is_decline: e }))}
                       >
-                        <Switch.Control className={appform.is_decline ? "bg-danger" : ""}>
-                          <Switch.Thumb />
-                        </Switch.Control>
                         <Switch.Content>
-                          <Label>Decline Approval</Label>
-                          <Description>Tandai jika pengajuan ditolak.</Description>
+                          <Switch.Control className={appform.is_decline ? "bg-danger" : ""}>
+                            <Switch.Thumb />
+                          </Switch.Control>
+                          Decline Approval
                         </Switch.Content>
+                        <Description>Tandai jika pengajuan ditolak.</Description>
                       </Switch>
                     </div>
                     {appform.is_decline && (
