@@ -246,7 +246,7 @@ export default function RichTextEditor({
       TwoColumn,
       Column,
       PageBreak,
-      CustomImage.configure({ inline: true }),
+      CustomImage.configure({ inline: true, allowBase64: true }),
       Underline,
       TextStyle,
       FontFamily.configure({ types: ['textStyle'] }),
