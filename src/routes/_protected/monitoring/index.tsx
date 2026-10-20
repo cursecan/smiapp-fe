@@ -5,6 +5,7 @@ import { SearchField, Surface, Table } from '@heroui/react'
 import ItemList from './-components/ItemList'
 import HeaderPage from '../../../components/HeaderPage'
 import PaginationTable from '../../../components/PaginationTable'
+import MonitoringCard from './-components/MonitoringCard'
 
 export const Route = createFileRoute('/_protected/monitoring/')({
   component: RouteComponent,
@@ -37,7 +38,11 @@ function RouteComponent() {
 
   return (
     <Surface className='px-6 my-1'>
-      <HeaderPage title='Monitoring Pekerjaan' />
+      <HeaderPage title='Monitoring' />
+
+      <div className="mb-6">
+        <MonitoringCard />
+      </div>
 
       <div className="flex items-center">
         <SearchField className={'w-100'}>
