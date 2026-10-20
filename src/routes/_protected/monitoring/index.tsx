@@ -20,8 +20,8 @@ function RouteComponent() {
   const {page, q} = Route.useSearch()
 
   const {data} = useQuery({
-    queryKey: ['monitoring'],
-    queryFn: () => useOprasionalService.minitoring(),
+    queryKey: ['monitoring', page, q],
+    queryFn: ({queryKey}) => useOprasionalService.minitoring({queryKey}),
     select: (res) => res.data
   })
 

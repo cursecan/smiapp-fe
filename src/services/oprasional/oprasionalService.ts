@@ -31,7 +31,8 @@ export const useOprasionalService = {
     submit: (id, payload) => {
         return api.post(`/oprasional/opr/${id}/submit/`, payload)
     },
-    minitoring: () => {
-        return api.get('/oprasional/monitoring/')
+    minitoring: ({queryKey}) => {
+        const [, page, q] = queryKey
+        return api.get('/oprasional/monitoring/', {params: {page, q,}})
     }
 }
