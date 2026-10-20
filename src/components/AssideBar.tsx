@@ -1,4 +1,4 @@
-import {  Envelope, Persons, House, MapPin, Bell, Circles5Random, Rocket, Flask, LogoDocker, Megaphone, Mug, ArrowRightFromSquare, CircleDollar, Layers3Diagonal } from "@gravity-ui/icons"
+import {  Envelope, Persons, House, MapPin, Bell, Circles5Random, Rocket, Flask, LogoDocker, Megaphone, Mug, ArrowRightFromSquare, CircleDollar, Layers3Diagonal, DisplayPulse } from "@gravity-ui/icons"
 import { useAuth } from "../auth/AuthProvider"
 import { Avatar, Badge, Button, Description, Label, Popover, Surface } from "@heroui/react"
 import { Link, useLocation, useNavigate } from "@tanstack/react-router"
@@ -41,6 +41,7 @@ const AssideBar = () => {
                             <div className="space-y-0">
                                 <NavButton active={location.pathname.includes('/dashboard')} to={'/dashboard'} onPress={() => navigate({to: '/dashboard'})} icon={<House />} name={'Home'} />
                                 <NavButton active={location.pathname.includes('/komersial/email')} to={'/komersial/email'} onPress={() => navigate({to: '/komersial/email'})}  icon={<Envelope />} name={'Email'} />
+                                <NavButton active={location.pathname.includes('/monitoring')} to={'/monitoring'} onPress={() => navigate({to: '/monitoring'})} icon={<DisplayPulse />} name={'Monitoring'} />
                                 <NavButton active={location.pathname.includes('/komersial/penawaran')} to={'/komersial/penawaran'} onPress={() => navigate({to: '/komersial/penawaran'})} icon={<Circles5Random />} name={'Penawaran'} />
                                 <NavButton active={location.pathname.includes('/oprasional/oprasional')} to={'/oprasional/oprasional'} onPress={() => navigate({to: '/oprasional/oprasional'})} icon={<Circles5Random />} icon={<Rocket />} name={'Operasional'} />
                                 <NavButton active={location.pathname.includes('/oprasional/casbon')}  to={'/oprasional/casbon'} onPress={() => navigate({to: '/oprasional/casbon'})} icon={<Flask />} name={'Casbon'} />

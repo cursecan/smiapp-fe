@@ -31,4 +31,7 @@ export const useOprasionalService = {
     submit: (id, payload) => {
         return api.post(`/oprasional/opr/${id}/submit/`, payload)
     },
+    minitoring: () => {
+        return api.get('/oprasional/monitoring/')
+    }
 }

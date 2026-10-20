@@ -16,6 +16,7 @@ import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProtectedMaintenanceRouteImport } from './routes/_protected/maintenance'
 import { Route as ProtectedDashboardRouteImport } from './routes/_protected/dashboard'
+import { Route as ProtectedMonitoringIndexRouteImport } from './routes/_protected/monitoring/index'
 import { Route as ProtectedKomersialEmailRouteImport } from './routes/_protected/komersial/email'
 import { Route as ProtectedOprasionalPembayaranIndexRouteImport } from './routes/_protected/oprasional/pembayaran/index'
 import { Route as ProtectedOprasionalOprasionalIndexRouteImport } from './routes/_protected/oprasional/oprasional/index'
@@ -66,6 +67,12 @@ const ProtectedDashboardRoute = ProtectedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
+const ProtectedMonitoringIndexRoute =
+  ProtectedMonitoringIndexRouteImport.update({
+    id: '/monitoring/',
+    path: '/monitoring/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 const ProtectedKomersialEmailRoute = ProtectedKomersialEmailRouteImport.update({
   id: '/komersial/email',
   path: '/komersial/email',
@@ -164,6 +171,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof ProtectedDashboardRoute
   '/maintenance': typeof ProtectedMaintenanceRoute
   '/komersial/email': typeof ProtectedKomersialEmailRoute
+  '/monitoring/': typeof ProtectedMonitoringIndexRoute
   '/invoice/invoice/$id': typeof ProtectedInvoiceInvoiceIdRoute
   '/keuangan/expense/$id': typeof ProtectedKeuanganExpenseIdRoute
   '/komersial/penawaran/$id': typeof ProtectedKomersialPenawaranIdRoute
@@ -187,6 +195,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof ProtectedDashboardRoute
   '/maintenance': typeof ProtectedMaintenanceRoute
   '/komersial/email': typeof ProtectedKomersialEmailRoute
+  '/monitoring': typeof ProtectedMonitoringIndexRoute
   '/invoice/invoice/$id': typeof ProtectedInvoiceInvoiceIdRoute
   '/keuangan/expense/$id': typeof ProtectedKeuanganExpenseIdRoute
   '/komersial/penawaran/$id': typeof ProtectedKomersialPenawaranIdRoute
@@ -212,6 +221,7 @@ export interface FileRoutesById {
   '/_protected/dashboard': typeof ProtectedDashboardRoute
   '/_protected/maintenance': typeof ProtectedMaintenanceRoute
   '/_protected/komersial/email': typeof ProtectedKomersialEmailRoute
+  '/_protected/monitoring/': typeof ProtectedMonitoringIndexRoute
   '/_protected/invoice/invoice/$id': typeof ProtectedInvoiceInvoiceIdRoute
   '/_protected/keuangan/expense/$id': typeof ProtectedKeuanganExpenseIdRoute
   '/_protected/komersial/penawaran/$id': typeof ProtectedKomersialPenawaranIdRoute
@@ -237,6 +247,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/maintenance'
     | '/komersial/email'
+    | '/monitoring/'
     | '/invoice/invoice/$id'
     | '/keuangan/expense/$id'
     | '/komersial/penawaran/$id'
@@ -260,6 +271,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/maintenance'
     | '/komersial/email'
+    | '/monitoring'
     | '/invoice/invoice/$id'
     | '/keuangan/expense/$id'
     | '/komersial/penawaran/$id'
@@ -284,6 +296,7 @@ export interface FileRouteTypes {
     | '/_protected/dashboard'
     | '/_protected/maintenance'
     | '/_protected/komersial/email'
+    | '/_protected/monitoring/'
     | '/_protected/invoice/invoice/$id'
     | '/_protected/keuangan/expense/$id'
     | '/_protected/komersial/penawaran/$id'
@@ -357,6 +370,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof ProtectedDashboardRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/monitoring/': {
+      id: '/_protected/monitoring/'
+      path: '/monitoring'
+      fullPath: '/monitoring/'
+      preLoaderRoute: typeof ProtectedMonitoringIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
     '/_protected/komersial/email': {
@@ -471,6 +491,7 @@ interface ProtectedRouteRouteChildren {
   ProtectedDashboardRoute: typeof ProtectedDashboardRoute
   ProtectedMaintenanceRoute: typeof ProtectedMaintenanceRoute
   ProtectedKomersialEmailRoute: typeof ProtectedKomersialEmailRoute
+  ProtectedMonitoringIndexRoute: typeof ProtectedMonitoringIndexRoute
   ProtectedInvoiceInvoiceIdRoute: typeof ProtectedInvoiceInvoiceIdRoute
   ProtectedKeuanganExpenseIdRoute: typeof ProtectedKeuanganExpenseIdRoute
   ProtectedKomersialPenawaranIdRoute: typeof ProtectedKomersialPenawaranIdRoute
@@ -491,6 +512,7 @@ const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedDashboardRoute: ProtectedDashboardRoute,
   ProtectedMaintenanceRoute: ProtectedMaintenanceRoute,
   ProtectedKomersialEmailRoute: ProtectedKomersialEmailRoute,
+  ProtectedMonitoringIndexRoute: ProtectedMonitoringIndexRoute,
   ProtectedInvoiceInvoiceIdRoute: ProtectedInvoiceInvoiceIdRoute,
   ProtectedKeuanganExpenseIdRoute: ProtectedKeuanganExpenseIdRoute,
   ProtectedKomersialPenawaranIdRoute: ProtectedKomersialPenawaranIdRoute,
