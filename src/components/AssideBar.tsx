@@ -40,9 +40,16 @@ const AssideBar = () => {
                             <div className="text-xs mb-2">Home</div>
                             <div className="space-y-0">
                                 <NavButton active={location.pathname.includes('/dashboard')} to={'/dashboard'} onPress={() => navigate({to: '/dashboard'})} icon={<House />} name={'Home'} />
-                                <NavButton active={location.pathname.includes('/komersial/email')} to={'/komersial/email'} onPress={() => navigate({to: '/komersial/email'})}  icon={<Envelope />} name={'Email'} />
                                 <NavButton active={location.pathname.includes('/monitoring')} to={'/monitoring'} onPress={() => navigate({to: '/monitoring'})} icon={<DisplayPulse />} name={'Monitoring'} />
+                                <NavButton active={location.pathname.includes('/komersial/email')} to={'/komersial/email'} onPress={() => navigate({to: '/komersial/email'})}  icon={<Envelope />} name={'Email'} />
                                 <NavButton active={location.pathname.includes('/komersial/penawaran')} to={'/komersial/penawaran'} onPress={() => navigate({to: '/komersial/penawaran'})} icon={<Circles5Random />} name={'Penawaran'} />
+                                {/* <NavButton active={location.pathname.includes('/oprasional/oprasional')} to={'/oprasional/oprasional'} onPress={() => navigate({to: '/oprasional/oprasional'})} icon={<Circles5Random />} icon={<Rocket />} name={'Operasional'} />
+                                <NavButton active={location.pathname.includes('/oprasional/casbon')}  to={'/oprasional/casbon'} onPress={() => navigate({to: '/oprasional/casbon'})} icon={<Flask />} name={'Casbon'} /> */}
+                            </div>
+                        </li>
+                        <li>
+                            <div className="text-xs mb-2">Operasional</div>
+                            <div className="space-y-0">
                                 <NavButton active={location.pathname.includes('/oprasional/oprasional')} to={'/oprasional/oprasional'} onPress={() => navigate({to: '/oprasional/oprasional'})} icon={<Circles5Random />} icon={<Rocket />} name={'Operasional'} />
                                 <NavButton active={location.pathname.includes('/oprasional/casbon')}  to={'/oprasional/casbon'} onPress={() => navigate({to: '/oprasional/casbon'})} icon={<Flask />} name={'Casbon'} />
                             </div>
@@ -55,7 +62,7 @@ const AssideBar = () => {
                             </div>
                         </li>
                         
-                        <li className="text-gray-400">
+                        {/* <li className="text-gray-400">
                             <div className="text-xs mb-2">Master Data</div>
                             <div className="space-y-0">
                                 <NavButton active={location.pathname.includes('/maintenance0')} onPress={() => navigate({to: '/maintenance'})} icon={<LogoDocker />} name={'Kapal'} />
@@ -64,7 +71,7 @@ const AssideBar = () => {
                                 <NavButton active={location.pathname.includes('/maintenance3')} onPress={() => navigate({to: '/maintenance'})} icon={<Megaphone />} name={'Pekerjaan'} />
                                 <NavButton active={location.pathname.includes('/maintenance4')} onPress={() => navigate({to: '/maintenance'})} icon={<Mug />} name={'Jenis Pekerjaan'} />
                             </div>
-                        </li>
+                        </li> */}
                         <li className="text-gray-400">
                             <div className="text-xs mb-2">Settings</div>
                             <div className="space-y-1">

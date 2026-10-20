@@ -289,7 +289,7 @@ function RouteComponent() {
                     <Chip className='bg-danger'>{monitoring?.penawaran.no_spk_count}</Chip>
                   </div>
                   <div className="flex flex-col">
-                    <Link to={'/komersial/penawaran?nospk=1'}>
+                    <Link to={'/monitoring?nospk=true'}>
                       <div className="link gap-2">
                         <p className='text-lg'>{formatRupiah(monitoring?.penawaran.no_spk_amount)}</p>
                         <LinkHero.Icon className='text-accent' />

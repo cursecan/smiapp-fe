@@ -1,8 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useOprasionalService } from '../../../services/oprasional/oprasionalService'
-import { Description, Label, SearchField, Surface, Table } from '@heroui/react'
-import { formatRupiah } from '../../../utils/formatCurrency'
+import { SearchField, Surface, Table } from '@heroui/react'
 import ItemList from './-components/ItemList'
 import HeaderPage from '../../../components/HeaderPage'
 import PaginationTable from '../../../components/PaginationTable'
@@ -12,22 +11,23 @@ export const Route = createFileRoute('/_protected/monitoring/')({
   validateSearch: (search) => ({
     page: Number(search.page ?? 1),
     q: String(search.q ?? ''),
+    nospk: String(search.nospk ?? '')
   })
 })
 
 function RouteComponent() {
   const navigate = useNavigate()
-  const {page, q} = Route.useSearch()
+  const {page, q, nospk} = Route.useSearch()
 
   const {data} = useQuery({
-    queryKey: ['monitoring', page, q],
+    queryKey: ['monitoring', page, q, nospk],
     queryFn: ({queryKey}) => useOprasionalService.minitoring({queryKey}),
     select: (res) => res.data
   })
 
   const changeSearch =(e) => {
     setTimeout(() => {
-      navigate({search: (prev) => ({...prev, q: e.target.value, page:1})})
+      navigate({search: (prev) => ({...prev, q: e.target.value, page:1, nospk:''})})
     }, 800);
   }
 
@@ -39,7 +39,7 @@ function RouteComponent() {
     <Surface className='px-6 my-1'>
       <HeaderPage title='Monitoring Pekerjaan' />
 
-      <div className="">
+      <div className="flex items-center">
         <SearchField className={'w-100'}>
             <SearchField.Group>
                 <SearchField.SearchIcon />
