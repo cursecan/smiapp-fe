@@ -2,7 +2,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
 import { useOprasionalService } from '../../../../services/oprasional/oprasionalService'
 import HeaderPage from '../../../../components/HeaderPage'
-import { Breadcrumbs, Button, Card, CloseButton, Description, Label, Surface, Table, Tabs, TextArea, Tooltip, useOverlayState } from '@heroui/react'
+import { Alert, Breadcrumbs, Button, Card, CloseButton, Description, Header, Label, Surface, Table, Tabs, TextArea, Tooltip, useOverlayState } from '@heroui/react'
 import KegiatanList from '../-components/oprasional/KegiatanList'
 import { formatRupiah } from '../../../../utils/formatCurrency'
 import { AlmostEqual, ArrowChevronRight, ArrowRightToSquare, Plus } from '@gravity-ui/icons'
@@ -19,10 +19,12 @@ import ApprovalButtons from '../../../../components/buttons/ApprovalButtons'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useOperasionalSchema, usePenawaranSchema } from '../../../../schemas/penawaranSchema'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import GenerateInvoiceModal from '../-components/GenerateInvoiceModal'
 import CardStepper from '../../../../components/CardStepper'
 import GenerateTandaTerimaModal from '../-components/GenerateTandaTerimaModal'
+import ModalComponent from '../../../../components/modals/ModalComponent'
+import AlertDialogModal from '../../../../components/modals/AlertDialogModal'
 
 export const Route = createFileRoute('/_protected/oprasional/oprasional/$id')({
   component: RouteComponent,
@@ -32,6 +34,7 @@ function RouteComponent() {
     const { id } = useParams({from: '/_protected/oprasional/oprasional/$id'})
     const navigate = useNavigate()
     const [errors, setErrors] = useState(null)
+    const revisi_state = useOverlayState()
     
     const { data, isLoading } = useQuery({
         queryKey: ['oprasional', id],
@@ -69,14 +72,29 @@ function RouteComponent() {
 
 
 
+    useEffect(() => {
+        revisi_state.open()
+    }, [])
+
 
     if (isLoading || casbonLoading) {
         return <div className="">Loading</div>
     }
 
+
     
   return (
     <div className="">
+        {
+            data?.penawaran.status === 'revisi' && (
+                <AlertDialogModal hideFooter state={revisi_state} header={'Pekerjaan Dalam Proses Revisi Penawaran'}>
+                    <div className="">
+                        <p>{data?.penawaran.catatan ?? '-'}</p>
+                    </div>
+                </AlertDialogModal>
+            )
+
+        }
         <HeaderPage
             title={`Detail Oprasional`}
             breadchrumb={<Breadcrumbs>
@@ -161,6 +179,20 @@ function RouteComponent() {
                                 )
                             }
 
+                            {
+                                data?.penawaran.status === 'revisi' && (
+                                    <Alert status="danger">
+                                        <Alert.Indicator />
+                                        <Alert.Content>
+                                        <Alert.Title>Proses Revisi Penawaran</Alert.Title>
+                                        <Alert.Description>
+                                            {data?.penawaran.catatan ?? '-'}
+                                        </Alert.Description>
+                                        </Alert.Content>
+                                    </Alert>
+                                )
+                            }
+
                             <Surface className='p-3 rounded-2xl space-y-4'>
                                 <Table>
                                     <Table.ScrollContainer>
@@ -239,6 +271,7 @@ function RouteComponent() {
                         </Surface>
                     </Card.Content>
                 </Card>
+                
                 <Card>
                     <Card.Header>
                         <Card.Title>Operasional Activity</Card.Title>
