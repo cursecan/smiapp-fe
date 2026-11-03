@@ -6,22 +6,26 @@ import ItemList from './-components/ItemList'
 import HeaderPage from '../../../components/HeaderPage'
 import PaginationTable from '../../../components/PaginationTable'
 import MonitoringCard from './-components/MonitoringCard'
+import { getJenisPekerjaan } from '../../../components/useSchema'
+import JenisPekerjaanFilter from '../../../components/JenisPekerjaanFilter'
 
 export const Route = createFileRoute('/_protected/monitoring/')({
   component: RouteComponent,
   validateSearch: (search) => ({
     page: Number(search.page ?? 1),
     q: String(search.q ?? ''),
-    nospk: String(search.nospk ?? '')
+    nospk: String(search.nospk ?? ''),
+    jobtype: String(search.jobtype ?? '')
   })
 })
 
 function RouteComponent() {
   const navigate = useNavigate()
-  const {page, q, nospk} = Route.useSearch()
+  const filter_pekerjaan = getJenisPekerjaan()
+  const {page, q, nospk, jobtype} = Route.useSearch()
 
   const {data} = useQuery({
-    queryKey: ['monitoring', page, q, nospk],
+    queryKey: ['monitoring', page, q, nospk, jobtype],
     queryFn: ({queryKey}) => useOprasionalService.minitoring({queryKey}),
     select: (res) => res.data
   })
@@ -41,10 +45,10 @@ function RouteComponent() {
       <HeaderPage title='Monitoring' />
 
       <div className="mb-6">
-        <MonitoringCard />
+        <MonitoringCard hideFirst />
       </div>
 
-      <div className="flex items-center">
+      <div className="flex items-center gap-2">
         <SearchField className={'w-100'}>
             <SearchField.Group>
                 <SearchField.SearchIcon />
@@ -52,6 +56,7 @@ function RouteComponent() {
                 <SearchField.ClearButton onPress={() => navigate({search: (prev) => ({...prev, q: undefined})})} />
             </SearchField.Group>
         </SearchField>
+        <JenisPekerjaanFilter data={filter_pekerjaan} onChange={(e) => navigate({search: (prev) => ({...prev, jobtype: e})})} />
       </div>
       <div className="mt-6">
         <Table>
