@@ -8,6 +8,7 @@ import PaginationTable from '../../../components/PaginationTable'
 import MonitoringCard from './-components/MonitoringCard'
 import { getJenisPekerjaan } from '../../../components/useSchema'
 import JenisPekerjaanFilter from '../../../components/JenisPekerjaanFilter'
+import ExportMonitoringModal from './-components/ExportMonitoringModal'
 
 export const Route = createFileRoute('/_protected/monitoring/')({
   component: RouteComponent,
@@ -49,14 +50,19 @@ function RouteComponent() {
       </div>
 
       <div className="flex items-center gap-2">
-        <SearchField className={'w-100'}>
-            <SearchField.Group>
-                <SearchField.SearchIcon />
-                <SearchField.Input onChange={changeSearch} placeholder='Search...' className={'w-90'} />
-                <SearchField.ClearButton onPress={() => navigate({search: (prev) => ({...prev, q: undefined})})} />
-            </SearchField.Group>
-        </SearchField>
-        <JenisPekerjaanFilter data={filter_pekerjaan} onChange={(e) => navigate({search: (prev) => ({...prev, jobtype: e})})} />
+        <div className="flex-1 flex items-center gap-2">
+          <SearchField className={'w-100'}>
+              <SearchField.Group>
+                  <SearchField.SearchIcon />
+                  <SearchField.Input onChange={changeSearch} placeholder='Search...' className={'w-90'} />
+                  <SearchField.ClearButton onPress={() => navigate({search: (prev) => ({...prev, q: undefined})})} />
+              </SearchField.Group>
+          </SearchField>
+          <JenisPekerjaanFilter data={filter_pekerjaan} onChange={(e) => navigate({search: (prev) => ({...prev, jobtype: e})})} />
+        </div>
+        <div className="flex items-center">
+          <ExportMonitoringModal />
+        </div>
       </div>
       <div className="mt-6">
         <Table>
