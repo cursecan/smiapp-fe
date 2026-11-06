@@ -7,6 +7,7 @@ import { formatRupiah } from '../../../../utils/formatCurrency'
 import StatusChiper from '../../../../components/StatusChiper'
 import { ArrowChevronRight, ArrowLeft, Tray } from '@gravity-ui/icons'
 import PaginationTable from '../../../../components/PaginationTable'
+import ExportExpenseModal from '../-components/expense/ExportExpenseModal'
 
 export const Route = createFileRoute('/_protected/keuangan/expense/')({
   component: RouteComponent,
@@ -46,13 +47,17 @@ function RouteComponent() {
         <Card>
             <Card.Header>
                 <div className="flex">
-                    <SearchField className={'w-100'}>
-                        <SearchField.Group>
-                            <SearchField.SearchIcon />
-                            <SearchField.Input onChange={changeSearch} placeholder='Search...' className={'w-90'} />
-                            <SearchField.ClearButton onPress={() => navigate({search: (prev) => ({...prev, q: undefined})})} />
-                        </SearchField.Group>
-                    </SearchField>
+                    <div className="flex-1 flex">
+                        <SearchField className={'w-100'}>
+                            <SearchField.Group>
+                                <SearchField.SearchIcon />
+                                <SearchField.Input onChange={changeSearch} placeholder='Search...' className={'w-90'} />
+                                <SearchField.ClearButton onPress={() => navigate({search: (prev) => ({...prev, q: undefined})})} />
+                            </SearchField.Group>
+                        </SearchField>
+
+                    </div>
+                    <ExportExpenseModal />
                 </div>
             </Card.Header>
            <Card.Content>
